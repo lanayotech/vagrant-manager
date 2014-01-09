@@ -22,6 +22,8 @@
     [statusItem setMenu:statusMenu];
     [statusItem setHighlightMode:YES];
     [statusMenu setDelegate:self];
+    
+    outputWindows = [[NSMutableArray alloc] init];
 }
 
 - (void)menuWillOpen:(NSMenu *)menu {
@@ -147,30 +149,22 @@
     [menuItem setTitle:@"Quit"];
     [menuItem setAction:@selector(terminate:)];
     [statusMenu addItem:menuItem];
-    
 }
 
 - (void)runVagrantCommand:directory :command {
-    
     NSTask *task = [[NSTask alloc] init];
     [task setLaunchPath:@"/bin/sh"];
     [task setArguments:@[@"-c", [NSString stringWithFormat:@"cd %@ && %@", directory, command]]];
+        
+    OutputWindow *outputWindow = [[OutputWindow alloc] initWithWindowNibName:@"OutputWindow"];
+    outputWindow.task = task;
+    [outputWindow showWindow:self];
     
-    NSPipe *taskOutputPipe = [NSPipe pipe];
-    [task setStandardInput:[NSPipe pipe]];
-    [task setStandardOutput:taskOutputPipe];
-    [task setStandardError:taskOutputPipe];
-    
-    [task launch];
-    [task waitUntilExit];
-    
-    NSData *taskOutputData = [[taskOutputPipe fileHandleForReading] readDataToEndOfFile];
-    NSString *taskOutputString = [[NSString alloc] initWithData:taskOutputData encoding:NSUTF8StringEncoding];
-    
-    if([task terminationStatus] != 0) {
-        [[NSAlert alertWithMessageText:@"Vagrant Manager Error:" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@"%@",taskOutputString] runModal];
-    }
+    [outputWindows addObject:outputWindow];
+}
 
+- (void)removeOutputWindow:(OutputWindow*)outputWindow {
+    [outputWindows removeObject:outputWindow];
 }
 
 - (void)vagrantUp:(id)sender {

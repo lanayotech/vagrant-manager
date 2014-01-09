@@ -7,6 +7,7 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "OutputWindow.h"
 
 @interface AppDelegate : NSObject <NSApplicationDelegate, NSMenuDelegate> {
     IBOutlet NSMenu *statusMenu;
@@ -15,6 +16,7 @@
     NSStatusItem *statusItem;
     NSImage *statusImage;
     NSImage *statusHighlightImage;
+    NSMutableArray *outputWindows;
 }
 
 @property (assign) IBOutlet NSWindow *window;
@@ -24,5 +26,6 @@
 - (IBAction)vagrantUp:(id)sender;
 - (IBAction)vagrantHalt:(id)sender;
 - (IBAction)vagrantDestroy:(id)sender;
+- (void)removeOutputWindow:(OutputWindow*)outputWindow;
 
 @end

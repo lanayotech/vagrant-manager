@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8339DCA1187E756B0036E162 /* OutputWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 8339DC9F187E756B0036E162 /* OutputWindow.m */; };
+		8339DCA2187E756B0036E162 /* OutputWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8339DCA0187E756B0036E162 /* OutputWindow.xib */; };
 		B1357A71187CEB3B00811CBC /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B1357A70187CEB3B00811CBC /* Cocoa.framework */; };
 		B1357A7B187CEB3B00811CBC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = B1357A79187CEB3B00811CBC /* InfoPlist.strings */; };
 		B1357A7D187CEB3B00811CBC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B1357A7C187CEB3B00811CBC /* main.m */; };
@@ -35,6 +37,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		8339DC9E187E756B0036E162 /* OutputWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OutputWindow.h; sourceTree = "<group>"; };
+		8339DC9F187E756B0036E162 /* OutputWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OutputWindow.m; sourceTree = "<group>"; };
+		8339DCA0187E756B0036E162 /* OutputWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OutputWindow.xib; sourceTree = "<group>"; };
 		B1357A6D187CEB3B00811CBC /* Vagrant Manager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Vagrant Manager.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B1357A70187CEB3B00811CBC /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		B1357A73187CEB3B00811CBC /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -132,6 +137,9 @@
 				B1743359187E1261000DCA38 /* on.png */,
 				B1357A88187CEB3B00811CBC /* Images.xcassets */,
 				B1357A77187CEB3B00811CBC /* Supporting Files */,
+				8339DC9E187E756B0036E162 /* OutputWindow.h */,
+				8339DC9F187E756B0036E162 /* OutputWindow.m */,
+				8339DCA0187E756B0036E162 /* OutputWindow.xib */,
 			);
 			path = "Vagrant Manager";
 			sourceTree = "<group>";
@@ -243,6 +251,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B1357A7B187CEB3B00811CBC /* InfoPlist.strings in Resources */,
+				8339DCA2187E756B0036E162 /* OutputWindow.xib in Resources */,
 				B1357ABD187DF58C00811CBC /* vagrant_logo_highlighted.png in Resources */,
 				B174335A187E1261000DCA38 /* off.png in Resources */,
 				B1357A89187CEB3B00811CBC /* Images.xcassets in Resources */,
@@ -269,6 +278,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B1357A84187CEB3B00811CBC /* AppDelegate.m in Sources */,
+				8339DCA1187E756B0036E162 /* OutputWindow.m in Sources */,
 				B1357A7D187CEB3B00811CBC /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
