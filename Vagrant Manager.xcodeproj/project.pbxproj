@@ -1,0 +1,497 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		B1357A71187CEB3B00811CBC /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B1357A70187CEB3B00811CBC /* Cocoa.framework */; };
+		B1357A7B187CEB3B00811CBC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = B1357A79187CEB3B00811CBC /* InfoPlist.strings */; };
+		B1357A7D187CEB3B00811CBC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B1357A7C187CEB3B00811CBC /* main.m */; };
+		B1357A81187CEB3B00811CBC /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = B1357A7F187CEB3B00811CBC /* Credits.rtf */; };
+		B1357A84187CEB3B00811CBC /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B1357A83187CEB3B00811CBC /* AppDelegate.m */; };
+		B1357A87187CEB3B00811CBC /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = B1357A85187CEB3B00811CBC /* MainMenu.xib */; };
+		B1357A89187CEB3B00811CBC /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B1357A88187CEB3B00811CBC /* Images.xcassets */; };
+		B1357A90187CEB3B00811CBC /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B1357A8F187CEB3B00811CBC /* XCTest.framework */; };
+		B1357A91187CEB3B00811CBC /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B1357A70187CEB3B00811CBC /* Cocoa.framework */; };
+		B1357A99187CEB3B00811CBC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = B1357A97187CEB3B00811CBC /* InfoPlist.strings */; };
+		B1357A9B187CEB3B00811CBC /* Vagrant_ManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B1357A9A187CEB3B00811CBC /* Vagrant_ManagerTests.m */; };
+		B1357ABD187DF58C00811CBC /* vagrant_logo_highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = B1357ABB187DF58B00811CBC /* vagrant_logo_highlighted.png */; };
+		B1357ABE187DF58C00811CBC /* vagrant_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = B1357ABC187DF58C00811CBC /* vagrant_logo.png */; };
+		B174335A187E1261000DCA38 /* off.png in Resources */ = {isa = PBXBuildFile; fileRef = B1743358187E1261000DCA38 /* off.png */; };
+		B174335B187E1261000DCA38 /* on.png in Resources */ = {isa = PBXBuildFile; fileRef = B1743359187E1261000DCA38 /* on.png */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		B1357A92187CEB3B00811CBC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B1357A65187CEB3B00811CBC /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B1357A6C187CEB3B00811CBC;
+			remoteInfo = "Vagrant Manager";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		B1357A6D187CEB3B00811CBC /* Vagrant Manager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Vagrant Manager.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B1357A70187CEB3B00811CBC /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		B1357A73187CEB3B00811CBC /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		B1357A74187CEB3B00811CBC /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		B1357A75187CEB3B00811CBC /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		B1357A78187CEB3B00811CBC /* Vagrant Manager-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Vagrant Manager-Info.plist"; sourceTree = "<group>"; };
+		B1357A7A187CEB3B00811CBC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		B1357A7C187CEB3B00811CBC /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		B1357A7E187CEB3B00811CBC /* Vagrant Manager-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Vagrant Manager-Prefix.pch"; sourceTree = "<group>"; };
+		B1357A80187CEB3B00811CBC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
+		B1357A82187CEB3B00811CBC /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		B1357A83187CEB3B00811CBC /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		B1357A86187CEB3B00811CBC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		B1357A88187CEB3B00811CBC /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		B1357A8E187CEB3B00811CBC /* Vagrant ManagerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Vagrant ManagerTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B1357A8F187CEB3B00811CBC /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		B1357A96187CEB3B00811CBC /* Vagrant ManagerTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Vagrant ManagerTests-Info.plist"; sourceTree = "<group>"; };
+		B1357A98187CEB3B00811CBC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		B1357A9A187CEB3B00811CBC /* Vagrant_ManagerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Vagrant_ManagerTests.m; sourceTree = "<group>"; };
+		B1357ABB187DF58B00811CBC /* vagrant_logo_highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = vagrant_logo_highlighted.png; sourceTree = "<group>"; };
+		B1357ABC187DF58C00811CBC /* vagrant_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = vagrant_logo.png; sourceTree = "<group>"; };
+		B1743358187E1261000DCA38 /* off.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = off.png; sourceTree = "<group>"; };
+		B1743359187E1261000DCA38 /* on.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = on.png; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		B1357A6A187CEB3B00811CBC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B1357A71187CEB3B00811CBC /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B1357A8B187CEB3B00811CBC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B1357A91187CEB3B00811CBC /* Cocoa.framework in Frameworks */,
+				B1357A90187CEB3B00811CBC /* XCTest.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		B1357A64187CEB3B00811CBC = {
+			isa = PBXGroup;
+			children = (
+				B1357A76187CEB3B00811CBC /* Vagrant Manager */,
+				B1357A94187CEB3B00811CBC /* Vagrant ManagerTests */,
+				B1357A6F187CEB3B00811CBC /* Frameworks */,
+				B1357A6E187CEB3B00811CBC /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		B1357A6E187CEB3B00811CBC /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				B1357A6D187CEB3B00811CBC /* Vagrant Manager.app */,
+				B1357A8E187CEB3B00811CBC /* Vagrant ManagerTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		B1357A6F187CEB3B00811CBC /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				B1357A70187CEB3B00811CBC /* Cocoa.framework */,
+				B1357A8F187CEB3B00811CBC /* XCTest.framework */,
+				B1357A72187CEB3B00811CBC /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		B1357A72187CEB3B00811CBC /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				B1357A73187CEB3B00811CBC /* AppKit.framework */,
+				B1357A74187CEB3B00811CBC /* CoreData.framework */,
+				B1357A75187CEB3B00811CBC /* Foundation.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		B1357A76187CEB3B00811CBC /* Vagrant Manager */ = {
+			isa = PBXGroup;
+			children = (
+				B1357A82187CEB3B00811CBC /* AppDelegate.h */,
+				B1357A83187CEB3B00811CBC /* AppDelegate.m */,
+				B1357A85187CEB3B00811CBC /* MainMenu.xib */,
+				B1357ABB187DF58B00811CBC /* vagrant_logo_highlighted.png */,
+				B1357ABC187DF58C00811CBC /* vagrant_logo.png */,
+				B1743358187E1261000DCA38 /* off.png */,
+				B1743359187E1261000DCA38 /* on.png */,
+				B1357A88187CEB3B00811CBC /* Images.xcassets */,
+				B1357A77187CEB3B00811CBC /* Supporting Files */,
+			);
+			path = "Vagrant Manager";
+			sourceTree = "<group>";
+		};
+		B1357A77187CEB3B00811CBC /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				B1357A78187CEB3B00811CBC /* Vagrant Manager-Info.plist */,
+				B1357A79187CEB3B00811CBC /* InfoPlist.strings */,
+				B1357A7C187CEB3B00811CBC /* main.m */,
+				B1357A7E187CEB3B00811CBC /* Vagrant Manager-Prefix.pch */,
+				B1357A7F187CEB3B00811CBC /* Credits.rtf */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		B1357A94187CEB3B00811CBC /* Vagrant ManagerTests */ = {
+			isa = PBXGroup;
+			children = (
+				B1357A9A187CEB3B00811CBC /* Vagrant_ManagerTests.m */,
+				B1357A95187CEB3B00811CBC /* Supporting Files */,
+			);
+			path = "Vagrant ManagerTests";
+			sourceTree = "<group>";
+		};
+		B1357A95187CEB3B00811CBC /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				B1357A96187CEB3B00811CBC /* Vagrant ManagerTests-Info.plist */,
+				B1357A97187CEB3B00811CBC /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		B1357A6C187CEB3B00811CBC /* Vagrant Manager */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B1357A9E187CEB3B00811CBC /* Build configuration list for PBXNativeTarget "Vagrant Manager" */;
+			buildPhases = (
+				B1357A69187CEB3B00811CBC /* Sources */,
+				B1357A6A187CEB3B00811CBC /* Frameworks */,
+				B1357A6B187CEB3B00811CBC /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Vagrant Manager";
+			productName = "Vagrant Manager";
+			productReference = B1357A6D187CEB3B00811CBC /* Vagrant Manager.app */;
+			productType = "com.apple.product-type.application";
+		};
+		B1357A8D187CEB3B00811CBC /* Vagrant ManagerTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B1357AA1187CEB3B00811CBC /* Build configuration list for PBXNativeTarget "Vagrant ManagerTests" */;
+			buildPhases = (
+				B1357A8A187CEB3B00811CBC /* Sources */,
+				B1357A8B187CEB3B00811CBC /* Frameworks */,
+				B1357A8C187CEB3B00811CBC /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B1357A93187CEB3B00811CBC /* PBXTargetDependency */,
+			);
+			name = "Vagrant ManagerTests";
+			productName = "Vagrant ManagerTests";
+			productReference = B1357A8E187CEB3B00811CBC /* Vagrant ManagerTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		B1357A65187CEB3B00811CBC /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0500;
+				ORGANIZATIONNAME = "Amitai Lanciano";
+				TargetAttributes = {
+					B1357A8D187CEB3B00811CBC = {
+						TestTargetID = B1357A6C187CEB3B00811CBC;
+					};
+				};
+			};
+			buildConfigurationList = B1357A68187CEB3B00811CBC /* Build configuration list for PBXProject "Vagrant Manager" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = B1357A64187CEB3B00811CBC;
+			productRefGroup = B1357A6E187CEB3B00811CBC /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				B1357A6C187CEB3B00811CBC /* Vagrant Manager */,
+				B1357A8D187CEB3B00811CBC /* Vagrant ManagerTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		B1357A6B187CEB3B00811CBC /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B1357A7B187CEB3B00811CBC /* InfoPlist.strings in Resources */,
+				B1357ABD187DF58C00811CBC /* vagrant_logo_highlighted.png in Resources */,
+				B174335A187E1261000DCA38 /* off.png in Resources */,
+				B1357A89187CEB3B00811CBC /* Images.xcassets in Resources */,
+				B1357A81187CEB3B00811CBC /* Credits.rtf in Resources */,
+				B1357A87187CEB3B00811CBC /* MainMenu.xib in Resources */,
+				B174335B187E1261000DCA38 /* on.png in Resources */,
+				B1357ABE187DF58C00811CBC /* vagrant_logo.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B1357A8C187CEB3B00811CBC /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B1357A99187CEB3B00811CBC /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		B1357A69187CEB3B00811CBC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B1357A84187CEB3B00811CBC /* AppDelegate.m in Sources */,
+				B1357A7D187CEB3B00811CBC /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B1357A8A187CEB3B00811CBC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B1357A9B187CEB3B00811CBC /* Vagrant_ManagerTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		B1357A93187CEB3B00811CBC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B1357A6C187CEB3B00811CBC /* Vagrant Manager */;
+			targetProxy = B1357A92187CEB3B00811CBC /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		B1357A79187CEB3B00811CBC /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				B1357A7A187CEB3B00811CBC /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		B1357A7F187CEB3B00811CBC /* Credits.rtf */ = {
+			isa = PBXVariantGroup;
+			children = (
+				B1357A80187CEB3B00811CBC /* en */,
+			);
+			name = Credits.rtf;
+			sourceTree = "<group>";
+		};
+		B1357A85187CEB3B00811CBC /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				B1357A86187CEB3B00811CBC /* Base */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+		B1357A97187CEB3B00811CBC /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				B1357A98187CEB3B00811CBC /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		B1357A9C187CEB3B00811CBC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		B1357A9D187CEB3B00811CBC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		B1357A9F187CEB3B00811CBC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Vagrant Manager/Vagrant Manager-Prefix.pch";
+				INFOPLIST_FILE = "Vagrant Manager/Vagrant Manager-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		B1357AA0187CEB3B00811CBC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Vagrant Manager/Vagrant Manager-Prefix.pch";
+				INFOPLIST_FILE = "Vagrant Manager/Vagrant Manager-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		B1357AA2187CEB3B00811CBC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/Vagrant Manager.app/Contents/MacOS/Vagrant Manager";
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Vagrant Manager/Vagrant Manager-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "Vagrant ManagerTests/Vagrant ManagerTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Debug;
+		};
+		B1357AA3187CEB3B00811CBC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/Vagrant Manager.app/Contents/MacOS/Vagrant Manager";
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Vagrant Manager/Vagrant Manager-Prefix.pch";
+				INFOPLIST_FILE = "Vagrant ManagerTests/Vagrant ManagerTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		B1357A68187CEB3B00811CBC /* Build configuration list for PBXProject "Vagrant Manager" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B1357A9C187CEB3B00811CBC /* Debug */,
+				B1357A9D187CEB3B00811CBC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B1357A9E187CEB3B00811CBC /* Build configuration list for PBXNativeTarget "Vagrant Manager" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B1357A9F187CEB3B00811CBC /* Debug */,
+				B1357AA0187CEB3B00811CBC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B1357AA1187CEB3B00811CBC /* Build configuration list for PBXNativeTarget "Vagrant ManagerTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B1357AA2187CEB3B00811CBC /* Debug */,
+				B1357AA3187CEB3B00811CBC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = B1357A65187CEB3B00811CBC /* Project object */;
+}
