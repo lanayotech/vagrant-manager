@@ -2,12 +2,11 @@
 //  AppDelegate.h
 //  Vagrant Manager
 //
-//  Created by Amitai Lanciano on 1/7/14.
-//  Copyright (c) 2014 Amitai Lanciano. All rights reserved.
+//  Copyright (c) 2014 Lanayo. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
-#import "OutputWindow.h"
+#import "TaskOutputWindow.h"
 
 @interface AppDelegate : NSObject <NSApplicationDelegate, NSMenuDelegate> {
     IBOutlet NSMenu *statusMenu;
@@ -16,7 +15,7 @@
     NSStatusItem *statusItem;
     NSImage *statusImage;
     NSImage *statusHighlightImage;
-    NSMutableArray *outputWindows;
+    NSMutableArray *taskOutputWindows;
 }
 
 @property (assign) IBOutlet NSWindow *window;
@@ -26,6 +25,6 @@
 - (IBAction)vagrantUp:(id)sender;
 - (IBAction)vagrantHalt:(id)sender;
 - (IBAction)vagrantDestroy:(id)sender;
-- (void)removeOutputWindow:(OutputWindow*)outputWindow;
+- (void)removeOutputWindow:(TaskOutputWindow*)outputWindow;
 
 @end

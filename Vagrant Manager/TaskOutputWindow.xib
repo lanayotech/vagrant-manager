@@ -4,7 +4,7 @@
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="4514"/>
     </dependencies>
     <objects>
-        <customObject id="-2" userLabel="File's Owner" customClass="OutputWindow">
+        <customObject id="-2" userLabel="File's Owner" customClass="TaskOutputWindow">
             <connections>
                 <outlet property="closeWindowButton" destination="L35-tt-XDn" id="1CK-wL-Pub"/>
                 <outlet property="outputTextView" destination="yGv-xC-aVr" id="Jmj-YV-czD"/>

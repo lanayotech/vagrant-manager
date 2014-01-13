@@ -2,8 +2,7 @@
 //  AppDelegate.m
 //  Vagrant Manager
 //
-//  Created by Amitai Lanciano on 1/7/14.
-//  Copyright (c) 2014 Amitai Lanciano. All rights reserved.
+//  Copyright (c) 2014 Lanayo. All rights reserved.
 //
 
 #import "AppDelegate.h"
@@ -23,7 +22,7 @@
     [statusItem setHighlightMode:YES];
     [statusMenu setDelegate:self];
     
-    outputWindows = [[NSMutableArray alloc] init];
+    taskOutputWindows = [[NSMutableArray alloc] init];
 }
 
 - (void)menuWillOpen:(NSMenu *)menu {
@@ -156,15 +155,15 @@
     [task setLaunchPath:@"/bin/sh"];
     [task setArguments:@[@"-c", [NSString stringWithFormat:@"cd %@ && %@", directory, command]]];
         
-    OutputWindow *outputWindow = [[OutputWindow alloc] initWithWindowNibName:@"OutputWindow"];
+    TaskOutputWindow *outputWindow = [[TaskOutputWindow alloc] initWithWindowNibName:@"OutputWindow"];
     outputWindow.task = task;
     [outputWindow showWindow:self];
     
-    [outputWindows addObject:outputWindow];
+    [taskOutputWindows addObject:outputWindow];
 }
 
-- (void)removeOutputWindow:(OutputWindow*)outputWindow {
-    [outputWindows removeObject:outputWindow];
+- (void)removeOutputWindow:(TaskOutputWindow*)outputWindow {
+    [taskOutputWindows removeObject:outputWindow];
 }
 
 - (void)vagrantUp:(id)sender {

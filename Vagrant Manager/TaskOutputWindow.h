@@ -2,13 +2,12 @@
 //  OutputWindow.h
 //  Vagrant Manager
 //
-//  Created by Chris Ayoub on 1/8/14.
-//  Copyright (c) 2014 Amitai Lanciano. All rights reserved.
+//  Copyright (c) 2014 Lanayo. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
 
-@interface OutputWindow : NSWindowController <NSWindowDelegate>
+@interface TaskOutputWindow : NSWindowController <NSWindowDelegate>
 
 @property (strong, nonatomic) NSTask *task;
 

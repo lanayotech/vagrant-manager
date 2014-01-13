@@ -2,8 +2,7 @@
 //  main.m
 //  Vagrant Manager
 //
-//  Created by Amitai Lanciano on 1/7/14.
-//  Copyright (c) 2014 Amitai Lanciano. All rights reserved.
+//  Copyright (c) 2014 Lanayo. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>

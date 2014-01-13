@@ -2,18 +2,17 @@
 //  OutputWindow.m
 //  Vagrant Manager
 //
-//  Created by Chris Ayoub on 1/8/14.
-//  Copyright (c) 2014 Amitai Lanciano. All rights reserved.
+//  Copyright (c) 2014 Lanayo. All rights reserved.
 //
 
-#import "OutputWindow.h"
+#import "TaskOutputWindow.h"
 #import "AppDelegate.h"
 
-@interface OutputWindow ()
+@interface TaskOutputWindow ()
 
 @end
 
-@implementation OutputWindow
+@implementation TaskOutputWindow
 
 - (id)initWithWindow:(NSWindow *)window {
     self = [super initWithWindow:window];
