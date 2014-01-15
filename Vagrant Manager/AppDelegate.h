@@ -36,5 +36,6 @@
 @property (assign) IBOutlet NSWindow *window;
 
 - (void)removeOutputWindow:(TaskOutputWindow*)outputWindow;
+- (void)detectVagrantMachines;
 
 @end

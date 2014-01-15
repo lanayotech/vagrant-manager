@@ -22,7 +22,6 @@
     statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength];
     [statusItem setImage:[[NSImage alloc] initWithContentsOfFile:[bundle pathForResource:@"vagrant_logo" ofType:@"png"]]];
     [statusItem setAlternateImage:[[NSImage alloc] initWithContentsOfFile:[bundle pathForResource:@"vagrant_logo_highlighted" ofType:@"png"]]];
-    [statusItem setTitle:@"1"];
     [statusItem setMenu:statusMenu];
     [statusItem setHighlightMode:YES];
     
@@ -35,9 +34,7 @@
 - (void)menuWillOpen:(NSMenu *)menu {
 }
 
-- (NSArray*)detectVagrantMachines {
-    NSMutableArray *arr = [[NSMutableArray alloc] init];
-    
+- (void)detectVagrantMachines {
     //TODO: more thorough checking of method to get VM names and paths
     
     [self removeDetectedMenuItems];
@@ -170,8 +167,6 @@
             [self rebuildMenu];
         });
     });
-    
-    return [NSArray arrayWithArray:arr];
 }
 
 #pragma mark - Vagrant machine control
@@ -199,6 +194,7 @@
     outputWindow.taskCommand = taskCommand;
     outputWindow.machine = machine;
     
+    [NSApp activateIgnoringOtherApps:YES];
     [outputWindow showWindow:self];
     
     [taskOutputWindows addObject:outputWindow];
@@ -312,6 +308,24 @@
         [quitMenuItem setAction:@selector(terminate:)];
     }
     [statusMenu addItem:quitMenuItem];
+    
+    int runningCount = [self getRunningVmCount];
+    if(runningCount > 0 ) {
+        [statusItem setTitle:[NSString stringWithFormat:@"%d", runningCount]];
+    } else {
+        [statusItem setTitle:@""];
+    }
+}
+
+- (int)getRunningVmCount {
+    int runningCount = 0;
+    for(VagrantMachine *machine in detectedVagrantMachines) {
+        if(machine.isRunning) {
+            ++runningCount;
+        }
+    }
+    
+    return runningCount;
 }
 
 - (void)removeDetectedMenuItems {
