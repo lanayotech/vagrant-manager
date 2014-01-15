@@ -28,10 +28,12 @@
     NSMutableArray *infoWindows;
     
     NSMutableArray *detectedVagrantMachines;
+    NSMutableArray *bookmarks;
     
     NSMenuItem *bookmarksSeparatorMenuItem;
     NSMenuItem *refreshDetectedMenuItem;
     NSMenuItem *detectedSeparatorMenuItem;
+    NSMenuItem *showAllWindowsMenuItem;
     NSMenuItem *preferencesMenuItem;
     NSMenuItem *aboutMenuItem;
     NSMenuItem *quitMenuItem;
@@ -44,5 +46,6 @@
 - (void)removeOutputWindow:(TaskOutputWindow*)outputWindow;
 - (void)removeInfoWindow:(VirtualMachineInfoWindow*)infoWindow;
 - (void)updateVirtualMachineState:(VirtualMachineInfo*)machine;
+- (void)updateBookmarkState:(Bookmark*)bookmark;
 
 @end

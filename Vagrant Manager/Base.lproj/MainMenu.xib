@@ -21,17 +21,23 @@
         <menu id="nkx-75-pgk"/>
         <menu id="boF-l8-dMu" userLabel="SubMenu">
             <items>
-                <menuItem title="vagrant up" id="zbw-I7-JVS">
+                <menuItem title="vagrant up" tag="1" id="zbw-I7-JVS">
                     <modifierMask key="keyEquivalentModifierMask"/>
                 </menuItem>
-                <menuItem title="vagrant halt" tag="1" id="GVA-sR-c4Z">
+                <menuItem title="vagrant halt" tag="2" id="GVA-sR-c4Z">
                     <modifierMask key="keyEquivalentModifierMask"/>
                 </menuItem>
-                <menuItem title="vagrant destroy" tag="2" id="MPx-Al-AWG">
+                <menuItem title="vagrant destroy" tag="3" id="MPx-Al-AWG">
                     <modifierMask key="keyEquivalentModifierMask"/>
                 </menuItem>
                 <menuItem isSeparatorItem="YES" id="nTQ-Da-JAA"/>
-                <menuItem title="Details" tag="3" id="t9Y-fZ-XOm">
+                <menuItem title="Add to bookmarks" tag="5" id="3VE-HG-tuh">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                </menuItem>
+                <menuItem title="Remove from bookmarks" tag="6" id="ykP-UR-S9q">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                </menuItem>
+                <menuItem title="Details" tag="4" id="t9Y-fZ-XOm">
                     <modifierMask key="keyEquivalentModifierMask"/>
                 </menuItem>
             </items>

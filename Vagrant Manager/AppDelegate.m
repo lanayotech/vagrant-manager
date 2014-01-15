@@ -7,6 +7,13 @@
 
 #import "AppDelegate.h"
 
+#define MENU_ITEM_VAGRANT_UP 1
+#define MENU_ITEM_VAGRANT_HALT 2
+#define MENU_ITEM_VAGRANT_DESTROY 3
+#define MENU_ITEM_DETAILS 4
+#define MENU_ITEM_ADD_BOOKMARK 5
+#define MENU_ITEM_REMOVE_BOOKMARK 6
+
 @implementation AppDelegate
 
 #pragma mark - Application events
@@ -18,6 +25,7 @@
     taskOutputWindows = [[NSMutableArray alloc] init];
     infoWindows = [[NSMutableArray alloc] init];
     detectedVagrantMachines = [[NSMutableArray alloc] init];
+    bookmarks = [self getSavedBookmarks];
     
     //create status bar menu item
     statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength];
@@ -41,9 +49,85 @@
     }
 }
 
+#pragma mark - Bookmarks
+
+- (NSMutableArray*)getSavedBookmarks {
+    NSMutableArray *bookmarksArray = [[NSMutableArray alloc] init];
+    
+    NSArray *savedBookmarks = [[NSUserDefaults standardUserDefaults] arrayForKey:@"bookmarks"];
+    if(savedBookmarks) {
+        for(NSDictionary *savedBookmark in savedBookmarks) {
+            Bookmark *bookmark = [[Bookmark alloc] init];
+            bookmark.displayName = [savedBookmark objectForKey:@"displayName"];
+            bookmark.path = [savedBookmark objectForKey:@"path"];
+            
+            if(bookmark.displayName && bookmark.path) {
+                [bookmarksArray addObject:bookmark];
+            }
+        }
+    }
+    
+    return bookmarksArray;
+}
+
+- (void)saveBookmarks:(NSMutableArray*)bm {
+    NSMutableArray *arr = [[NSMutableArray alloc] init];
+    for(Bookmark *b in bm) {
+        [arr addObject:@{@"displayName":b.displayName, @"path":b.path}];
+    }
+    [[NSUserDefaults standardUserDefaults] setObject:arr forKey:@"bookmarks"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+- (void)addBookmarkForVirtualMachine:(VirtualMachineInfo*)machine {
+    for(Bookmark *b in bookmarks) {
+        if([b.path isEqualToString:[machine getSharedFolderPathWithName:@"/vagrant"]]) {
+            return;
+        }
+    }
+    
+    Bookmark *bookmark = [[Bookmark alloc] init];
+    bookmark.displayName = machine.name;
+    bookmark.path = [machine getSharedFolderPathWithName:@"/vagrant"];
+    [bookmarks addObject:bookmark];
+    
+    machine.bookmark = bookmark;
+    
+    [self saveBookmarks:bookmarks];
+}
+
+- (void)removeBookmark:(Bookmark*)bookmark {
+    VirtualMachineInfo *machine = [self getVirtualMachineForBookmark:bookmark];
+    if(machine) {
+        machine.bookmark = nil;
+    }
+    [bookmarks removeObject:bookmark];
+    [self saveBookmarks:bookmarks];
+}
+
+- (Bookmark*)getBookmarkByPath:(NSString*)path {
+    for(Bookmark *bookmark in bookmarks) {
+        if([bookmark.path isEqualToString:path]) {
+            return bookmark;
+        }
+    }
+    
+    return nil;
+}
+
+- (void)updateBookmarkState:(Bookmark*)bookmark {
+    VirtualMachineInfo *machine = [self getVirtualMachineForBookmark:bookmark];
+    if(machine) {
+        [self updateVirtualMachineState:machine];
+    } else {
+        [self detectVagrantMachines];
+    }
+}
+
+
 #pragma mark - Vagrant machine control
 
-- (void)runVagrantAction:(NSString*)action withMachine:(VirtualMachineInfo*)machine {
+- (void)runVagrantAction:(NSString*)action withObject:(id)obj {
     NSString *command;
     
     if([action isEqualToString:@"up"]) {
@@ -57,7 +141,16 @@
     NSTask *task = [[NSTask alloc] init];
     [task setLaunchPath:@"/bin/sh"];
     
-    NSString *taskCommand = [NSString stringWithFormat:@"cd '%@' && %@", [machine getSharedFolderPathWithName:@"/vagrant"], command];
+    VirtualMachineInfo *machine;
+    Bookmark *bookmark;
+    
+    if([obj isKindOfClass:[VirtualMachineInfo class]]) {
+        machine = obj;
+    } else if([obj isKindOfClass:[Bookmark class]]) {
+        bookmark = obj;
+    }
+    
+    NSString *taskCommand = [NSString stringWithFormat:@"cd '%@' && %@", bookmark ? bookmark.path : [machine getSharedFolderPathWithName:@"/vagrant"], command];
     
     [task setArguments:@[@"-c", taskCommand]];
     
@@ -65,6 +158,7 @@
     outputWindow.task = task;
     outputWindow.taskCommand = taskCommand;
     outputWindow.machine = machine;
+    outputWindow.bookmark = bookmark;
     
     [NSApp activateIgnoringOtherApps:YES];
     [outputWindow showWindow:self];
@@ -79,64 +173,118 @@
 
     [statusMenu removeAllItems];
     
-    //add bookmarks
-    NSMenuItem *i = [[NSMenuItem alloc] init];
-    [i setTitle:@"Bookmarks"];
-    [i setEnabled:NO];
-    [statusMenu addItem:i];
-    
-    if(!bookmarksSeparatorMenuItem) {
-        bookmarksSeparatorMenuItem = [NSMenuItem separatorItem];
-    }
-    [statusMenu addItem:bookmarksSeparatorMenuItem];
-    
-    //add detected
-    if(detectedVagrantMachines && [detectedVagrantMachines count] > 0) {
-        @synchronized(detectedVagrantMachines) {
-            for(VirtualMachineInfo *machine in detectedVagrantMachines) {
-                i = [[NSMenuItem alloc] init];
-                [i setTitle:machine.name];
+    @synchronized(detectedVagrantMachines) {
+        //add bookmarks
+        if(bookmarks.count == 0) {
+            NSMenuItem *i = [[NSMenuItem alloc] init];
+            [i setTitle:@"No Bookmarks Added"];
+            [i setEnabled:NO];
+            [statusMenu addItem:i];
+        } else {
+            for(Bookmark *bookmark in bookmarks) {
+                VirtualMachineInfo *machine = [self getVirtualMachineForBookmark:bookmark];
+                NSMenuItem *i = [[NSMenuItem alloc] init];
+                [i setTitle:bookmark.displayName];
                 
                 [i setEnabled:YES];
                 [i setImage:[[NSImage alloc] initWithContentsOfFile:[bundle pathForResource:[machine isRunning]?@"on":@"off" ofType:@"png"]]];
                 [i setTag:MenuItemDetected];
-                [i setRepresentedObject:machine];
+                [i setRepresentedObject:bookmark];
                 
                 [statusMenu addItem:i];
                 
                 NSMenu *submenu = [statusSubMenuTemplate copy];
                 
                 if(machine.isRunning) {
-                    NSMenuItem *vagrantUp = [submenu itemWithTag:0];
+                    NSMenuItem *vagrantUp = [submenu itemWithTag:MENU_ITEM_VAGRANT_UP];
                     [vagrantUp setEnabled:NO];
                     
-                    NSMenuItem *vagrantHalt = [submenu itemWithTag:1];
+                    NSMenuItem *vagrantHalt = [submenu itemWithTag:MENU_ITEM_VAGRANT_HALT];
                     [vagrantHalt setAction:@selector(vagrantHaltMenuItemClicked:)];
                 } else {
-                    NSMenu *submenu = [statusSubMenuTemplate copy];
-                    
-                    NSMenuItem *vagrantUp = [submenu itemWithTag:0];
+                    NSMenuItem *vagrantUp = [submenu itemWithTag:MENU_ITEM_VAGRANT_UP];
                     [vagrantUp setAction:@selector(vagrantUpMenuItemClicked:)];
                     
-                    NSMenuItem *vagrantHalt = [submenu itemWithTag:1];
+                    NSMenuItem *vagrantHalt = [submenu itemWithTag:MENU_ITEM_VAGRANT_HALT];
                     [vagrantHalt setEnabled:NO];
                 }
                 
-                NSMenuItem *vagrantDestroy = [submenu itemWithTag:2];
-                [vagrantDestroy setAction:@selector(vagrantDestroyMenuItemClicked:)];
-
-                NSMenuItem *virtualMachineDetails = [submenu itemWithTag:3];
-                [virtualMachineDetails setAction:@selector(virtualMachineDetailsMenuItemClicked:)];
+                NSMenuItem *vagrantDestroy = [submenu itemWithTag:MENU_ITEM_VAGRANT_DESTROY];
+                if(!machine) {
+                    [vagrantDestroy setEnabled:NO];
+                } else {
+                    [vagrantDestroy setAction:@selector(vagrantDestroyMenuItemClicked:)];
+                }
+                
+                NSMenuItem *virtualMachineDetails = [submenu itemWithTag:MENU_ITEM_DETAILS];
+                if(!machine) {
+                    [virtualMachineDetails setEnabled:NO];
+                } else {
+                    [virtualMachineDetails setAction:@selector(virtualMachineDetailsMenuItemClicked:)];
+                }
+                
+                NSMenuItem *removeBookmark = [submenu itemWithTag:MENU_ITEM_REMOVE_BOOKMARK];
+                [removeBookmark setAction:@selector(removeBookmarkMenuItemClicked:)];
                 
                 [statusMenu setSubmenu:submenu forItem:i];
             }
         }
-    } else {
-        i = [[NSMenuItem alloc] init];
-        [i setTitle:@"No detected VMs"];
-        [i setTag:MenuItemDetected];
-        [i setEnabled:NO];
-        [statusMenu addItem:i];
+        
+        if(!bookmarksSeparatorMenuItem) {
+            bookmarksSeparatorMenuItem = [NSMenuItem separatorItem];
+        }
+        [statusMenu addItem:bookmarksSeparatorMenuItem];
+        
+        if(detectedVagrantMachines.count == 0) {
+            NSMenuItem *i = [[NSMenuItem alloc] init];
+            [i setTitle:@"No detected VMs"];
+            [i setTag:MenuItemDetected];
+            [i setEnabled:NO];
+            [statusMenu addItem:i];
+        }
+        
+        for(VirtualMachineInfo *machine in detectedVagrantMachines) {
+            if(machine.bookmark) {
+                continue;
+            }
+            
+            NSMenuItem *i = [[NSMenuItem alloc] init];
+            [i setTitle:machine.name];
+            
+            [i setEnabled:YES];
+            [i setImage:[[NSImage alloc] initWithContentsOfFile:[bundle pathForResource:[machine isRunning]?@"on":@"off" ofType:@"png"]]];
+            [i setTag:MenuItemDetected];
+            [i setRepresentedObject:machine];
+            
+            [statusMenu addItem:i];
+            
+            NSMenu *submenu = [statusSubMenuTemplate copy];
+            
+            if(machine.isRunning) {
+                NSMenuItem *vagrantUp = [submenu itemWithTag:MENU_ITEM_VAGRANT_UP];
+                [vagrantUp setEnabled:NO];
+                
+                NSMenuItem *vagrantHalt = [submenu itemWithTag:MENU_ITEM_VAGRANT_HALT];
+                [vagrantHalt setAction:@selector(vagrantHaltMenuItemClicked:)];
+            } else {
+                NSMenuItem *vagrantUp = [submenu itemWithTag:MENU_ITEM_VAGRANT_UP];
+                [vagrantUp setAction:@selector(vagrantUpMenuItemClicked:)];
+                
+                NSMenuItem *vagrantHalt = [submenu itemWithTag:MENU_ITEM_VAGRANT_HALT];
+                [vagrantHalt setEnabled:NO];
+            }
+            
+            NSMenuItem *vagrantDestroy = [submenu itemWithTag:MENU_ITEM_VAGRANT_DESTROY];
+            [vagrantDestroy setAction:@selector(vagrantDestroyMenuItemClicked:)];
+
+            NSMenuItem *virtualMachineDetails = [submenu itemWithTag:MENU_ITEM_DETAILS];
+            [virtualMachineDetails setAction:@selector(virtualMachineDetailsMenuItemClicked:)];
+            
+            NSMenuItem *addBookmark = [submenu itemWithTag:MENU_ITEM_ADD_BOOKMARK];
+            [addBookmark setAction:@selector(addBookmarkMenuItemClicked:)];
+            
+            [statusMenu setSubmenu:submenu forItem:i];
+        }
     }
     
     if(!refreshDetectedMenuItem) {
@@ -152,6 +300,13 @@
     [statusMenu addItem:detectedSeparatorMenuItem];
     
     //add static items
+    if(!showAllWindowsMenuItem) {
+        showAllWindowsMenuItem = [[NSMenuItem alloc] init];
+        [showAllWindowsMenuItem setTitle:@"Show All Windows"];
+        [showAllWindowsMenuItem setAction:@selector(showAllWindowsMenuItemClicked:)];
+    }
+    [statusMenu addItem:showAllWindowsMenuItem];
+
     if(!preferencesMenuItem) {
         preferencesMenuItem = [[NSMenuItem alloc] init];
         [preferencesMenuItem setTitle:@"Preferences"];
@@ -190,7 +345,21 @@
     };
 }
 
+- (void)removeBookmarkedMenuItems {
+    while(true) {
+        NSMenuItem *i = [statusMenu itemWithTag:MenuItemBookmarked];
+        if(!i) {
+            break;
+        }
+        [statusMenu removeItem:i];
+    };
+}
+
 #pragma mark - Menu Item Handlers
+
+- (IBAction)showAllWindowsMenuItemClicked:(id)sender {
+    [self showAllWindows];
+}
 
 - (IBAction)refreshDetectedMenuItemClicked:(id)sender {
     [self detectVagrantMachines];
@@ -203,23 +372,26 @@
 
 
 - (void)vagrantUpMenuItemClicked:(NSMenuItem*)menuItem {
-    VirtualMachineInfo *machine = [menuItem parentItem].representedObject;
-    [self runVagrantAction:@"up" withMachine:machine];
+    [self runVagrantAction:@"up" withObject:menuItem.parentItem.representedObject];
 }
 
 - (void)vagrantHaltMenuItemClicked:(NSMenuItem*)menuItem {
-    VirtualMachineInfo *machine = [menuItem parentItem].representedObject;
-    [self runVagrantAction:@"halt" withMachine:machine];
+    [self runVagrantAction:@"halt" withObject:menuItem.parentItem.representedObject];
 }
 
 - (void)vagrantDestroyMenuItemClicked:(NSMenuItem*)menuItem {
-    VirtualMachineInfo *machine = [menuItem parentItem].representedObject;
-    
-    NSAlert *confirmAlert = [NSAlert alertWithMessageText:[NSString stringWithFormat:@"Are you sure you want to destroy \"%@\"?", machine.name] defaultButton:@"Confirm" alternateButton:@"Cancel" otherButton:nil informativeTextWithFormat:@""];
+    NSString *name;
+    if([menuItem.parentItem.representedObject isKindOfClass:[VirtualMachineInfo class]]) {
+        name = ((VirtualMachineInfo*)menuItem.parentItem.representedObject).name;
+    } else if([menuItem.parentItem.representedObject isKindOfClass:[Bookmark class]]) {
+        name = ((Bookmark*)menuItem.parentItem.representedObject).displayName;
+    }
+
+    NSAlert *confirmAlert = [NSAlert alertWithMessageText:[NSString stringWithFormat:@"Are you sure you want to destroy \"%@\"?", name] defaultButton:@"Confirm" alternateButton:@"Cancel" otherButton:nil informativeTextWithFormat:@""];
     NSInteger button = [confirmAlert runModal];
     
     if(button == NSAlertDefaultReturn) {
-        [self runVagrantAction:@"destroy" withMachine:machine];
+        [self runVagrantAction:@"destroy" withObject:menuItem.parentItem.representedObject];
     }
 }
 
@@ -233,6 +405,22 @@
     [infoWindows addObject:infoWindow];
 }
 
+- (void)addBookmarkMenuItemClicked:(NSMenuItem*)menuItem {
+    VirtualMachineInfo *machine = [menuItem parentItem].representedObject;
+    
+    [self addBookmarkForVirtualMachine:machine];
+    [self rebuildMenu];
+}
+
+- (void)removeBookmarkMenuItemClicked:(NSMenuItem*)menuItem {
+    VirtualMachineInfo *machine = [menuItem parentItem].representedObject;
+    
+    if(machine.bookmark) {
+        [self removeBookmark:machine.bookmark];
+        [self rebuildMenu];
+    }
+}
+
 #pragma mark - General Functions
 
 - (void)removeOutputWindow:(TaskOutputWindow*)outputWindow {
@@ -243,7 +431,22 @@
     [infoWindows removeObject:infoWindow];
 }
 
+- (void)showAllWindows {
+    //TODO: this is not working properly, it only shows the most recently activated window
+    [NSApp activateIgnoringOtherApps:YES];
+}
+
 #pragma mark - Virtual Machines
+
+- (VirtualMachineInfo*)getVirtualMachineForBookmark:(Bookmark*)bookmark {
+    for(VirtualMachineInfo *machine in detectedVagrantMachines) {
+        if(machine.bookmark == bookmark) {
+            return machine;
+        }
+    }
+    
+    return nil;
+}
 
 - (VirtualMachineInfo*)getVirtualMachineInfo:(NSString*)uuid {
     NSTask *task = [[NSTask alloc] init];
@@ -301,7 +504,10 @@
 
 - (void)updateVirtualMachineState:(VirtualMachineInfo*)machine {
     VirtualMachineInfo *info = [self getVirtualMachineInfo:machine.uuid];
-    if(info) {
+    
+    if(!info) {
+        [self detectVagrantMachines];
+    } else {
         machine.state = info.state;
         [self rebuildMenu];
     }
@@ -355,6 +561,7 @@
         NSMutableArray *vagrantMachines = [[NSMutableArray alloc] init];
         for(VirtualMachineInfo *vmInfo in virtualMachines) {
             if([vmInfo getSharedFolderPathWithName:@"/vagrant"]) {
+                vmInfo.bookmark = [self getBookmarkByPath:[vmInfo getSharedFolderPathWithName:@"/vagrant"]];
                 [vagrantMachines addObject:vmInfo];
             }
         }

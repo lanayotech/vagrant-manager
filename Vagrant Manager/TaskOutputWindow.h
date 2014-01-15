@@ -7,10 +7,12 @@
 
 #import <Cocoa/Cocoa.h>
 #import "VirtualMachineInfo.h"
+#import "Bookmark.h"
 
 @interface TaskOutputWindow : NSWindowController <NSWindowDelegate>
 
 @property (strong, nonatomic) VirtualMachineInfo *machine;
+@property (strong, nonatomic) Bookmark *bookmark;
 @property (strong, nonatomic) NSString *taskCommand;
 @property (strong, nonatomic) NSTask *task;
 
