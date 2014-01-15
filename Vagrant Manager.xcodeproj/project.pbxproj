@@ -10,9 +10,9 @@
 		8308E132188662BD001E0B45 /* AboutWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 8308E130188662BD001E0B45 /* AboutWindow.m */; };
 		8308E133188662BD001E0B45 /* AboutWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8308E131188662BD001E0B45 /* AboutWindow.xib */; };
 		8308E135188668A1001E0B45 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8308E134188668A1001E0B45 /* WebKit.framework */; };
+		8308E138188678A0001E0B45 /* VirtualMachineInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 8308E137188678A0001E0B45 /* VirtualMachineInfo.m */; };
 		8339DCA1187E756B0036E162 /* TaskOutputWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 8339DC9F187E756B0036E162 /* TaskOutputWindow.m */; };
 		8339DCA2187E756B0036E162 /* TaskOutputWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8339DCA0187E756B0036E162 /* TaskOutputWindow.xib */; };
-		838A111D18839E3300A5E6DB /* VagrantMachine.m in Sources */ = {isa = PBXBuildFile; fileRef = 838A111C18839E3300A5E6DB /* VagrantMachine.m */; };
 		B1357A71187CEB3B00811CBC /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B1357A70187CEB3B00811CBC /* Cocoa.framework */; };
 		B1357A7B187CEB3B00811CBC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = B1357A79187CEB3B00811CBC /* InfoPlist.strings */; };
 		B1357A7D187CEB3B00811CBC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B1357A7C187CEB3B00811CBC /* main.m */; };
@@ -30,11 +30,11 @@
 		8308E130188662BD001E0B45 /* AboutWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AboutWindow.m; sourceTree = "<group>"; };
 		8308E131188662BD001E0B45 /* AboutWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AboutWindow.xib; sourceTree = "<group>"; };
 		8308E134188668A1001E0B45 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
+		8308E136188678A0001E0B45 /* VirtualMachineInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VirtualMachineInfo.h; sourceTree = "<group>"; };
+		8308E137188678A0001E0B45 /* VirtualMachineInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VirtualMachineInfo.m; sourceTree = "<group>"; };
 		8339DC9E187E756B0036E162 /* TaskOutputWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskOutputWindow.h; sourceTree = "<group>"; };
 		8339DC9F187E756B0036E162 /* TaskOutputWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TaskOutputWindow.m; sourceTree = "<group>"; };
 		8339DCA0187E756B0036E162 /* TaskOutputWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TaskOutputWindow.xib; sourceTree = "<group>"; };
-		838A111B18839E3300A5E6DB /* VagrantMachine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VagrantMachine.h; sourceTree = "<group>"; };
-		838A111C18839E3300A5E6DB /* VagrantMachine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VagrantMachine.m; sourceTree = "<group>"; };
 		B1357A6D187CEB3B00811CBC /* Vagrant Manager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Vagrant Manager.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B1357A70187CEB3B00811CBC /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		B1357A73187CEB3B00811CBC /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -103,8 +103,8 @@
 		838A111A18839E1100A5E6DB /* Data */ = {
 			isa = PBXGroup;
 			children = (
-				838A111B18839E3300A5E6DB /* VagrantMachine.h */,
-				838A111C18839E3300A5E6DB /* VagrantMachine.m */,
+				8308E136188678A0001E0B45 /* VirtualMachineInfo.h */,
+				8308E137188678A0001E0B45 /* VirtualMachineInfo.m */,
 			);
 			name = Data;
 			sourceTree = "<group>";
@@ -241,10 +241,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				B1357A84187CEB3B00811CBC /* AppDelegate.m in Sources */,
+				8308E138188678A0001E0B45 /* VirtualMachineInfo.m in Sources */,
 				8308E132188662BD001E0B45 /* AboutWindow.m in Sources */,
 				8339DCA1187E756B0036E162 /* TaskOutputWindow.m in Sources */,
 				B1357A7D187CEB3B00811CBC /* main.m in Sources */,
-				838A111D18839E3300A5E6DB /* VagrantMachine.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

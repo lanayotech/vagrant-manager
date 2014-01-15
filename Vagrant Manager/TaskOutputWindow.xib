@@ -70,7 +70,7 @@
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="GMU-0g-Bph">
                         <rect key="frame" x="20" y="230" width="440" height="20"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="left" title="Task Command" drawsBackground="YES" usesSingleLineMode="YES" id="c1d-fd-4lg">
+                        <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="left" title="Task Command" drawsBackground="YES" usesSingleLineMode="YES" id="c1d-fd-4lg">
                             <font key="font" size="14" name="CourierNewPSMT"/>
                             <color key="textColor" red="0.24771750301885942" green="1" blue="0.28522159497353927" alpha="1" colorSpace="calibratedRGB"/>
                             <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>

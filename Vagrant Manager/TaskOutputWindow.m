@@ -36,7 +36,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receivedOutput:) name:NSFileHandleDataAvailableNotification object:fh];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(taskCompletion:)  name: NSTaskDidTerminateNotification object:self.task];
     
-    self.window.title = self.machine.displayName;
+    self.window.title = self.machine.name;
     
     self.taskCommandLabel.stringValue = self.taskCommand;
     self.taskStatusLabel.stringValue = @"Running task...";
@@ -64,7 +64,7 @@
     }
     
     AppDelegate *app = (AppDelegate*)[[NSApplication sharedApplication] delegate];
-    [app detectVagrantMachines];
+    [app updateVirtualMachineState:self.machine];
 }
 
 - (void)windowWillClose:(NSNotification *)notification {

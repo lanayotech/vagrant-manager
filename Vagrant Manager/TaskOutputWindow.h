@@ -6,11 +6,11 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "VagrantMachine.h"
+#import "VirtualMachineInfo.h"
 
 @interface TaskOutputWindow : NSWindowController <NSWindowDelegate>
 
-@property (strong, nonatomic) VagrantMachine *machine;
+@property (strong, nonatomic) VirtualMachineInfo *machine;
 @property (strong, nonatomic) NSString *taskCommand;
 @property (strong, nonatomic) NSTask *task;
 

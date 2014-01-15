@@ -8,7 +8,7 @@
 #import <Cocoa/Cocoa.h>
 #import "TaskOutputWindow.h"
 #import "AboutWindow.h"
-#import "VagrantMachine.h"
+#import "VirtualMachineInfo.h"
 
 #define MENU_ITEM_BOOKMARKED_VM 1
 #define MENU_ITEM_DETECTED_VM   2
@@ -39,6 +39,6 @@
 @property (assign) IBOutlet NSWindow *window;
 
 - (void)removeOutputWindow:(TaskOutputWindow*)outputWindow;
-- (void)detectVagrantMachines;
+- (void)updateVirtualMachineState:(VirtualMachineInfo*)machine;
 
 @end
