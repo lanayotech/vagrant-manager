@@ -34,7 +34,7 @@
     [fh waitForDataInBackgroundAndNotify];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receivedOutput:) name:NSFileHandleDataAvailableNotification object:fh];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(TaskCompletion:)  name: NSTaskDidTerminateNotification object:self.task];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(taskCompletion:)  name: NSTaskDidTerminateNotification object:self.task];
     
     self.window.title = self.machine.displayName;
     
@@ -45,7 +45,7 @@
     [self.task launch];
 }
 
--(void) TaskCompletion :(NSNotification*)notif {
+- (void)taskCompletion:(NSNotification*)notif {
     NSTask *task = [notif object];
     
     [self.progressBar stopAnimation:self];
@@ -62,6 +62,9 @@
     } else {
         self.taskStatusLabel.stringValue = @"Completed successfully";
     }
+    
+    AppDelegate *app = (AppDelegate*)[[NSApplication sharedApplication] delegate];
+    [app detectVagrantMachines];
 }
 
 - (void)windowWillClose:(NSNotification *)notification {
@@ -75,14 +78,12 @@
     NSData *data = [fh availableData];
     NSString *str = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
     
-    // Smart Scrolling
+    //smart scrolling logic for command output
     BOOL scroll = (NSMaxY(self.outputTextView.visibleRect) == NSMaxY(self.outputTextView.bounds));
-    
-    // Append string to textview
     [self.outputTextView.textStorage appendAttributedString:[[NSAttributedString alloc]initWithString:str]];
-    
-    if (scroll) // Scroll to end of the textview contents
+    if (scroll) {
         [self.outputTextView scrollRangeToVisible: NSMakeRange(self.outputTextView.string.length, 0)];
+    }
     
     [fh waitForDataInBackgroundAndNotify];
 }
