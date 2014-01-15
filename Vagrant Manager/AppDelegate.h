@@ -7,6 +7,7 @@
 
 #import <Cocoa/Cocoa.h>
 #import "TaskOutputWindow.h"
+#import "AboutWindow.h"
 #import "VagrantMachine.h"
 
 #define MENU_ITEM_BOOKMARKED_VM 1
@@ -31,6 +32,8 @@
     NSMenuItem *preferencesMenuItem;
     NSMenuItem *aboutMenuItem;
     NSMenuItem *quitMenuItem;
+    
+    AboutWindow *aboutWindow;
 }
 
 @property (assign) IBOutlet NSWindow *window;

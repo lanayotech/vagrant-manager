@@ -34,141 +34,6 @@
 - (void)menuWillOpen:(NSMenu *)menu {
 }
 
-- (void)detectVagrantMachines {
-    //TODO: more thorough checking of method to get VM names and paths
-    
-    [self removeDetectedMenuItems];
-    
-    NSMenuItem *i = [[NSMenuItem alloc] init];
-    [i setTitle:@"Refreshing..."];
-    [i setEnabled:NO];
-    [i setTag:MenuItemDetected];
-    [statusMenu insertItem:i atIndex:[statusMenu indexOfItem:refreshDetectedMenuItem]];
-
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        //detect all VMs
-        NSTask *allVmsTask = [[NSTask alloc] init];
-        [allVmsTask setLaunchPath:@"/bin/sh"];
-        [allVmsTask setArguments:@[@"-c", @"vboxmanage list vms | grep -iEo '\".*\"' | cut -c 2- | rev | cut -c 2- | rev"]];
-        
-        NSPipe *allVmsOutputPipe = [NSPipe pipe];
-        [allVmsTask setStandardInput:[NSPipe pipe]];
-        [allVmsTask setStandardOutput:allVmsOutputPipe];
-        
-        [allVmsTask launch];
-        [allVmsTask waitUntilExit];
-        
-        NSData *allVmsOutputData = [[allVmsOutputPipe fileHandleForReading] readDataToEndOfFile];
-        NSString *allVmsOutputString = [[NSString alloc] initWithData:allVmsOutputData encoding:NSUTF8StringEncoding];
-        
-        NSMutableArray *arr = [[allVmsOutputString componentsSeparatedByCharactersInSet: [NSCharacterSet newlineCharacterSet]] mutableCopy];
-        
-        NSMutableArray *detectedVmNames = [[NSMutableArray alloc] init];
-        
-        for(NSString *str in arr) {
-            if([[str stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] length] > 0) {
-                [detectedVmNames addObject:str];
-            }
-        }
-        
-        detectedVmNames = [[detectedVmNames sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)] mutableCopy];
-        
-        //get running vms
-        NSTask *runningVmsTask = [[NSTask alloc] init];
-        [runningVmsTask setLaunchPath:@"/bin/sh"];
-        [runningVmsTask setArguments:@[@"-c", @"vboxmanage list runningvms | grep -iEo '\".*\"' | cut -c 2- | rev | cut -c 2- | rev"]];
-        
-        NSPipe *runningVmsOutputPipe = [NSPipe pipe];
-        [runningVmsTask setStandardInput:[NSPipe pipe]];
-        [runningVmsTask setStandardOutput:runningVmsOutputPipe];
-        
-        [runningVmsTask launch];
-        [runningVmsTask waitUntilExit];
-        
-        NSData *runningVmsOutputData = [[runningVmsOutputPipe fileHandleForReading] readDataToEndOfFile];
-        NSString *runningVmsOutputString = [[NSString alloc] initWithData:runningVmsOutputData encoding:NSUTF8StringEncoding];
-        
-        arr = [[runningVmsOutputString componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]] mutableCopy];
-        
-        NSMutableArray *runningVmNames = [[NSMutableArray alloc] init];
-        
-        for(NSString *str in arr) {
-            if([[str stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] length] > 0) {
-                [runningVmNames addObject:str];
-            }
-        }
-        
-        runningVmNames = [[runningVmNames sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)] mutableCopy];
-
-        //get vagrant machine paths
-        NSMutableArray *vagrantMachines = [[NSMutableArray alloc] init];
-        for (NSString *machineName in detectedVmNames) {
-            NSTask *getVagrantPathTask = [[NSTask alloc] init];
-            [getVagrantPathTask setLaunchPath:@"/bin/sh"];
-            [getVagrantPathTask setArguments:@[@"-c", [NSString stringWithFormat:@"vboxmanage showvminfo \"%@\" | grep 'Name:.*' | grep -iEo \"'[^\']*'\" | cut -c 2- | rev | cut -c 2- | rev", machineName]]];
-            
-            NSPipe *outputPipe = [NSPipe pipe];
-            [getVagrantPathTask setStandardInput:[NSPipe pipe]];
-            [getVagrantPathTask setStandardOutput:outputPipe];
-            
-            [getVagrantPathTask launch];
-            [getVagrantPathTask waitUntilExit];
-            
-            NSData *outputData = [[outputPipe fileHandleForReading] readDataToEndOfFile];
-            NSString *outputString = [[NSString alloc] initWithData:outputData encoding:NSUTF8StringEncoding];
-            outputString = [outputString stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
-            NSMutableArray *outputArr = [[outputString componentsSeparatedByCharactersInSet: [NSCharacterSet newlineCharacterSet]] mutableCopy];
-            
-            [outputArr removeObject:@""];
-            
-            int insertIdx = 0;
-            if ([outputArr count] == 2) {
-                if ([[outputArr objectAtIndex:0] isEqualToString:@"/vagrant"]) {
-                    VagrantMachine *machine = [[VagrantMachine alloc] init];
-                    machine.vmid = machineName;
-                    machine.displayName = machineName;
-                    machine.path = [outputArr objectAtIndex:1];
-                    machine.isRunning = [runningVmNames containsObject:machineName];
-                    
-                    //TODO: need to check if it's bookmark and ignore it or set running flag on bookmarked machine
-                    
-                    if(machine.isRunning) {
-                        [vagrantMachines insertObject:machine atIndex:insertIdx++];
-                    } else {
-                        [vagrantMachines addObject:machine];
-                    }
-                }
-            }
-        }
-        
-        vagrantMachines = [[vagrantMachines sortedArrayUsingComparator:^(id obj1, id obj2) {
-            if ([obj1 isKindOfClass:[VagrantMachine class]] && [obj2 isKindOfClass:[VagrantMachine class]]) {
-                VagrantMachine *m1 = obj1;
-                VagrantMachine *m2 = obj2;
-                
-                if (m1.isRunning && !m2.isRunning) {
-                    return (NSComparisonResult)NSOrderedAscending;
-                } else if (m2.isRunning && !m1.isRunning) {
-                    return (NSComparisonResult)NSOrderedDescending;
-                }
-                
-                return [m1.displayName caseInsensitiveCompare:m2.displayName];
-            }
-
-            return NSOrderedSame;
-        }] mutableCopy];
-        
-        @synchronized(detectedVagrantMachines) {
-            detectedVagrantMachines = vagrantMachines;
-        }
-        
-        // when that method finishes you can run whatever you need to on the main thread
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self rebuildMenu];
-        });
-    });
-}
-
 #pragma mark - Vagrant machine control
 
 - (void)runVagrantAction:(NSString*)action withMachine:(VagrantMachine*)machine {
@@ -286,7 +151,7 @@
     if(!refreshDetectedMenuItem) {
         refreshDetectedMenuItem = [[NSMenuItem alloc] init];
         [refreshDetectedMenuItem setTitle:@"Refresh Detected VMs"];
-        [refreshDetectedMenuItem setAction:@selector(refreshDetectedClicked:)];
+        [refreshDetectedMenuItem setAction:@selector(refreshDetectedMenuItemClicked:)];
     }
     [statusMenu addItem:refreshDetectedMenuItem];
     
@@ -305,6 +170,7 @@
     if(!aboutMenuItem) {
         aboutMenuItem = [[NSMenuItem alloc] init];
         [aboutMenuItem setTitle:@"About"];
+        [aboutMenuItem setAction:@selector(aboutMenuItemClicked:)];
     }
     [statusMenu addItem:aboutMenuItem];
 
@@ -346,14 +212,154 @@
 
 #pragma mark - Menu Item Handlers
 
-- (IBAction)refreshDetectedClicked:(id)sender {
+- (IBAction)refreshDetectedMenuItemClicked:(id)sender {
     [self detectVagrantMachines];
+}
+
+- (IBAction)aboutMenuItemClicked:(id)sender {
+    aboutWindow = [[AboutWindow alloc] initWithWindowNibName:@"AboutWindow"];
+    [aboutWindow showWindow:self];
 }
 
 #pragma mark - General Functions
 
 - (void)removeOutputWindow:(TaskOutputWindow*)outputWindow {
     [taskOutputWindows removeObject:outputWindow];
+}
+
+- (void)detectVagrantMachines {
+    //TODO: more thorough checking of method to get VM names and paths
+    
+    [self removeDetectedMenuItems];
+    
+    NSMenuItem *i = [[NSMenuItem alloc] init];
+    [i setTitle:@"Refreshing..."];
+    [i setEnabled:NO];
+    [i setTag:MenuItemDetected];
+    [statusMenu insertItem:i atIndex:[statusMenu indexOfItem:refreshDetectedMenuItem]];
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        //detect all VMs
+        NSTask *allVmsTask = [[NSTask alloc] init];
+        [allVmsTask setLaunchPath:@"/bin/sh"];
+        [allVmsTask setArguments:@[@"-c", @"vboxmanage list vms | grep -iEo '\".*\"' | cut -c 2- | rev | cut -c 2- | rev"]];
+        
+        NSPipe *allVmsOutputPipe = [NSPipe pipe];
+        [allVmsTask setStandardInput:[NSPipe pipe]];
+        [allVmsTask setStandardOutput:allVmsOutputPipe];
+        
+        [allVmsTask launch];
+        [allVmsTask waitUntilExit];
+        
+        NSData *allVmsOutputData = [[allVmsOutputPipe fileHandleForReading] readDataToEndOfFile];
+        NSString *allVmsOutputString = [[NSString alloc] initWithData:allVmsOutputData encoding:NSUTF8StringEncoding];
+        
+        NSMutableArray *arr = [[allVmsOutputString componentsSeparatedByCharactersInSet: [NSCharacterSet newlineCharacterSet]] mutableCopy];
+        
+        NSMutableArray *detectedVmNames = [[NSMutableArray alloc] init];
+        
+        for(NSString *str in arr) {
+            if([[str stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] length] > 0) {
+                [detectedVmNames addObject:str];
+            }
+        }
+        
+        detectedVmNames = [[detectedVmNames sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)] mutableCopy];
+        
+        //get running vms
+        NSTask *runningVmsTask = [[NSTask alloc] init];
+        [runningVmsTask setLaunchPath:@"/bin/sh"];
+        [runningVmsTask setArguments:@[@"-c", @"vboxmanage list runningvms | grep -iEo '\".*\"' | cut -c 2- | rev | cut -c 2- | rev"]];
+        
+        NSPipe *runningVmsOutputPipe = [NSPipe pipe];
+        [runningVmsTask setStandardInput:[NSPipe pipe]];
+        [runningVmsTask setStandardOutput:runningVmsOutputPipe];
+        
+        [runningVmsTask launch];
+        [runningVmsTask waitUntilExit];
+        
+        NSData *runningVmsOutputData = [[runningVmsOutputPipe fileHandleForReading] readDataToEndOfFile];
+        NSString *runningVmsOutputString = [[NSString alloc] initWithData:runningVmsOutputData encoding:NSUTF8StringEncoding];
+        
+        arr = [[runningVmsOutputString componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]] mutableCopy];
+        
+        NSMutableArray *runningVmNames = [[NSMutableArray alloc] init];
+        
+        for(NSString *str in arr) {
+            if([[str stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] length] > 0) {
+                [runningVmNames addObject:str];
+            }
+        }
+        
+        runningVmNames = [[runningVmNames sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)] mutableCopy];
+        
+        //get vagrant machine paths
+        NSMutableArray *vagrantMachines = [[NSMutableArray alloc] init];
+        for (NSString *machineName in detectedVmNames) {
+            NSTask *getVagrantPathTask = [[NSTask alloc] init];
+            [getVagrantPathTask setLaunchPath:@"/bin/sh"];
+            [getVagrantPathTask setArguments:@[@"-c", [NSString stringWithFormat:@"vboxmanage showvminfo \"%@\" | grep 'Name:.*' | grep -iEo \"'[^\']*'\" | cut -c 2- | rev | cut -c 2- | rev", machineName]]];
+            
+            NSPipe *outputPipe = [NSPipe pipe];
+            [getVagrantPathTask setStandardInput:[NSPipe pipe]];
+            [getVagrantPathTask setStandardOutput:outputPipe];
+            
+            [getVagrantPathTask launch];
+            [getVagrantPathTask waitUntilExit];
+            
+            NSData *outputData = [[outputPipe fileHandleForReading] readDataToEndOfFile];
+            NSString *outputString = [[NSString alloc] initWithData:outputData encoding:NSUTF8StringEncoding];
+            outputString = [outputString stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
+            NSMutableArray *outputArr = [[outputString componentsSeparatedByCharactersInSet: [NSCharacterSet newlineCharacterSet]] mutableCopy];
+            
+            [outputArr removeObject:@""];
+            
+            int insertIdx = 0;
+            if ([outputArr count] == 2) {
+                if ([[outputArr objectAtIndex:0] isEqualToString:@"/vagrant"]) {
+                    VagrantMachine *machine = [[VagrantMachine alloc] init];
+                    machine.vmid = machineName;
+                    machine.displayName = machineName;
+                    machine.path = [outputArr objectAtIndex:1];
+                    machine.isRunning = [runningVmNames containsObject:machineName];
+                    
+                    //TODO: need to check if it's bookmark and ignore it or set running flag on bookmarked machine
+                    
+                    if(machine.isRunning) {
+                        [vagrantMachines insertObject:machine atIndex:insertIdx++];
+                    } else {
+                        [vagrantMachines addObject:machine];
+                    }
+                }
+            }
+        }
+        
+        vagrantMachines = [[vagrantMachines sortedArrayUsingComparator:^(id obj1, id obj2) {
+            if ([obj1 isKindOfClass:[VagrantMachine class]] && [obj2 isKindOfClass:[VagrantMachine class]]) {
+                VagrantMachine *m1 = obj1;
+                VagrantMachine *m2 = obj2;
+                
+                if (m1.isRunning && !m2.isRunning) {
+                    return (NSComparisonResult)NSOrderedAscending;
+                } else if (m2.isRunning && !m1.isRunning) {
+                    return (NSComparisonResult)NSOrderedDescending;
+                }
+                
+                return [m1.displayName caseInsensitiveCompare:m2.displayName];
+            }
+            
+            return NSOrderedSame;
+        }] mutableCopy];
+        
+        @synchronized(detectedVagrantMachines) {
+            detectedVagrantMachines = vagrantMachines;
+        }
+        
+        // when that method finishes you can run whatever you need to on the main thread
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self rebuildMenu];
+        });
+    });
 }
 
 @end
