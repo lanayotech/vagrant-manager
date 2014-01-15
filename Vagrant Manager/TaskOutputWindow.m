@@ -36,6 +36,9 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receivedOutput:) name:NSFileHandleDataAvailableNotification object:fh];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(TaskCompletion:)  name: NSTaskDidTerminateNotification object:self.task];
     
+    self.window.title = self.machine.displayName;
+    
+    self.taskCommandLabel.stringValue = self.taskCommand;
     self.taskStatusLabel.stringValue = @"Running task...";
     [self.progressBar startAnimation:self];
 
@@ -63,8 +66,6 @@
 
 - (void)windowWillClose:(NSNotification *)notification {
     AppDelegate *app = (AppDelegate*)[[NSApplication sharedApplication] delegate];
-    
-    NSLog(@"Close");
     
     [app removeOutputWindow:self];
 }

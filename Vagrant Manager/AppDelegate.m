@@ -9,177 +9,331 @@
 
 @implementation AppDelegate
 
+#pragma mark - Application events
+
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
-    statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength];
     NSBundle *bundle = [NSBundle mainBundle];
+
+    //initialize data
+    taskOutputWindows = [[NSMutableArray alloc] init];
+    detectedVagrantMachines = [[NSMutableArray alloc] init];
     
-    statusImage = [[NSImage alloc] initWithContentsOfFile:[bundle pathForResource:@"vagrant_logo" ofType:@"png"]];
-    statusHighlightImage = [[NSImage alloc] initWithContentsOfFile:[bundle pathForResource:@"vagrant_logo_highlighted" ofType:@"png"]];
-    
-    [statusItem setImage:statusImage];
-    [statusItem setAlternateImage:statusHighlightImage];
+    //create status bar menu item
+    statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength];
+    [statusItem setImage:[[NSImage alloc] initWithContentsOfFile:[bundle pathForResource:@"vagrant_logo" ofType:@"png"]]];
+    [statusItem setAlternateImage:[[NSImage alloc] initWithContentsOfFile:[bundle pathForResource:@"vagrant_logo_highlighted" ofType:@"png"]]];
+    [statusItem setTitle:@"1"];
     [statusItem setMenu:statusMenu];
     [statusItem setHighlightMode:YES];
+    
     [statusMenu setDelegate:self];
     
-    taskOutputWindows = [[NSMutableArray alloc] init];
+    [self rebuildMenu];
+    [self detectVagrantMachines];
 }
 
 - (void)menuWillOpen:(NSMenu *)menu {
-    NSBundle *bundle = [NSBundle mainBundle];
-    [menu removeAllItems];
+}
+
+- (NSArray*)detectVagrantMachines {
+    NSMutableArray *arr = [[NSMutableArray alloc] init];
     
-    //get running vms
-    NSTask *runningVmsTask = [[NSTask alloc] init];
-    [runningVmsTask setLaunchPath:@"/bin/sh"];
-    [runningVmsTask setArguments:@[@"-c", @"vboxmanage list runningvms | grep -iEo '\".*\"' | sed -e 's/\"//g'"]];
+    //TODO: more thorough checking of method to get VM names and paths
     
-    NSPipe *runningVmsOutputPipe = [NSPipe pipe];
-    [runningVmsTask setStandardInput:[NSPipe pipe]];
-    [runningVmsTask setStandardOutput:runningVmsOutputPipe];
+    [self removeDetectedMenuItems];
     
-    [runningVmsTask launch];
-    [runningVmsTask waitUntilExit];
-    
-    NSData *runningVmsOutputData = [[runningVmsOutputPipe fileHandleForReading] readDataToEndOfFile];
-    NSString *runningVmsOutputString = [[NSString alloc] initWithData:runningVmsOutputData encoding:NSUTF8StringEncoding];
-    
-    NSMutableArray *runningMachines = [[runningVmsOutputString componentsSeparatedByCharactersInSet: [NSCharacterSet newlineCharacterSet]] mutableCopy];
-    
-    //get all vms
-    NSTask *allVmsTask = [[NSTask alloc] init];
-    [allVmsTask setLaunchPath:@"/bin/sh"];
-    [allVmsTask setArguments:@[@"-c", @"vboxmanage list vms | grep -iEo '\".*\"' | sed -e 's/\"//g'"]];
-    
-    NSPipe *allVmsOutputPipe = [NSPipe pipe];
-    [allVmsTask setStandardInput:[NSPipe pipe]];
-    [allVmsTask setStandardOutput:allVmsOutputPipe];
-    
-    [allVmsTask launch];
-    [allVmsTask waitUntilExit];
-    
-    NSData *allVmsOutputData = [[allVmsOutputPipe fileHandleForReading] readDataToEndOfFile];
-    NSString *allVmsOutputString = [[NSString alloc] initWithData:allVmsOutputData encoding:NSUTF8StringEncoding];
-    
-    NSMutableArray *allMachines = [[allVmsOutputString componentsSeparatedByCharactersInSet: [NSCharacterSet newlineCharacterSet]] mutableCopy];
-    
-    //clean up results
-    [runningMachines removeObject:@""];
-    [allMachines removeObject:@""];
-    
-    //get vagrant machine paths
-    NSMutableDictionary *vagrantMachines = [[NSMutableDictionary alloc] init];
-    for (NSString *machine in allMachines) {
-        NSTask *allVagrantsTask = [[NSTask alloc] init];
-        [allVagrantsTask setLaunchPath:@"/bin/sh"];
-        [allVagrantsTask setArguments:@[@"-c", [NSString stringWithFormat:@"vboxmanage showvminfo \"%@\" | grep 'Name:.*' | grep -iEo \"'[^']*'\"", machine]]];
+    NSMenuItem *i = [[NSMenuItem alloc] init];
+    [i setTitle:@"Refreshing..."];
+    [i setEnabled:NO];
+    [i setTag:MenuItemDetected];
+    [statusMenu insertItem:i atIndex:[statusMenu indexOfItem:refreshDetectedMenuItem]];
+
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        //detect all VMs
+        NSTask *allVmsTask = [[NSTask alloc] init];
+        [allVmsTask setLaunchPath:@"/bin/sh"];
+        [allVmsTask setArguments:@[@"-c", @"vboxmanage list vms | grep -iEo '\".*\"' | cut -c 2- | rev | cut -c 2- | rev"]];
         
-        NSPipe *allVagrantsOutputPipe = [NSPipe pipe];
-        [allVagrantsTask setStandardInput:[NSPipe pipe]];
-        [allVagrantsTask setStandardOutput:allVagrantsOutputPipe];
+        NSPipe *allVmsOutputPipe = [NSPipe pipe];
+        [allVmsTask setStandardInput:[NSPipe pipe]];
+        [allVmsTask setStandardOutput:allVmsOutputPipe];
         
-        [allVagrantsTask launch];
-        [allVagrantsTask waitUntilExit];
+        [allVmsTask launch];
+        [allVmsTask waitUntilExit];
         
-        NSData *allVagrantsOutputData = [[allVagrantsOutputPipe fileHandleForReading] readDataToEndOfFile];
-        NSString *allVagrantsOutputString = [[NSString alloc] initWithData:allVagrantsOutputData encoding:NSUTF8StringEncoding];
-        allVagrantsOutputString = [allVagrantsOutputString stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
-        NSMutableArray *allVagrantsOutputStringArr = [[allVagrantsOutputString componentsSeparatedByCharactersInSet: [NSCharacterSet newlineCharacterSet]] mutableCopy];
+        NSData *allVmsOutputData = [[allVmsOutputPipe fileHandleForReading] readDataToEndOfFile];
+        NSString *allVmsOutputString = [[NSString alloc] initWithData:allVmsOutputData encoding:NSUTF8StringEncoding];
         
-        [allVagrantsOutputStringArr removeObject:@""];
+        NSMutableArray *arr = [[allVmsOutputString componentsSeparatedByCharactersInSet: [NSCharacterSet newlineCharacterSet]] mutableCopy];
         
-        if ([allVagrantsOutputStringArr count] == 2) {
-            if ([[allVagrantsOutputStringArr objectAtIndex:0] isEqualToString:@"'/vagrant'"]) {
-                [vagrantMachines setObject:[allVagrantsOutputStringArr objectAtIndex:1] forKey:machine];
+        NSMutableArray *detectedVmNames = [[NSMutableArray alloc] init];
+        
+        for(NSString *str in arr) {
+            if([[str stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] length] > 0) {
+                [detectedVmNames addObject:str];
             }
         }
         
-    }
-    
-    //remove running machines from all machines list
-    for(NSString *machine in runningMachines) {
-        if([allMachines containsObject:machine]) {
-            [allMachines removeObject:machine];
+        detectedVmNames = [[detectedVmNames sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)] mutableCopy];
+        
+        //get running vms
+        NSTask *runningVmsTask = [[NSTask alloc] init];
+        [runningVmsTask setLaunchPath:@"/bin/sh"];
+        [runningVmsTask setArguments:@[@"-c", @"vboxmanage list runningvms | grep -iEo '\".*\"' | cut -c 2- | rev | cut -c 2- | rev"]];
+        
+        NSPipe *runningVmsOutputPipe = [NSPipe pipe];
+        [runningVmsTask setStandardInput:[NSPipe pipe]];
+        [runningVmsTask setStandardOutput:runningVmsOutputPipe];
+        
+        [runningVmsTask launch];
+        [runningVmsTask waitUntilExit];
+        
+        NSData *runningVmsOutputData = [[runningVmsOutputPipe fileHandleForReading] readDataToEndOfFile];
+        NSString *runningVmsOutputString = [[NSString alloc] initWithData:runningVmsOutputData encoding:NSUTF8StringEncoding];
+        
+        arr = [[runningVmsOutputString componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]] mutableCopy];
+        
+        NSMutableArray *runningVmNames = [[NSMutableArray alloc] init];
+        
+        for(NSString *str in arr) {
+            if([[str stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] length] > 0) {
+                [runningVmNames addObject:str];
+            }
         }
-    }
-    
-    for (NSString *machine in runningMachines) {
-        if ([vagrantMachines objectForKey:machine]) {
-            NSMenuItem *menuItem = [[NSMenuItem alloc] init];
-            [menuItem setTitle:machine];
-            [menuItem setImage:[[NSImage alloc] initWithContentsOfFile:[bundle pathForResource:@"on" ofType:@"png"]]];
-            [statusMenu addItem:menuItem];
+        
+        runningVmNames = [[runningVmNames sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)] mutableCopy];
+
+        //get vagrant machine paths
+        NSMutableArray *vagrantMachines = [[NSMutableArray alloc] init];
+        for (NSString *machineName in detectedVmNames) {
+            NSTask *getVagrantPathTask = [[NSTask alloc] init];
+            [getVagrantPathTask setLaunchPath:@"/bin/sh"];
+            [getVagrantPathTask setArguments:@[@"-c", [NSString stringWithFormat:@"vboxmanage showvminfo \"%@\" | grep 'Name:.*' | grep -iEo \"'[^\']*'\" | cut -c 2- | rev | cut -c 2- | rev", machineName]]];
             
-            NSMenu *submenu = [statusSubMenuTemplate copy];
+            NSPipe *outputPipe = [NSPipe pipe];
+            [getVagrantPathTask setStandardInput:[NSPipe pipe]];
+            [getVagrantPathTask setStandardOutput:outputPipe];
             
-            NSMenuItem *vagrantHalt = [submenu itemWithTitle:@"vagrant halt"];
-            [vagrantHalt setToolTip:[vagrantMachines objectForKey:machine]]; //lazy
-            [vagrantHalt setAction:@selector(vagrantHalt:)];
+            [getVagrantPathTask launch];
+            [getVagrantPathTask waitUntilExit];
             
-            NSMenuItem *vagrantDestroy = [submenu itemWithTitle:@"vagrant destroy"];
-            [vagrantDestroy setToolTip:[vagrantMachines objectForKey:machine]]; //lazy
-            [vagrantDestroy setAction:@selector(vagrantDestroy:)];
+            NSData *outputData = [[outputPipe fileHandleForReading] readDataToEndOfFile];
+            NSString *outputString = [[NSString alloc] initWithData:outputData encoding:NSUTF8StringEncoding];
+            outputString = [outputString stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
+            NSMutableArray *outputArr = [[outputString componentsSeparatedByCharactersInSet: [NSCharacterSet newlineCharacterSet]] mutableCopy];
             
-            [statusMenu setSubmenu:submenu forItem:menuItem];
+            [outputArr removeObject:@""];
+            
+            int insertIdx = 0;
+            if ([outputArr count] == 2) {
+                if ([[outputArr objectAtIndex:0] isEqualToString:@"/vagrant"]) {
+                    VagrantMachine *machine = [[VagrantMachine alloc] init];
+                    machine.vmid = machineName;
+                    machine.displayName = machineName;
+                    machine.path = [outputArr objectAtIndex:1];
+                    machine.isRunning = [runningVmNames containsObject:machineName];
+                    
+                    //TODO: need to check if it's bookmark and ignore it or set running flag on bookmarked machine
+                    
+                    if(machine.isRunning) {
+                        [vagrantMachines insertObject:machine atIndex:insertIdx++];
+                    } else {
+                        [vagrantMachines addObject:machine];
+                    }
+                }
+            }
         }
-    }
-    
-    for (NSString *machine in allMachines) {
-        if ([vagrantMachines objectForKey:machine]) {
-            NSMenuItem *menuItem = [[NSMenuItem alloc] init];
-            [menuItem setTitle:machine];
-            [menuItem setImage:[[NSImage alloc] initWithContentsOfFile:[bundle pathForResource:@"off" ofType:@"png"]]];
-            [statusMenu addItem:menuItem];
-            
-            NSMenu *submenu = [statusSubMenuTemplate copy];
-            
-            NSMenuItem *vagrantUp = [submenu itemWithTitle:@"vagrant up"];
-            [vagrantUp setToolTip:[vagrantMachines objectForKey:machine]]; //lazy
-            [vagrantUp setAction:@selector(vagrantUp:)];
-            
-            NSMenuItem *vagrantDestroy = [submenu itemWithTitle:@"vagrant destroy"];
-            [vagrantDestroy setToolTip:[vagrantMachines objectForKey:machine]]; //lazy
-            [vagrantDestroy setAction:@selector(vagrantDestroy:)];
-            [statusMenu setSubmenu:submenu forItem:menuItem];
+        
+        vagrantMachines = [[vagrantMachines sortedArrayUsingComparator:^(id obj1, id obj2) {
+            if ([obj1 isKindOfClass:[VagrantMachine class]] && [obj2 isKindOfClass:[VagrantMachine class]]) {
+                VagrantMachine *m1 = obj1;
+                VagrantMachine *m2 = obj2;
+                
+                if (m1.isRunning && !m2.isRunning) {
+                    return (NSComparisonResult)NSOrderedAscending;
+                } else if (m2.isRunning && !m1.isRunning) {
+                    return (NSComparisonResult)NSOrderedDescending;
+                }
+                
+                return [m1.displayName caseInsensitiveCompare:m2.displayName];
+            }
+
+            return NSOrderedSame;
+        }] mutableCopy];
+        
+        @synchronized(detectedVagrantMachines) {
+            detectedVagrantMachines = vagrantMachines;
         }
-    }
+        
+        // when that method finishes you can run whatever you need to on the main thread
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self rebuildMenu];
+        });
+    });
     
-    NSMenuItem *menuItem = [[NSMenuItem alloc] init];
-    [menuItem setTitle:@"Quit"];
-    [menuItem setAction:@selector(terminate:)];
-    [statusMenu addItem:menuItem];
+    return [NSArray arrayWithArray:arr];
 }
 
-- (void)runVagrantCommand:directory :command {
+#pragma mark - Vagrant machine control
+
+- (void)runVagrantAction:(NSString*)action withMachine:(VagrantMachine*)machine {
+    NSString *command;
+    
+    if([action isEqualToString:@"up"]) {
+        command = @"vagrant up";
+    } else if([action isEqualToString:@"halt"]) {
+        command = @"vagrant halt";
+    } else if([action isEqualToString:@"destroy"]) {
+        command = @"vagrant destroy -f";
+    }
+    
     NSTask *task = [[NSTask alloc] init];
     [task setLaunchPath:@"/bin/sh"];
-    [task setArguments:@[@"-c", [NSString stringWithFormat:@"cd %@ && %@", directory, command]]];
-        
-    TaskOutputWindow *outputWindow = [[TaskOutputWindow alloc] initWithWindowNibName:@"OutputWindow"];
+    
+    NSString *taskCommand = [NSString stringWithFormat:@"cd '%@' && %@", machine.path, command];
+    
+    [task setArguments:@[@"-c", taskCommand]];
+    
+    TaskOutputWindow *outputWindow = [[TaskOutputWindow alloc] initWithWindowNibName:@"TaskOutputWindow"];
     outputWindow.task = task;
+    outputWindow.taskCommand = taskCommand;
+    outputWindow.machine = machine;
+    
     [outputWindow showWindow:self];
     
     [taskOutputWindows addObject:outputWindow];
 }
 
+- (void)vagrantUp:(NSMenuItem*)menuItem {
+    VagrantMachine *machine = [menuItem parentItem].representedObject;
+    [self runVagrantAction:@"up" withMachine:machine];
+}
+
+- (void) vagrantHalt:(NSMenuItem*)menuItem {
+    VagrantMachine *machine = [menuItem parentItem].representedObject;
+    [self runVagrantAction:@"halt" withMachine:machine];
+}
+
+- (void) vagrantDestroy:(NSMenuItem*)menuItem {
+    VagrantMachine *machine = [menuItem parentItem].representedObject;
+    [self runVagrantAction:@"destroy" withMachine:machine];
+}
+
+#pragma mark - Menu management
+
+- (void)rebuildMenu {
+    NSBundle *bundle = [NSBundle mainBundle];
+
+    [statusMenu removeAllItems];
+    
+    //add bookmarks
+    NSMenuItem *i = [[NSMenuItem alloc] init];
+    [i setTitle:@"Bookmarks"];
+    [i setEnabled:NO];
+    [statusMenu addItem:i];
+    
+    if(!bookmarksSeparatorMenuItem) {
+        bookmarksSeparatorMenuItem = [NSMenuItem separatorItem];
+    }
+    [statusMenu addItem:bookmarksSeparatorMenuItem];
+    
+    //add detected
+    if(detectedVagrantMachines && [detectedVagrantMachines count] > 0) {
+        @synchronized(detectedVagrantMachines) {
+            for(VagrantMachine *machine in detectedVagrantMachines) {
+                i = [[NSMenuItem alloc] init];
+                [i setTitle:machine.displayName];
+                
+                [i setEnabled:YES];
+                [i setImage:[[NSImage alloc] initWithContentsOfFile:[bundle pathForResource:machine.isRunning?@"on":@"off" ofType:@"png"]]];
+                [i setTag:MenuItemDetected];
+                [i setRepresentedObject:machine];
+                
+                [statusMenu addItem:i];
+                
+                NSMenu *submenu = [statusSubMenuTemplate copy];
+                
+                if(machine.isRunning) {
+                    NSMenuItem *vagrantHalt = [submenu itemWithTitle:@"vagrant halt"];
+                    [vagrantHalt setAction:@selector(vagrantHalt:)];
+                    
+                    NSMenuItem *vagrantDestroy = [submenu itemWithTitle:@"vagrant destroy"];
+                    [vagrantDestroy setAction:@selector(vagrantDestroy:)];
+                        
+                    [statusMenu setSubmenu:submenu forItem:i];
+                } else {
+                    NSMenu *submenu = [statusSubMenuTemplate copy];
+                    
+                    NSMenuItem *vagrantUp = [submenu itemWithTitle:@"vagrant up"];
+                    [vagrantUp setAction:@selector(vagrantUp:)];
+                    
+                    NSMenuItem *vagrantDestroy = [submenu itemWithTitle:@"vagrant destroy"];
+                    [vagrantDestroy setAction:@selector(vagrantDestroy:)];
+                    [statusMenu setSubmenu:submenu forItem:i];
+                }
+            }
+        }
+    } else {
+        i = [[NSMenuItem alloc] init];
+        [i setTitle:@"No detected VMs"];
+        [i setTag:MenuItemDetected];
+        [i setEnabled:NO];
+        [statusMenu addItem:i];
+    }
+    
+    if(!refreshDetectedMenuItem) {
+        refreshDetectedMenuItem = [[NSMenuItem alloc] init];
+        [refreshDetectedMenuItem setTitle:@"Refresh Detected VMs"];
+        [refreshDetectedMenuItem setAction:@selector(refreshDetectedClicked:)];
+    }
+    [statusMenu addItem:refreshDetectedMenuItem];
+    
+    if(!detectedSeparatorMenuItem) {
+        detectedSeparatorMenuItem = [NSMenuItem separatorItem];
+    }
+    [statusMenu addItem:detectedSeparatorMenuItem];
+    
+    //add static items
+    if(!preferencesMenuItem) {
+        preferencesMenuItem = [[NSMenuItem alloc] init];
+        [preferencesMenuItem setTitle:@"Preferences"];
+    }
+    [statusMenu addItem:preferencesMenuItem];
+
+    if(!aboutMenuItem) {
+        aboutMenuItem = [[NSMenuItem alloc] init];
+        [aboutMenuItem setTitle:@"About"];
+    }
+    [statusMenu addItem:aboutMenuItem];
+
+    if(!quitMenuItem) {
+        quitMenuItem = [[NSMenuItem alloc] init];
+        [quitMenuItem setTitle:@"Quit"];
+        [quitMenuItem setAction:@selector(terminate:)];
+    }
+    [statusMenu addItem:quitMenuItem];
+}
+
+- (void)removeDetectedMenuItems {
+    while(true) {
+        NSMenuItem *i = [statusMenu itemWithTag:MenuItemDetected];
+        if(!i) {
+            break;
+        }
+        [statusMenu removeItem:i];
+    };
+}
+
+#pragma mark - Menu Item Handlers
+
+- (IBAction)refreshDetectedClicked:(id)sender {
+    [self detectVagrantMachines];
+}
+
+#pragma mark - General Functions
+
 - (void)removeOutputWindow:(TaskOutputWindow*)outputWindow {
     [taskOutputWindows removeObject:outputWindow];
 }
-
-- (void)vagrantUp:(id)sender {
-    sender = (NSMenuItem*)sender;
-    [self runVagrantCommand:[sender toolTip] :@"vagrant up"];
-}
-
-- (void) vagrantHalt:(id)sender {
-    sender = (NSMenuItem*)sender;
-    [self runVagrantCommand:[sender toolTip] :@"vagrant halt"];
-}
-
-- (void) vagrantDestroy:(id)sender {
-    sender = (NSMenuItem*)sender;
-    [self runVagrantCommand:[sender toolTip] :@"vagrant destroy -f"];
-}
-
 
 @end

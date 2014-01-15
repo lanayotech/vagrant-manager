@@ -9,6 +9,7 @@
                 <outlet property="closeWindowButton" destination="L35-tt-XDn" id="1CK-wL-Pub"/>
                 <outlet property="outputTextView" destination="yGv-xC-aVr" id="Jmj-YV-czD"/>
                 <outlet property="progressBar" destination="Hgf-UO-j1p" id="jUn-8I-xti"/>
+                <outlet property="taskCommandLabel" destination="GMU-0g-Bph" id="9yC-Ra-u0a"/>
                 <outlet property="taskStatusLabel" destination="YfK-N0-5lw" id="6Vm-4A-pdh"/>
                 <outlet property="window" destination="1" id="3"/>
             </connections>
@@ -25,20 +26,20 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <scrollView autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="iN4-Se-IjL">
-                        <rect key="frame" x="20" y="54" width="440" height="194"/>
+                        <rect key="frame" x="20" y="54" width="440" height="171"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <clipView key="contentView" id="MZ0-Uz-MIM">
-                            <rect key="frame" x="1" y="1" width="438" height="192"/>
+                            <rect key="frame" x="1" y="1" width="438" height="169"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <textView editable="NO" importsGraphics="NO" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" usesFontPanel="YES" verticallyResizable="YES" allowsNonContiguousLayout="YES" quoteSubstitution="YES" dashSubstitution="YES" spellingCorrection="YES" smartInsertDelete="YES" id="yGv-xC-aVr">
-                                    <rect key="frame" x="0.0" y="0.0" width="438" height="192"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="438" height="169"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                    <size key="minSize" width="438" height="192"/>
+                                    <size key="minSize" width="438" height="169"/>
                                     <size key="maxSize" width="465" height="10000000"/>
                                     <color key="insertionPointColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                                    <size key="minSize" width="438" height="192"/>
+                                    <size key="minSize" width="438" height="169"/>
                                     <size key="maxSize" width="465" height="10000000"/>
                                 </textView>
                             </subviews>
@@ -54,11 +55,11 @@
                         </scroller>
                     </scrollView>
                     <progressIndicator maxValue="100" indeterminate="YES" style="bar" id="Hgf-UO-j1p">
-                        <rect key="frame" x="20" y="255" width="440" height="20"/>
+                        <rect key="frame" x="20" y="258" width="440" height="20"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                     </progressIndicator>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="YfK-N0-5lw">
-                        <rect key="frame" x="18" y="281" width="444" height="17"/>
+                        <rect key="frame" x="18" y="282" width="444" height="17"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Task Status" id="9sl-2N-8HX">
                             <font key="font" metaFont="system"/>
@@ -66,9 +67,18 @@
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="GMU-0g-Bph">
+                        <rect key="frame" x="20" y="230" width="440" height="20"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="left" title="Task Command" drawsBackground="YES" usesSingleLineMode="YES" id="c1d-fd-4lg">
+                            <font key="font" size="14" name="CourierNewPSMT"/>
+                            <color key="textColor" red="0.24771750301885942" green="1" blue="0.28522159497353927" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        </textFieldCell>
+                    </textField>
                     <button verticalHuggingPriority="750" id="L35-tt-XDn">
                         <rect key="frame" x="338" y="13" width="128" height="32"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="push" title="Close Window" bezelStyle="rounded" alignment="center" enabled="NO" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="aRO-dI-Ufm">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>

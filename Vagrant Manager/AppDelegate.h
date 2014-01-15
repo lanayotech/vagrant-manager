@@ -7,24 +7,34 @@
 
 #import <Cocoa/Cocoa.h>
 #import "TaskOutputWindow.h"
+#import "VagrantMachine.h"
+
+#define MENU_ITEM_BOOKMARKED_VM 1
+#define MENU_ITEM_DETECTED_VM   2
 
 @interface AppDelegate : NSObject <NSApplicationDelegate, NSMenuDelegate> {
+    enum MenuItemType : NSUInteger {
+        MenuItemBookmarked = 1,
+        MenuItemDetected
+    };
+    
     IBOutlet NSMenu *statusMenu;
     IBOutlet NSMenu *statusSubMenuTemplate;
-    
     NSStatusItem *statusItem;
-    NSImage *statusImage;
-    NSImage *statusHighlightImage;
+    
     NSMutableArray *taskOutputWindows;
+    NSMutableArray *detectedVagrantMachines;
+    
+    NSMenuItem *bookmarksSeparatorMenuItem;
+    NSMenuItem *refreshDetectedMenuItem;
+    NSMenuItem *detectedSeparatorMenuItem;
+    NSMenuItem *preferencesMenuItem;
+    NSMenuItem *aboutMenuItem;
+    NSMenuItem *quitMenuItem;
 }
 
 @property (assign) IBOutlet NSWindow *window;
 
-- (void)runVagrantCommand:(NSString*)directory :(NSString*)command;
-- (void)menuWillOpen:(NSMenu *)menu;
-- (IBAction)vagrantUp:(id)sender;
-- (IBAction)vagrantHalt:(id)sender;
-- (IBAction)vagrantDestroy:(id)sender;
 - (void)removeOutputWindow:(TaskOutputWindow*)outputWindow;
 
 @end

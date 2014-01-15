@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		8339DCA1187E756B0036E162 /* TaskOutputWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 8339DC9F187E756B0036E162 /* TaskOutputWindow.m */; };
 		8339DCA2187E756B0036E162 /* TaskOutputWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8339DCA0187E756B0036E162 /* TaskOutputWindow.xib */; };
+		838A111D18839E3300A5E6DB /* VagrantMachine.m in Sources */ = {isa = PBXBuildFile; fileRef = 838A111C18839E3300A5E6DB /* VagrantMachine.m */; };
 		B1357A71187CEB3B00811CBC /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B1357A70187CEB3B00811CBC /* Cocoa.framework */; };
 		B1357A7B187CEB3B00811CBC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = B1357A79187CEB3B00811CBC /* InfoPlist.strings */; };
 		B1357A7D187CEB3B00811CBC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B1357A7C187CEB3B00811CBC /* main.m */; };
@@ -25,11 +26,12 @@
 		8339DC9E187E756B0036E162 /* TaskOutputWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskOutputWindow.h; sourceTree = "<group>"; };
 		8339DC9F187E756B0036E162 /* TaskOutputWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TaskOutputWindow.m; sourceTree = "<group>"; };
 		8339DCA0187E756B0036E162 /* TaskOutputWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TaskOutputWindow.xib; sourceTree = "<group>"; };
+		838A111B18839E3300A5E6DB /* VagrantMachine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VagrantMachine.h; sourceTree = "<group>"; };
+		838A111C18839E3300A5E6DB /* VagrantMachine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VagrantMachine.m; sourceTree = "<group>"; };
 		B1357A6D187CEB3B00811CBC /* Vagrant Manager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Vagrant Manager.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B1357A70187CEB3B00811CBC /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		B1357A73187CEB3B00811CBC /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		B1357A74187CEB3B00811CBC /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
-		B1357A75187CEB3B00811CBC /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		B1357A78187CEB3B00811CBC /* Vagrant Manager-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Vagrant Manager-Info.plist"; sourceTree = "<group>"; };
 		B1357A7A187CEB3B00811CBC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		B1357A7C187CEB3B00811CBC /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -87,6 +89,15 @@
 			name = Windows;
 			sourceTree = "<group>";
 		};
+		838A111A18839E1100A5E6DB /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				838A111B18839E3300A5E6DB /* VagrantMachine.h */,
+				838A111C18839E3300A5E6DB /* VagrantMachine.m */,
+			);
+			name = Data;
+			sourceTree = "<group>";
+		};
 		B1357A64187CEB3B00811CBC = {
 			isa = PBXGroup;
 			children = (
@@ -118,7 +129,6 @@
 			children = (
 				B1357A73187CEB3B00811CBC /* AppKit.framework */,
 				B1357A74187CEB3B00811CBC /* CoreData.framework */,
-				B1357A75187CEB3B00811CBC /* Foundation.framework */,
 			);
 			name = "Other Frameworks";
 			sourceTree = "<group>";
@@ -126,6 +136,7 @@
 		B1357A76187CEB3B00811CBC /* Vagrant Manager */ = {
 			isa = PBXGroup;
 			children = (
+				838A111A18839E1100A5E6DB /* Data */,
 				838A111918839D8E00A5E6DB /* Windows */,
 				838A111818839D8200A5E6DB /* App */,
 				838A111718839D6900A5E6DB /* Images */,
@@ -173,7 +184,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0500;
-				ORGANIZATIONNAME = "Amitai Lanciano";
+				ORGANIZATIONNAME = Lanayo;
 			};
 			buildConfigurationList = B1357A68187CEB3B00811CBC /* Build configuration list for PBXProject "Vagrant Manager" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -219,6 +230,7 @@
 				B1357A84187CEB3B00811CBC /* AppDelegate.m in Sources */,
 				8339DCA1187E756B0036E162 /* TaskOutputWindow.m in Sources */,
 				B1357A7D187CEB3B00811CBC /* main.m in Sources */,
+				838A111D18839E3300A5E6DB /* VagrantMachine.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
