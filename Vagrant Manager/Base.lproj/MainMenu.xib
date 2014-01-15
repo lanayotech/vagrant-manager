@@ -24,10 +24,14 @@
                 <menuItem title="vagrant up" id="zbw-I7-JVS">
                     <modifierMask key="keyEquivalentModifierMask"/>
                 </menuItem>
-                <menuItem title="vagrant halt" id="GVA-sR-c4Z">
+                <menuItem title="vagrant halt" tag="1" id="GVA-sR-c4Z">
                     <modifierMask key="keyEquivalentModifierMask"/>
                 </menuItem>
-                <menuItem title="vagrant destroy" id="MPx-Al-AWG">
+                <menuItem title="vagrant destroy" tag="2" id="MPx-Al-AWG">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                </menuItem>
+                <menuItem isSeparatorItem="YES" id="nTQ-Da-JAA"/>
+                <menuItem title="Details" tag="3" id="t9Y-fZ-XOm">
                     <modifierMask key="keyEquivalentModifierMask"/>
                 </menuItem>
             </items>

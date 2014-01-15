@@ -11,6 +11,8 @@
 		8308E133188662BD001E0B45 /* AboutWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8308E131188662BD001E0B45 /* AboutWindow.xib */; };
 		8308E135188668A1001E0B45 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8308E134188668A1001E0B45 /* WebKit.framework */; };
 		8308E138188678A0001E0B45 /* VirtualMachineInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 8308E137188678A0001E0B45 /* VirtualMachineInfo.m */; };
+		8308E13C18868D52001E0B45 /* VirtualMachineInfoWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 8308E13A18868D52001E0B45 /* VirtualMachineInfoWindow.m */; };
+		8308E13D18868D52001E0B45 /* VirtualMachineInfoWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8308E13B18868D52001E0B45 /* VirtualMachineInfoWindow.xib */; };
 		8339DCA1187E756B0036E162 /* TaskOutputWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 8339DC9F187E756B0036E162 /* TaskOutputWindow.m */; };
 		8339DCA2187E756B0036E162 /* TaskOutputWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8339DCA0187E756B0036E162 /* TaskOutputWindow.xib */; };
 		B1357A71187CEB3B00811CBC /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B1357A70187CEB3B00811CBC /* Cocoa.framework */; };
@@ -32,6 +34,9 @@
 		8308E134188668A1001E0B45 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		8308E136188678A0001E0B45 /* VirtualMachineInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VirtualMachineInfo.h; sourceTree = "<group>"; };
 		8308E137188678A0001E0B45 /* VirtualMachineInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VirtualMachineInfo.m; sourceTree = "<group>"; };
+		8308E13918868D52001E0B45 /* VirtualMachineInfoWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VirtualMachineInfoWindow.h; sourceTree = "<group>"; };
+		8308E13A18868D52001E0B45 /* VirtualMachineInfoWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VirtualMachineInfoWindow.m; sourceTree = "<group>"; };
+		8308E13B18868D52001E0B45 /* VirtualMachineInfoWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VirtualMachineInfoWindow.xib; sourceTree = "<group>"; };
 		8339DC9E187E756B0036E162 /* TaskOutputWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskOutputWindow.h; sourceTree = "<group>"; };
 		8339DC9F187E756B0036E162 /* TaskOutputWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TaskOutputWindow.m; sourceTree = "<group>"; };
 		8339DCA0187E756B0036E162 /* TaskOutputWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TaskOutputWindow.xib; sourceTree = "<group>"; };
@@ -96,6 +101,9 @@
 				8308E12F188662BD001E0B45 /* AboutWindow.h */,
 				8308E130188662BD001E0B45 /* AboutWindow.m */,
 				8308E131188662BD001E0B45 /* AboutWindow.xib */,
+				8308E13918868D52001E0B45 /* VirtualMachineInfoWindow.h */,
+				8308E13A18868D52001E0B45 /* VirtualMachineInfoWindow.m */,
+				8308E13B18868D52001E0B45 /* VirtualMachineInfoWindow.xib */,
 			);
 			name = Windows;
 			sourceTree = "<group>";
@@ -230,6 +238,7 @@
 				8308E133188662BD001E0B45 /* AboutWindow.xib in Resources */,
 				B174335B187E1261000DCA38 /* on.png in Resources */,
 				B1357ABE187DF58C00811CBC /* vagrant_logo.png in Resources */,
+				8308E13D18868D52001E0B45 /* VirtualMachineInfoWindow.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -241,6 +250,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B1357A84187CEB3B00811CBC /* AppDelegate.m in Sources */,
+				8308E13C18868D52001E0B45 /* VirtualMachineInfoWindow.m in Sources */,
 				8308E138188678A0001E0B45 /* VirtualMachineInfo.m in Sources */,
 				8308E132188662BD001E0B45 /* AboutWindow.m in Sources */,
 				8339DCA1187E756B0036E162 /* TaskOutputWindow.m in Sources */,

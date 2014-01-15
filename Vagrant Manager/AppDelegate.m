@@ -16,6 +16,7 @@
 
     //initialize data
     taskOutputWindows = [[NSMutableArray alloc] init];
+    infoWindows = [[NSMutableArray alloc] init];
     detectedVagrantMachines = [[NSMutableArray alloc] init];
     
     //create status bar menu item
@@ -71,27 +72,6 @@
     [taskOutputWindows addObject:outputWindow];
 }
 
-- (void)vagrantUp:(NSMenuItem*)menuItem {
-    VirtualMachineInfo *machine = [menuItem parentItem].representedObject;
-    [self runVagrantAction:@"up" withMachine:machine];
-}
-
-- (void) vagrantHalt:(NSMenuItem*)menuItem {
-    VirtualMachineInfo *machine = [menuItem parentItem].representedObject;
-    [self runVagrantAction:@"halt" withMachine:machine];
-}
-
-- (void) vagrantDestroy:(NSMenuItem*)menuItem {
-    VirtualMachineInfo *machine = [menuItem parentItem].representedObject;
-    
-    NSAlert *confirmAlert = [NSAlert alertWithMessageText:[NSString stringWithFormat:@"Are you sure you want to destroy \"%@\"?", machine.name] defaultButton:@"Confirm" alternateButton:@"Cancel" otherButton:nil informativeTextWithFormat:@""];
-    NSInteger button = [confirmAlert runModal];
-    
-    if(button == NSAlertDefaultReturn) {
-        [self runVagrantAction:@"destroy" withMachine:machine];
-    }
-}
-
 #pragma mark - Menu management
 
 - (void)rebuildMenu {
@@ -127,23 +107,28 @@
                 NSMenu *submenu = [statusSubMenuTemplate copy];
                 
                 if(machine.isRunning) {
-                    NSMenuItem *vagrantHalt = [submenu itemWithTitle:@"vagrant halt"];
-                    [vagrantHalt setAction:@selector(vagrantHalt:)];
+                    NSMenuItem *vagrantUp = [submenu itemWithTag:0];
+                    [vagrantUp setEnabled:NO];
                     
-                    NSMenuItem *vagrantDestroy = [submenu itemWithTitle:@"vagrant destroy"];
-                    [vagrantDestroy setAction:@selector(vagrantDestroy:)];
-                        
-                    [statusMenu setSubmenu:submenu forItem:i];
+                    NSMenuItem *vagrantHalt = [submenu itemWithTag:1];
+                    [vagrantHalt setAction:@selector(vagrantHaltMenuItemClicked:)];
                 } else {
                     NSMenu *submenu = [statusSubMenuTemplate copy];
                     
-                    NSMenuItem *vagrantUp = [submenu itemWithTitle:@"vagrant up"];
-                    [vagrantUp setAction:@selector(vagrantUp:)];
+                    NSMenuItem *vagrantUp = [submenu itemWithTag:0];
+                    [vagrantUp setAction:@selector(vagrantUpMenuItemClicked:)];
                     
-                    NSMenuItem *vagrantDestroy = [submenu itemWithTitle:@"vagrant destroy"];
-                    [vagrantDestroy setAction:@selector(vagrantDestroy:)];
-                    [statusMenu setSubmenu:submenu forItem:i];
+                    NSMenuItem *vagrantHalt = [submenu itemWithTag:1];
+                    [vagrantHalt setEnabled:NO];
                 }
+                
+                NSMenuItem *vagrantDestroy = [submenu itemWithTag:2];
+                [vagrantDestroy setAction:@selector(vagrantDestroyMenuItemClicked:)];
+
+                NSMenuItem *virtualMachineDetails = [submenu itemWithTag:3];
+                [virtualMachineDetails setAction:@selector(virtualMachineDetailsMenuItemClicked:)];
+                
+                [statusMenu setSubmenu:submenu forItem:i];
             }
         }
     } else {
@@ -216,10 +201,46 @@
     [aboutWindow showWindow:self];
 }
 
+
+- (void)vagrantUpMenuItemClicked:(NSMenuItem*)menuItem {
+    VirtualMachineInfo *machine = [menuItem parentItem].representedObject;
+    [self runVagrantAction:@"up" withMachine:machine];
+}
+
+- (void)vagrantHaltMenuItemClicked:(NSMenuItem*)menuItem {
+    VirtualMachineInfo *machine = [menuItem parentItem].representedObject;
+    [self runVagrantAction:@"halt" withMachine:machine];
+}
+
+- (void)vagrantDestroyMenuItemClicked:(NSMenuItem*)menuItem {
+    VirtualMachineInfo *machine = [menuItem parentItem].representedObject;
+    
+    NSAlert *confirmAlert = [NSAlert alertWithMessageText:[NSString stringWithFormat:@"Are you sure you want to destroy \"%@\"?", machine.name] defaultButton:@"Confirm" alternateButton:@"Cancel" otherButton:nil informativeTextWithFormat:@""];
+    NSInteger button = [confirmAlert runModal];
+    
+    if(button == NSAlertDefaultReturn) {
+        [self runVagrantAction:@"destroy" withMachine:machine];
+    }
+}
+
+- (void)virtualMachineDetailsMenuItemClicked:(NSMenuItem*)menuItem {
+    VirtualMachineInfo *machine = [menuItem parentItem].representedObject;
+    VirtualMachineInfoWindow *infoWindow = [[VirtualMachineInfoWindow alloc] initWithWindowNibName:@"VirtualMachineInfoWindow"];
+    infoWindow.machine = machine;
+    [NSApp activateIgnoringOtherApps:YES];
+    [infoWindow showWindow:self];
+
+    [infoWindows addObject:infoWindow];
+}
+
 #pragma mark - General Functions
 
 - (void)removeOutputWindow:(TaskOutputWindow*)outputWindow {
     [taskOutputWindows removeObject:outputWindow];
+}
+
+- (void)removeInfoWindow:(VirtualMachineInfoWindow*)infoWindow {
+    [infoWindows removeObject:infoWindow];
 }
 
 #pragma mark - Virtual Machines

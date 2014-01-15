@@ -18,15 +18,15 @@
         <customObject id="-3" userLabel="Application"/>
         <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" wantsToBeColor="NO" animationBehavior="default" id="1">
             <windowStyleMask key="styleMask" titled="YES" miniaturizable="YES" resizable="YES"/>
-            <rect key="contentRect" x="196" y="240" width="480" height="304"/>
+            <rect key="contentRect" x="196" y="240" width="480" height="311"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1178"/>
             <value key="minSize" type="size" width="480" height="270"/>
             <view key="contentView" id="2">
-                <rect key="frame" x="0.0" y="0.0" width="480" height="304"/>
+                <rect key="frame" x="0.0" y="0.0" width="480" height="311"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <scrollView autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="iN4-Se-IjL">
-                        <rect key="frame" x="20" y="54" width="440" height="171"/>
+                        <rect key="frame" x="20" y="61" width="440" height="171"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <clipView key="contentView" id="MZ0-Uz-MIM">
                             <rect key="frame" x="1" y="1" width="438" height="169"/>
@@ -55,11 +55,11 @@
                         </scroller>
                     </scrollView>
                     <progressIndicator maxValue="100" indeterminate="YES" style="bar" id="Hgf-UO-j1p">
-                        <rect key="frame" x="20" y="258" width="440" height="20"/>
+                        <rect key="frame" x="20" y="265" width="440" height="20"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                     </progressIndicator>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="YfK-N0-5lw">
-                        <rect key="frame" x="18" y="282" width="444" height="17"/>
+                        <rect key="frame" x="18" y="289" width="444" height="17"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Task Status" id="9sl-2N-8HX">
                             <font key="font" metaFont="system"/>
@@ -68,7 +68,7 @@
                         </textFieldCell>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="GMU-0g-Bph">
-                        <rect key="frame" x="20" y="230" width="440" height="20"/>
+                        <rect key="frame" x="20" y="237" width="440" height="20"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="left" title="Task Command" drawsBackground="YES" usesSingleLineMode="YES" id="c1d-fd-4lg">
                             <font key="font" size="14" name="CourierNewPSMT"/>

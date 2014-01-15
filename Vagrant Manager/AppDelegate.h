@@ -8,6 +8,7 @@
 #import <Cocoa/Cocoa.h>
 #import "TaskOutputWindow.h"
 #import "AboutWindow.h"
+#import "VirtualMachineInfoWindow.h"
 #import "VirtualMachineInfo.h"
 
 #define MENU_ITEM_BOOKMARKED_VM 1
@@ -24,6 +25,8 @@
     NSStatusItem *statusItem;
     
     NSMutableArray *taskOutputWindows;
+    NSMutableArray *infoWindows;
+    
     NSMutableArray *detectedVagrantMachines;
     
     NSMenuItem *bookmarksSeparatorMenuItem;
@@ -39,6 +42,7 @@
 @property (assign) IBOutlet NSWindow *window;
 
 - (void)removeOutputWindow:(TaskOutputWindow*)outputWindow;
+- (void)removeInfoWindow:(VirtualMachineInfoWindow*)infoWindow;
 - (void)updateVirtualMachineState:(VirtualMachineInfo*)machine;
 
 @end
