@@ -212,7 +212,13 @@
 
 - (void) vagrantDestroy:(NSMenuItem*)menuItem {
     VagrantMachine *machine = [menuItem parentItem].representedObject;
-    [self runVagrantAction:@"destroy" withMachine:machine];
+    
+    NSAlert *confirmAlert = [NSAlert alertWithMessageText:[NSString stringWithFormat:@"Are you sure you want to destroy \"%@\"?", machine.displayName] defaultButton:@"Confirm" alternateButton:@"Cancel" otherButton:nil informativeTextWithFormat:@""];
+    NSInteger button = [confirmAlert runModal];
+    
+    if(button == NSAlertDefaultReturn) {
+        [self runVagrantAction:@"destroy" withMachine:machine];
+    }
 }
 
 #pragma mark - Menu management
