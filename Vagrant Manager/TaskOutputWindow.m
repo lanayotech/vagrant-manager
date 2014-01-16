@@ -69,6 +69,10 @@
     } else if(self.bookmark) {
         [app updateBookmarkState:self.bookmark];
     }
+    
+    if([[NSUserDefaults standardUserDefaults] boolForKey:@"autoCloseTaskWindows"] && task.terminationStatus == 0) {
+        [self close];
+    }
 }
 
 - (void)windowWillClose:(NSNotification *)notification {
