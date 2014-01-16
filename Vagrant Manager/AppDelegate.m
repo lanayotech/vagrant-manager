@@ -12,6 +12,7 @@
 #define MENU_ITEM_VAGRANT_HALT 2
 #define MENU_ITEM_VAGRANT_DESTROY 3
 #define MENU_ITEM_OPEN_IN_FINDER 8
+#define MENU_ITEM_OPEN_IN_TERMINAL 9
 #define MENU_ITEM_DETAILS 4
 #define MENU_ITEM_ADD_BOOKMARK 5
 #define MENU_ITEM_REMOVE_BOOKMARK 6
@@ -129,14 +130,26 @@
 
 #pragma mark - Vagrant machine control
 - (void)runTerminalCommand:(NSString*)command {
-    NSString *s = [NSString stringWithFormat:@"tell application \"iTerm\"\n"
-                   "tell current terminal\n"
-                   "launch session \"Default Session\"\n"
-                   "tell the last session\n"
-                   "write text \"%@\"\n"
-                   "end tell\n"
-                   "end tell\n"
-                   "end tell\n", command];
+    NSString *terminalName = [[NSUserDefaults standardUserDefaults] valueForKey:@"terminalName"];
+
+    NSString *s = @"";
+    if ([terminalName isEqualToString:@"iTerm"]) {
+        s = [NSString stringWithFormat:@"tell application \"iTerm\"\n"
+                       "tell current terminal\n"
+                       "launch session \"Default Session\"\n"
+                       "delay .15\n"
+                       "activate\n"
+                       "tell the last session\n"
+                       "write text \"%@\"\n"
+                       "end tell\n"
+                       "end tell\n"
+                       "end tell\n", command];
+    } else {
+        s = [NSString stringWithFormat:@"tell application \"Terminal\"\n"
+                       "activate\n"
+                       "do script \"%@\"\n"
+                       "end tell\n", command];
+    }
     
     NSAppleScript *as = [[NSAppleScript alloc] initWithSource: s];
     [as executeAndReturnError:nil];
@@ -192,6 +205,16 @@
     [statusMenu removeAllItems];
     
     @synchronized(detectedVagrantMachines) {
+        //add refresh button
+        if(!refreshDetectedMenuItem) {
+            refreshDetectedMenuItem = [[NSMenuItem alloc] init];
+            [refreshDetectedMenuItem setTitle:@"Detect Vagrant Machines"];
+            [refreshDetectedMenuItem setAction:@selector(refreshDetectedMenuItemClicked:)];
+        }
+        [statusMenu addItem:refreshDetectedMenuItem];
+        
+        [statusMenu addItem:[NSMenuItem separatorItem]];
+        
         //add bookmarks
         if(bookmarks.count == 0) {
             NSMenuItem *i = [[NSMenuItem alloc] init];
@@ -249,6 +272,9 @@
                 
                 NSMenuItem *openInFinder = [submenu itemWithTag:MENU_ITEM_OPEN_IN_FINDER];
                 [openInFinder setAction:@selector(vagrantOpenInFinderMenuItemClicked:)];
+                
+                NSMenuItem *openInTerminal = [submenu itemWithTag:MENU_ITEM_OPEN_IN_TERMINAL];
+                [openInTerminal setAction:@selector(vagrantOpenInTerminalMenuItemClicked:)];
                 
                 NSMenuItem *removeBookmark = [submenu itemWithTag:MENU_ITEM_REMOVE_BOOKMARK];
                 [removeBookmark setAction:@selector(removeBookmarkMenuItemClicked:)];
@@ -313,6 +339,9 @@
             NSMenuItem *openInFinder = [submenu itemWithTag:MENU_ITEM_OPEN_IN_FINDER];
             [openInFinder setAction:@selector(vagrantOpenInFinderMenuItemClicked:)];
             
+            NSMenuItem *openInTerminal = [submenu itemWithTag:MENU_ITEM_OPEN_IN_TERMINAL];
+            [openInTerminal setAction:@selector(vagrantOpenInTerminalMenuItemClicked:)];
+            
             NSMenuItem *virtualMachineDetails = [submenu itemWithTag:MENU_ITEM_DETAILS];
             [virtualMachineDetails setAction:@selector(virtualMachineDetailsMenuItemClicked:)];
             
@@ -322,13 +351,6 @@
             [statusMenu setSubmenu:submenu forItem:i];
         }
     }
-    
-    if(!refreshDetectedMenuItem) {
-        refreshDetectedMenuItem = [[NSMenuItem alloc] init];
-        [refreshDetectedMenuItem setTitle:@"Refresh Detected VMs"];
-        [refreshDetectedMenuItem setAction:@selector(refreshDetectedMenuItemClicked:)];
-    }
-    [statusMenu addItem:refreshDetectedMenuItem];
     
     if(!detectedSeparatorMenuItem) {
         detectedSeparatorMenuItem = [NSMenuItem separatorItem];
@@ -463,6 +485,23 @@
     if(path) {
         NSURL *fileURL = [NSURL fileURLWithPath:path];
         [[NSWorkspace sharedWorkspace] openURL:fileURL];
+    } else {
+        [[NSAlert alertWithMessageText:@"Path not found." defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@""] runModal];
+    }
+}
+
+- (void)vagrantOpenInTerminalMenuItemClicked:(NSMenuItem*)menuItem {
+    NSString *path = nil;
+    if([menuItem.parentItem.representedObject isKindOfClass:[VirtualMachineInfo class]]) {
+        VirtualMachineInfo *machine = [menuItem parentItem].representedObject;
+        path = [machine getSharedFolderPathWithName:@"/vagrant"];
+    } else if([menuItem.parentItem.representedObject isKindOfClass:[Bookmark class]]) {
+        Bookmark *bookmark = menuItem.parentItem.representedObject;
+        path = bookmark.path;
+    }
+    
+    if(path) {
+        [self runTerminalCommand:[NSString stringWithFormat:@"cd %@", [Util escapeShellArg:path]]];
     } else {
         [[NSAlert alertWithMessageText:@"Path not found." defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@""] runModal];
     }

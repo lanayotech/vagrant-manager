@@ -38,6 +38,9 @@
                 <menuItem title="Open in Finder" tag="8" id="3VE-HG-tuh">
                     <modifierMask key="keyEquivalentModifierMask"/>
                 </menuItem>
+                <menuItem title="Open in Terminal" tag="9" id="T5f-V4-l3h">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                </menuItem>
                 <menuItem title="Add to bookmarks" tag="5" id="Iuv-OV-lJc">
                     <modifierMask key="keyEquivalentModifierMask"/>
                 </menuItem>
