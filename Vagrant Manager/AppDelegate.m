@@ -392,13 +392,22 @@
 }
 
 - (void)virtualMachineDetailsMenuItemClicked:(NSMenuItem*)menuItem {
-    VirtualMachineInfo *machine = [menuItem parentItem].representedObject;
-    VirtualMachineInfoWindow *infoWindow = [[VirtualMachineInfoWindow alloc] initWithWindowNibName:@"VirtualMachineInfoWindow"];
-    infoWindow.machine = machine;
-    [NSApp activateIgnoringOtherApps:YES];
-    [infoWindow showWindow:self];
+    VirtualMachineInfo *machine;
+    
+    if([menuItem.parentItem.representedObject isKindOfClass:[VirtualMachineInfo class]]) {
+        machine = menuItem.parentItem.representedObject;
+    } else if([menuItem.parentItem.representedObject isKindOfClass:[Bookmark class]]) {
+        machine = [self getVirtualMachineForBookmark:menuItem.parentItem.representedObject];
+    }
 
-    [infoWindows addObject:infoWindow];
+    if(machine) {
+        VirtualMachineInfoWindow *infoWindow = [[VirtualMachineInfoWindow alloc] initWithWindowNibName:@"VirtualMachineInfoWindow"];
+        infoWindow.machine = machine;
+        [NSApp activateIgnoringOtherApps:YES];
+        [infoWindow showWindow:self];
+        
+        [infoWindows addObject:infoWindow];
+    }
 }
 
 - (void)addBookmarkMenuItemClicked:(NSMenuItem*)menuItem {
@@ -409,10 +418,18 @@
 }
 
 - (void)removeBookmarkMenuItemClicked:(NSMenuItem*)menuItem {
-    VirtualMachineInfo *machine = [menuItem parentItem].representedObject;
     
-    if(machine.bookmark) {
-        [self removeBookmark:machine.bookmark];
+    if([menuItem.parentItem.representedObject isKindOfClass:[VirtualMachineInfo class]]) {
+        VirtualMachineInfo *machine = menuItem.parentItem.representedObject;
+        
+        if(machine.bookmark) {
+            [self removeBookmark:machine.bookmark];
+            [self rebuildMenu];
+        }
+    } else if([menuItem.parentItem.representedObject isKindOfClass:[Bookmark class]]) {
+        Bookmark *bookmark = menuItem.parentItem.representedObject;
+        
+        [self removeBookmark:bookmark];
         [self rebuildMenu];
     }
 }
