@@ -343,11 +343,14 @@
     }
     [statusMenu addItem:windowMenuItem];
     
+    //TODO: implement this eventually
+    /*
     if(!preferencesMenuItem) {
         preferencesMenuItem = [[NSMenuItem alloc] init];
         [preferencesMenuItem setTitle:@"Preferences"];
     }
     [statusMenu addItem:preferencesMenuItem];
+     */
     
     if(!aboutMenuItem) {
         aboutMenuItem = [[NSMenuItem alloc] init];
