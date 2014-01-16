@@ -300,13 +300,13 @@
     [statusMenu addItem:detectedSeparatorMenuItem];
     
     //add static items
-    if(!showAllWindowsMenuItem) {
-        showAllWindowsMenuItem = [[NSMenuItem alloc] init];
-        [showAllWindowsMenuItem setTitle:@"Show All Windows"];
-        [showAllWindowsMenuItem setAction:@selector(showAllWindowsMenuItemClicked:)];
+    if(!windowMenuItem) {
+        windowMenuItem = [[NSMenuItem alloc] init];
+        [windowMenuItem setTitle:@"Windows"];
+        [statusMenu setSubmenu:self.windowMenu forItem:windowMenuItem];
     }
-    [statusMenu addItem:showAllWindowsMenuItem];
-
+    [statusMenu addItem:windowMenuItem];
+    
     if(!preferencesMenuItem) {
         preferencesMenuItem = [[NSMenuItem alloc] init];
         [preferencesMenuItem setTitle:@"Preferences"];
@@ -356,10 +356,6 @@
 }
 
 #pragma mark - Menu Item Handlers
-
-- (IBAction)showAllWindowsMenuItemClicked:(id)sender {
-    [self showAllWindows];
-}
 
 - (IBAction)refreshDetectedMenuItemClicked:(id)sender {
     [self detectVagrantMachines];
@@ -429,11 +425,6 @@
 
 - (void)removeInfoWindow:(VirtualMachineInfoWindow*)infoWindow {
     [infoWindows removeObject:infoWindow];
-}
-
-- (void)showAllWindows {
-    //TODO: this is not working properly, it only shows the most recently activated window
-    [NSApp activateIgnoringOtherApps:YES];
 }
 
 #pragma mark - Virtual Machines

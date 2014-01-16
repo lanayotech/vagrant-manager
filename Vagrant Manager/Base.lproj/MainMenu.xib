@@ -15,6 +15,7 @@
             <connections>
                 <outlet property="statusMenu" destination="nkx-75-pgk" id="Bjd-iH-hno"/>
                 <outlet property="statusSubMenuTemplate" destination="boF-l8-dMu" id="yUY-z1-Wpk"/>
+                <outlet property="windowMenu" destination="T0Y-4B-8X3" id="3Qg-gW-0bW"/>
             </connections>
         </customObject>
         <customObject id="420" customClass="NSFontManager"/>
@@ -39,6 +40,28 @@
                 </menuItem>
                 <menuItem title="Details" tag="4" id="t9Y-fZ-XOm">
                     <modifierMask key="keyEquivalentModifierMask"/>
+                </menuItem>
+            </items>
+        </menu>
+        <menu title="Window" systemMenu="window" id="T0Y-4B-8X3">
+            <items>
+                <menuItem title="Minimize" keyEquivalent="m" id="zWO-9f-RHt">
+                    <connections>
+                        <action selector="performMiniaturize:" target="-1" id="Mir-JV-aYz"/>
+                    </connections>
+                </menuItem>
+                <menuItem title="Zoom" id="aC6-An-KbW">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="performZoom:" target="-1" id="rry-5g-nD6"/>
+                    </connections>
+                </menuItem>
+                <menuItem isSeparatorItem="YES" id="Bau-qr-9ed"/>
+                <menuItem title="Bring All to Front" id="Yd0-3g-DgC">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="arrangeInFront:" target="-1" id="0X1-zB-GzD"/>
+                    </connections>
                 </menuItem>
             </items>
         </menu>

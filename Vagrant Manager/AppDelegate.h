@@ -33,15 +33,16 @@
     NSMenuItem *bookmarksSeparatorMenuItem;
     NSMenuItem *refreshDetectedMenuItem;
     NSMenuItem *detectedSeparatorMenuItem;
-    NSMenuItem *showAllWindowsMenuItem;
     NSMenuItem *preferencesMenuItem;
     NSMenuItem *aboutMenuItem;
     NSMenuItem *quitMenuItem;
+    NSMenuItem *windowMenuItem;
     
     AboutWindow *aboutWindow;
 }
 
 @property (assign) IBOutlet NSWindow *window;
+@property (weak) IBOutlet NSMenu *windowMenu;
 
 - (void)removeOutputWindow:(TaskOutputWindow*)outputWindow;
 - (void)removeInfoWindow:(VirtualMachineInfoWindow*)infoWindow;
