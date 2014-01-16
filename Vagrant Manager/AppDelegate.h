@@ -8,6 +8,7 @@
 #import <Cocoa/Cocoa.h>
 #import "TaskOutputWindow.h"
 #import "AboutWindow.h"
+#import "PreferencesWindow.h"
 #import "VirtualMachineInfoWindow.h"
 #import "VirtualMachineInfo.h"
 
@@ -39,6 +40,7 @@
     NSMenuItem *windowMenuItem;
     
     AboutWindow *aboutWindow;
+    PreferencesWindow *preferencesWindow;
 }
 
 @property (assign) IBOutlet NSWindow *window;
