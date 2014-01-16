@@ -167,7 +167,7 @@
         bookmark = obj;
     }
     
-    NSString *taskCommand = [NSString stringWithFormat:@"cd '%@' && %@", bookmark ? [Util escapeShellArg:bookmark.path] : [Util escapeShellArg:[machine getSharedFolderPathWithName:@"/vagrant"]], command];
+    NSString *taskCommand = [NSString stringWithFormat:@"cd %@ && %@", bookmark ? [Util escapeShellArg:bookmark.path] : [Util escapeShellArg:[machine getSharedFolderPathWithName:@"/vagrant"]], command];
     
     [task setArguments:@[@"-c", taskCommand]];
     
@@ -176,6 +176,7 @@
     outputWindow.taskCommand = taskCommand;
     outputWindow.machine = machine;
     outputWindow.bookmark = bookmark;
+    outputWindow.taskAction = command;
     
     [NSApp activateIgnoringOtherApps:YES];
     [outputWindow showWindow:self];

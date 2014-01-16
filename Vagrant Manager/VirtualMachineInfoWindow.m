@@ -37,6 +37,8 @@
     for(NSString *name in self.machine.sharedFolders) {
         [sharedFolders addObject:@{@"name": name, @"path":[self.machine.sharedFolders objectForKey:name]}];
     }
+    
+    self.window.title = [NSString stringWithFormat:@"%@ Details", self.machine.name];
 
     self.propertiesTableView.delegate = self;
     self.propertiesTableView.dataSource = self;

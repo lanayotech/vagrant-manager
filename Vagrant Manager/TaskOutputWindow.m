@@ -36,7 +36,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receivedOutput:) name:NSFileHandleDataAvailableNotification object:fh];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(taskCompletion:)  name: NSTaskDidTerminateNotification object:self.task];
     
-    self.window.title = self.bookmark ? self.bookmark.displayName : self.machine.bookmark ? self.machine.bookmark.displayName : self.machine.name;
+    self.window.title = [NSString stringWithFormat:@"%@ %@", (self.bookmark ? self.bookmark.displayName : self.machine.bookmark ? self.machine.bookmark.displayName : self.machine.name), self.taskAction];
     
     self.taskCommandLabel.stringValue = self.taskCommand;
     self.taskStatusLabel.stringValue = @"Running task...";

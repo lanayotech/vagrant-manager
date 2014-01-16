@@ -14,6 +14,7 @@
 @property (strong, nonatomic) VirtualMachineInfo *machine;
 @property (strong, nonatomic) Bookmark *bookmark;
 @property (strong, nonatomic) NSString *taskCommand;
+@property (strong, nonatomic) NSString *taskAction;
 @property (strong, nonatomic) NSTask *task;
 
 @property (unsafe_unretained) IBOutlet NSTextView *outputTextView;
