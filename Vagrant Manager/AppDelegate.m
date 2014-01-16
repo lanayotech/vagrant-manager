@@ -7,9 +7,11 @@
 
 #import "AppDelegate.h"
 
+#define MENU_ITEM_VAGRANT_SSH 7
 #define MENU_ITEM_VAGRANT_UP 1
 #define MENU_ITEM_VAGRANT_HALT 2
 #define MENU_ITEM_VAGRANT_DESTROY 3
+#define MENU_ITEM_OPEN_IN_FINDER 8
 #define MENU_ITEM_DETAILS 4
 #define MENU_ITEM_ADD_BOOKMARK 5
 #define MENU_ITEM_REMOVE_BOOKMARK 6
@@ -20,7 +22,7 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     NSBundle *bundle = [NSBundle mainBundle];
-
+    
     //initialize data
     taskOutputWindows = [[NSMutableArray alloc] init];
     infoWindows = [[NSMutableArray alloc] init];
@@ -126,11 +128,26 @@
 
 
 #pragma mark - Vagrant machine control
+- (void)runTerminalCommand:(NSString*)command {
+    NSString *s = [NSString stringWithFormat:@"tell application \"iTerm\"\n"
+                   "tell current terminal\n"
+                   "launch session \"Default Session\"\n"
+                   "tell the last session\n"
+                   "write text \"%@\"\n"
+                   "end tell\n"
+                   "end tell\n"
+                   "end tell\n", command];
+    
+    NSAppleScript *as = [[NSAppleScript alloc] initWithSource: s];
+    [as executeAndReturnError:nil];
+}
 
 - (void)runVagrantAction:(NSString*)action withObject:(id)obj {
     NSString *command;
     
-    if([action isEqualToString:@"up"]) {
+    if ([action isEqualToString:@"ssh"]) {
+        command = @"vagrant ssh";
+    } else if([action isEqualToString:@"up"]) {
         command = @"vagrant up";
     } else if([action isEqualToString:@"halt"]) {
         command = @"vagrant halt";
@@ -150,7 +167,7 @@
         bookmark = obj;
     }
     
-    NSString *taskCommand = [NSString stringWithFormat:@"cd '%@' && %@", bookmark ? bookmark.path : [machine getSharedFolderPathWithName:@"/vagrant"], command];
+    NSString *taskCommand = [NSString stringWithFormat:@"cd '%@' && %@", bookmark ? [Util escapeShellArg:bookmark.path] : [Util escapeShellArg:[machine getSharedFolderPathWithName:@"/vagrant"]], command];
     
     [task setArguments:@[@"-c", taskCommand]];
     
@@ -170,7 +187,7 @@
 
 - (void)rebuildMenu {
     NSBundle *bundle = [NSBundle mainBundle];
-
+    
     [statusMenu removeAllItems];
     
     @synchronized(detectedVagrantMachines) {
@@ -196,12 +213,18 @@
                 NSMenu *submenu = [statusSubMenuTemplate copy];
                 
                 if(machine.isRunning) {
+                    NSMenuItem *vagrantSsh = [submenu itemWithTag:MENU_ITEM_VAGRANT_SSH];
+                    [vagrantSsh setAction:@selector(vagrantSshMenuItemClicked:)];
+                    
                     NSMenuItem *vagrantUp = [submenu itemWithTag:MENU_ITEM_VAGRANT_UP];
                     [vagrantUp setEnabled:NO];
                     
                     NSMenuItem *vagrantHalt = [submenu itemWithTag:MENU_ITEM_VAGRANT_HALT];
                     [vagrantHalt setAction:@selector(vagrantHaltMenuItemClicked:)];
                 } else {
+                    NSMenuItem *vagrantSsh = [submenu itemWithTag:MENU_ITEM_VAGRANT_SSH];
+                    [vagrantSsh setEnabled:NO];
+                    
                     NSMenuItem *vagrantUp = [submenu itemWithTag:MENU_ITEM_VAGRANT_UP];
                     [vagrantUp setAction:@selector(vagrantUpMenuItemClicked:)];
                     
@@ -222,6 +245,9 @@
                 } else {
                     [virtualMachineDetails setAction:@selector(virtualMachineDetailsMenuItemClicked:)];
                 }
+                
+                NSMenuItem *openInFinder = [submenu itemWithTag:MENU_ITEM_OPEN_IN_FINDER];
+                [openInFinder setAction:@selector(vagrantOpenInFinderMenuItemClicked:)];
                 
                 NSMenuItem *removeBookmark = [submenu itemWithTag:MENU_ITEM_REMOVE_BOOKMARK];
                 [removeBookmark setAction:@selector(removeBookmarkMenuItemClicked:)];
@@ -261,12 +287,18 @@
             NSMenu *submenu = [statusSubMenuTemplate copy];
             
             if(machine.isRunning) {
+                NSMenuItem *vagrantSsh = [submenu itemWithTag:MENU_ITEM_VAGRANT_SSH];
+                [vagrantSsh setAction:@selector(vagrantSshMenuItemClicked:)];
+                
                 NSMenuItem *vagrantUp = [submenu itemWithTag:MENU_ITEM_VAGRANT_UP];
                 [vagrantUp setEnabled:NO];
                 
                 NSMenuItem *vagrantHalt = [submenu itemWithTag:MENU_ITEM_VAGRANT_HALT];
                 [vagrantHalt setAction:@selector(vagrantHaltMenuItemClicked:)];
             } else {
+                NSMenuItem *vagrantSsh = [submenu itemWithTag:MENU_ITEM_VAGRANT_SSH];
+                [vagrantSsh setEnabled:NO];
+                
                 NSMenuItem *vagrantUp = [submenu itemWithTag:MENU_ITEM_VAGRANT_UP];
                 [vagrantUp setAction:@selector(vagrantUpMenuItemClicked:)];
                 
@@ -276,7 +308,10 @@
             
             NSMenuItem *vagrantDestroy = [submenu itemWithTag:MENU_ITEM_VAGRANT_DESTROY];
             [vagrantDestroy setAction:@selector(vagrantDestroyMenuItemClicked:)];
-
+            
+            NSMenuItem *openInFinder = [submenu itemWithTag:MENU_ITEM_OPEN_IN_FINDER];
+            [openInFinder setAction:@selector(vagrantOpenInFinderMenuItemClicked:)];
+            
             NSMenuItem *virtualMachineDetails = [submenu itemWithTag:MENU_ITEM_DETAILS];
             [virtualMachineDetails setAction:@selector(virtualMachineDetailsMenuItemClicked:)];
             
@@ -312,14 +347,14 @@
         [preferencesMenuItem setTitle:@"Preferences"];
     }
     [statusMenu addItem:preferencesMenuItem];
-
+    
     if(!aboutMenuItem) {
         aboutMenuItem = [[NSMenuItem alloc] init];
         [aboutMenuItem setTitle:@"About"];
         [aboutMenuItem setAction:@selector(aboutMenuItemClicked:)];
     }
     [statusMenu addItem:aboutMenuItem];
-
+    
     if(!quitMenuItem) {
         quitMenuItem = [[NSMenuItem alloc] init];
         [quitMenuItem setTitle:@"Quit"];
@@ -366,6 +401,13 @@
     [aboutWindow showWindow:self];
 }
 
+- (void)vagrantSshMenuItemClicked:(NSMenuItem*)menuItem {
+    VirtualMachineInfo* machine = [self getMachineFromObject:menuItem.parentItem.representedObject];
+    if(machine) {
+        NSString *action = [NSString stringWithFormat:@"cd %@ && vagrant ssh", [Util escapeShellArg:[machine getSharedFolderPathWithName:@"/vagrant"]]];
+        [self runTerminalCommand:action];
+    }
+}
 
 - (void)vagrantUpMenuItemClicked:(NSMenuItem*)menuItem {
     [self runVagrantAction:@"up" withObject:menuItem.parentItem.representedObject];
@@ -382,7 +424,7 @@
     } else if([menuItem.parentItem.representedObject isKindOfClass:[Bookmark class]]) {
         name = ((Bookmark*)menuItem.parentItem.representedObject).displayName;
     }
-
+    
     NSAlert *confirmAlert = [NSAlert alertWithMessageText:[NSString stringWithFormat:@"Are you sure you want to destroy \"%@\"?", name] defaultButton:@"Confirm" alternateButton:@"Cancel" otherButton:nil informativeTextWithFormat:@""];
     NSInteger button = [confirmAlert runModal];
     
@@ -392,14 +434,8 @@
 }
 
 - (void)virtualMachineDetailsMenuItemClicked:(NSMenuItem*)menuItem {
-    VirtualMachineInfo *machine;
+    VirtualMachineInfo *machine = [self getMachineFromObject:menuItem.parentItem.representedObject];
     
-    if([menuItem.parentItem.representedObject isKindOfClass:[VirtualMachineInfo class]]) {
-        machine = menuItem.parentItem.representedObject;
-    } else if([menuItem.parentItem.representedObject isKindOfClass:[Bookmark class]]) {
-        machine = [self getVirtualMachineForBookmark:menuItem.parentItem.representedObject];
-    }
-
     if(machine) {
         VirtualMachineInfoWindow *infoWindow = [[VirtualMachineInfoWindow alloc] initWithWindowNibName:@"VirtualMachineInfoWindow"];
         infoWindow.machine = machine;
@@ -407,6 +443,24 @@
         [infoWindow showWindow:self];
         
         [infoWindows addObject:infoWindow];
+    }
+}
+
+- (void)vagrantOpenInFinderMenuItemClicked:(NSMenuItem*)menuItem {
+    NSString *path = nil;
+    if([menuItem.parentItem.representedObject isKindOfClass:[VirtualMachineInfo class]]) {
+        VirtualMachineInfo *machine = [menuItem parentItem].representedObject;
+        path = [machine getSharedFolderPathWithName:@"/vagrant"];
+    } else if([menuItem.parentItem.representedObject isKindOfClass:[Bookmark class]]) {
+        Bookmark *bookmark = menuItem.parentItem.representedObject;
+        path = bookmark.path;
+    }
+    
+    if(path) {
+        NSURL *fileURL = [NSURL fileURLWithPath:path];
+        [[NSWorkspace sharedWorkspace] openURL:fileURL];
+    } else {
+        [[NSAlert alertWithMessageText:@"Path not found." defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@""] runModal];
     }
 }
 
@@ -435,6 +489,16 @@
 }
 
 #pragma mark - General Functions
+
+- (VirtualMachineInfo*)getMachineFromObject:(id)obj {
+    if([obj isKindOfClass:[VirtualMachineInfo class]]) {
+        return obj;
+    } else if([obj isKindOfClass:[Bookmark class]]) {
+        return [self getVirtualMachineForBookmark:obj];
+    }
+    
+    return nil;
+}
 
 - (void)removeOutputWindow:(TaskOutputWindow*)outputWindow {
     [taskOutputWindows removeObject:outputWindow];
@@ -474,7 +538,7 @@
     if(task.terminationStatus != 0) {
         return nil;
     }
-
+    
     VirtualMachineInfo *vmInfo = [VirtualMachineInfo fromInfo:outputString];
     
     return vmInfo;

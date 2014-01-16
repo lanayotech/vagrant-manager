@@ -22,7 +22,10 @@
         <menu id="nkx-75-pgk"/>
         <menu id="boF-l8-dMu" userLabel="SubMenu">
             <items>
-                <menuItem title="vagrant up" tag="1" id="zbw-I7-JVS">
+                <menuItem title="vagrant ssh" tag="7" id="zbw-I7-JVS">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                </menuItem>
+                <menuItem title="vagrant up" tag="1" id="JrR-Xu-Q6K">
                     <modifierMask key="keyEquivalentModifierMask"/>
                 </menuItem>
                 <menuItem title="vagrant halt" tag="2" id="GVA-sR-c4Z">
@@ -32,7 +35,10 @@
                     <modifierMask key="keyEquivalentModifierMask"/>
                 </menuItem>
                 <menuItem isSeparatorItem="YES" id="nTQ-Da-JAA"/>
-                <menuItem title="Add to bookmarks" tag="5" id="3VE-HG-tuh">
+                <menuItem title="Open in Finder" tag="8" id="3VE-HG-tuh">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                </menuItem>
+                <menuItem title="Add to bookmarks" tag="5" id="Iuv-OV-lJc">
                     <modifierMask key="keyEquivalentModifierMask"/>
                 </menuItem>
                 <menuItem title="Remove from bookmarks" tag="6" id="ykP-UR-S9q">

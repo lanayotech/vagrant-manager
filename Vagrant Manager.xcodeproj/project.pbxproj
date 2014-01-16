@@ -26,6 +26,7 @@
 		B1357ABE187DF58C00811CBC /* vagrant_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = B1357ABC187DF58C00811CBC /* vagrant_logo.png */; };
 		B174335A187E1261000DCA38 /* off.png in Resources */ = {isa = PBXBuildFile; fileRef = B1743358187E1261000DCA38 /* off.png */; };
 		B174335B187E1261000DCA38 /* on.png in Resources */ = {isa = PBXBuildFile; fileRef = B1743359187E1261000DCA38 /* on.png */; };
+		B17AA18B1887A75300B4C274 /* Util.m in Sources */ = {isa = PBXBuildFile; fileRef = B17AA18A1887A75300B4C274 /* Util.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -59,6 +60,8 @@
 		B1357ABC187DF58C00811CBC /* vagrant_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = vagrant_logo.png; sourceTree = "<group>"; };
 		B1743358187E1261000DCA38 /* off.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = off.png; sourceTree = "<group>"; };
 		B1743359187E1261000DCA38 /* on.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = on.png; sourceTree = "<group>"; };
+		B17AA1891887A75300B4C274 /* Util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Util.h; sourceTree = "<group>"; };
+		B17AA18A1887A75300B4C274 /* Util.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Util.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -178,6 +181,8 @@
 				B1357A79187CEB3B00811CBC /* InfoPlist.strings */,
 				B1357A7C187CEB3B00811CBC /* main.m */,
 				B1357A7E187CEB3B00811CBC /* Vagrant Manager-Prefix.pch */,
+				B17AA1891887A75300B4C274 /* Util.h */,
+				B17AA18A1887A75300B4C274 /* Util.m */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -261,6 +266,7 @@
 				8308E132188662BD001E0B45 /* AboutWindow.m in Sources */,
 				8339DCA1187E756B0036E162 /* TaskOutputWindow.m in Sources */,
 				B1357A7D187CEB3B00811CBC /* main.m in Sources */,
+				B17AA18B1887A75300B4C274 /* Util.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

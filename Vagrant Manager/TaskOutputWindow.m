@@ -63,7 +63,7 @@
         self.taskStatusLabel.stringValue = @"Completed successfully";
     }
     
-    AppDelegate *app = (AppDelegate*)[[NSApplication sharedApplication] delegate];
+    AppDelegate *app = [Util getApp];
     if(self.machine) {
         [app updateVirtualMachineState:self.machine];
     } else if(self.bookmark) {
@@ -72,7 +72,7 @@
 }
 
 - (void)windowWillClose:(NSNotification *)notification {
-    AppDelegate *app = (AppDelegate*)[[NSApplication sharedApplication] delegate];
+    AppDelegate *app = [Util getApp];
     
     [app removeOutputWindow:self];
 }

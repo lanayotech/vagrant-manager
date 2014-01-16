@@ -51,7 +51,7 @@
 }
 
 - (void)windowWillClose:(NSNotification *)notification {
-    AppDelegate *app = (AppDelegate*)[[NSApplication sharedApplication] delegate];
+    AppDelegate *app = [Util getApp];
     
     [app removeInfoWindow:self];
 }
