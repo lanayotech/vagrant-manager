@@ -13,4 +13,6 @@
 + (AppDelegate*)getApp;
 + (NSString*)escapeShellArg:(NSString*)arg;
 
++ (BOOL)isRegistered;
+
 @end

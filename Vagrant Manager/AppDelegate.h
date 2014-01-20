@@ -11,6 +11,7 @@
 #import "PreferencesWindow.h"
 #import "VirtualMachineInfoWindow.h"
 #import "VirtualMachineInfo.h"
+#import "Licensing.h"
 
 #define MENU_ITEM_BOOKMARKED_VM 1
 #define MENU_ITEM_DETECTED_VM   2

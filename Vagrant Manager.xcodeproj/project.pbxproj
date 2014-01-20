@@ -16,6 +16,7 @@
 		8308E14018869FAC001E0B45 /* Bookmark.m in Sources */ = {isa = PBXBuildFile; fileRef = 8308E13F18869FAC001E0B45 /* Bookmark.m */; };
 		8339DCA1187E756B0036E162 /* TaskOutputWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 8339DC9F187E756B0036E162 /* TaskOutputWindow.m */; };
 		8339DCA2187E756B0036E162 /* TaskOutputWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8339DCA0187E756B0036E162 /* TaskOutputWindow.xib */; };
+		834AF8BB188CD7C500AB3CDA /* Licensing.m in Sources */ = {isa = PBXBuildFile; fileRef = 834AF8BA188CD7C500AB3CDA /* Licensing.m */; };
 		B1357A71187CEB3B00811CBC /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B1357A70187CEB3B00811CBC /* Cocoa.framework */; };
 		B1357A7B187CEB3B00811CBC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = B1357A79187CEB3B00811CBC /* InfoPlist.strings */; };
 		B1357A7D187CEB3B00811CBC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B1357A7C187CEB3B00811CBC /* main.m */; };
@@ -47,6 +48,8 @@
 		8339DC9E187E756B0036E162 /* TaskOutputWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskOutputWindow.h; sourceTree = "<group>"; };
 		8339DC9F187E756B0036E162 /* TaskOutputWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TaskOutputWindow.m; sourceTree = "<group>"; };
 		8339DCA0187E756B0036E162 /* TaskOutputWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TaskOutputWindow.xib; sourceTree = "<group>"; };
+		834AF8B9188CD7C500AB3CDA /* Licensing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Licensing.h; sourceTree = "<group>"; };
+		834AF8BA188CD7C500AB3CDA /* Licensing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Licensing.m; sourceTree = "<group>"; };
 		B1357A6D187CEB3B00811CBC /* Vagrant Manager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Vagrant Manager.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B1357A70187CEB3B00811CBC /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		B1357A73187CEB3B00811CBC /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -194,6 +197,8 @@
 				B1357A7E187CEB3B00811CBC /* Vagrant Manager-Prefix.pch */,
 				B17AA1891887A75300B4C274 /* Util.h */,
 				B17AA18A1887A75300B4C274 /* Util.m */,
+				834AF8B9188CD7C500AB3CDA /* Licensing.h */,
+				834AF8BA188CD7C500AB3CDA /* Licensing.m */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -274,6 +279,7 @@
 			files = (
 				B1357A84187CEB3B00811CBC /* AppDelegate.m in Sources */,
 				8308E13C18868D52001E0B45 /* VirtualMachineInfoWindow.m in Sources */,
+				834AF8BB188CD7C500AB3CDA /* Licensing.m in Sources */,
 				8308E138188678A0001E0B45 /* VirtualMachineInfo.m in Sources */,
 				8308E14018869FAC001E0B45 /* Bookmark.m in Sources */,
 				8308E132188662BD001E0B45 /* AboutWindow.m in Sources */,

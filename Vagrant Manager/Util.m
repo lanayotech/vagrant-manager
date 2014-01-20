@@ -21,4 +21,8 @@
     return result;
 }
 
++ (BOOL)isRegistered {
+    return NO;
+}
+
 @end
