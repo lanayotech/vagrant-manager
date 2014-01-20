@@ -9,9 +9,9 @@
 
 @interface RegisterWindow : NSWindowController <NSTextFieldDelegate>
 
-@property (weak) IBOutlet NSTextField *licenseTextField;
 @property (weak) IBOutlet NSButton *validateButton;
 @property (weak) IBOutlet NSButton *purchaseLicenseButton;
+@property (weak) IBOutlet NSScrollView *licenseScrollView;
 
 - (IBAction)validateButtonClicked:(id)sender;
 - (IBAction)purchaseLicenseButtonClicked:(id)sender;

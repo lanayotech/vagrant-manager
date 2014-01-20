@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="4514" systemVersion="13B42" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="4514" systemVersion="13B42" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="4514"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="RegisterWindow">
             <connections>
-                <outlet property="licenseTextField" destination="fZ4-bT-Cuz" id="JXg-zv-YPI"/>
+                <outlet property="licenseScrollView" destination="0D2-Bz-fzF" id="svT-2R-bwN"/>
                 <outlet property="purchaseLicenseButton" destination="cQY-15-M08" id="JNs-nu-EHq"/>
                 <outlet property="validateButton" destination="JPv-zH-lOY" id="dFK-Ec-Es4"/>
                 <outlet property="window" destination="1" id="3"/>
@@ -22,7 +22,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="647" height="259"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="g7a-Av-ffN">
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="g7a-Av-ffN">
                         <rect key="frame" x="18" y="222" width="118" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Enter License Key:" id="1oM-SX-Pve">
@@ -31,16 +31,7 @@
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fZ4-bT-Cuz">
-                        <rect key="frame" x="20" y="97" width="607" height="117"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="CJk-kl-db2">
-                            <font key="font" metaFont="system"/>
-                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JPv-zH-lOY">
+                    <button verticalHuggingPriority="750" id="JPv-zH-lOY">
                         <rect key="frame" x="551" y="61" width="82" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="push" title="Validate" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="pTn-Pu-W6F">
@@ -51,7 +42,7 @@
                             <action selector="validateButtonClicked:" target="-2" id="NRT-Dl-qla"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cQY-15-M08">
+                    <button verticalHuggingPriority="750" id="cQY-15-M08">
                         <rect key="frame" x="14" y="13" width="173" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="push" title="Purchase License Key" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9su-Ip-leu">
@@ -62,7 +53,7 @@
                             <action selector="purchaseLicenseButtonClicked:" target="-2" id="rZC-61-CV8"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YSt-YN-cWO">
+                    <button verticalHuggingPriority="750" id="YSt-YN-cWO">
                         <rect key="frame" x="505" y="13" width="128" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="push" title="Close Window" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="7ff-ku-Tqh">
@@ -73,6 +64,35 @@
                             <action selector="performClose:" target="-1" id="QXz-Rv-ytl"/>
                         </connections>
                     </button>
+                    <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="0D2-Bz-fzF">
+                        <rect key="frame" x="20" y="109" width="607" height="105"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <clipView key="contentView" id="2cn-qn-D14">
+                            <rect key="frame" x="1" y="1" width="590" height="103"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <subviews>
+                                <textView importsGraphics="NO" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" usesFontPanel="YES" verticallyResizable="YES" allowsNonContiguousLayout="YES" quoteSubstitution="YES" dashSubstitution="YES" spellingCorrection="YES" smartInsertDelete="YES" id="gGc-gH-sFE">
+                                    <rect key="frame" x="0.0" y="0.0" width="590" height="103"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <size key="minSize" width="590" height="103"/>
+                                    <size key="maxSize" width="611" height="10000000"/>
+                                    <color key="insertionPointColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                    <size key="minSize" width="590" height="103"/>
+                                    <size key="maxSize" width="611" height="10000000"/>
+                                </textView>
+                            </subviews>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        </clipView>
+                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="HX0-pi-hJk">
+                            <rect key="frame" x="-100" y="-100" width="87" height="18"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                        </scroller>
+                        <scroller key="verticalScroller" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="BTH-Od-9Ui">
+                            <rect key="frame" x="591" y="1" width="15" height="103"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                        </scroller>
+                    </scrollView>
                 </subviews>
             </view>
             <connections>
