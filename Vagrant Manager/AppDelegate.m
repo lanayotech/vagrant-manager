@@ -39,7 +39,7 @@
     
     [statusMenu setDelegate:self];
     
-    [self rebuildMenu];
+    [self rebuildMenu:NO];
     [self detectVagrantMachines];
 }
 
@@ -48,7 +48,7 @@
         @synchronized(detectedVagrantMachines) {
             detectedVagrantMachines = [self sortVirtualMachines:detectedVagrantMachines];
         }
-        [self rebuildMenu];
+        [self rebuildMenu:NO];
     }
 }
 
@@ -199,8 +199,12 @@
 
 #pragma mark - Menu management
 
-- (void)rebuildMenu {
+- (void)rebuildMenu:(BOOL)closeMenu {
     NSBundle *bundle = [NSBundle mainBundle];
+    
+    if(closeMenu) {
+        [statusMenu cancelTracking];
+    }
     
     [statusMenu removeAllItems];
     
@@ -550,7 +554,7 @@
     VirtualMachineInfo *machine = [menuItem parentItem].representedObject;
     
     [self addBookmarkForVirtualMachine:machine];
-    [self rebuildMenu];
+    [self rebuildMenu:YES];
 }
 
 - (void)removeBookmarkMenuItemClicked:(NSMenuItem*)menuItem {
@@ -560,13 +564,13 @@
         
         if(machine.bookmark) {
             [self removeBookmark:machine.bookmark];
-            [self rebuildMenu];
+            [self rebuildMenu:YES];
         }
     } else if([menuItem.parentItem.representedObject isKindOfClass:[Bookmark class]]) {
         Bookmark *bookmark = menuItem.parentItem.representedObject;
         
         [self removeBookmark:bookmark];
-        [self rebuildMenu];
+        [self rebuildMenu:YES];
     }
 }
 
@@ -663,7 +667,7 @@
         [self detectVagrantMachines];
     } else {
         machine.state = info.state;
-        [self rebuildMenu];
+        [self rebuildMenu:YES];
     }
 }
 
@@ -727,7 +731,7 @@
         }
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self rebuildMenu];
+            [self rebuildMenu:YES];
         });
     });
 }
