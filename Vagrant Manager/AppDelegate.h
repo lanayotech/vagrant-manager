@@ -9,6 +9,7 @@
 #import "TaskOutputWindow.h"
 #import "AboutWindow.h"
 #import "PreferencesWindow.h"
+#import "RegisterWindow.h"
 #import "VirtualMachineInfoWindow.h"
 #import "VirtualMachineInfo.h"
 #import "Licensing.h"
@@ -39,9 +40,13 @@
     NSMenuItem *aboutMenuItem;
     NSMenuItem *quitMenuItem;
     NSMenuItem *windowMenuItem;
+    NSMenuItem *expirationMenuItem;
+    NSMenuItem *registerMenuItem;
+    NSMenuItem *registerSeparatorMenuItem;
     
     AboutWindow *aboutWindow;
     PreferencesWindow *preferencesWindow;
+    RegisterWindow *registerWindow;
 }
 
 @property (assign) IBOutlet NSWindow *window;

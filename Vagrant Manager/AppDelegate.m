@@ -400,26 +400,35 @@
     }
     
     if(![lic isRegistered]) {
-        NSMenuItem *i;
-        
         if([lic isExpired]) {
-            i = [[NSMenuItem alloc] init];
-            [i setTitle:@"Trial Expired"];
-            [statusMenu addItem:i];
+            if(!expirationMenuItem) {
+                expirationMenuItem = [[NSMenuItem alloc] init];
+            }
+            [expirationMenuItem setTitle:@"Trial Expired"];
+            [statusMenu addItem:expirationMenuItem];
         } else {
             NSDate *expirationDate = [lic getExpirationDate];
-            
             NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
             NSDateComponents *components = [calendar components:NSDayCalendarUnit fromDate:[NSDate date] toDate:expirationDate options:0];
-            
-            i = [[NSMenuItem alloc] init];
-            [i setTitle:[NSString stringWithFormat:@"Trial expires in %ld days", (long)components.day]];
-            [statusMenu addItem:i];
+    
+            if(!expirationMenuItem) {
+                expirationMenuItem = [[NSMenuItem alloc] init];
+            }
+            [expirationMenuItem setTitle:[NSString stringWithFormat:@"Trial expires in %ld days", (long)components.day]];
+            [statusMenu addItem:expirationMenuItem];
         }
         
-        i = [[NSMenuItem alloc] init];
-        [i setTitle:@"Register"];
-        [statusMenu addItem:i];
+        if(!registerMenuItem) {
+            registerMenuItem = [[NSMenuItem alloc] init];
+        }
+        [registerMenuItem setTitle:@"Register"];
+        [registerMenuItem setAction:@selector(registerMenuItemClicked:)];
+        [statusMenu addItem:registerMenuItem];
+        
+        if(!registerSeparatorMenuItem) {
+            registerSeparatorMenuItem = [NSMenuItem separatorItem];
+        }
+        [statusMenu addItem:registerSeparatorMenuItem];
     }
     
     //add static items
@@ -495,6 +504,12 @@
     preferencesWindow = [[PreferencesWindow alloc] initWithWindowNibName:@"PreferencesWindow"];
     [NSApp activateIgnoringOtherApps:YES];
     [preferencesWindow showWindow:self];
+}
+
+- (IBAction)registerMenuItemClicked:(id)sender {
+    registerWindow = [[RegisterWindow alloc] initWithWindowNibName:@"RegisterWindow"];
+    [NSApp activateIgnoringOtherApps:YES];
+    [registerWindow showWindow:self];
 }
 
 - (void)vagrantSshMenuItemClicked:(NSMenuItem*)menuItem {

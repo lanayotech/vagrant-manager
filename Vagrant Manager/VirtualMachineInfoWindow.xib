@@ -26,10 +26,10 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <scrollView autohidesScrollers="YES" horizontalLineScroll="24" horizontalPageScroll="10" verticalLineScroll="24" verticalPageScroll="10" usesPredominantAxisScrolling="NO" id="jEU-0j-S2G">
-                        <rect key="frame" x="20" y="58" width="514" height="261"/>
+                        <rect key="frame" x="20" y="58" width="514" height="261.00000964906025"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
                         <clipView key="contentView" id="oL6-sq-NrP">
-                            <rect key="frame" x="1" y="17" width="512" height="243"/>
+                            <rect key="frame" x="1" y="17.000009649060303" width="512" height="243"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="22" headerView="LJT-NO-8nt" id="3jZ-15-LLP">
@@ -93,10 +93,10 @@
                         </textFieldCell>
                     </textField>
                     <scrollView autohidesScrollers="YES" horizontalLineScroll="24" horizontalPageScroll="10" verticalLineScroll="24" verticalPageScroll="10" usesPredominantAxisScrolling="NO" id="yPX-tq-x2x">
-                        <rect key="frame" x="20" y="346" width="514" height="66"/>
+                        <rect key="frame" x="20" y="346" width="514" height="66.000000759959221"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                         <clipView key="contentView" id="ndM-Tm-VXZ">
-                            <rect key="frame" x="1" y="17" width="512" height="48"/>
+                            <rect key="frame" x="1" y="17.000000759959221" width="512" height="48"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="22" headerView="r6v-ZJ-KJO" id="Egl-Vj-6B4">
