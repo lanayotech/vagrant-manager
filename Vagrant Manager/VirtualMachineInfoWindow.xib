@@ -26,10 +26,10 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <scrollView autohidesScrollers="YES" horizontalLineScroll="24" horizontalPageScroll="10" verticalLineScroll="24" verticalPageScroll="10" usesPredominantAxisScrolling="NO" id="jEU-0j-S2G">
-                        <rect key="frame" x="20" y="58" width="514" height="261.00000964906025"/>
+                        <rect key="frame" x="20" y="58" width="514" height="261"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
                         <clipView key="contentView" id="oL6-sq-NrP">
-                            <rect key="frame" x="1" y="17.000009649060303" width="512" height="243"/>
+                            <rect key="frame" x="1" y="17" width="512" height="243"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="22" headerView="LJT-NO-8nt" id="3jZ-15-LLP">
@@ -93,10 +93,10 @@
                         </textFieldCell>
                     </textField>
                     <scrollView autohidesScrollers="YES" horizontalLineScroll="24" horizontalPageScroll="10" verticalLineScroll="24" verticalPageScroll="10" usesPredominantAxisScrolling="NO" id="yPX-tq-x2x">
-                        <rect key="frame" x="20" y="346" width="514" height="66.000000759959221"/>
+                        <rect key="frame" x="20" y="346" width="514" height="66"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                         <clipView key="contentView" id="ndM-Tm-VXZ">
-                            <rect key="frame" x="1" y="17.000000759959221" width="512" height="48"/>
+                            <rect key="frame" x="1" y="17" width="512" height="48"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="22" headerView="r6v-ZJ-KJO" id="Egl-Vj-6B4">
@@ -138,11 +138,11 @@
                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </clipView>
                         <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="7iS-D7-Dyp">
-                            <rect key="frame" x="1" y="25.999999999999943" width="423" height="15"/>
+                            <rect key="frame" x="1" y="26" width="423" height="15"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                         <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="GDe-7B-PiB">
-                            <rect key="frame" x="424" y="17" width="15" height="23.999999999999943"/>
+                            <rect key="frame" x="424" y="17" width="15" height="24"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                         <tableHeaderView key="headerView" id="r6v-ZJ-KJO">
@@ -171,7 +171,7 @@
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="wvc-dQ-ADq">
                         <rect key="frame" x="87" y="496" width="449" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Name" id="4M4-ln-fBe">
+                        <textFieldCell key="cell" lineBreakMode="truncatingTail" selectable="YES" sendsActionOnEndEditing="YES" title="Name" id="4M4-ln-fBe">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -189,7 +189,7 @@
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="Ku0-yU-8FI">
                         <rect key="frame" x="87" y="478" width="449" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="OS" id="JF9-eU-1EE">
+                        <textFieldCell key="cell" lineBreakMode="truncatingTail" selectable="YES" sendsActionOnEndEditing="YES" title="OS" id="JF9-eU-1EE">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -207,7 +207,7 @@
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="4r8-Yd-LXm">
                         <rect key="frame" x="87" y="458" width="449" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="UUID" id="fYx-eR-Lni">
+                        <textFieldCell key="cell" lineBreakMode="truncatingTail" selectable="YES" sendsActionOnEndEditing="YES" title="UUID" id="fYx-eR-Lni">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -225,7 +225,7 @@
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="Uxa-FN-NWR">
                         <rect key="frame" x="87" y="439" width="449" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="State" id="Ttf-pR-e8H">
+                        <textFieldCell key="cell" lineBreakMode="truncatingTail" selectable="YES" sendsActionOnEndEditing="YES" title="State" id="Ttf-pR-e8H">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
