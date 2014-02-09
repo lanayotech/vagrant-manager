@@ -71,7 +71,9 @@
     }
     
     if([[NSUserDefaults standardUserDefaults] boolForKey:@"autoCloseTaskWindows"] && task.terminationStatus == 0) {
-        [self close];
+        dispatch_async(dispatch_get_global_queue(0,0), ^{
+            [self close];
+        });
     }
 }
 
