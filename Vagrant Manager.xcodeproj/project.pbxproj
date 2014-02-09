@@ -47,6 +47,7 @@
 		8308E13B18868D52001E0B45 /* VirtualMachineInfoWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VirtualMachineInfoWindow.xib; sourceTree = "<group>"; };
 		8308E13E18869FAC001E0B45 /* Bookmark.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bookmark.h; sourceTree = "<group>"; };
 		8308E13F18869FAC001E0B45 /* Bookmark.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Bookmark.m; sourceTree = "<group>"; };
+		832784C918A7483900222C71 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		8339DC9E187E756B0036E162 /* TaskOutputWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskOutputWindow.h; sourceTree = "<group>"; };
 		8339DC9F187E756B0036E162 /* TaskOutputWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TaskOutputWindow.m; sourceTree = "<group>"; };
 		8339DCA0187E756B0036E162 /* TaskOutputWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TaskOutputWindow.xib; sourceTree = "<group>"; };
@@ -167,6 +168,7 @@
 		B1357A6F187CEB3B00811CBC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				832784C918A7483900222C71 /* Security.framework */,
 				8308E134188668A1001E0B45 /* WebKit.framework */,
 				B1357A70187CEB3B00811CBC /* Cocoa.framework */,
 				B1357A72187CEB3B00811CBC /* Other Frameworks */,

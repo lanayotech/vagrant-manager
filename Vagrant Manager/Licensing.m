@@ -7,6 +7,8 @@
 
 #import "Licensing.h"
 
+#import <CommonCrypto/CommonDigest.h>
+
 @implementation Licensing
 
 static Licensing *_sharedInstance;
@@ -52,6 +54,31 @@ static Licensing *_sharedInstance;
     NSDateComponents *components = [[NSDateComponents alloc] init];
     [components setDay:14];
     return components;
+}
+
+- (BOOL)validateLicense:(NSString *)licenseKey {
+    NSString *secretKey = @"497bf1451685d7832a87e86d1d5dec1a";
+    
+    NSArray *parts = [[licenseKey lowercaseString] componentsSeparatedByString:@"-"];
+    
+    NSString *checkKey = [parts objectAtIndex:0];
+    
+    const char *cStr = [[NSString stringWithFormat:@"%@:%@", checkKey, secretKey] UTF8String];
+    unsigned char digest[CC_MD5_DIGEST_LENGTH];
+    CC_MD5(cStr, (uint)strlen(cStr), digest);
+    
+    NSMutableString *output = [NSMutableString stringWithCapacity:CC_MD5_DIGEST_LENGTH * 2 + [licenseKey length] + 1];
+    
+    [output appendString:checkKey];
+    
+    for(int i = 0; i < CC_MD5_DIGEST_LENGTH; i++) {
+        if(i%4 == 0) {
+            [output appendString:@"-"];
+        }
+        [output appendFormat:@"%02x", digest[i]];
+    }
+    
+    return [output isEqualToString:licenseKey];
 }
 
 @end

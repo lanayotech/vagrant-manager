@@ -17,5 +17,6 @@
 - (BOOL)isExpired;
 - (NSDateComponents*)getTrialLength;
 - (NSDate*)getExpirationDate;
+- (BOOL)validateLicense:(NSString*)licenseKey;
 
 @end
