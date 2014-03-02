@@ -10,6 +10,7 @@
 @interface Licensing : NSObject
 
 @property (strong, nonatomic) NSDate *firstRunDate;
+@property (strong, nonatomic) NSString *licenseKey;
 
 + (Licensing*)sharedInstance;
 
@@ -17,6 +18,7 @@
 - (BOOL)isExpired;
 - (NSDateComponents*)getTrialLength;
 - (NSDate*)getExpirationDate;
+- (void)storeLicenseKey:(NSString*)licenseKey;
 - (BOOL)validateLicense:(NSString*)licenseKey;
 
 @end

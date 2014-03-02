@@ -20,19 +20,24 @@ static Licensing *_sharedInstance;
         if(!firstRunDate) {
             firstRunDate = [NSDate date];
             [[NSUserDefaults standardUserDefaults] setObject:firstRunDate forKey:@"firstRunDate"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
         }
         
         _sharedInstance.firstRunDate = firstRunDate;
+        _sharedInstance.licenseKey = [[NSUserDefaults standardUserDefaults] objectForKey:@"licenseKey"];        
     }
-    
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
     
     return _sharedInstance;
 }
 
+- (void)storeLicenseKey:(NSString*)licenseKey {
+    self.licenseKey = licenseKey;
+    [[NSUserDefaults standardUserDefaults] setObject:licenseKey forKey:@"licenseKey"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
 - (BOOL)isRegistered {
-    return NO;
+    return self.licenseKey && [self validateLicense:self.licenseKey];
 }
 
 - (NSDate*)getExpirationDate {

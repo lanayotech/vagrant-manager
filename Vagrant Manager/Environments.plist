@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Debug</key>
+	<dict>
+		<key>buy_url</key>
+		<string>http://www.vagrantmanager.com/?debug=1</string>
+	</dict>
+	<key>_default</key>
+	<dict>
+		<key>buy_url</key>
+		<string>http://www.vagrantmanager.com/</string>
+		<key>about_url</key>
+		<string>http://www.vagrantmanager.com/</string>
+	</dict>
+</dict>
+</plist>

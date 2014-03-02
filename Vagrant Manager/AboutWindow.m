@@ -6,6 +6,7 @@
 //
 
 #import "AboutWindow.h"
+#import "Environment.h"
 
 @interface AboutWindow ()
 
@@ -31,7 +32,7 @@
     
     str = [str stringByReplacingOccurrencesOfString:@"{YEAR}" withString:yearString];
     str = [str stringByReplacingOccurrencesOfString:@"{VERSION}" withString:[[[NSBundle mainBundle] infoDictionary] valueForKey:@"CFBundleShortVersionString"]];
-    str = [str stringByReplacingOccurrencesOfString:@"{URL}" withString:@"<a href=\"http://www.lanayo.com\">http://www.lanayo.com/</a>"];
+    str = [str stringByReplacingOccurrencesOfString:@"{URL}" withString:@[[Environment sharedInstance] aboutURL]"<a href=\"http://www.lanayo.com\">http://www.lanayo.com/</a>"];
     str = [str stringByReplacingOccurrencesOfString:@"\n" withString:@"<br>"];
     
     self.webView.policyDelegate = self;

@@ -56,5 +56,6 @@
 - (void)removeInfoWindow:(VirtualMachineInfoWindow*)infoWindow;
 - (void)updateVirtualMachineState:(VirtualMachineInfo*)machine;
 - (void)updateBookmarkState:(Bookmark*)bookmark;
+- (void)rebuildMenu:(BOOL)closeMenu;
 
 @end

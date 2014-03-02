@@ -11,7 +11,7 @@
 
 @property (weak) IBOutlet NSButton *validateButton;
 @property (weak) IBOutlet NSButton *purchaseLicenseButton;
-@property (weak) IBOutlet NSScrollView *licenseScrollView;
+@property (weak) IBOutlet NSTextField *licenseKeyTextField;
 
 - (IBAction)validateButtonClicked:(id)sender;
 - (IBAction)purchaseLicenseButtonClicked:(id)sender;
