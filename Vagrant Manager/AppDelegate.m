@@ -10,6 +10,7 @@
 
 #define MENU_ITEM_VAGRANT_SSH 7
 #define MENU_ITEM_VAGRANT_UP 1
+#define MENU_ITEM_VAGRANT_RELOAD 10
 #define MENU_ITEM_VAGRANT_HALT 2
 #define MENU_ITEM_VAGRANT_DESTROY 3
 #define MENU_ITEM_OPEN_IN_FINDER 8
@@ -165,10 +166,14 @@
         command = @"vagrant ssh";
     } else if([action isEqualToString:@"up"]) {
         command = @"vagrant up";
+    } else if([action isEqualToString:@"reload"]) {
+        command = @"vagrant reload";
     } else if([action isEqualToString:@"halt"]) {
         command = @"vagrant halt";
     } else if([action isEqualToString:@"destroy"]) {
         command = @"vagrant destroy -f";
+    } else {
+        return;
     }
     
     NSTask *task = [[NSTask alloc] init];
@@ -261,6 +266,9 @@
                             NSMenuItem *vagrantUp = [submenu itemWithTag:MENU_ITEM_VAGRANT_UP];
                             [vagrantUp setEnabled:NO];
                             
+                            NSMenuItem *vagrantReload = [submenu itemWithTag:MENU_ITEM_VAGRANT_RELOAD];
+                            [vagrantReload setAction:@selector(vagrantReloadMenuItemClicked:)];
+                            
                             NSMenuItem *vagrantHalt = [submenu itemWithTag:MENU_ITEM_VAGRANT_HALT];
                             [vagrantHalt setAction:@selector(vagrantHaltMenuItemClicked:)];
                         } else {
@@ -269,6 +277,9 @@
                             
                             NSMenuItem *vagrantUp = [submenu itemWithTag:MENU_ITEM_VAGRANT_UP];
                             [vagrantUp setAction:@selector(vagrantUpMenuItemClicked:)];
+                            
+                            NSMenuItem *vagrantReload = [submenu itemWithTag:MENU_ITEM_VAGRANT_RELOAD];
+                            [vagrantReload setEnabled:NO];
                             
                             NSMenuItem *vagrantHalt = [submenu itemWithTag:MENU_ITEM_VAGRANT_HALT];
                             [vagrantHalt setEnabled:NO];
@@ -358,6 +369,9 @@
                         NSMenuItem *vagrantUp = [submenu itemWithTag:MENU_ITEM_VAGRANT_UP];
                         [vagrantUp setEnabled:NO];
                         
+                        NSMenuItem *vagrantReload = [submenu itemWithTag:MENU_ITEM_VAGRANT_RELOAD];
+                        [vagrantReload setAction:@selector(vagrantReloadMenuItemClicked:)];
+                        
                         NSMenuItem *vagrantHalt = [submenu itemWithTag:MENU_ITEM_VAGRANT_HALT];
                         [vagrantHalt setAction:@selector(vagrantHaltMenuItemClicked:)];
                     } else {
@@ -366,6 +380,9 @@
                         
                         NSMenuItem *vagrantUp = [submenu itemWithTag:MENU_ITEM_VAGRANT_UP];
                         [vagrantUp setAction:@selector(vagrantUpMenuItemClicked:)];
+
+                        NSMenuItem *vagrantReload = [submenu itemWithTag:MENU_ITEM_VAGRANT_RELOAD];
+                        [vagrantReload setEnabled:NO];
                         
                         NSMenuItem *vagrantHalt = [submenu itemWithTag:MENU_ITEM_VAGRANT_HALT];
                         [vagrantHalt setEnabled:NO];
@@ -536,6 +553,10 @@
 
 - (void)vagrantUpMenuItemClicked:(NSMenuItem*)menuItem {
     [self runVagrantAction:@"up" withObject:menuItem.parentItem.representedObject];
+}
+
+- (void)vagrantReloadMenuItemClicked:(NSMenuItem*)menuItem {
+    [self runVagrantAction:@"reload" withObject:menuItem.parentItem.representedObject];
 }
 
 - (void)vagrantHaltMenuItemClicked:(NSMenuItem*)menuItem {
