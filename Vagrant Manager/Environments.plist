@@ -9,6 +9,8 @@
 	</dict>
 	<key>_default</key>
 	<dict>
+		<key>app_info_url</key>
+		<string>http://api.lanayo.com/info/vagrant_manager</string>
 		<key>buy_url</key>
 		<string>http://www.vagrantmanager.com/</string>
 		<key>about_url</key>

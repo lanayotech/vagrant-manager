@@ -42,6 +42,7 @@
     NSMenuItem *windowMenuItem;
     NSMenuItem *expirationMenuItem;
     NSMenuItem *registerMenuItem;
+    NSMenuItem *checkForUpdatesMenuItem;
     NSMenuItem *registerSeparatorMenuItem;
     
     AboutWindow *aboutWindow;
