@@ -42,6 +42,8 @@
     
     [self rebuildMenu:NO];
     [self detectVagrantMachines];
+    
+    [self checkForUpdates:NO];
 }
 
 - (void)menuWillOpen:(NSMenu *)menu {
@@ -216,7 +218,7 @@
             //add refresh button
             if(!refreshDetectedMenuItem) {
                 refreshDetectedMenuItem = [[NSMenuItem alloc] init];
-                [refreshDetectedMenuItem setTitle:@"Detect Vagrant Machines"];
+                [refreshDetectedMenuItem setTitle:@"Refresh List"];
                 [refreshDetectedMenuItem setAction:@selector(refreshDetectedMenuItemClicked:)];
             }
             [statusMenu addItem:refreshDetectedMenuItem];
@@ -503,47 +505,7 @@
 }
 
 - (IBAction)checkForUpdatesMenuItemClicked:(id)sender {
-    
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSError *err;
-        
-        NSData *responseData = [NSData dataWithContentsOfURL:[NSURL URLWithString:[[Environment sharedInstance] appInfoURL]] options:NSDataReadingUncached error:&err];
-        
-        if(err) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                NSAlert *errorAlert = [NSAlert alertWithMessageText:@"There was an error checking for a new version. Please try again later." defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@""];
-                [errorAlert runModal];
-            });
-        } else {
-            NSDictionary *responseObj = [NSJSONSerialization JSONObjectWithData:responseData options:0 error:&err];
-            
-            if(err) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    NSAlert *errorAlert = [NSAlert alertWithMessageText:@"There was an error checking for a new version. Please try again later." defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@""];
-                    [errorAlert runModal];
-                });
-            } else {
-                NSString *currentVersion = [responseObj objectForKey:@"current_version"];
-                NSString *downloadURL = [responseObj objectForKey:@"download_url"];
-                
-                if(currentVersion != [[[NSBundle mainBundle] infoDictionary] valueForKey:@"CFBundleShortVersionString"]) {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        NSAlert *confirmAlert = [NSAlert alertWithMessageText:[NSString stringWithFormat:@"There is a new version available.\nCurrent Version:  %@\nLatest Version: %@", [[[NSBundle mainBundle] infoDictionary] valueForKey:@"CFBundleShortVersionString"], currentVersion] defaultButton:@"Download Latest Version" alternateButton:@"Cancel" otherButton:nil informativeTextWithFormat:@""];
-                        NSInteger button = [confirmAlert runModal];
-                        
-                        if(button == NSAlertDefaultReturn) {
-                            [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:downloadURL]];
-                        }
-                    });
-                } else {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        NSAlert *alert = [NSAlert alertWithMessageText:@"There are no updates available." defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@""];
-                        [alert runModal];
-                    });
-                }
-            }
-        }
-    });
+    [self checkForUpdates:YES];
 }
 
 - (IBAction)aboutMenuItemClicked:(id)sender {
@@ -686,6 +648,65 @@
 
 - (void)removeInfoWindow:(VirtualMachineInfoWindow*)infoWindow {
     [infoWindows removeObject:infoWindow];
+}
+
+- (void)checkForUpdates:(BOOL)displayResult {
+    //check for updates initially
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSError *err;
+        
+        NSData *responseData = [NSData dataWithContentsOfURL:[NSURL URLWithString:[[Environment sharedInstance] appInfoURL]] options:NSDataReadingUncached error:&err];
+        
+        if(err) {
+            if(displayResult) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    NSAlert *errorAlert = [NSAlert alertWithMessageText:@"There was an error checking for a new version. Please try again later." defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@""];
+                    [errorAlert runModal];
+                });
+            }
+        } else {
+            NSDictionary *responseObj = [NSJSONSerialization JSONObjectWithData:responseData options:0 error:&err];
+            
+            if(err) {
+                if(displayResult) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        NSAlert *errorAlert = [NSAlert alertWithMessageText:@"There was an error checking for a new version. Please try again later." defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@""];
+                        [errorAlert runModal];
+                    });
+                }
+            } else {
+                NSString *currentVersion = [responseObj objectForKey:@"current_version"];
+                NSString *downloadURL = [responseObj objectForKey:@"download_url"];
+                
+                if(currentVersion != [[[NSBundle mainBundle] infoDictionary] valueForKey:@"CFBundleShortVersionString"]) {
+                    checkForUpdatesMenuItem.title = @"Update Available";
+                    [checkForUpdatesMenuItem setImage:[[NSImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"problem" ofType:@"png"]]];
+                    
+                    
+                    if(displayResult) {
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            NSAlert *confirmAlert = [NSAlert alertWithMessageText:[NSString stringWithFormat:@"There is a new version available.\nCurrent Version:  %@\nLatest Version: %@", [[[NSBundle mainBundle] infoDictionary] valueForKey:@"CFBundleShortVersionString"], currentVersion] defaultButton:@"Download Latest Version" alternateButton:@"Cancel" otherButton:nil informativeTextWithFormat:@""];
+                            NSInteger button = [confirmAlert runModal];
+                            
+                            if(button == NSAlertDefaultReturn) {
+                                [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:downloadURL]];
+                            }
+                        });
+                    }
+                } else {
+                    checkForUpdatesMenuItem.title = @"Check For Updates";
+                    [checkForUpdatesMenuItem setImage:nil];
+                    
+                    if(displayResult) {
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            NSAlert *alert = [NSAlert alertWithMessageText:@"There are no updates available." defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@""];
+                            [alert runModal];
+                        });
+                    }
+                }
+            }
+        }
+    });
 }
 
 #pragma mark - Virtual Machines
