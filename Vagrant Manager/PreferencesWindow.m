@@ -26,6 +26,15 @@
     
     NSString *terminalPreference = [[NSUserDefaults standardUserDefaults] stringForKey:@"terminalPreference"];
     BOOL autoCloseTaskWindows = [[NSUserDefaults standardUserDefaults] boolForKey:@"autoCloseTaskWindows"];
+    NSString *statusBarIconTheme = [[NSUserDefaults standardUserDefaults] stringForKey:@"statusBarIconTheme"];
+    
+    if([statusBarIconTheme isEqualToString:@"black"]) {
+        [self.statusBarIconThemePopUpButton selectItemWithTag:101];
+    } else if([statusBarIconTheme isEqualToString:@"flat"]) {
+        [self.statusBarIconThemePopUpButton selectItemWithTag:102];
+    } else {
+        [self.statusBarIconThemePopUpButton selectItemWithTag:100];
+    }
     
     if ([terminalPreference isEqualToString:@"iTerm"]) {
         [self.terminalPreferencePopUpButton selectItemWithTag:101];
@@ -52,6 +61,24 @@
     
     [[NSUserDefaults standardUserDefaults] setValue:terminalPreference forKey:@"terminalPreference"];
     [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+- (IBAction)statusBarIconThemePopUpButtonClicked:(id)sender {
+    NSString *statusBarIconTheme;
+    
+    if (self.statusBarIconThemePopUpButton.selectedItem.tag == 101) {
+        statusBarIconTheme = @"black";
+    }
+    else if (self.statusBarIconThemePopUpButton.selectedItem.tag == 102) {
+        statusBarIconTheme = @"flat";
+    } else {
+        statusBarIconTheme = @"default";
+    }
+    
+    [[NSUserDefaults standardUserDefaults] setValue:statusBarIconTheme forKey:@"statusBarIconTheme"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    [[Util getApp] rebuildMenu:NO];
 }
 
 @end

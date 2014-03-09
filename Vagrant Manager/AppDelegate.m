@@ -24,8 +24,6 @@
 #pragma mark - Application events
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
-    NSBundle *bundle = [NSBundle mainBundle];
-    
     //initialize data
     taskOutputWindows = [[NSMutableArray alloc] init];
     infoWindows = [[NSMutableArray alloc] init];
@@ -34,8 +32,8 @@
     
     //create status bar menu item
     statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength];
-    [statusItem setImage:[[NSImage alloc] initWithContentsOfFile:[bundle pathForResource:@"vagrant_logo" ofType:@"png"]]];
-    [statusItem setAlternateImage:[[NSImage alloc] initWithContentsOfFile:[bundle pathForResource:@"vagrant_logo_highlighted" ofType:@"png"]]];
+    [statusItem setImage:[self getThemedImage:@"vagrant_logo_off"]];
+    [statusItem setAlternateImage:[self getThemedImage:@"vagrant_logo_highlighted"]];
     [statusItem setMenu:statusMenu];
     [statusItem setHighlightMode:YES];
     
@@ -490,9 +488,16 @@
     int runningCount = [self getRunningVmCount];
     if(runningCount > 0 ) {
         [statusItem setTitle:[NSString stringWithFormat:@"%d", runningCount]];
+        [statusItem setImage:[self getThemedImage:@"vagrant_logo_on"]];
     } else {
         [statusItem setTitle:@""];
+        [statusItem setImage:[self getThemedImage:@"vagrant_logo_off"]];
     }
+    [statusItem setAlternateImage:[self getThemedImage:@"vagrant_logo_highlighted"]];
+}
+
+- (NSImage*)getThemedImage:(NSString*)imageName {
+    return [[NSImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:[NSString stringWithFormat:@"%@-%@", imageName, [self getCurrentTheme]] ofType:@"png"]];
 }
 
 - (void)removeDetectedMenuItems {
@@ -669,6 +674,16 @@
 
 - (void)removeInfoWindow:(VirtualMachineInfoWindow*)infoWindow {
     [infoWindows removeObject:infoWindow];
+}
+
+- (NSString*)getCurrentTheme {
+    NSString *theme = [[NSUserDefaults standardUserDefaults] objectForKey:@"statusBarIconTheme"];
+    
+    if(!theme) {
+        theme = @"default";
+    }
+    
+    return theme;
 }
 
 - (void)checkForUpdates:(BOOL)displayResult {

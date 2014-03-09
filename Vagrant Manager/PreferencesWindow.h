@@ -13,8 +13,10 @@
 
 @property (weak) IBOutlet NSButton *autoCloseCheckBox;
 @property (weak) IBOutlet NSPopUpButton *terminalPreferencePopUpButton;
+@property (weak) IBOutlet NSPopUpButton *statusBarIconThemePopUpButton;
 
 - (IBAction)autoCloseCheckBoxClicked:(id)sender;
 - (IBAction)terminalPreferencePopUpButtonClicked:(id)sender;
+- (IBAction)statusBarIconThemePopUpButtonClicked:(id)sender;
 
 @end
