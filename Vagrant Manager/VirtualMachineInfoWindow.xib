@@ -1,23 +1,25 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="4514" systemVersion="13B42" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5053" systemVersion="13C64" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="4514"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="5053"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="VirtualMachineInfoWindow">
             <connections>
+                <outlet property="nameEditTextField" destination="Man-dg-17h" id="Vxg-gH-1nx"/>
                 <outlet property="nameTextField" destination="wvc-dQ-ADq" id="v3L-2L-sb6"/>
                 <outlet property="osTextField" destination="Ku0-yU-8FI" id="usY-Pn-pIQ"/>
                 <outlet property="propertiesTableView" destination="3jZ-15-LLP" id="nmd-QG-Mqr"/>
                 <outlet property="sharedFoldersTableView" destination="Egl-Vj-6B4" id="L2g-xg-UGG"/>
                 <outlet property="stateTextField" destination="Uxa-FN-NWR" id="URm-nY-2Ed"/>
+                <outlet property="updateNameButton" destination="pal-2F-gJo" id="q4T-KQ-iY8"/>
                 <outlet property="uuidTextField" destination="4r8-Yd-LXm" id="Tne-Sn-KI6"/>
                 <outlet property="window" destination="1" id="3"/>
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application"/>
-        <window title="Virtual Machine Info" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" wantsToBeColor="NO" animationBehavior="default" id="1">
+        <window title="Virtual Machine Info" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" animationBehavior="default" id="1">
             <windowStyleMask key="styleMask" titled="YES" closable="YES"/>
             <rect key="contentRect" x="196" y="240" width="554" height="525"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1178"/>
@@ -240,6 +242,26 @@
                         </buttonCell>
                         <connections>
                             <action selector="closeWindowButtonClicked:" target="-2" id="Lyp-fQ-lel"/>
+                        </connections>
+                    </button>
+                    <textField verticalHuggingPriority="750" id="Man-dg-17h">
+                        <rect key="frame" x="89" y="494" width="371" height="22"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="4Kc-eF-Pae">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <button verticalHuggingPriority="750" id="pal-2F-gJo">
+                        <rect key="frame" x="458" y="487" width="82" height="32"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="push" title="Update" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="TvH-Qe-j1x">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="updateNameButtonClicked:" target="-2" id="hSM-0H-eED"/>
                         </connections>
                     </button>
                 </subviews>

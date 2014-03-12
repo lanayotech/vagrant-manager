@@ -81,10 +81,15 @@
 }
 
 - (void)saveBookmarks:(NSMutableArray*)bm {
+    if(!bm) {
+        bm = bookmarks;
+    }
+    
     NSMutableArray *arr = [[NSMutableArray alloc] init];
     for(Bookmark *b in bm) {
         [arr addObject:@{@"displayName":b.displayName, @"path":b.path}];
     }
+    
     [[NSUserDefaults standardUserDefaults] setObject:arr forKey:@"bookmarks"];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
@@ -635,6 +640,9 @@
     if(machine) {
         VirtualMachineInfoWindow *infoWindow = [[VirtualMachineInfoWindow alloc] initWithWindowNibName:@"VirtualMachineInfoWindow"];
         infoWindow.machine = machine;
+        if([menuItem.parentItem.representedObject isKindOfClass:[Bookmark class]]) {
+            infoWindow.bookmark = (Bookmark*)menuItem.parentItem.representedObject;
+        }
         [NSApp activateIgnoringOtherApps:YES];
         [infoWindow showWindow:self];
         

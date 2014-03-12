@@ -63,5 +63,6 @@
 - (void)addBookmarkWithPath:(NSString*)path withDisplayName:(NSString*)displayName;
 - (void)rebuildMenu:(BOOL)closeMenu;
 - (void)detectVagrantMachines;
+- (void)saveBookmarks:(NSMutableArray*)bm;
 
 @end

@@ -41,7 +41,7 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uIE-7X-jhG">
-                        <rect key="frame" x="20" y="115" width="413" height="22"/>
+                        <rect key="frame" x="20" y="115" width="407" height="22"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="jYX-ST-Y0O">
                             <font key="font" metaFont="system"/>
@@ -50,7 +50,7 @@
                         </textFieldCell>
                     </textField>
                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BT0-kM-woq">
-                        <rect key="frame" x="437" y="115" width="23" height="22"/>
+                        <rect key="frame" x="429" y="115" width="31" height="22"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" title="..." bezelStyle="shadowlessSquare" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Tj5-Ah-rws">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>

@@ -46,10 +46,25 @@
     self.sharedFoldersTableView.delegate = self;
     self.sharedFoldersTableView.dataSource = self;
     
-    self.nameTextField.stringValue = self.machine.name;
+    if(self.bookmark) {
+        self.nameEditTextField.stringValue = self.bookmark.displayName;
+        self.nameEditTextField.delegate = self;
+        [self.nameTextField setHidden:YES];
+        [self.updateNameButton setEnabled:NO];
+    } else {
+        self.nameTextField.stringValue = self.machine.name;
+        [self.nameEditTextField setHidden:YES];
+        [self.updateNameButton setHidden:YES];
+    }
+    
     self.osTextField.stringValue = self.machine.os;
     self.uuidTextField.stringValue = self.machine.uuid;
     self.stateTextField.stringValue = self.machine.state;
+}
+
+
+- (void)keyUp:(NSEvent *)theEvent {
+    [self.updateNameButton setEnabled:![[self.nameEditTextField stringValue] isEqualToString:self.bookmark.displayName] && [[self.nameEditTextField stringValue] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]].length > 0];
 }
 
 - (void)windowWillClose:(NSNotification *)notification {
@@ -94,6 +109,12 @@
 
 - (IBAction)closeWindowButtonClicked:(id)sender {
     [self close];
+}
+
+- (IBAction)updateNameButtonClicked:(id)sender {
+    self.bookmark.displayName = [self.nameEditTextField stringValue];
+    [self.updateNameButton setEnabled:NO];
+    [[Util getApp] saveBookmarks:nil];
 }
 
 @end
