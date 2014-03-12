@@ -28,6 +28,11 @@
 		838B393E18CC85BC00A04C15 /* vagrant_logo_highlighted-flat.png in Resources */ = {isa = PBXBuildFile; fileRef = 838B393B18CC85BC00A04C15 /* vagrant_logo_highlighted-flat.png */; };
 		838B393F18CC85BC00A04C15 /* vagrant_logo_off-flat.png in Resources */ = {isa = PBXBuildFile; fileRef = 838B393C18CC85BC00A04C15 /* vagrant_logo_off-flat.png */; };
 		838B394018CC85BC00A04C15 /* vagrant_logo_on-flat.png in Resources */ = {isa = PBXBuildFile; fileRef = 838B393D18CC85BC00A04C15 /* vagrant_logo_on-flat.png */; };
+		83EAC43518D05E9300FF26A1 /* AddBookmarkWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 83EAC43318D05E9300FF26A1 /* AddBookmarkWindow.m */; };
+		83EAC43618D05E9300FF26A1 /* AddBookmarkWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 83EAC43418D05E9300FF26A1 /* AddBookmarkWindow.xib */; };
+		83EAC43A18D067C900FF26A1 /* vagrant_logo_highlighted-clean.png in Resources */ = {isa = PBXBuildFile; fileRef = 83EAC43718D067C900FF26A1 /* vagrant_logo_highlighted-clean.png */; };
+		83EAC43B18D067C900FF26A1 /* vagrant_logo_off-clean.png in Resources */ = {isa = PBXBuildFile; fileRef = 83EAC43818D067C900FF26A1 /* vagrant_logo_off-clean.png */; };
+		83EAC43C18D067C900FF26A1 /* vagrant_logo_on-clean.png in Resources */ = {isa = PBXBuildFile; fileRef = 83EAC43918D067C900FF26A1 /* vagrant_logo_on-clean.png */; };
 		B1357A71187CEB3B00811CBC /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B1357A70187CEB3B00811CBC /* Cocoa.framework */; };
 		B1357A7B187CEB3B00811CBC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = B1357A79187CEB3B00811CBC /* InfoPlist.strings */; };
 		B1357A7D187CEB3B00811CBC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B1357A7C187CEB3B00811CBC /* main.m */; };
@@ -75,6 +80,12 @@
 		838B393B18CC85BC00A04C15 /* vagrant_logo_highlighted-flat.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "vagrant_logo_highlighted-flat.png"; sourceTree = "<group>"; };
 		838B393C18CC85BC00A04C15 /* vagrant_logo_off-flat.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "vagrant_logo_off-flat.png"; sourceTree = "<group>"; };
 		838B393D18CC85BC00A04C15 /* vagrant_logo_on-flat.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "vagrant_logo_on-flat.png"; sourceTree = "<group>"; };
+		83EAC43218D05E9300FF26A1 /* AddBookmarkWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddBookmarkWindow.h; sourceTree = "<group>"; };
+		83EAC43318D05E9300FF26A1 /* AddBookmarkWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddBookmarkWindow.m; sourceTree = "<group>"; };
+		83EAC43418D05E9300FF26A1 /* AddBookmarkWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AddBookmarkWindow.xib; sourceTree = "<group>"; };
+		83EAC43718D067C900FF26A1 /* vagrant_logo_highlighted-clean.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "vagrant_logo_highlighted-clean.png"; sourceTree = "<group>"; };
+		83EAC43818D067C900FF26A1 /* vagrant_logo_off-clean.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "vagrant_logo_off-clean.png"; sourceTree = "<group>"; };
+		83EAC43918D067C900FF26A1 /* vagrant_logo_on-clean.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "vagrant_logo_on-clean.png"; sourceTree = "<group>"; };
 		B1357A6D187CEB3B00811CBC /* Vagrant Manager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Vagrant Manager.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B1357A70187CEB3B00811CBC /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		B1357A73187CEB3B00811CBC /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -115,6 +126,9 @@
 		838A111718839D6900A5E6DB /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				83EAC43718D067C900FF26A1 /* vagrant_logo_highlighted-clean.png */,
+				83EAC43818D067C900FF26A1 /* vagrant_logo_off-clean.png */,
+				83EAC43918D067C900FF26A1 /* vagrant_logo_on-clean.png */,
 				838B393B18CC85BC00A04C15 /* vagrant_logo_highlighted-flat.png */,
 				838B393C18CC85BC00A04C15 /* vagrant_logo_off-flat.png */,
 				838B393D18CC85BC00A04C15 /* vagrant_logo_on-flat.png */,
@@ -159,6 +173,9 @@
 				834AF8BC188CE29900AB3CDA /* RegisterWindow.h */,
 				834AF8BD188CE29900AB3CDA /* RegisterWindow.m */,
 				834AF8BE188CE29900AB3CDA /* RegisterWindow.xib */,
+				83EAC43218D05E9300FF26A1 /* AddBookmarkWindow.h */,
+				83EAC43318D05E9300FF26A1 /* AddBookmarkWindow.m */,
+				83EAC43418D05E9300FF26A1 /* AddBookmarkWindow.xib */,
 			);
 			name = Windows;
 			sourceTree = "<group>";
@@ -294,6 +311,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83EAC43C18D067C900FF26A1 /* vagrant_logo_on-clean.png in Resources */,
 				838B393418CC78E800A04C15 /* vagrant_logo_off-default.png in Resources */,
 				B1357A7B187CEB3B00811CBC /* InfoPlist.strings in Resources */,
 				B17AA1991887DB8C00B4C274 /* off.png in Resources */,
@@ -304,11 +322,14 @@
 				838B393918CC7C3000A04C15 /* vagrant_logo_off-black.png in Resources */,
 				B1357A89187CEB3B00811CBC /* Images.xcassets in Resources */,
 				B1357A87187CEB3B00811CBC /* MainMenu.xib in Resources */,
+				83EAC43B18D067C900FF26A1 /* vagrant_logo_off-clean.png in Resources */,
 				838B393E18CC85BC00A04C15 /* vagrant_logo_highlighted-flat.png in Resources */,
+				83EAC43618D05E9300FF26A1 /* AddBookmarkWindow.xib in Resources */,
 				8308E133188662BD001E0B45 /* AboutWindow.xib in Resources */,
 				838B393818CC7C3000A04C15 /* vagrant_logo_highlighted-black.png in Resources */,
 				834AF8C0188CE29900AB3CDA /* RegisterWindow.xib in Resources */,
 				8360A05718C2B37F002EA89B /* Environments.plist in Resources */,
+				83EAC43A18D067C900FF26A1 /* vagrant_logo_highlighted-clean.png in Resources */,
 				B1357ABE187DF58C00811CBC /* vagrant_logo_on-default.png in Resources */,
 				838B393A18CC7C3000A04C15 /* vagrant_logo_on-black.png in Resources */,
 				838B394018CC85BC00A04C15 /* vagrant_logo_on-flat.png in Resources */,
@@ -325,6 +346,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83EAC43518D05E9300FF26A1 /* AddBookmarkWindow.m in Sources */,
 				B1357A84187CEB3B00811CBC /* AppDelegate.m in Sources */,
 				8360A05A18C2B39B002EA89B /* Environment.m in Sources */,
 				8308E13C18868D52001E0B45 /* VirtualMachineInfoWindow.m in Sources */,

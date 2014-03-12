@@ -6,11 +6,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Bookmark.h"
 
 @interface VirtualMachineInfo : NSObject
 
-@property (strong, nonatomic) Bookmark *bookmark;
 @property (strong, nonatomic) NSString *uuid;
 @property (strong, nonatomic) NSString *state;
 @property (strong, nonatomic) NSString *name;

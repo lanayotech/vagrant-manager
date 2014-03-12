@@ -30,6 +30,10 @@
     detectedVagrantMachines = [[NSMutableArray alloc] init];
     bookmarks = [self getSavedBookmarks];
     
+    for(Bookmark *bookmark in bookmarks) {
+        [bookmark loadId];
+    }
+    
     //create status bar menu item
     statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength];
     [statusItem setImage:[self getThemedImage:@"vagrant_logo_off"]];
@@ -65,6 +69,7 @@
             Bookmark *bookmark = [[Bookmark alloc] init];
             bookmark.displayName = [savedBookmark objectForKey:@"displayName"];
             bookmark.path = [savedBookmark objectForKey:@"path"];
+            [bookmark loadId];
             
             if(bookmark.displayName && bookmark.path) {
                 [bookmarksArray addObject:bookmark];
@@ -94,18 +99,30 @@
     Bookmark *bookmark = [[Bookmark alloc] init];
     bookmark.displayName = machine.name;
     bookmark.path = [machine getSharedFolderPathWithName:@"/vagrant"];
+    bookmark.uuid = machine.uuid;
+    bookmark.machine = machine;
     [bookmarks addObject:bookmark];
     
-    machine.bookmark = bookmark;
+    [self saveBookmarks:bookmarks];
+}
+
+- (void)addBookmarkWithPath:(NSString*)path withDisplayName:(NSString*)displayName {
+    for(Bookmark *b in bookmarks) {
+        if([b.path isEqualToString:path]) {
+            return;
+        }
+    }
+    
+    Bookmark *bookmark = [[Bookmark alloc] init];
+    bookmark.displayName = displayName;
+    bookmark.path = path;
+    [bookmark loadId];
+    [bookmarks addObject:bookmark];
     
     [self saveBookmarks:bookmarks];
 }
 
 - (void)removeBookmark:(Bookmark*)bookmark {
-    VirtualMachineInfo *machine = [self getVirtualMachineForBookmark:bookmark];
-    if(machine) {
-        machine.bookmark = nil;
-    }
     [bookmarks removeObject:bookmark];
     [self saveBookmarks:bookmarks];
 }
@@ -120,10 +137,29 @@
     return nil;
 }
 
+- (Bookmark*)getBookmarkById:(NSString*)uuid {
+    for(Bookmark *bookmark in bookmarks) {
+        if([bookmark.uuid isEqualToString:uuid]) {
+            return bookmark;
+        }
+    }
+    
+    return nil;
+}
+
+- (Bookmark*)getBookmarkForMachine:(VirtualMachineInfo*)machine {
+    for(Bookmark *bookmark in bookmarks) {
+        if(bookmark.machine == machine) {
+            return bookmark;
+        }
+    }
+    
+    return nil;
+}
+
 - (void)updateBookmarkState:(Bookmark*)bookmark {
-    VirtualMachineInfo *machine = [self getVirtualMachineForBookmark:bookmark];
-    if(machine) {
-        [self updateVirtualMachineState:machine];
+    if(bookmark.machine) {
+        [self updateVirtualMachineState:bookmark.machine];
     } else {
         [self detectVagrantMachines];
     }
@@ -230,13 +266,15 @@
             
             //add bookmarks
             if(bookmarks.count == 0) {
+                /*
                 NSMenuItem *i = [[NSMenuItem alloc] init];
                 [i setTitle:@"No Bookmarks Added"];
                 [i setEnabled:NO];
                 [statusMenu addItem:i];
+                */
             } else {
                 for(Bookmark *bookmark in bookmarks) {
-                    VirtualMachineInfo *machine = [self getVirtualMachineForBookmark:bookmark];
+                    VirtualMachineInfo *machine = bookmark.machine;
                     NSMenuItem *i = [[NSMenuItem alloc] init];
                     [i setTitle:bookmark.displayName];
                     
@@ -319,6 +357,13 @@
                 }
             }
             
+            if(!addBookmarkMenuItem) {
+                addBookmarkMenuItem = [[NSMenuItem alloc] init];
+                addBookmarkMenuItem.title = @"Add Bookmark";
+                [addBookmarkMenuItem setAction:@selector(addCustomBookmarkMenuItemClicked:)];
+            }
+            [statusMenu addItem:addBookmarkMenuItem];
+            
             if(!bookmarksSeparatorMenuItem) {
                 bookmarksSeparatorMenuItem = [NSMenuItem separatorItem];
             }
@@ -333,7 +378,7 @@
             }
             
             for(VirtualMachineInfo *machine in detectedVagrantMachines) {
-                if(machine.bookmark) {
+                if([self getBookmarkForMachine:machine]) {
                     continue;
                 }
                 
@@ -640,20 +685,30 @@
 }
 
 - (void)removeBookmarkMenuItemClicked:(NSMenuItem*)menuItem {
-    
     if([menuItem.parentItem.representedObject isKindOfClass:[VirtualMachineInfo class]]) {
         VirtualMachineInfo *machine = menuItem.parentItem.representedObject;
         
-        if(machine.bookmark) {
-            [self removeBookmark:machine.bookmark];
+        Bookmark *bookmark = [self getBookmarkForMachine:machine];
+        
+        if(bookmark) {
+            [self removeBookmark:bookmark];
             [self rebuildMenu:YES];
         }
     } else if([menuItem.parentItem.representedObject isKindOfClass:[Bookmark class]]) {
         Bookmark *bookmark = menuItem.parentItem.representedObject;
         
         [self removeBookmark:bookmark];
+        if(bookmark.machine && ![detectedVagrantMachines containsObject:bookmark.machine]) {
+            [detectedVagrantMachines addObject:bookmark.machine];
+        }
         [self rebuildMenu:YES];
     }
+}
+
+- (void)addCustomBookmarkMenuItemClicked:(NSMenuItem*)menuItem {
+    addBookmarkWindow = [[AddBookmarkWindow alloc] initWithWindowNibName:@"AddBookmarkWindow"];
+    [NSApp activateIgnoringOtherApps:YES];
+    [addBookmarkWindow showWindow:self];
 }
 
 #pragma mark - General Functions
@@ -662,7 +717,7 @@
     if([obj isKindOfClass:[VirtualMachineInfo class]]) {
         return obj;
     } else if([obj isKindOfClass:[Bookmark class]]) {
-        return [self getVirtualMachineForBookmark:obj];
+        return ((Bookmark*)obj).machine;
     }
     
     return nil;
@@ -747,16 +802,6 @@
 
 #pragma mark - Virtual Machines
 
-- (VirtualMachineInfo*)getVirtualMachineForBookmark:(Bookmark*)bookmark {
-    for(VirtualMachineInfo *machine in detectedVagrantMachines) {
-        if(machine.bookmark == bookmark) {
-            return machine;
-        }
-    }
-    
-    return nil;
-}
-
 - (VirtualMachineInfo*)getVirtualMachineInfo:(NSString*)uuid {
     NSTask *task = [[NSTask alloc] init];
     [task setLaunchPath:@"/bin/sh"];
@@ -815,15 +860,36 @@
     VirtualMachineInfo *info = [self getVirtualMachineInfo:machine.uuid];
     
     if(!info) {
+        for(Bookmark *bookmark in bookmarks) {
+            if(bookmark.machine == machine) {
+                bookmark.machine = nil;
+                [bookmark loadId];
+            }
+        }
+        
         [self detectVagrantMachines];
     } else {
         machine.state = info.state;
+        
+        for(Bookmark *bookmark in bookmarks) {
+            if(bookmark.uuid == machine.uuid) {
+                bookmark.machine = machine;
+            }
+        }
+        
         [self rebuildMenu:YES];
     }
 }
 
 - (int)getRunningVmCount {
     int runningCount = 0;
+    
+    for(Bookmark *bookmark in bookmarks) {
+        if(bookmark.machine && bookmark.machine.isRunning) {
+            ++runningCount;
+        }
+    }
+    
     for(VirtualMachineInfo *machine in detectedVagrantMachines) {
         if(machine.isRunning) {
             ++runningCount;
@@ -861,6 +927,10 @@
     
     [self removeDetectedMenuItems];
     
+    for(Bookmark *bookmark in bookmarks) {
+        [bookmark loadId];
+    }
+    
     NSMenuItem *i = [[NSMenuItem alloc] init];
     [i setTitle:@"Refreshing..."];
     [i setEnabled:NO];
@@ -874,8 +944,10 @@
         //filter only vagrant machines
         NSMutableArray *vagrantMachines = [[NSMutableArray alloc] init];
         for(VirtualMachineInfo *vmInfo in virtualMachines) {
-            if([vmInfo getSharedFolderPathWithName:@"/vagrant"]) {
-                vmInfo.bookmark = [self getBookmarkByPath:[vmInfo getSharedFolderPathWithName:@"/vagrant"]];
+            Bookmark *bookmark = [self getBookmarkById:vmInfo.uuid];
+            if(bookmark) {
+                bookmark.machine = vmInfo;
+            } else if([vmInfo getSharedFolderPathWithName:@"/vagrant"]) {
                 [vagrantMachines addObject:vmInfo];
             }
         }

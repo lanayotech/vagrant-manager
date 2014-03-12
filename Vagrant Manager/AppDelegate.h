@@ -10,6 +10,7 @@
 #import "AboutWindow.h"
 #import "PreferencesWindow.h"
 #import "RegisterWindow.h"
+#import "AddBookmarkWindow.h"
 #import "VirtualMachineInfoWindow.h"
 #import "VirtualMachineInfo.h"
 #import "Licensing.h"
@@ -33,6 +34,7 @@
     NSMutableArray *detectedVagrantMachines;
     NSMutableArray *bookmarks;
     
+    NSMenuItem *addBookmarkMenuItem;
     NSMenuItem *bookmarksSeparatorMenuItem;
     NSMenuItem *refreshDetectedMenuItem;
     NSMenuItem *detectedSeparatorMenuItem;
@@ -48,6 +50,7 @@
     AboutWindow *aboutWindow;
     PreferencesWindow *preferencesWindow;
     RegisterWindow *registerWindow;
+    AddBookmarkWindow *addBookmarkWindow;
 }
 
 @property (assign) IBOutlet NSWindow *window;
@@ -57,6 +60,8 @@
 - (void)removeInfoWindow:(VirtualMachineInfoWindow*)infoWindow;
 - (void)updateVirtualMachineState:(VirtualMachineInfo*)machine;
 - (void)updateBookmarkState:(Bookmark*)bookmark;
+- (void)addBookmarkWithPath:(NSString*)path withDisplayName:(NSString*)displayName;
 - (void)rebuildMenu:(BOOL)closeMenu;
+- (void)detectVagrantMachines;
 
 @end
