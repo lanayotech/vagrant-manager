@@ -32,6 +32,8 @@
         [self.statusBarIconThemePopUpButton selectItemWithTag:101];
     } else if([statusBarIconTheme isEqualToString:@"flat"]) {
         [self.statusBarIconThemePopUpButton selectItemWithTag:102];
+    } else if([statusBarIconTheme isEqualToString:@"clean"]) {
+        [self.statusBarIconThemePopUpButton selectItemWithTag:103];
     } else {
         [self.statusBarIconThemePopUpButton selectItemWithTag:100];
     }
@@ -68,9 +70,10 @@
     
     if (self.statusBarIconThemePopUpButton.selectedItem.tag == 101) {
         statusBarIconTheme = @"black";
-    }
-    else if (self.statusBarIconThemePopUpButton.selectedItem.tag == 102) {
+    } else if (self.statusBarIconThemePopUpButton.selectedItem.tag == 102) {
         statusBarIconTheme = @"flat";
+    } else if (self.statusBarIconThemePopUpButton.selectedItem.tag == 103) {
+        statusBarIconTheme = @"clean";
     } else {
         statusBarIconTheme = @"default";
     }
