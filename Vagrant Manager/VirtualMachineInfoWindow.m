@@ -30,15 +30,18 @@
     properties = [[NSMutableArray alloc] init];
     sharedFolders = [[NSMutableArray alloc] init];
     
-    for(NSString *name in self.machine.properties) {
-        [properties addObject:@{@"name": name, @"value":[self.machine.properties objectForKey:name]}];
+    if(self.machine) {
+        for(NSString *name in self.machine.properties) {
+            [properties addObject:@{@"name": name, @"value":[self.machine.properties objectForKey:name]}];
+        }
+        
+    
+        for(NSString *name in self.machine.sharedFolders) {
+            [sharedFolders addObject:@{@"name": name, @"path":[self.machine.sharedFolders objectForKey:name]}];
+        }
     }
     
-    for(NSString *name in self.machine.sharedFolders) {
-        [sharedFolders addObject:@{@"name": name, @"path":[self.machine.sharedFolders objectForKey:name]}];
-    }
-    
-    self.window.title = [NSString stringWithFormat:@"%@ Details", self.machine.name];
+    self.window.title = [NSString stringWithFormat:@"%@ Details", self.bookmark ? self.bookmark.displayName : self.machine.name];
 
     self.propertiesTableView.delegate = self;
     self.propertiesTableView.dataSource = self;
@@ -57,9 +60,15 @@
         [self.updateNameButton setHidden:YES];
     }
     
-    self.osTextField.stringValue = self.machine.os;
-    self.uuidTextField.stringValue = self.machine.uuid;
-    self.stateTextField.stringValue = self.machine.state;
+    if(self.machine) {
+        self.osTextField.stringValue = self.machine.os;
+        self.uuidTextField.stringValue = self.machine.uuid;
+        self.stateTextField.stringValue = self.machine.state;
+    } else {
+        self.osTextField.stringValue = @"N/A";
+        self.uuidTextField.stringValue = self.bookmark.uuid ?: @"N/A";
+        self.stateTextField.stringValue = @"N/A";
+    }
 }
 
 

@@ -332,14 +332,10 @@
                         } else {
                             [vagrantDestroy setAction:@selector(vagrantDestroyMenuItemClicked:)];
                         }
-                        
-                        NSMenuItem *virtualMachineDetails = [submenu itemWithTag:MENU_ITEM_DETAILS];
-                        if(!machine) {
-                            [virtualMachineDetails setEnabled:NO];
-                        } else {
-                            [virtualMachineDetails setAction:@selector(virtualMachineDetailsMenuItemClicked:)];
-                        }
                     }
+                    
+                    NSMenuItem *virtualMachineDetails = [submenu itemWithTag:MENU_ITEM_DETAILS];
+                    [virtualMachineDetails setAction:@selector(virtualMachineDetailsMenuItemClicked:)];
                     
                     NSMenuItem *openInFinder = [submenu itemWithTag:MENU_ITEM_OPEN_IN_FINDER];
                     NSMenuItem *openInTerminal = [submenu itemWithTag:MENU_ITEM_OPEN_IN_TERMINAL];
@@ -637,17 +633,15 @@
 - (void)virtualMachineDetailsMenuItemClicked:(NSMenuItem*)menuItem {
     VirtualMachineInfo *machine = [self getMachineFromObject:menuItem.parentItem.representedObject];
     
-    if(machine) {
-        VirtualMachineInfoWindow *infoWindow = [[VirtualMachineInfoWindow alloc] initWithWindowNibName:@"VirtualMachineInfoWindow"];
-        infoWindow.machine = machine;
-        if([menuItem.parentItem.representedObject isKindOfClass:[Bookmark class]]) {
-            infoWindow.bookmark = (Bookmark*)menuItem.parentItem.representedObject;
-        }
-        [NSApp activateIgnoringOtherApps:YES];
-        [infoWindow showWindow:self];
-        
-        [infoWindows addObject:infoWindow];
+    VirtualMachineInfoWindow *infoWindow = [[VirtualMachineInfoWindow alloc] initWithWindowNibName:@"VirtualMachineInfoWindow"];
+    infoWindow.machine = machine;
+    if([menuItem.parentItem.representedObject isKindOfClass:[Bookmark class]]) {
+        infoWindow.bookmark = (Bookmark*)menuItem.parentItem.representedObject;
     }
+    [NSApp activateIgnoringOtherApps:YES];
+    [infoWindow showWindow:self];
+    
+    [infoWindows addObject:infoWindow];
 }
 
 - (void)vagrantOpenInFinderMenuItemClicked:(NSMenuItem*)menuItem {
