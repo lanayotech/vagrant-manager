@@ -457,8 +457,22 @@
     if(!detectedSeparatorMenuItem) {
         detectedSeparatorMenuItem = [NSMenuItem separatorItem];
     }
-    
     [statusMenu addItem:detectedSeparatorMenuItem];
+    
+    if([self getRunningVmCount] > 0) {
+        if(!haltAllMenuItem) {
+            haltAllMenuItem = [[NSMenuItem alloc] init];
+            [haltAllMenuItem setTitle:@"Halt All Machines"];
+            [haltAllMenuItem setAction:@selector(haltAllMenuItemClicked:)];
+        }
+        [statusMenu addItem:haltAllMenuItem];
+        
+        if(!globalCommandsSeparatorMenuItem) {
+            globalCommandsSeparatorMenuItem = [NSMenuItem separatorItem];
+        }
+        [statusMenu addItem:globalCommandsSeparatorMenuItem];
+    }
+    
     
     //add static items
     if(!windowMenuItem) {
@@ -558,6 +572,20 @@
     if(machine) {
         NSString *action = [NSString stringWithFormat:@"cd %@ && vagrant ssh", [Util escapeShellArg:[machine getSharedFolderPathWithName:@"/vagrant"]]];
         [self runTerminalCommand:action];
+    }
+}
+
+- (void)haltAllMenuItemClicked:(NSMenuItem*)menuItem {
+    for(Bookmark *bookmark in bookmarks) {
+        if(bookmark.machine.isRunning) {
+            [self runVagrantAction:@"halt" withObject:bookmark];
+        }
+    }
+    
+    for(VirtualMachineInfo *vm in detectedVagrantMachines) {
+        if(vm.isRunning) {
+            [self runVagrantAction:@"halt" withObject:vm];
+        }
     }
 }
 

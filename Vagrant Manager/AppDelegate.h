@@ -42,6 +42,8 @@
     NSMenuItem *windowMenuItem;
     NSMenuItem *expirationMenuItem;
     NSMenuItem *checkForUpdatesMenuItem;
+    NSMenuItem *globalCommandsSeparatorMenuItem;
+    NSMenuItem *haltAllMenuItem;
     
     AboutWindow *aboutWindow;
     PreferencesWindow *preferencesWindow;
