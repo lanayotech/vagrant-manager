@@ -216,7 +216,7 @@
     }
     
     NSTask *task = [[NSTask alloc] init];
-    [task setLaunchPath:@"/bin/sh"];
+    [task setLaunchPath:@"/bin/bash"];
     
     VirtualMachineInfo *machine;
     Bookmark *bookmark;
@@ -791,9 +791,35 @@
 
 #pragma mark - Virtual Machines
 
+- (VirtualMachineInfo*)getNFSVirtualMachineInfo:(NSString*)uuid NFSPath:(NSString*)NFSPath {
+    NSTask *task = [[NSTask alloc] init];
+    [task setLaunchPath:@"/bin/bash"];
+    [task setArguments:@[@"-c", [NSString stringWithFormat:@"vboxmanage showvminfo %@ --machinereadable", uuid]]];
+    
+    NSPipe *pipe = [NSPipe pipe];
+    [task setStandardInput:[NSPipe pipe]];
+    [task setStandardOutput:pipe];
+    
+    [task launch];
+    [task waitUntilExit];
+    
+    NSData *outputData = [[pipe fileHandleForReading] readDataToEndOfFile];
+    NSString *outputString = [[NSString alloc] initWithData:outputData encoding:NSUTF8StringEncoding];
+    
+    outputString = [NSString stringWithFormat:@"%@%@\n%@", outputString, @"SharedFolderNameMachineMapping1=\"/vagrant\"", [NSString stringWithFormat:@"SharedFolderPathMachineMapping1=\"%@\"", NFSPath]];
+    
+    if(task.terminationStatus != 0) {
+        return nil;
+    }
+    
+    VirtualMachineInfo *vmInfo = [VirtualMachineInfo fromInfo:outputString];
+    
+    return vmInfo;
+}
+
 - (VirtualMachineInfo*)getVirtualMachineInfo:(NSString*)uuid {
     NSTask *task = [[NSTask alloc] init];
-    [task setLaunchPath:@"/bin/sh"];
+    [task setLaunchPath:@"/bin/bash"];
     [task setArguments:@[@"-c", [NSString stringWithFormat:@"vboxmanage showvminfo %@ --machinereadable", uuid]]];
     
     NSPipe *pipe = [NSPipe pipe];
@@ -817,8 +843,8 @@
 
 - (NSArray*)getAllVirtualMachinesInfo {
     NSTask *task = [[NSTask alloc] init];
-    [task setLaunchPath:@"/bin/sh"];
-    [task setArguments:@[@"-c", @"vboxmanage list vms | awk '{ print $NF }' | sed -e 's/[{}]//g'"]];
+    [task setLaunchPath:@"/bin/bash"];
+    [task setArguments:@[@"-c", @"vboxmanage list vms | grep -Eo '[^ ]+$' | sed -e 's/[{}]//g' | grep -vFf <(cat /etc/exports | grep 'VAGRANT' | grep -Eo '[^ ]+$' | uniq)"]];
     
     NSPipe *pipe = [NSPipe pipe];
     [task setStandardInput:[NSPipe pipe]];
@@ -839,6 +865,51 @@
         VirtualMachineInfo *vmInfo = [self getVirtualMachineInfo:uuid];
         if(vmInfo) {
             [virtualMachines addObject:vmInfo];
+        }
+    }
+    
+    return [NSArray arrayWithArray:virtualMachines];
+}
+
+- (NSArray*)getAllNFSVagrantMachines {
+    NSTask *task = [[NSTask alloc] init];
+    [task setLaunchPath:@"/bin/bash"];
+    [task setArguments:@[@"-c", @"cat /etc/exports"]];
+    
+    NSPipe *pipe = [NSPipe pipe];
+    [task setStandardInput:[NSPipe pipe]];
+    [task setStandardOutput:pipe];
+    
+    [task launch];
+    [task waitUntilExit];
+    
+    NSData *outputData = [[pipe fileHandleForReading] readDataToEndOfFile];
+    NSString *outputString = [[NSString alloc] initWithData:outputData encoding:NSUTF8StringEncoding];
+    
+    NSMutableArray *lines = [[outputString componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]] mutableCopy];
+    [lines removeObject:@""];
+    
+    NSMutableArray *virtualMachines = [[NSMutableArray alloc] init];
+
+    NSString *uuid = @"";
+    for(NSString *line in lines) {
+        
+        if([line rangeOfString:@"# VAGRANT-"].location != NSNotFound) {
+            uuid = [[line componentsSeparatedByString:@" "] lastObject];
+            continue;
+        }
+        
+        //remove quotes
+        NSString *path = [[[line componentsSeparatedByString:@" "] objectAtIndex:0] substringFromIndex:1];
+        path = [path substringToIndex:path.length-1];
+        
+        BOOL vagrantFileExists = [[NSFileManager defaultManager] fileExistsAtPath:[NSString pathWithComponents:@[path, @"Vagrantfile"]]];
+        
+        if (vagrantFileExists && uuid.length) {
+            VirtualMachineInfo *vmInfo = [self getNFSVirtualMachineInfo:uuid NFSPath:path];
+            if(vmInfo) {
+                [virtualMachines addObject:vmInfo];
+            }
         }
     }
     
@@ -926,6 +997,9 @@
         //detect all VMs
         NSArray *virtualMachines = [self getAllVirtualMachinesInfo];
         
+        //detect all vagrant machines
+        NSArray *nfsVagrantMachines = [self getAllNFSVagrantMachines];
+        
         //filter only vagrant machines
         NSMutableArray *vagrantMachines = [[NSMutableArray alloc] init];
         for(VirtualMachineInfo *vmInfo in virtualMachines) {
@@ -935,6 +1009,10 @@
             } else if([vmInfo getSharedFolderPathWithName:@"/vagrant"]) {
                 [vagrantMachines addObject:vmInfo];
             }
+        }
+        
+        for(VirtualMachineInfo *nfsVmInfo in nfsVagrantMachines) {
+            [vagrantMachines addObject:nfsVmInfo];
         }
         
         vagrantMachines = [self sortVirtualMachines:vagrantMachines];
