@@ -1012,7 +1012,12 @@
         }
         
         for(VirtualMachineInfo *nfsVmInfo in nfsVagrantMachines) {
-            [vagrantMachines addObject:nfsVmInfo];
+            Bookmark *bookmark = [self getBookmarkById:nfsVmInfo.uuid];
+            if(bookmark) {
+                bookmark.machine = nfsVmInfo;
+            } else if([nfsVmInfo getSharedFolderPathWithName:@"/vagrant"]) {
+                [vagrantMachines addObject:nfsVmInfo];
+            }
         }
         
         vagrantMachines = [self sortVirtualMachines:vagrantMachines];
