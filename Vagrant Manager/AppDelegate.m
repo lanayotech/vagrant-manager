@@ -758,10 +758,9 @@
                 NSString *currentVersion = [responseObj objectForKey:@"current_version"];
                 NSString *downloadURL = [responseObj objectForKey:@"download_url"];
                 
-                if(currentVersion != [[[NSBundle mainBundle] infoDictionary] valueForKey:@"CFBundleShortVersionString"]) {
+                if(![currentVersion isEqualTo:[[[NSBundle mainBundle] infoDictionary] valueForKey:@"CFBundleShortVersionString"]]) {
                     checkForUpdatesMenuItem.title = @"Update Available";
                     [checkForUpdatesMenuItem setImage:[[NSImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"problem" ofType:@"png"]]];
-                    
                     
                     if(displayResult) {
                         dispatch_async(dispatch_get_main_queue(), ^{
