@@ -6,6 +6,8 @@
 	<dict/>
 	<key>_default</key>
 	<dict>
+		<key>github_url</key>
+		<string>https://github.com/lanayotech/vagrant-manager</string>
 		<key>app_info_url</key>
 		<string>http://api.lanayo.com/info/vagrant_manager</string>
 		<key>about_url</key>

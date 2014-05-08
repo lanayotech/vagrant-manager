@@ -23,7 +23,7 @@
 - (void)windowDidLoad {
     [super windowDidLoad];
 
-    NSString *str = @"<div style=\"text-align:center;font-family:Arial;font-size:13px\">Copyright &copy;{YEAR} Lanayo Tech<br><br>Vagrant Manager {VERSION}<br><br>For more information visit:<br><a href=\"{URL}\">{URL}</a></div>";
+    NSString *str = @"<div style=\"text-align:center;font-family:Arial;font-size:13px\">Copyright &copy;{YEAR} Lanayo Tech<br><br>Vagrant Manager {VERSION}<br><br>For more information visit:<br><a href=\"{URL}\">{URL}</a><br><br>or check us out on GitHub:<br><a href=\"{GITHUB_URL}\">{GITHUB_URL}</a></div>";
 
     NSString *dateString = [NSString stringWithCString:__DATE__ encoding:NSASCIIStringEncoding];
     NSString *yearString = [dateString substringWithRange:NSMakeRange([dateString length] - 4, 4)];
@@ -31,6 +31,7 @@
     str = [str stringByReplacingOccurrencesOfString:@"{YEAR}" withString:yearString];
     str = [str stringByReplacingOccurrencesOfString:@"{VERSION}" withString:[[[NSBundle mainBundle] infoDictionary] valueForKey:@"CFBundleShortVersionString"]];
     str = [str stringByReplacingOccurrencesOfString:@"{URL}" withString:[[Environment sharedInstance] aboutURL]];
+    str = [str stringByReplacingOccurrencesOfString:@"{GITHUB_URL}" withString:[[Environment sharedInstance] githubURL]];
     str = [str stringByReplacingOccurrencesOfString:@"\n" withString:@"<br>"];
     
     self.webView.policyDelegate = self;
