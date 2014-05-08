@@ -844,7 +844,13 @@
 - (NSArray*)getAllVirtualMachinesInfo {
     NSTask *task = [[NSTask alloc] init];
     [task setLaunchPath:@"/bin/bash"];
-    [task setArguments:@[@"-c", @"vboxmanage list vms | grep -Eo '[^ ]+$' | sed -e 's/[{}]//g' | grep -vFf <(cat /etc/exports | grep 'VAGRANT' | grep -Eo '[^ ]+$' | uniq)"]];
+    
+    if ([[NSFileManager defaultManager] isReadableFileAtPath:@"/etc/exports"]) {
+        [task setArguments:@[@"-c", @"vboxmanage list vms | grep -Eo '[^ ]+$' | sed -e 's/[{}]//g' | grep -vFf <(cat /etc/exports | grep 'VAGRANT' | grep -Eo '[^ ]+$' | uniq)"]];
+    } else {
+        [task setArguments:@[@"-c", @"vboxmanage list vms | grep -Eo '[^ ]+$' | sed -e 's/[{}]//g'"]];
+    }
+
     
     NSPipe *pipe = [NSPipe pipe];
     [task setStandardInput:[NSPipe pipe]];
@@ -872,6 +878,12 @@
 }
 
 - (NSArray*)getAllNFSVagrantMachines {
+    NSMutableArray *virtualMachines = [[NSMutableArray alloc] init];
+    
+    if (![[NSFileManager defaultManager] isReadableFileAtPath:@"/etc/exports"]) {
+        return [NSArray arrayWithArray:virtualMachines];
+    }
+    
     NSTask *task = [[NSTask alloc] init];
     [task setLaunchPath:@"/bin/bash"];
     [task setArguments:@[@"-c", @"cat /etc/exports"]];
@@ -888,8 +900,6 @@
     
     NSMutableArray *lines = [[outputString componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]] mutableCopy];
     [lines removeObject:@""];
-    
-    NSMutableArray *virtualMachines = [[NSMutableArray alloc] init];
 
     NSString *uuid = @"";
     for(NSString *line in lines) {
