@@ -601,6 +601,7 @@
 				838A3730191F59FE006244FA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		B1357A68187CEB3B00811CBC /* Build configuration list for PBXProject "Vagrant Manager" */ = {
 			isa = XCConfigurationList;
