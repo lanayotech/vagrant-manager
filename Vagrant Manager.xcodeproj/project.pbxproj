@@ -18,6 +18,12 @@
 		8339DCA2187E756B0036E162 /* TaskOutputWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8339DCA0187E756B0036E162 /* TaskOutputWindow.xib */; };
 		8360A05718C2B37F002EA89B /* Environments.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8360A05618C2B37F002EA89B /* Environments.plist */; };
 		8360A05A18C2B39B002EA89B /* Environment.m in Sources */ = {isa = PBXBuildFile; fileRef = 8360A05918C2B39B002EA89B /* Environment.m */; };
+		838A36FB191F56E4006244FA /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 832784C918A7483900222C71 /* Security.framework */; };
+		838A3726191F59FE006244FA /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 838A3701191F5798006244FA /* Foundation.framework */; };
+		838A3731191F5A0F006244FA /* Askpass.m in Sources */ = {isa = PBXBuildFile; fileRef = 838A36F6191F53D8006244FA /* Askpass.m */; };
+		838A3732191F5A0F006244FA /* PasswordHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 838A36F8191F53D8006244FA /* PasswordHelper.m */; };
+		838A3733191F5A8B006244FA /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 832784C918A7483900222C71 /* Security.framework */; };
+		838A3736191F5AAB006244FA /* Askpass in Resources */ = {isa = PBXBuildFile; fileRef = 838A3725191F59FE006244FA /* Askpass */; };
 		838B393418CC78E800A04C15 /* vagrant_logo_off-default.png in Resources */ = {isa = PBXBuildFile; fileRef = 838B393318CC78E800A04C15 /* vagrant_logo_off-default.png */; };
 		838B393818CC7C3000A04C15 /* vagrant_logo_highlighted-black.png in Resources */ = {isa = PBXBuildFile; fileRef = 838B393518CC7C3000A04C15 /* vagrant_logo_highlighted-black.png */; };
 		838B393918CC7C3000A04C15 /* vagrant_logo_off-black.png in Resources */ = {isa = PBXBuildFile; fileRef = 838B393618CC7C3000A04C15 /* vagrant_logo_off-black.png */; };
@@ -46,6 +52,28 @@
 		B17AA19A1887DB8C00B4C274 /* on.png in Resources */ = {isa = PBXBuildFile; fileRef = B17AA1981887DB8C00B4C274 /* on.png */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		838A3734191F5A9D006244FA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B1357A65187CEB3B00811CBC /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 838A3724191F59FE006244FA;
+			remoteInfo = Askpass;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		838A3723191F59FE006244FA /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		8308E12F188662BD001E0B45 /* AboutWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutWindow.h; sourceTree = "<group>"; };
 		8308E130188662BD001E0B45 /* AboutWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AboutWindow.m; sourceTree = "<group>"; };
@@ -65,6 +93,12 @@
 		8360A05618C2B37F002EA89B /* Environments.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Environments.plist; sourceTree = "<group>"; };
 		8360A05818C2B39B002EA89B /* Environment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Environment.h; sourceTree = "<group>"; };
 		8360A05918C2B39B002EA89B /* Environment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Environment.m; sourceTree = "<group>"; };
+		838A36F6191F53D8006244FA /* Askpass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Askpass.m; path = "../Vagrant Manager/Askpass.m"; sourceTree = "<group>"; };
+		838A36F7191F53D8006244FA /* PasswordHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PasswordHelper.h; path = "../Vagrant Manager/PasswordHelper.h"; sourceTree = "<group>"; };
+		838A36F8191F53D8006244FA /* PasswordHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PasswordHelper.m; path = "../Vagrant Manager/PasswordHelper.m"; sourceTree = "<group>"; };
+		838A3701191F5798006244FA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		838A3725191F59FE006244FA /* Askpass */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Askpass; sourceTree = BUILT_PRODUCTS_DIR; };
+		838A372B191F59FE006244FA /* Askpass-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Askpass-Prefix.pch"; sourceTree = "<group>"; };
 		838B393318CC78E800A04C15 /* vagrant_logo_off-default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "vagrant_logo_off-default.png"; sourceTree = "<group>"; };
 		838B393518CC7C3000A04C15 /* vagrant_logo_highlighted-black.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "vagrant_logo_highlighted-black.png"; sourceTree = "<group>"; };
 		838B393618CC7C3000A04C15 /* vagrant_logo_off-black.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "vagrant_logo_off-black.png"; sourceTree = "<group>"; };
@@ -103,10 +137,20 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		838A3722191F59FE006244FA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				838A3733191F5A8B006244FA /* Security.framework in Frameworks */,
+				838A3726191F59FE006244FA /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		B1357A6A187CEB3B00811CBC /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				838A36FB191F56E4006244FA /* Security.framework in Frameworks */,
 				8308E135188668A1001E0B45 /* WebKit.framework in Frameworks */,
 				B1357A71187CEB3B00811CBC /* Cocoa.framework in Frameworks */,
 			);
@@ -180,10 +224,30 @@
 			name = Data;
 			sourceTree = "<group>";
 		};
+		838A3727191F59FE006244FA /* Askpass */ = {
+			isa = PBXGroup;
+			children = (
+				838A372A191F59FE006244FA /* Supporting Files */,
+			);
+			path = Askpass;
+			sourceTree = "<group>";
+		};
+		838A372A191F59FE006244FA /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				838A36F6191F53D8006244FA /* Askpass.m */,
+				838A36F7191F53D8006244FA /* PasswordHelper.h */,
+				838A36F8191F53D8006244FA /* PasswordHelper.m */,
+				838A372B191F59FE006244FA /* Askpass-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 		B1357A64187CEB3B00811CBC = {
 			isa = PBXGroup;
 			children = (
 				B1357A76187CEB3B00811CBC /* Vagrant Manager */,
+				838A3727191F59FE006244FA /* Askpass */,
 				B1357A6F187CEB3B00811CBC /* Frameworks */,
 				B1357A6E187CEB3B00811CBC /* Products */,
 			);
@@ -193,6 +257,7 @@
 			isa = PBXGroup;
 			children = (
 				B1357A6D187CEB3B00811CBC /* Vagrant Manager.app */,
+				838A3725191F59FE006244FA /* Askpass */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -203,6 +268,7 @@
 				832784C918A7483900222C71 /* Security.framework */,
 				8308E134188668A1001E0B45 /* WebKit.framework */,
 				B1357A70187CEB3B00811CBC /* Cocoa.framework */,
+				838A3701191F5798006244FA /* Foundation.framework */,
 				B1357A72187CEB3B00811CBC /* Other Frameworks */,
 			);
 			name = Frameworks;
@@ -249,6 +315,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		838A3724191F59FE006244FA /* Askpass */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 838A372E191F59FE006244FA /* Build configuration list for PBXNativeTarget "Askpass" */;
+			buildPhases = (
+				838A3721191F59FE006244FA /* Sources */,
+				838A3722191F59FE006244FA /* Frameworks */,
+				838A3723191F59FE006244FA /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Askpass;
+			productName = Askpass;
+			productReference = 838A3725191F59FE006244FA /* Askpass */;
+			productType = "com.apple.product-type.tool";
+		};
 		B1357A6C187CEB3B00811CBC /* Vagrant Manager */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = B1357A9E187CEB3B00811CBC /* Build configuration list for PBXNativeTarget "Vagrant Manager" */;
@@ -260,6 +343,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				838A3735191F5A9D006244FA /* PBXTargetDependency */,
 			);
 			name = "Vagrant Manager";
 			productName = "Vagrant Manager";
@@ -289,6 +373,7 @@
 			projectRoot = "";
 			targets = (
 				B1357A6C187CEB3B00811CBC /* Vagrant Manager */,
+				838A3724191F59FE006244FA /* Askpass */,
 			);
 		};
 /* End PBXProject section */
@@ -298,6 +383,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				838A3736191F5AAB006244FA /* Askpass in Resources */,
 				83EAC43C18D067C900FF26A1 /* vagrant_logo_on-clean.png in Resources */,
 				838B393418CC78E800A04C15 /* vagrant_logo_off-default.png in Resources */,
 				B1357A7B187CEB3B00811CBC /* InfoPlist.strings in Resources */,
@@ -328,6 +414,15 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		838A3721191F59FE006244FA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				838A3731191F5A0F006244FA /* Askpass.m in Sources */,
+				838A3732191F5A0F006244FA /* PasswordHelper.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		B1357A69187CEB3B00811CBC /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -347,6 +442,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		838A3735191F5A9D006244FA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 838A3724191F59FE006244FA /* Askpass */;
+			targetProxy = 838A3734191F5A9D006244FA /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		B1357A79187CEB3B00811CBC /* InfoPlist.strings */ = {
@@ -368,6 +471,32 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		838A372F191F59FE006244FA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Askpass/Askpass-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		838A3730191F59FE006244FA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Askpass/Askpass-Prefix.pch";
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		B1357A9C187CEB3B00811CBC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -465,6 +594,14 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		838A372E191F59FE006244FA /* Build configuration list for PBXNativeTarget "Askpass" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				838A372F191F59FE006244FA /* Debug */,
+				838A3730191F59FE006244FA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		B1357A68187CEB3B00811CBC /* Build configuration list for PBXProject "Vagrant Manager" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
