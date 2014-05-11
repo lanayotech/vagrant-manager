@@ -724,7 +724,9 @@
     NSString *theme = [[NSUserDefaults standardUserDefaults] objectForKey:@"statusBarIconTheme"];
     
     if(!theme) {
-        theme = @"default";
+        theme = @"clean";
+        [[NSUserDefaults standardUserDefaults] setValue:theme forKey:@"statusBarIconTheme"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
     }
     
     return theme;
