@@ -959,8 +959,8 @@
     
     NSMutableArray *bookmarkUuids = [[NSMutableArray alloc] init];
     for(Bookmark *bookmark in bookmarks) {
-        [bookmarkUuids addObject:bookmark.uuid];
         if(bookmark.machine && bookmark.machine.isRunning) {
+            [bookmarkUuids addObject:bookmark.uuid];
             ++runningCount;
         }
     }
