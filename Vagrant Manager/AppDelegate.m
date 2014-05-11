@@ -757,10 +757,31 @@
                     });
                 }
             } else {
-                NSString *currentVersion = [responseObj objectForKey:@"current_version"];
                 NSString *downloadURL = [responseObj objectForKey:@"download_url"];
+                NSString *currentVersion = [responseObj objectForKey:@"current_version"];
+                NSString *installedVersion = [[[NSBundle mainBundle] infoDictionary] valueForKey:@"CFBundleShortVersionString"];
                 
-                if(![currentVersion isEqualTo:[[[NSBundle mainBundle] infoDictionary] valueForKey:@"CFBundleShortVersionString"]]) {
+                NSMutableArray *currentVersionParts = [[currentVersion componentsSeparatedByString:@"."] mutableCopy];
+                while(currentVersionParts.count < 3) {
+                    [currentVersionParts addObject:@"0"];
+                }
+                
+                NSMutableArray *installedVersionParts = [[installedVersion componentsSeparatedByString:@"."] mutableCopy];
+                while(installedVersionParts.count < 3) {
+                    [installedVersionParts addObject:@"0"];
+                }
+                
+                bool updateAvailable = false;
+                for(int i=0; i<currentVersionParts.count; ++i) {
+                    if([[currentVersionParts objectAtIndex:i] intValue] < [[installedVersionParts objectAtIndex:i] intValue]) {
+                        break;
+                    } else if([[currentVersionParts objectAtIndex:i] intValue] > [[installedVersionParts objectAtIndex:i] intValue]) {
+                        updateAvailable = true;
+                        break;
+                    }
+                }
+
+                if(updateAvailable) {
                     checkForUpdatesMenuItem.title = @"Update Available";
                     [checkForUpdatesMenuItem setImage:[[NSImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"problem" ofType:@"png"]]];
                     
