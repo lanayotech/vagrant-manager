@@ -50,6 +50,7 @@
 		B17AA1961887DA5800B4C274 /* problem.png in Resources */ = {isa = PBXBuildFile; fileRef = B17AA1931887DA5800B4C274 /* problem.png */; };
 		B17AA1991887DB8C00B4C274 /* off.png in Resources */ = {isa = PBXBuildFile; fileRef = B17AA1971887DB8C00B4C274 /* off.png */; };
 		B17AA19A1887DB8C00B4C274 /* on.png in Resources */ = {isa = PBXBuildFile; fileRef = B17AA1981887DB8C00B4C274 /* on.png */; };
+		B1FAFC791920B62D009F0F86 /* suspended.png in Resources */ = {isa = PBXBuildFile; fileRef = B1FAFC781920B62D009F0F86 /* suspended.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -134,6 +135,7 @@
 		B17AA1931887DA5800B4C274 /* problem.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = problem.png; sourceTree = "<group>"; };
 		B17AA1971887DB8C00B4C274 /* off.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = off.png; sourceTree = "<group>"; };
 		B17AA1981887DB8C00B4C274 /* on.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = on.png; sourceTree = "<group>"; };
+		B1FAFC781920B62D009F0F86 /* suspended.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = suspended.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -169,6 +171,7 @@
 				838B393C18CC85BC00A04C15 /* vagrant_logo_off-flat.png */,
 				838B393D18CC85BC00A04C15 /* vagrant_logo_on-flat.png */,
 				B17AA1971887DB8C00B4C274 /* off.png */,
+				B1FAFC781920B62D009F0F86 /* suspended.png */,
 				B17AA1981887DB8C00B4C274 /* on.png */,
 				B17AA1931887DA5800B4C274 /* problem.png */,
 				B1357ABB187DF58B00811CBC /* vagrant_logo_highlighted-default.png */,
@@ -404,6 +407,7 @@
 				83EAC43A18D067C900FF26A1 /* vagrant_logo_highlighted-clean.png in Resources */,
 				B1357ABE187DF58C00811CBC /* vagrant_logo_on-default.png in Resources */,
 				838B393A18CC7C3000A04C15 /* vagrant_logo_on-black.png in Resources */,
+				B1FAFC791920B62D009F0F86 /* suspended.png in Resources */,
 				838B394018CC85BC00A04C15 /* vagrant_logo_on-flat.png in Resources */,
 				838B393F18CC85BC00A04C15 /* vagrant_logo_off-flat.png in Resources */,
 				8308E13D18868D52001E0B45 /* VirtualMachineInfoWindow.xib in Resources */,

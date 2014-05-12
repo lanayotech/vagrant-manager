@@ -81,4 +81,8 @@
     return [self.state isEqualToString:@"running"];
 }
 
+- (BOOL)isSuspended {
+    return [self.state isEqualToString:@"saved"];
+}
+
 @end

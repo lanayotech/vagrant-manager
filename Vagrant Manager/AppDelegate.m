@@ -12,6 +12,8 @@
 #define MENU_ITEM_VAGRANT_UP 1
 #define MENU_ITEM_VAGRANT_RELOAD 10
 #define MENU_ITEM_VAGRANT_HALT 2
+#define MENU_ITEM_VAGRANT_SUSPEND 11
+#define MENU_ITEM_VAGRANT_PROVISION 12
 #define MENU_ITEM_VAGRANT_DESTROY 3
 #define MENU_ITEM_OPEN_IN_FINDER 8
 #define MENU_ITEM_OPEN_IN_TERMINAL 9
@@ -207,8 +209,12 @@
         command = @"vagrant up";
     } else if([action isEqualToString:@"reload"]) {
         command = @"vagrant reload";
+    } else if([action isEqualToString:@"suspend"]) {
+        command = @"vagrant suspend";
     } else if([action isEqualToString:@"halt"]) {
         command = @"vagrant halt";
+    } else if([action isEqualToString:@"provision"]) {
+        command = @"vagrant provision";
     } else if([action isEqualToString:@"destroy"]) {
         command = @"vagrant destroy -f";
     } else {
@@ -288,7 +294,7 @@
                 }
                 
                 [i setEnabled:YES];
-                [i setImage:[[NSImage alloc] initWithContentsOfFile:[bundle pathForResource:vagrantFileExists?([machine isRunning]?@"on":@"off"):@"problem" ofType:@"png"]]];
+                [i setImage:[[NSImage alloc] initWithContentsOfFile:[bundle pathForResource:vagrantFileExists?([machine isSuspended]?@"suspended":([machine isRunning]?@"on":@"off")):@"problem" ofType:@"png"]]];
                 [i setTag:MenuItemDetected];
                 [i setRepresentedObject:bookmark];
                 
@@ -307,8 +313,14 @@
                         NSMenuItem *vagrantReload = [submenu itemWithTag:MENU_ITEM_VAGRANT_RELOAD];
                         [vagrantReload setAction:@selector(vagrantReloadMenuItemClicked:)];
                         
+                        NSMenuItem *vagrantSuspend = [submenu itemWithTag:MENU_ITEM_VAGRANT_SUSPEND];
+                        [vagrantSuspend setAction:@selector(vagrantSuspendMenuItemClicked:)];
+                        
                         NSMenuItem *vagrantHalt = [submenu itemWithTag:MENU_ITEM_VAGRANT_HALT];
                         [vagrantHalt setAction:@selector(vagrantHaltMenuItemClicked:)];
+                        
+                        NSMenuItem *vagrantProvision = [submenu itemWithTag:MENU_ITEM_VAGRANT_PROVISION];
+                        [vagrantProvision setAction:@selector(vagrantProvisionMenuItemClicked:)];
                     } else {
                         NSMenuItem *vagrantSsh = [submenu itemWithTag:MENU_ITEM_VAGRANT_SSH];
                         [vagrantSsh setEnabled:NO];
@@ -319,8 +331,14 @@
                         NSMenuItem *vagrantReload = [submenu itemWithTag:MENU_ITEM_VAGRANT_RELOAD];
                         [vagrantReload setEnabled:NO];
                         
+                        NSMenuItem *vagrantSuspend = [submenu itemWithTag:MENU_ITEM_VAGRANT_SUSPEND];
+                        [vagrantSuspend setEnabled:NO];
+                        
                         NSMenuItem *vagrantHalt = [submenu itemWithTag:MENU_ITEM_VAGRANT_HALT];
                         [vagrantHalt setEnabled:NO];
+                        
+                        NSMenuItem *vagrantProvision = [submenu itemWithTag:MENU_ITEM_VAGRANT_PROVISION];
+                        [vagrantProvision setEnabled:NO];
                     }
                     
                     NSMenuItem *vagrantDestroy = [submenu itemWithTag:MENU_ITEM_VAGRANT_DESTROY];
@@ -391,7 +409,7 @@
             }
             
             [i setEnabled:YES];
-            [i setImage:[[NSImage alloc] initWithContentsOfFile:[bundle pathForResource:vagrantFileExists?([machine isRunning]?@"on":@"off"):@"problem" ofType:@"png"]]];
+            [i setImage:[[NSImage alloc] initWithContentsOfFile:[bundle pathForResource:vagrantFileExists?([machine isSuspended]?@"suspended":([machine isRunning]?@"on":@"off")):@"problem" ofType:@"png"]]];
             [i setTag:MenuItemDetected];
             [i setRepresentedObject:machine];
             
@@ -413,8 +431,14 @@
                     NSMenuItem *vagrantReload = [submenu itemWithTag:MENU_ITEM_VAGRANT_RELOAD];
                     [vagrantReload setAction:@selector(vagrantReloadMenuItemClicked:)];
                     
+                    NSMenuItem *vagrantSuspend = [submenu itemWithTag:MENU_ITEM_VAGRANT_SUSPEND];
+                    [vagrantSuspend setAction:@selector(vagrantSuspendMenuItemClicked:)];
+                    
                     NSMenuItem *vagrantHalt = [submenu itemWithTag:MENU_ITEM_VAGRANT_HALT];
                     [vagrantHalt setAction:@selector(vagrantHaltMenuItemClicked:)];
+                    
+                    NSMenuItem *vagrantProvision = [submenu itemWithTag:MENU_ITEM_VAGRANT_PROVISION];
+                    [vagrantProvision setAction:@selector(vagrantProvisionMenuItemClicked:)];
                 } else {
                     NSMenuItem *vagrantSsh = [submenu itemWithTag:MENU_ITEM_VAGRANT_SSH];
                     [vagrantSsh setEnabled:NO];
@@ -425,8 +449,14 @@
                     NSMenuItem *vagrantReload = [submenu itemWithTag:MENU_ITEM_VAGRANT_RELOAD];
                     [vagrantReload setEnabled:NO];
                     
+                    NSMenuItem *vagrantSuspend = [submenu itemWithTag:MENU_ITEM_VAGRANT_SUSPEND];
+                    [vagrantSuspend setEnabled:NO];
+                    
                     NSMenuItem *vagrantHalt = [submenu itemWithTag:MENU_ITEM_VAGRANT_HALT];
                     [vagrantHalt setEnabled:NO];
+                    
+                    NSMenuItem *vagrantProvision = [submenu itemWithTag:MENU_ITEM_VAGRANT_PROVISION];
+                    [vagrantProvision setEnabled:NO];
                 }
                 
                 NSMenuItem *vagrantDestroy = [submenu itemWithTag:MENU_ITEM_VAGRANT_DESTROY];
@@ -597,8 +627,16 @@
     [self runVagrantAction:@"reload" withObject:menuItem.parentItem.representedObject];
 }
 
+- (void)vagrantSuspendMenuItemClicked:(NSMenuItem*)menuItem {
+    [self runVagrantAction:@"suspend" withObject:menuItem.parentItem.representedObject];
+}
+
 - (void)vagrantHaltMenuItemClicked:(NSMenuItem*)menuItem {
     [self runVagrantAction:@"halt" withObject:menuItem.parentItem.representedObject];
+}
+
+- (void)vagrantProvisionMenuItemClicked:(NSMenuItem*)menuItem {
+    [self runVagrantAction:@"provision" withObject:menuItem.parentItem.representedObject];
 }
 
 - (void)vagrantDestroyMenuItemClicked:(NSMenuItem*)menuItem {
