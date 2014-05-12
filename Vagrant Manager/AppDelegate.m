@@ -811,33 +811,42 @@
                 NSString *currentVersion = [responseObj objectForKey:@"current_version"];
                 NSString *installedVersion = [[[NSBundle mainBundle] infoDictionary] valueForKey:@"CFBundleShortVersionString"];
                 
-                NSComparisonResult versionComparison = [Util compareVersion:currentVersion toVersion:installedVersion];
-                
-                BOOL updateAvailable = (versionComparison == NSOrderedDescending);
-
-                if(updateAvailable) {
-                    if(![[NSUserDefaults standardUserDefaults] boolForKey:@"dontShowUpdateNotification"]) {
-                        [self updateCheckUpdatesIcon:YES];
-                    }
+                if(downloadURL && currentVersion) {
+                    NSComparisonResult versionComparison = [Util compareVersion:currentVersion toVersion:installedVersion];
                     
-                    if(displayResult) {
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            NSAlert *confirmAlert = [NSAlert alertWithMessageText:[NSString stringWithFormat:@"There is a new version available.\nCurrent Version:  %@\nLatest Version: %@", [[[NSBundle mainBundle] infoDictionary] valueForKey:@"CFBundleShortVersionString"], currentVersion] defaultButton:@"Download Latest Version" alternateButton:@"Cancel" otherButton:nil informativeTextWithFormat:@""];
-                            NSInteger button = [confirmAlert runModal];
-                            
-                            if(button == NSAlertDefaultReturn) {
-                                [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:downloadURL]];
-                            }
-                        });
+                    BOOL updateAvailable = (versionComparison == NSOrderedDescending);
+
+                    if(updateAvailable) {
+                        if(![[NSUserDefaults standardUserDefaults] boolForKey:@"dontShowUpdateNotification"]) {
+                            [self updateCheckUpdatesIcon:YES];
+                        }
+                        
+                        if(displayResult) {
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                NSAlert *confirmAlert = [NSAlert alertWithMessageText:[NSString stringWithFormat:@"There is a new version available.\nCurrent Version:  %@\nLatest Version: %@", [[[NSBundle mainBundle] infoDictionary] valueForKey:@"CFBundleShortVersionString"], currentVersion] defaultButton:@"Download Latest Version" alternateButton:@"Cancel" otherButton:nil informativeTextWithFormat:@""];
+                                NSInteger button = [confirmAlert runModal];
+                                
+                                if(button == NSAlertDefaultReturn) {
+                                    [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:downloadURL]];
+                                }
+                            });
+                        }
+                    } else {
+                        [self updateCheckUpdatesIcon:NO];
+                        
+                        if(displayResult) {
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                NSAlert *alert = [NSAlert alertWithMessageText:@"There are no updates available." defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@""];
+                                [alert runModal];
+                            });
+                        }
                     }
                 } else {
-                    [self updateCheckUpdatesIcon:NO];
-                    
                     if(displayResult) {
                         dispatch_async(dispatch_get_main_queue(), ^{
-                            NSAlert *alert = [NSAlert alertWithMessageText:@"There are no updates available." defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@""];
-                            [alert runModal];
-                        });
+                            NSAlert *errorAlert = [NSAlert alertWithMessageText:@"There was an error checking for a new version. Please try again later." defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@""];
+                            [errorAlert runModal];
+                        });                        
                     }
                 }
             }
