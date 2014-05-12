@@ -799,25 +799,9 @@
                 NSString *currentVersion = [responseObj objectForKey:@"current_version"];
                 NSString *installedVersion = [[[NSBundle mainBundle] infoDictionary] valueForKey:@"CFBundleShortVersionString"];
                 
-                NSMutableArray *currentVersionParts = [[currentVersion componentsSeparatedByString:@"."] mutableCopy];
-                while(currentVersionParts.count < 3) {
-                    [currentVersionParts addObject:@"0"];
-                }
+                NSComparisonResult versionComparison = [Util compareVersion:currentVersion toVersion:installedVersion];
                 
-                NSMutableArray *installedVersionParts = [[installedVersion componentsSeparatedByString:@"."] mutableCopy];
-                while(installedVersionParts.count < 3) {
-                    [installedVersionParts addObject:@"0"];
-                }
-                
-                bool updateAvailable = false;
-                for(int i=0; i<currentVersionParts.count; ++i) {
-                    if([[currentVersionParts objectAtIndex:i] intValue] < [[installedVersionParts objectAtIndex:i] intValue]) {
-                        break;
-                    } else if([[currentVersionParts objectAtIndex:i] intValue] > [[installedVersionParts objectAtIndex:i] intValue]) {
-                        updateAvailable = true;
-                        break;
-                    }
-                }
+                BOOL updateAvailable = (versionComparison == NSOrderedDescending);
 
                 if(updateAvailable) {
                     checkForUpdatesMenuItem.title = @"Update Available";
