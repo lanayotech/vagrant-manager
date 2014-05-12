@@ -246,6 +246,16 @@
 
 #pragma mark - Menu management
 
+- (void)updateCheckUpdatesIcon:(BOOL)available {
+    if(available) {
+        checkForUpdatesMenuItem.title = @"Update Available";
+        [checkForUpdatesMenuItem setImage:[[NSImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"problem" ofType:@"png"]]];
+    } else {
+        checkForUpdatesMenuItem.title = @"Check For Updates";
+        [checkForUpdatesMenuItem setImage:nil];
+    }
+}
+
 - (void)rebuildMenu:(BOOL)closeMenu {
     NSBundle *bundle = [NSBundle mainBundle];
     
@@ -783,8 +793,7 @@
 
                 if(updateAvailable) {
                     if(![[NSUserDefaults standardUserDefaults] boolForKey:@"dontShowUpdateNotification"]) {
-                        checkForUpdatesMenuItem.title = @"Update Available";
-                        [checkForUpdatesMenuItem setImage:[[NSImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"problem" ofType:@"png"]]];
+                        [self updateCheckUpdatesIcon:YES];
                     }
                     
                     if(displayResult) {
@@ -798,8 +807,7 @@
                         });
                     }
                 } else {
-                    checkForUpdatesMenuItem.title = @"Check For Updates";
-                    [checkForUpdatesMenuItem setImage:nil];
+                    [self updateCheckUpdatesIcon:NO];
                     
                     if(displayResult) {
                         dispatch_async(dispatch_get_main_queue(), ^{

@@ -55,6 +55,8 @@
 - (IBAction)dontShowUpdateCheckBoxClicked:(id)sender {
     [[NSUserDefaults standardUserDefaults] setBool:(self.dontShowUpdateCheckBox.state == NSOnState) forKey:@"dontShowUpdateNotification"];
     [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    [[Util getApp] updateCheckUpdatesIcon:NO];
 }
 
 - (IBAction)terminalPreferencePopUpButtonClicked:(id)sender {
