@@ -24,9 +24,16 @@
     [super windowDidLoad];
     
     NSPipe *taskOutputPipe = [NSPipe pipe];
-    [self.task setStandardInput:[NSPipe pipe]];
+	[self.task setStandardInput:[NSFileHandle fileHandleWithNullDevice]];
     [self.task setStandardOutput:taskOutputPipe];
     [self.task setStandardError:taskOutputPipe];
+
+    //set up Askpass handler for sudo
+	NSString *askPassPath = [NSBundle pathForResource:@"Askpass" ofType:@"" inDirectory:[[NSBundle mainBundle] bundlePath]];
+    NSMutableDictionary *env = [[[NSProcessInfo processInfo] environment] mutableCopy];
+    [env setObject:@"NONE" forKey:@"DISPLAY"];
+    [env setObject:askPassPath forKey:@"SUDO_ASKPASS"];
+    [self.task setEnvironment:env];
     
     NSFileHandle *fh = [taskOutputPipe fileHandleForReading];
     [fh waitForDataInBackgroundAndNotify];

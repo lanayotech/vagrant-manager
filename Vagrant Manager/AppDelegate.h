@@ -58,6 +58,7 @@
 - (void)updateVirtualMachineState:(VirtualMachineInfo*)machine;
 - (void)updateBookmarkState:(Bookmark*)bookmark;
 - (void)addBookmarkWithPath:(NSString*)path withDisplayName:(NSString*)displayName;
+- (void)updateCheckUpdatesIcon:(BOOL)available;
 - (void)rebuildMenu:(BOOL)closeMenu;
 - (void)detectVagrantMachines;
 - (void)saveBookmarks:(NSMutableArray*)bm;

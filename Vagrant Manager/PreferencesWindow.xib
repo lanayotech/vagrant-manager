@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5053" systemVersion="13C64" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5056" systemVersion="13C64" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="5053"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="5056"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="PreferencesWindow">
             <connections>
                 <outlet property="autoCloseCheckBox" destination="e4G-MV-FOy" id="zHy-VY-UGs"/>
+                <outlet property="dontShowUpdateCheckBox" destination="8v8-Ay-Er0" id="0XX-po-XOl"/>
                 <outlet property="statusBarIconThemePopUpButton" destination="swb-Aa-PIS" id="On2-hu-OeB"/>
                 <outlet property="terminalPreferencePopUpButton" destination="5JC-yq-pDl" id="d4O-WE-EdO"/>
                 <outlet property="window" destination="1" id="3"/>
@@ -88,7 +89,7 @@
                                     </connections>
                                 </popUpButton>
                                 <button id="e4G-MV-FOy">
-                                    <rect key="frame" x="192" y="98" width="173" height="18"/>
+                                    <rect key="frame" x="191" y="74" width="173" height="18"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <buttonCell key="cell" type="check" title="Auto-close task window" bezelStyle="regularSquare" imagePosition="left" inset="2" id="6GI-LG-Uu4">
                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -98,8 +99,19 @@
                                         <action selector="autoCloseCheckBoxClicked:" target="-2" id="1Sr-lG-F48"/>
                                     </connections>
                                 </button>
+                                <button id="8v8-Ay-Er0">
+                                    <rect key="frame" x="191" y="98" width="216" height="18"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                    <buttonCell key="cell" type="check" title="Don't show update notification" bezelStyle="regularSquare" imagePosition="left" inset="2" id="1Yx-3K-UFZ">
+                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                        <font key="font" metaFont="system"/>
+                                    </buttonCell>
+                                    <connections>
+                                        <action selector="dontShowUpdateCheckBoxClicked:" target="-2" id="8VL-4J-RMb"/>
+                                    </connections>
+                                </button>
                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" setsMaxLayoutWidthAtFirstLayout="YES" id="i4T-vz-mDV">
-                                    <rect key="frame" x="212" y="53" width="188" height="39"/>
+                                    <rect key="frame" x="205" y="29" width="188" height="39"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Settings this option will automatically close the task output window if the task was successful" id="WYk-Ua-Uq2">
                                         <font key="font" size="10" name="LucidaGrande"/>

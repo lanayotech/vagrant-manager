@@ -12,5 +12,6 @@
 
 + (AppDelegate*)getApp;
 + (NSString*)escapeShellArg:(NSString*)arg;
++ (NSComparisonResult)compareVersion:(NSString*)version1 toVersion:(NSString*)version2;
 
 @end
