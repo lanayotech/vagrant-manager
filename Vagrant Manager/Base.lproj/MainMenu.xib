@@ -37,6 +37,9 @@
                 <menuItem title="vagrant halt" tag="2" id="R0Q-rb-a72">
                     <modifierMask key="keyEquivalentModifierMask"/>
                 </menuItem>
+                <menuItem title="vagrant provision" tag="12" id="yhU-BR-9Yz">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                </menuItem>
                 <menuItem title="vagrant destroy" tag="3" id="MPx-Al-AWG">
                     <modifierMask key="keyEquivalentModifierMask"/>
                 </menuItem>
