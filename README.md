@@ -1,6 +1,6 @@
 # Vagrant Manager for OS X
 
-Vagrant Manager is a OS X Status Bar icon that lets you manage all of your vagrant machines from one central location.
+Vagrant Manager is an OS X status bar menu app that lets you manage all of your vagrant machines from one central location.
 More information is available at http://vagrantmanager.com/
 
 ## Downloads
