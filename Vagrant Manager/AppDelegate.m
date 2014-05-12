@@ -247,12 +247,14 @@
 #pragma mark - Menu management
 
 - (void)updateCheckUpdatesIcon:(BOOL)available {
-    if(available) {
-        checkForUpdatesMenuItem.title = @"Update Available";
-        [checkForUpdatesMenuItem setImage:[[NSImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"problem" ofType:@"png"]]];
-    } else {
-        checkForUpdatesMenuItem.title = @"Check For Updates";
-        [checkForUpdatesMenuItem setImage:nil];
+    if (checkForUpdatesMenuItem) {
+        if(available) {
+            checkForUpdatesMenuItem.title = @"Update Available";
+            [checkForUpdatesMenuItem setImage:[[NSImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"problem" ofType:@"png"]]];
+        } else {
+            checkForUpdatesMenuItem.title = @"Check For Updates";
+            [checkForUpdatesMenuItem setImage:nil];
+        }
     }
 }
 
