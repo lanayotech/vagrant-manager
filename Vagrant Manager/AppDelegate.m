@@ -859,7 +859,7 @@
 - (VirtualMachineInfo*)getNFSVirtualMachineInfo:(NSString*)uuid NFSPath:(NSString*)NFSPath {
     NSTask *task = [[NSTask alloc] init];
     [task setLaunchPath:@"/bin/bash"];
-    [task setArguments:@[@"-c", [NSString stringWithFormat:@"vboxmanage showvminfo %@ --machinereadable", uuid]]];
+    [task setArguments:@[@"-c", [NSString stringWithFormat:@"VBoxManage showvminfo %@ --machinereadable", uuid]]];
     
     NSPipe *pipe = [NSPipe pipe];
     [task setStandardInput:[NSPipe pipe]];
@@ -885,7 +885,7 @@
 - (VirtualMachineInfo*)getVirtualMachineInfo:(NSString*)uuid {
     NSTask *task = [[NSTask alloc] init];
     [task setLaunchPath:@"/bin/bash"];
-    [task setArguments:@[@"-c", [NSString stringWithFormat:@"vboxmanage showvminfo %@ --machinereadable", uuid]]];
+    [task setArguments:@[@"-c", [NSString stringWithFormat:@"VBoxManage showvminfo %@ --machinereadable", uuid]]];
     
     NSPipe *pipe = [NSPipe pipe];
     [task setStandardInput:[NSPipe pipe]];
@@ -911,9 +911,9 @@
     [task setLaunchPath:@"/bin/bash"];
     
     if ([[NSFileManager defaultManager] isReadableFileAtPath:@"/etc/exports"]) {
-        [task setArguments:@[@"-c", @"vboxmanage list vms | grep -Eo '[^ ]+$' | sed -e 's/[{}]//g' | grep -vFf <(cat /etc/exports | grep 'VAGRANT' | grep -Eo '[^ ]+$' | uniq)"]];
+        [task setArguments:@[@"-c", @"VBoxManage list vms | grep -Eo '[^ ]+$' | sed -e 's/[{}]//g' | grep -vFf <(cat /etc/exports | grep 'VAGRANT' | grep -Eo '[^ ]+$' | uniq)"]];
     } else {
-        [task setArguments:@[@"-c", @"vboxmanage list vms | grep -Eo '[^ ]+$' | sed -e 's/[{}]//g'"]];
+        [task setArguments:@[@"-c", @"VBoxManage list vms | grep -Eo '[^ ]+$' | sed -e 's/[{}]//g'"]];
     }
 
     
