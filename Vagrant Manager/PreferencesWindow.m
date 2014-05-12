@@ -24,6 +24,7 @@
     
     NSString *terminalPreference = [[NSUserDefaults standardUserDefaults] stringForKey:@"terminalPreference"];
     BOOL autoCloseTaskWindows = [[NSUserDefaults standardUserDefaults] boolForKey:@"autoCloseTaskWindows"];
+    BOOL dontShowUpdateNotification = [[NSUserDefaults standardUserDefaults] boolForKey:@"dontShowUpdateNotification"];
     NSString *statusBarIconTheme = [[NSUserDefaults standardUserDefaults] stringForKey:@"statusBarIconTheme"];
     
     if([statusBarIconTheme isEqualToString:@"black"]) {
@@ -43,11 +44,19 @@
     }
     
     [self.autoCloseCheckBox setState:autoCloseTaskWindows ? NSOnState : NSOffState];
+    [self.dontShowUpdateCheckBox setState:dontShowUpdateNotification ? NSOnState : NSOffState];
 }
 
 - (IBAction)autoCloseCheckBoxClicked:(id)sender {
     [[NSUserDefaults standardUserDefaults] setBool:(self.autoCloseCheckBox.state == NSOnState) forKey:@"autoCloseTaskWindows"];
     [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+- (IBAction)dontShowUpdateCheckBoxClicked:(id)sender {
+    [[NSUserDefaults standardUserDefaults] setBool:(self.dontShowUpdateCheckBox.state == NSOnState) forKey:@"dontShowUpdateNotification"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    [[Util getApp] updateCheckUpdatesIcon:NO];
 }
 
 - (IBAction)terminalPreferencePopUpButtonClicked:(id)sender {
