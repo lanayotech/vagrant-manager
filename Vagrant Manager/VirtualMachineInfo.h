@@ -20,5 +20,6 @@
 
 - (NSString*)getSharedFolderPathWithName:(NSString*)name;
 - (BOOL)isRunning;
+- (BOOL)isSuspended;
 
 @end
