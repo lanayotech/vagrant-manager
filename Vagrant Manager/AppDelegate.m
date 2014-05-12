@@ -782,8 +782,10 @@
                 }
 
                 if(updateAvailable) {
-                    checkForUpdatesMenuItem.title = @"Update Available";
-                    [checkForUpdatesMenuItem setImage:[[NSImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"problem" ofType:@"png"]]];
+                    if(![[NSUserDefaults standardUserDefaults] boolForKey:@"dontShowUpdateNotification"]) {
+                        checkForUpdatesMenuItem.title = @"Update Available";
+                        [checkForUpdatesMenuItem setImage:[[NSImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"problem" ofType:@"png"]]];
+                    }
                     
                     if(displayResult) {
                         dispatch_async(dispatch_get_main_queue(), ^{
