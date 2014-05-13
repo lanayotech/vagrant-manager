@@ -31,6 +31,9 @@
 		838B393E18CC85BC00A04C15 /* vagrant_logo_highlighted-flat.png in Resources */ = {isa = PBXBuildFile; fileRef = 838B393B18CC85BC00A04C15 /* vagrant_logo_highlighted-flat.png */; };
 		838B393F18CC85BC00A04C15 /* vagrant_logo_off-flat.png in Resources */ = {isa = PBXBuildFile; fileRef = 838B393C18CC85BC00A04C15 /* vagrant_logo_off-flat.png */; };
 		838B394018CC85BC00A04C15 /* vagrant_logo_on-flat.png in Resources */ = {isa = PBXBuildFile; fileRef = 838B393D18CC85BC00A04C15 /* vagrant_logo_on-flat.png */; };
+		83BCB0441921B02600206967 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83BCB0431921B02600206967 /* Sparkle.framework */; };
+		83BCB0471921B1D600206967 /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 83BCB0431921B02600206967 /* Sparkle.framework */; };
+		83BCB0491921B6BF00206967 /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 83BCB0481921B6BF00206967 /* dsa_pub.pem */; };
 		83EAC43518D05E9300FF26A1 /* AddBookmarkWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 83EAC43318D05E9300FF26A1 /* AddBookmarkWindow.m */; };
 		83EAC43618D05E9300FF26A1 /* AddBookmarkWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 83EAC43418D05E9300FF26A1 /* AddBookmarkWindow.xib */; };
 		83EAC43A18D067C900FF26A1 /* vagrant_logo_highlighted-clean.png in Resources */ = {isa = PBXBuildFile; fileRef = 83EAC43718D067C900FF26A1 /* vagrant_logo_highlighted-clean.png */; };
@@ -73,6 +76,16 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 		};
+		83BCB0451921B1AA00206967 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				83BCB0471921B1D600206967 /* Sparkle.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
@@ -107,6 +120,8 @@
 		838B393B18CC85BC00A04C15 /* vagrant_logo_highlighted-flat.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "vagrant_logo_highlighted-flat.png"; sourceTree = "<group>"; };
 		838B393C18CC85BC00A04C15 /* vagrant_logo_off-flat.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "vagrant_logo_off-flat.png"; sourceTree = "<group>"; };
 		838B393D18CC85BC00A04C15 /* vagrant_logo_on-flat.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "vagrant_logo_on-flat.png"; sourceTree = "<group>"; };
+		83BCB0431921B02600206967 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = "<group>"; };
+		83BCB0481921B6BF00206967 /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dsa_pub.pem; sourceTree = "<group>"; };
 		83EAC43218D05E9300FF26A1 /* AddBookmarkWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddBookmarkWindow.h; sourceTree = "<group>"; };
 		83EAC43318D05E9300FF26A1 /* AddBookmarkWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddBookmarkWindow.m; sourceTree = "<group>"; };
 		83EAC43418D05E9300FF26A1 /* AddBookmarkWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AddBookmarkWindow.xib; sourceTree = "<group>"; };
@@ -155,6 +170,7 @@
 				838A36FB191F56E4006244FA /* Security.framework in Frameworks */,
 				8308E135188668A1001E0B45 /* WebKit.framework in Frameworks */,
 				B1357A71187CEB3B00811CBC /* Cocoa.framework in Frameworks */,
+				83BCB0441921B02600206967 /* Sparkle.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -268,6 +284,7 @@
 		B1357A6F187CEB3B00811CBC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				83BCB0431921B02600206967 /* Sparkle.framework */,
 				832784C918A7483900222C71 /* Security.framework */,
 				8308E134188668A1001E0B45 /* WebKit.framework */,
 				B1357A70187CEB3B00811CBC /* Cocoa.framework */,
@@ -302,6 +319,7 @@
 		B1357A77187CEB3B00811CBC /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				83BCB0481921B6BF00206967 /* dsa_pub.pem */,
 				8360A05818C2B39B002EA89B /* Environment.h */,
 				8360A05918C2B39B002EA89B /* Environment.m */,
 				B1357A78187CEB3B00811CBC /* Vagrant Manager-Info.plist */,
@@ -342,6 +360,7 @@
 				B1357A69187CEB3B00811CBC /* Sources */,
 				B1357A6A187CEB3B00811CBC /* Frameworks */,
 				B1357A6B187CEB3B00811CBC /* Resources */,
+				83BCB0451921B1AA00206967 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -399,6 +418,7 @@
 				B1357A89187CEB3B00811CBC /* Images.xcassets in Resources */,
 				B1357A87187CEB3B00811CBC /* MainMenu.xib in Resources */,
 				83EAC43B18D067C900FF26A1 /* vagrant_logo_off-clean.png in Resources */,
+				83BCB0491921B6BF00206967 /* dsa_pub.pem in Resources */,
 				838B393E18CC85BC00A04C15 /* vagrant_logo_highlighted-flat.png in Resources */,
 				83EAC43618D05E9300FF26A1 /* AddBookmarkWindow.xib in Resources */,
 				8308E133188662BD001E0B45 /* AboutWindow.xib in Resources */,
@@ -576,6 +596,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Vagrant Manager/Vagrant Manager-Prefix.pch";
 				INFOPLIST_FILE = "Vagrant Manager/Vagrant Manager-Info.plist";
@@ -589,6 +613,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Vagrant Manager/Vagrant Manager-Prefix.pch";
 				INFOPLIST_FILE = "Vagrant Manager/Vagrant Manager-Info.plist";
