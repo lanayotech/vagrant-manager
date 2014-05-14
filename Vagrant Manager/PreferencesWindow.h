@@ -15,10 +15,14 @@
 @property (weak) IBOutlet NSButton *dontShowUpdateCheckBox;
 @property (weak) IBOutlet NSPopUpButton *terminalPreferencePopUpButton;
 @property (weak) IBOutlet NSPopUpButton *statusBarIconThemePopUpButton;
+@property (weak) IBOutlet NSPopUpButton *updateStabilityPopUpButton;
+@property (weak) IBOutlet NSButton *sendProfileDataCheckBox;
 
 - (IBAction)autoCloseCheckBoxClicked:(id)sender;
 - (IBAction)dontShowUpdateCheckBoxClicked:(id)sender;
 - (IBAction)terminalPreferencePopUpButtonClicked:(id)sender;
 - (IBAction)statusBarIconThemePopUpButtonClicked:(id)sender;
+- (IBAction)updateStabilityPopUpButtonClicked:(id)sender;
+- (IBAction)sendProfileDataCheckBoxClicked:(id)sender;
 
 @end

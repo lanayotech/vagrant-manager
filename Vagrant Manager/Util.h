@@ -13,5 +13,11 @@
 + (AppDelegate*)getApp;
 + (NSString*)escapeShellArg:(NSString*)arg;
 + (NSComparisonResult)compareVersion:(NSString*)version1 toVersion:(NSString*)version2;
-
++ (void)redirectConsoleLogToDocumentFolder;
++ (void)log:(NSObject*)message;
++ (NSString*)getMachineId;
++ (NSString*)getUpdateStability;
++ (NSString*)getVersionStability:(NSString*)version;
++ (int)getUpdateStabilityScore:(NSString*)updateStability;
++ (BOOL)shouldSendProfileData;
 @end

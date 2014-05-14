@@ -7,6 +7,7 @@
 
 #import "AppDelegate.h"
 #import "Environment.h"
+#import "VersionComparison.h"
 
 #define MENU_ITEM_VAGRANT_SSH 7
 #define MENU_ITEM_VAGRANT_UP 1
@@ -48,7 +49,31 @@
     [self rebuildMenu:NO];
     [self detectVagrantMachines];
     
-    [self checkForUpdates:NO];
+    [[SUUpdater sharedUpdater] setDelegate:self];
+    [[SUUpdater sharedUpdater] setSendsSystemProfile:[Util shouldSendProfileData]];
+    [[SUUpdater sharedUpdater] checkForUpdateInformation];
+}
+
+- (id<SUVersionComparison>)versionComparatorForUpdater:(SUUpdater *)updater {
+    return [[VersionComparison alloc] init];
+}
+
+- (SUAppcastItem *)bestValidUpdateInAppcast:(SUAppcast *)appcast forUpdater:(SUUpdater *)bundle {
+    SUAppcastItem *bestItem = nil;
+    
+    NSString *appVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+    
+    for(SUAppcastItem *item in [appcast items]) {
+        if([Util compareVersion:appVersion toVersion:item.versionString] == NSOrderedAscending) {
+            if([Util getUpdateStabilityScore:[Util getVersionStability:item.versionString]] <= [Util getUpdateStabilityScore:[Util getUpdateStability]]) {
+                if(!bestItem || [Util compareVersion:bestItem.versionString toVersion:item.versionString] == NSOrderedAscending) {
+                    bestItem = item;
+                }
+            }
+        }
+    }
+    
+    return bestItem;
 }
 
 - (void)menuWillOpen:(NSMenu *)menu {
@@ -253,14 +278,12 @@
 #pragma mark - Menu management
 
 - (void)updateCheckUpdatesIcon:(BOOL)available {
-    if (checkForUpdatesMenuItem) {
-        if(available) {
-            checkForUpdatesMenuItem.title = @"Update Available";
-            [checkForUpdatesMenuItem setImage:[[NSImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"problem" ofType:@"png"]]];
-        } else {
-            checkForUpdatesMenuItem.title = @"Check For Updates";
-            [checkForUpdatesMenuItem setImage:nil];
-        }
+    if (checkForUpdatesMenuItem && available) {
+        checkForUpdatesMenuItem.title = @"Update Available";
+        [checkForUpdatesMenuItem setImage:[[NSImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"problem" ofType:@"png"]]];
+    } else {
+        checkForUpdatesMenuItem.title = @"Check For Updates";
+        [checkForUpdatesMenuItem setImage:nil];
     }
 }
 
@@ -594,7 +617,7 @@
 }
 
 - (IBAction)checkForUpdatesMenuItemClicked:(id)sender {
-    [self checkForUpdates:YES];
+    [[SUUpdater sharedUpdater] checkForUpdates:sender];
 }
 
 - (IBAction)aboutMenuItemClicked:(id)sender {
@@ -782,78 +805,6 @@
     return theme;
 }
 
-- (void)checkForUpdates:(BOOL)displayResult {
-    //check for updates initially
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSError *err;
-        
-        NSData *responseData = [NSData dataWithContentsOfURL:[NSURL URLWithString:[[Environment sharedInstance] appInfoURL]] options:NSDataReadingUncached error:&err];
-        
-        if(err) {
-            if(displayResult) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    NSAlert *errorAlert = [NSAlert alertWithMessageText:@"There was an error checking for a new version. Please try again later." defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@""];
-                    [errorAlert runModal];
-                });
-            }
-        } else {
-            NSDictionary *responseObj = [NSJSONSerialization JSONObjectWithData:responseData options:0 error:&err];
-            
-            if(err) {
-                if(displayResult) {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        NSAlert *errorAlert = [NSAlert alertWithMessageText:@"There was an error checking for a new version. Please try again later." defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@""];
-                        [errorAlert runModal];
-                    });
-                }
-            } else {
-                NSString *downloadURL = [responseObj objectForKey:@"download_url"];
-                NSString *currentVersion = [responseObj objectForKey:@"current_version"];
-                NSString *installedVersion = [[[NSBundle mainBundle] infoDictionary] valueForKey:@"CFBundleShortVersionString"];
-                
-                if(downloadURL && currentVersion) {
-                    NSComparisonResult versionComparison = [Util compareVersion:currentVersion toVersion:installedVersion];
-                    
-                    BOOL updateAvailable = (versionComparison == NSOrderedDescending);
-
-                    if(updateAvailable) {
-                        if(![[NSUserDefaults standardUserDefaults] boolForKey:@"dontShowUpdateNotification"]) {
-                            [self updateCheckUpdatesIcon:YES];
-                        }
-                        
-                        if(displayResult) {
-                            dispatch_async(dispatch_get_main_queue(), ^{
-                                NSAlert *confirmAlert = [NSAlert alertWithMessageText:[NSString stringWithFormat:@"There is a new version available.\nCurrent Version:  %@\nLatest Version: %@", [[[NSBundle mainBundle] infoDictionary] valueForKey:@"CFBundleShortVersionString"], currentVersion] defaultButton:@"Download Latest Version" alternateButton:@"Cancel" otherButton:nil informativeTextWithFormat:@""];
-                                NSInteger button = [confirmAlert runModal];
-                                
-                                if(button == NSAlertDefaultReturn) {
-                                    [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:downloadURL]];
-                                }
-                            });
-                        }
-                    } else {
-                        [self updateCheckUpdatesIcon:NO];
-                        
-                        if(displayResult) {
-                            dispatch_async(dispatch_get_main_queue(), ^{
-                                NSAlert *alert = [NSAlert alertWithMessageText:@"There are no updates available." defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@""];
-                                [alert runModal];
-                            });
-                        }
-                    }
-                } else {
-                    if(displayResult) {
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            NSAlert *errorAlert = [NSAlert alertWithMessageText:@"There was an error checking for a new version. Please try again later." defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@""];
-                            [errorAlert runModal];
-                        });                        
-                    }
-                }
-            }
-        }
-    });
-}
-
 #pragma mark - Virtual Machines
 
 - (VirtualMachineInfo*)getNFSVirtualMachineInfo:(NSString*)uuid NFSPath:(NSString*)NFSPath {
@@ -968,7 +919,6 @@
 
     NSString *uuid = @"";
     for(NSString *line in lines) {
-        
         if([line rangeOfString:@"# VAGRANT-"].location != NSNotFound) {
             uuid = [[line componentsSeparatedByString:@" "] lastObject];
             continue;
@@ -1061,7 +1011,6 @@
 }
 
 - (void)detectVagrantMachines {
-    
     [self removeDetectedMenuItems];
     
     for(Bookmark *bookmark in bookmarks) {
@@ -1111,6 +1060,27 @@
             [self rebuildMenu:YES];
         });
     });
+}
+
+#pragma mark - Sparkle updater delegates
+
+- (NSArray*)feedParametersForUpdater:(SUUpdater *)updater sendingSystemProfile:(BOOL)sendingProfile {
+    NSMutableArray *data = [[NSMutableArray alloc] init];
+    [data addObject:@{@"key": @"machineid", @"value": [Util getMachineId]}];
+    [data addObject:@{@"key": @"appversion", @"value": [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]}];
+    if(sendingProfile) {
+        [data addObject:@{@"key": @"profile", @"value": @"1"}];
+    }
+    
+    return data;
+}
+
+- (void)updater:(SUUpdater *)updater didFindValidUpdate:(SUAppcastItem *)update {
+    [self updateCheckUpdatesIcon:YES];
+}
+
+- (void)updaterDidNotFindUpdate:(SUUpdater *)update {
+    [self updateCheckUpdatesIcon:NO];
 }
 
 @end

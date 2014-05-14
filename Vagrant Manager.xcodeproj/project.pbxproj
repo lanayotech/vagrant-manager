@@ -39,6 +39,7 @@
 		83EAC43A18D067C900FF26A1 /* vagrant_logo_highlighted-clean.png in Resources */ = {isa = PBXBuildFile; fileRef = 83EAC43718D067C900FF26A1 /* vagrant_logo_highlighted-clean.png */; };
 		83EAC43B18D067C900FF26A1 /* vagrant_logo_off-clean.png in Resources */ = {isa = PBXBuildFile; fileRef = 83EAC43818D067C900FF26A1 /* vagrant_logo_off-clean.png */; };
 		83EAC43C18D067C900FF26A1 /* vagrant_logo_on-clean.png in Resources */ = {isa = PBXBuildFile; fileRef = 83EAC43918D067C900FF26A1 /* vagrant_logo_on-clean.png */; };
+		83F1696F1923789900C54F13 /* VersionComparison.m in Sources */ = {isa = PBXBuildFile; fileRef = 83F1696E1923789900C54F13 /* VersionComparison.m */; };
 		B1357A71187CEB3B00811CBC /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B1357A70187CEB3B00811CBC /* Cocoa.framework */; };
 		B1357A7B187CEB3B00811CBC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = B1357A79187CEB3B00811CBC /* InfoPlist.strings */; };
 		B1357A7D187CEB3B00811CBC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B1357A7C187CEB3B00811CBC /* main.m */; };
@@ -128,6 +129,8 @@
 		83EAC43718D067C900FF26A1 /* vagrant_logo_highlighted-clean.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "vagrant_logo_highlighted-clean.png"; sourceTree = "<group>"; };
 		83EAC43818D067C900FF26A1 /* vagrant_logo_off-clean.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "vagrant_logo_off-clean.png"; sourceTree = "<group>"; };
 		83EAC43918D067C900FF26A1 /* vagrant_logo_on-clean.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "vagrant_logo_on-clean.png"; sourceTree = "<group>"; };
+		83F1696D1923789900C54F13 /* VersionComparison.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VersionComparison.h; sourceTree = "<group>"; };
+		83F1696E1923789900C54F13 /* VersionComparison.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VersionComparison.m; sourceTree = "<group>"; };
 		B1357A6D187CEB3B00811CBC /* Vagrant Manager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Vagrant Manager.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B1357A70187CEB3B00811CBC /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		B1357A73187CEB3B00811CBC /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -329,6 +332,8 @@
 				B17AA1891887A75300B4C274 /* Util.h */,
 				B17AA18A1887A75300B4C274 /* Util.m */,
 				8360A05618C2B37F002EA89B /* Environments.plist */,
+				83F1696D1923789900C54F13 /* VersionComparison.h */,
+				83F1696E1923789900C54F13 /* VersionComparison.m */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -462,6 +467,7 @@
 				B1357A7D187CEB3B00811CBC /* main.m in Sources */,
 				B17AA18B1887A75300B4C274 /* Util.m in Sources */,
 				B17AA18F1887CA4600B4C274 /* PreferencesWindow.m in Sources */,
+				83F1696F1923789900C54F13 /* VersionComparison.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
