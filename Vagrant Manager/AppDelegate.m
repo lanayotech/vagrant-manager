@@ -910,12 +910,7 @@
     NSTask *task = [[NSTask alloc] init];
     [task setLaunchPath:@"/bin/bash"];
     
-    if ([[NSFileManager defaultManager] isReadableFileAtPath:@"/etc/exports"]) {
-        [task setArguments:@[@"-c", @"VBoxManage list vms | grep -Eo '[^ ]+$' | sed -e 's/[{}]//g' | grep -vFf <(cat /etc/exports | grep 'VAGRANT' | grep -Eo '[^ ]+$' | uniq)"]];
-    } else {
-        [task setArguments:@[@"-c", @"VBoxManage list vms | grep -Eo '[^ ]+$' | sed -e 's/[{}]//g'"]];
-    }
-
+    [task setArguments:@[@"-c", @"VBoxManage list vms | grep -Eo '[^ ]+$' | sed -e 's/[{}]//g'"]];
     
     NSPipe *pipe = [NSPipe pipe];
     [task setStandardInput:[NSPipe pipe]];
@@ -931,6 +926,29 @@
     [vmUuids removeObject:@""];
     
     NSMutableArray *virtualMachines = [[NSMutableArray alloc] init];
+    
+    //remove nfs machines
+    if ([[NSFileManager defaultManager] isReadableFileAtPath:@"/etc/exports"]) {
+        task = [[NSTask alloc] init];
+        [task setLaunchPath:@"/bin/bash"];
+        
+        [task setArguments:@[@"-c", @"cat /etc/exports | grep '# VAGRANT-' | grep -Eo '[^ ]+$' | sort -u"]];
+        
+        pipe = [NSPipe pipe];
+        [task setStandardInput:[NSPipe pipe]];
+        [task setStandardOutput:pipe];
+        
+        [task launch];
+        [task waitUntilExit];
+        
+        outputData = [[pipe fileHandleForReading] readDataToEndOfFile];
+        outputString = [[NSString alloc] initWithData:outputData encoding:NSUTF8StringEncoding];
+        
+        NSMutableArray *nfsVmUuids = [[outputString componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]] mutableCopy];
+        [nfsVmUuids removeObject:@""];
+        
+        [vmUuids removeObjectsInArray:nfsVmUuids];
+    }
     
     for(NSString *uuid in vmUuids) {
         VirtualMachineInfo *vmInfo = [self getVirtualMachineInfo:uuid];

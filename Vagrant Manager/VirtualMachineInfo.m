@@ -74,7 +74,12 @@
 }
 
 - (NSString*)getSharedFolderPathWithName:(NSString*)name {
-    return [self.sharedFolders objectForKey:name];
+    NSString *folder = [self.sharedFolders objectForKey:name];
+    if(!folder && [[name substringToIndex:1] isEqualToString:@"/"]) {
+        folder = [self.sharedFolders objectForKey:[name substringFromIndex:1]];
+    }
+    
+    return folder;
 }
 
 - (BOOL)isRunning {
