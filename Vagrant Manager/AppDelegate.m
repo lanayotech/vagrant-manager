@@ -32,6 +32,10 @@
     detectedVagrantMachines = [[NSMutableArray alloc] init];
     bookmarks = [self getSavedBookmarks];
     
+    //initialize service providers
+    serviceProviders = [[NSMutableDictionary alloc] init];
+    [serviceProviders setObject:[[VirtualBoxServiceProvider alloc] init] forKey:@"VirtualBoxServiceProvider"];
+    
     for(Bookmark *bookmark in bookmarks) {
         [bookmark loadId];
     }
@@ -54,7 +58,7 @@
 - (void)menuWillOpen:(NSMenu *)menu {
     if(menu == statusMenu) {
         @synchronized(detectedVagrantMachines) {
-            detectedVagrantMachines = [VirtualMachineServiceProvider sortVirtualMachines:detectedVagrantMachines];
+            detectedVagrantMachines = [self sortVirtualMachines:detectedVagrantMachines];
         }
         [self rebuildMenu:NO];
     }
@@ -176,24 +180,24 @@
 #pragma mark - Vagrant machine control
 - (void)runTerminalCommand:(NSString*)command {
     NSString *terminalName = [[NSUserDefaults standardUserDefaults] valueForKey:@"terminalPreference"];
-
+    
     NSString *s;
     if ([terminalName isEqualToString:@"iTerm"]) {
         s = [NSString stringWithFormat:@"tell application \"iTerm\"\n"
-                       "tell current terminal\n"
-                       "launch session \"Default Session\"\n"
-                       "delay .15\n"
-                       "activate\n"
-                       "tell the last session\n"
-                       "write text \"%@\"\n"
-                       "end tell\n"
-                       "end tell\n"
-                       "end tell\n", command];
+             "tell current terminal\n"
+             "launch session \"Default Session\"\n"
+             "delay .15\n"
+             "activate\n"
+             "tell the last session\n"
+             "write text \"%@\"\n"
+             "end tell\n"
+             "end tell\n"
+             "end tell\n", command];
     } else {
         s = [NSString stringWithFormat:@"tell application \"Terminal\"\n"
-                       "activate\n"
-                       "do script \"%@\"\n"
-                       "end tell\n", command];
+             "activate\n"
+             "do script \"%@\"\n"
+             "end tell\n", command];
     }
     
     NSAppleScript *as = [[NSAppleScript alloc] initWithSource: s];
@@ -272,7 +276,7 @@
     }
     
     [statusMenu removeAllItems];
-
+    
     @synchronized(detectedVagrantMachines) {
         //add refresh button
         if(!refreshDetectedMenuItem) {
@@ -287,11 +291,11 @@
         //add bookmarks
         if(bookmarks.count == 0) {
             /*
-            NSMenuItem *i = [[NSMenuItem alloc] init];
-            [i setTitle:@"No Bookmarks Added"];
-            [i setEnabled:NO];
-            [statusMenu addItem:i];
-            */
+             NSMenuItem *i = [[NSMenuItem alloc] init];
+             [i setTitle:@"No Bookmarks Added"];
+             [i setEnabled:NO];
+             [statusMenu addItem:i];
+             */
         } else {
             for(Bookmark *bookmark in bookmarks) {
                 VirtualMachineInfo *machine = bookmark.machine;
@@ -457,7 +461,7 @@
                     
                     NSMenuItem *vagrantUp = [submenu itemWithTag:MENU_ITEM_VAGRANT_UP];
                     [vagrantUp setAction:@selector(vagrantUpMenuItemClicked:)];
-
+                    
                     NSMenuItem *vagrantReload = [submenu itemWithTag:MENU_ITEM_VAGRANT_RELOAD];
                     [vagrantReload setEnabled:NO];
                     
@@ -499,6 +503,7 @@
     if(!detectedSeparatorMenuItem) {
         detectedSeparatorMenuItem = [NSMenuItem separatorItem];
     }
+    
     [statusMenu addItem:detectedSeparatorMenuItem];
     
     if([self getRunningVmCount] > 0) {
@@ -514,7 +519,6 @@
         }
         [statusMenu addItem:globalCommandsSeparatorMenuItem];
     }
-    
     
     //add static items
     if(!windowMenuItem) {
@@ -544,7 +548,7 @@
         [checkForUpdatesMenuItem setAction:@selector(checkForUpdatesMenuItemClicked:)];
     }
     [statusMenu addItem:checkForUpdatesMenuItem];
-
+    
     if(!quitMenuItem) {
         quitMenuItem = [[NSMenuItem alloc] init];
         [quitMenuItem setTitle:@"Quit"];
@@ -752,6 +756,10 @@
 
 #pragma mark - General Functions
 
+- (NSMutableDictionary*)getServiceProviders {
+    return serviceProviders;
+}
+
 - (VirtualMachineInfo*)getMachineFromObject:(id)obj {
     if([obj isKindOfClass:[VirtualMachineInfo class]]) {
         return obj;
@@ -815,7 +823,7 @@
                     NSComparisonResult versionComparison = [Util compareVersion:currentVersion toVersion:installedVersion];
                     
                     BOOL updateAvailable = (versionComparison == NSOrderedDescending);
-
+                    
                     if(updateAvailable) {
                         if(![[NSUserDefaults standardUserDefaults] boolForKey:@"dontShowUpdateNotification"]) {
                             [self updateCheckUpdatesIcon:YES];
@@ -846,7 +854,7 @@
                         dispatch_async(dispatch_get_main_queue(), ^{
                             NSAlert *errorAlert = [NSAlert alertWithMessageText:@"There was an error checking for a new version. Please try again later." defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@""];
                             [errorAlert runModal];
-                        });                        
+                        });
                     }
                 }
             }
@@ -855,9 +863,28 @@
 }
 
 #pragma mark - Virtual Machines
+- (NSMutableArray*)sortVirtualMachines:(NSArray*)virtualMachines {
+    //sort alphabetically with running machines at the top
+    return [[virtualMachines sortedArrayUsingComparator:^(id obj1, id obj2) {
+        if ([obj1 isKindOfClass:[VirtualMachineInfo class]] && [obj2 isKindOfClass:[VirtualMachineInfo class]]) {
+            VirtualMachineInfo *m1 = obj1;
+            VirtualMachineInfo *m2 = obj2;
+            
+            if ([m1 isRunning] && ![m2 isRunning]) {
+                return (NSComparisonResult)NSOrderedAscending;
+            } else if (m2.isRunning && !m1.isRunning) {
+                return (NSComparisonResult)NSOrderedDescending;
+            }
+            
+            return [m1.name caseInsensitiveCompare:m2.name];
+        }
+        
+        return NSOrderedSame;
+    }] mutableCopy];
+}
 
 - (void)updateVirtualMachineState:(VirtualMachineInfo*)machine {
-    VirtualMachineInfo *info = [VirtualMachineServiceProvider getVirtualMachineInfo:machine.uuid];
+    VirtualMachineInfo *info = [[machine getProvider] getVagrantMachineInfo:machine.uuid];
     
     if(!info) {
         for(Bookmark *bookmark in bookmarks) {
@@ -916,20 +943,14 @@
     [statusMenu insertItem:i atIndex:[statusMenu indexOfItem:refreshDetectedMenuItem]];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        
-        NSArray *virtualMachines = [VirtualMachineServiceProvider getAllVirtualMachinesWithInfo];
         NSMutableArray *vagrantMachines = [[NSMutableArray alloc] init];
         
-        for(VirtualMachineInfo *vmInfo in virtualMachines) {
-            Bookmark *bookmark = [self getBookmarkById:vmInfo.uuid];
-            if(bookmark) {
-                bookmark.machine = vmInfo;
-            } else if([vmInfo getSharedFolderPathWithName:@"/vagrant"]) {
-                [vagrantMachines addObject:vmInfo];
-            }
+        for (NSString *key in [serviceProviders allKeys]) {
+            id<VirtualMachineServiceProvider> pr = [serviceProviders objectForKey:key];
+            [vagrantMachines addObjectsFromArray:[pr getAllVagrantMachines]];
         }
         
-        vagrantMachines = [VirtualMachineServiceProvider sortVirtualMachines:vagrantMachines];
+        vagrantMachines = [self sortVirtualMachines:vagrantMachines];
         
         @synchronized(detectedVagrantMachines) {
             detectedVagrantMachines = [[NSMutableArray alloc] initWithArray:vagrantMachines];

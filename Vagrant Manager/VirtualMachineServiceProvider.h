@@ -6,13 +6,9 @@
 //
 
 #import <Foundation/Foundation.h>
+@class VirtualMachineInfo;
 
-@interface VirtualMachineServiceProvider : NSObject
-
-+ (NSArray*)getAllVirtualMachinesWithInfo;
-+ (VirtualMachineInfo*)getNFSVirtualMachineInfo:(NSString*)uuid NFSPath:(NSString*)NFSPath;
-+ (VirtualMachineInfo*)getVirtualMachineInfo:(NSString*)uuid;
-+ (NSArray*)getAllNFSVagrantMachinesWithInfo;
-+ (NSMutableArray*)sortVirtualMachines:(NSArray*)virtualMachines;
-
+@protocol VirtualMachineServiceProvider <NSObject>
+- (NSArray*)getAllVagrantMachines;
+- (VirtualMachineInfo*)getVagrantMachineInfo :(NSString*)uuid;
 @end
