@@ -44,6 +44,7 @@
 		B1357A89187CEB3B00811CBC /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B1357A88187CEB3B00811CBC /* Images.xcassets */; };
 		B1357ABD187DF58C00811CBC /* vagrant_logo_highlighted-default.png in Resources */ = {isa = PBXBuildFile; fileRef = B1357ABB187DF58B00811CBC /* vagrant_logo_highlighted-default.png */; };
 		B1357ABE187DF58C00811CBC /* vagrant_logo_on-default.png in Resources */ = {isa = PBXBuildFile; fileRef = B1357ABC187DF58C00811CBC /* vagrant_logo_on-default.png */; };
+		B13DC358192310D8002E5A50 /* VirtualMachineServiceProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = B13DC357192310D8002E5A50 /* VirtualMachineServiceProvider.m */; };
 		B17AA18B1887A75300B4C274 /* Util.m in Sources */ = {isa = PBXBuildFile; fileRef = B17AA18A1887A75300B4C274 /* Util.m */; };
 		B17AA18F1887CA4600B4C274 /* PreferencesWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = B17AA18D1887CA4600B4C274 /* PreferencesWindow.m */; };
 		B17AA1901887CA4600B4C274 /* PreferencesWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = B17AA18E1887CA4600B4C274 /* PreferencesWindow.xib */; };
@@ -127,6 +128,8 @@
 		B1357A88187CEB3B00811CBC /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		B1357ABB187DF58B00811CBC /* vagrant_logo_highlighted-default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "vagrant_logo_highlighted-default.png"; sourceTree = "<group>"; };
 		B1357ABC187DF58C00811CBC /* vagrant_logo_on-default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "vagrant_logo_on-default.png"; sourceTree = "<group>"; };
+		B13DC356192310D8002E5A50 /* VirtualMachineServiceProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VirtualMachineServiceProvider.h; sourceTree = "<group>"; };
+		B13DC357192310D8002E5A50 /* VirtualMachineServiceProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VirtualMachineServiceProvider.m; sourceTree = "<group>"; };
 		B17AA1891887A75300B4C274 /* Util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Util.h; sourceTree = "<group>"; };
 		B17AA18A1887A75300B4C274 /* Util.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Util.m; sourceTree = "<group>"; };
 		B17AA18C1887CA4600B4C274 /* PreferencesWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreferencesWindow.h; sourceTree = "<group>"; };
@@ -223,6 +226,8 @@
 				8308E137188678A0001E0B45 /* VirtualMachineInfo.m */,
 				8308E13E18869FAC001E0B45 /* Bookmark.h */,
 				8308E13F18869FAC001E0B45 /* Bookmark.m */,
+				B13DC356192310D8002E5A50 /* VirtualMachineServiceProvider.h */,
+				B13DC357192310D8002E5A50 /* VirtualMachineServiceProvider.m */,
 			);
 			name = Data;
 			sourceTree = "<group>";
@@ -441,6 +446,7 @@
 				8339DCA1187E756B0036E162 /* TaskOutputWindow.m in Sources */,
 				B1357A7D187CEB3B00811CBC /* main.m in Sources */,
 				B17AA18B1887A75300B4C274 /* Util.m in Sources */,
+				B13DC358192310D8002E5A50 /* VirtualMachineServiceProvider.m in Sources */,
 				B17AA18F1887CA4600B4C274 /* PreferencesWindow.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
