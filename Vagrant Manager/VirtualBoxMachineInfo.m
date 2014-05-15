@@ -45,7 +45,15 @@
         } else if([name isEqualToString:@"UUID"]) {
             vm.uuid = value;
         } else if([name isEqualToString:@"VMState"]) {
-            vm.state = value;
+            vm.stateString = value;
+            
+            if ([value isEqualToString:@"running"]) {
+                vm.state = running;
+            } else if ([value isEqualToString:@"saved"]) {
+                vm.state = suspended;
+            } else {
+                vm.state = off;
+            }
         } else if([name hasPrefix:@"SharedFolderNameMachineMapping"] || [name hasPrefix:@"SharedFolderPathMachineMapping"]) {
             NSString *mappingId = [name substringFromIndex:30];
             if(![sharedFolders objectForKey:mappingId]) {

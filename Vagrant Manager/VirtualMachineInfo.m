@@ -18,12 +18,20 @@
     return folder;
 }
 
+- (BOOL)isState:(PossibleVmStates)state {
+    return self.state == state;
+}
+
 - (BOOL)isRunning {
-    return [self.state isEqualToString:@"running"];
+    return self.state == running;
 }
 
 - (BOOL)isSuspended {
-    return [self.state isEqualToString:@"saved"];
+    return self.state == suspended;
+}
+
+- (BOOL)isOff {
+    return self.state == off;
 }
 
 - (id<VirtualMachineServiceProvider>)getProvider {
