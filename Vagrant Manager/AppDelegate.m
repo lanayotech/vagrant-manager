@@ -58,28 +58,6 @@
     [[SUUpdater sharedUpdater] checkForUpdateInformation];
 }
 
-- (id<SUVersionComparison>)versionComparatorForUpdater:(SUUpdater *)updater {
-    return [[VersionComparison alloc] init];
-}
-
-- (SUAppcastItem *)bestValidUpdateInAppcast:(SUAppcast *)appcast forUpdater:(SUUpdater *)bundle {
-    SUAppcastItem *bestItem = nil;
-
-    NSString *appVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
-
-    for(SUAppcastItem *item in [appcast items]) {
-        if([Util compareVersion:appVersion toVersion:item.versionString] == NSOrderedAscending) {
-            if([Util getUpdateStabilityScore:[Util getVersionStability:item.versionString]] <= [Util getUpdateStabilityScore:[Util getUpdateStability]]) {
-                if(!bestItem || [Util compareVersion:bestItem.versionString toVersion:item.versionString] == NSOrderedAscending) {
-                    bestItem = item;
-                }
-            }
-        }
-    }
-
-    return bestItem;
-}
-
 - (void)menuWillOpen:(NSMenu *)menu {
     if(menu == statusMenu) {
         @synchronized(detectedVagrantMachines) {
@@ -953,6 +931,28 @@
 
 - (void)updaterDidNotFindUpdate:(SUUpdater *)update {
     [self updateCheckUpdatesIcon:NO];
+}
+
+- (id<SUVersionComparison>)versionComparatorForUpdater:(SUUpdater *)updater {
+    return [[VersionComparison alloc] init];
+}
+
+- (SUAppcastItem *)bestValidUpdateInAppcast:(SUAppcast *)appcast forUpdater:(SUUpdater *)bundle {
+    SUAppcastItem *bestItem = nil;
+    
+    NSString *appVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+    
+    for(SUAppcastItem *item in [appcast items]) {
+        if([Util compareVersion:appVersion toVersion:item.versionString] == NSOrderedAscending) {
+            if([Util getUpdateStabilityScore:[Util getVersionStability:item.versionString]] <= [Util getUpdateStabilityScore:[Util getUpdateStability]]) {
+                if(!bestItem || [Util compareVersion:bestItem.versionString toVersion:item.versionString] == NSOrderedAscending) {
+                    bestItem = item;
+                }
+            }
+        }
+    }
+    
+    return bestItem;
 }
 
 @end
