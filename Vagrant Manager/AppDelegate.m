@@ -599,30 +599,6 @@
     }
 }
 
-- (NSArray*)getAllBookmarksAndMachines {
-    NSMutableArray *machines = [[NSMutableArray alloc] init];
-    [machines addObjectsFromArray:bookmarks];
-    [machines addObjectsFromArray:detectedVagrantMachines];
-    return machines;
-}
-
-- (NSArray*)getAllBookmarksAndMachines :(PossibleVmStates)withState {
-    NSMutableArray *machines = [[NSMutableArray alloc] init];
-    for(Bookmark *bookmark in bookmarks) {
-        if([bookmark.machine isState:withState]) {
-            [machines addObject:bookmark];
-        }
-    }
-    
-    for(VirtualMachineInfo *vm in detectedVagrantMachines) {
-        if([vm isState:withState]) {
-            [machines addObject:vm];
-        }
-    }
-    
-    return machines;
-}
-
 - (void)sshAllMenuItemClicked:(NSMenuItem*)menuItem {
     [self runVagrantAction:@"ssh" withObjectArray:[self getAllBookmarksAndMachines:running]];
 }
@@ -777,6 +753,30 @@
 }
 
 #pragma mark - General Functions
+
+- (NSArray*)getAllBookmarksAndMachines {
+    NSMutableArray *machines = [[NSMutableArray alloc] init];
+    [machines addObjectsFromArray:bookmarks];
+    [machines addObjectsFromArray:detectedVagrantMachines];
+    return machines;
+}
+
+- (NSArray*)getAllBookmarksAndMachines :(PossibleVmStates)withState {
+    NSMutableArray *machines = [[NSMutableArray alloc] init];
+    for(Bookmark *bookmark in bookmarks) {
+        if([bookmark.machine isState:withState]) {
+            [machines addObject:bookmark];
+        }
+    }
+    
+    for(VirtualMachineInfo *vm in detectedVagrantMachines) {
+        if([vm isState:withState]) {
+            [machines addObject:vm];
+        }
+    }
+    
+    return machines;
+}
 
 - (NSMutableDictionary*)getServiceProviders {
     return serviceProviders;
