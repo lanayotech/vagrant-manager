@@ -13,6 +13,7 @@
 #import "VirtualMachineInfoWindow.h"
 #import "VirtualBoxMachineInfo.h"
 #import "VirtualBoxServiceProvider.h"
+#include <Sparkle/Sparkle.h>
 
 #define MENU_ITEM_BOOKMARKED_VM 1
 #define MENU_ITEM_DETECTED_VM   2
@@ -22,18 +23,18 @@
         MenuItemBookmarked = 1,
         MenuItemDetected
     };
-    
+
     IBOutlet NSMenu *statusMenu;
     IBOutlet NSMenu *statusSubMenuTemplate;
     NSStatusItem *statusItem;
-    
+
     NSMutableArray *taskOutputWindows;
     NSMutableArray *infoWindows;
-    
+
     NSMutableArray *detectedVagrantMachines;
     NSMutableArray *bookmarks;
     NSMutableDictionary *serviceProviders;
-    
+
     NSMenuItem *addBookmarkMenuItem;
     NSMenuItem *bookmarksSeparatorMenuItem;
     NSMenuItem *refreshDetectedMenuItem;
@@ -46,7 +47,7 @@
     NSMenuItem *checkForUpdatesMenuItem;
     NSMenuItem *globalCommandsSeparatorMenuItem;
     NSMenuItem *allMachinesMenuItem;
-    
+
     AboutWindow *aboutWindow;
     PreferencesWindow *preferencesWindow;
     AddBookmarkWindow *addBookmarkWindow;

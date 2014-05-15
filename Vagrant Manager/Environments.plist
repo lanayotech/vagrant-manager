@@ -3,7 +3,10 @@
 <plist version="1.0">
 <dict>
 	<key>Debug</key>
-	<dict/>
+	<dict>
+		<key>appcast_url</key>
+		<string>http://vagrant.localhost:8080/appcast/vagrant_manager.xml</string>
+	</dict>
 	<key>_default</key>
 	<dict>
 		<key>github_url</key>
@@ -12,6 +15,8 @@
 		<string>http://api.lanayo.com/info/vagrant_manager</string>
 		<key>about_url</key>
 		<string>http://www.vagrantmanager.com/</string>
+		<key>appcast_url</key>
+		<string>http://www.vagrantmanager.com/appcast/vagrant_manager</string>
 	</dict>
 </dict>
 </plist>

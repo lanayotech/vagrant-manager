@@ -26,6 +26,7 @@
     BOOL autoCloseTaskWindows = [[NSUserDefaults standardUserDefaults] boolForKey:@"autoCloseTaskWindows"];
     BOOL dontShowUpdateNotification = [[NSUserDefaults standardUserDefaults] boolForKey:@"dontShowUpdateNotification"];
     NSString *statusBarIconTheme = [[NSUserDefaults standardUserDefaults] stringForKey:@"statusBarIconTheme"];
+    NSString *updateStability = [Util getUpdateStability];
     
     if([statusBarIconTheme isEqualToString:@"black"]) {
         [self.statusBarIconThemePopUpButton selectItemWithTag:101];
@@ -43,8 +44,21 @@
         [self.terminalPreferencePopUpButton selectItemWithTag:100];
     }
     
+    if([updateStability isEqualToString:@"rc"]) {
+        [self.updateStabilityPopUpButton selectItemWithTag:101];
+    } else if([updateStability isEqualToString:@"beta"]) {
+        [self.updateStabilityPopUpButton selectItemWithTag:102];
+    } else if([updateStability isEqualToString:@"alpha"]) {
+        [self.updateStabilityPopUpButton selectItemWithTag:103];
+    } else if([updateStability isEqualToString:@"debug"]) {
+        [self.updateStabilityPopUpButton selectItemWithTag:104];
+    } else {
+        [self.updateStabilityPopUpButton selectItemWithTag:100];
+    }
+
     [self.autoCloseCheckBox setState:autoCloseTaskWindows ? NSOnState : NSOffState];
     [self.dontShowUpdateCheckBox setState:dontShowUpdateNotification ? NSOnState : NSOffState];
+    [self.sendProfileDataCheckBox setState:[Util shouldSendProfileData] ? NSOnState : NSOffState];
 }
 
 - (IBAction)autoCloseCheckBoxClicked:(id)sender {
@@ -87,6 +101,33 @@
     [[NSUserDefaults standardUserDefaults] synchronize];
     
     [[Util getApp] rebuildMenu:NO];
+}
+
+- (IBAction)updateStabilityPopUpButtonClicked:(id)sender {
+    NSString *updateStability;
+    
+    if(self.updateStabilityPopUpButton.selectedItem.tag == 101) {
+        updateStability = @"rc";
+    } else if(self.updateStabilityPopUpButton.selectedItem.tag == 102) {
+        updateStability = @"beta";
+    } else if(self.updateStabilityPopUpButton.selectedItem.tag == 103) {
+        updateStability = @"alpha";
+    } else if(self.updateStabilityPopUpButton.selectedItem.tag == 104) {
+        updateStability = @"debug";
+    } else {
+        updateStability = @"stable";
+    }
+
+    [[NSUserDefaults standardUserDefaults] setValue:updateStability forKey:@"updateStability"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+
+    [[SUUpdater sharedUpdater] checkForUpdateInformation];
+}
+
+- (IBAction)sendProfileDataCheckBoxClicked:(id)sender {
+    [[NSUserDefaults standardUserDefaults] setBool:(self.sendProfileDataCheckBox.state == NSOnState) forKey:@"sendProfileData"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    [[SUUpdater sharedUpdater] setSendsSystemProfile:[Util shouldSendProfileData]];
 }
 
 @end

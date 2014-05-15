@@ -70,7 +70,9 @@
                         @"beta",
                         @"b",
                         @"alpha",
-                        @"a"
+                        @"a",
+                        @"debug",
+                        @"d"
                        ];
     
     for(int i=0; i<alphas.count; ++i) {
@@ -79,6 +81,78 @@
     }
     
     return [self compareVersion:part1 toVersion:part2 skipExpansion:YES];
+}
+
++ (NSString*)getVersionStability:(NSString*)version {
+    NSDictionary *classes = @{
+                         @"rc": @[@"RC"],
+                         @"beta": @[@"beta", @"b"],
+                         @"alpha": @[@"alpha", @"a"],
+                         @"debug": @[@"debug", @"d"]
+                        };
+
+    for(NSString *class in [classes allKeys]) {
+        for(NSString *string in [classes objectForKey:class]) {
+            if([version rangeOfString:string].location != NSNotFound) {
+                return class;
+            }
+        }
+    }
+    
+    return @"stable";
+};
+
++ (void)redirectConsoleLogToDocumentFolder {
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"yyyyMMdd-HHmmss"];
+    
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString *logPath = [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"vagrant-manager-%@.log", [formatter stringFromDate:[NSDate date]]]];
+    freopen([logPath fileSystemRepresentation],"a+",stderr);
+}
+
++ (void)log:(NSObject*)message {
+    NSLog(@"%@", message);
+}
+
++ (NSString*)getMachineId {
+    NSString *uuid = [[NSUserDefaults standardUserDefaults] stringForKey:@"machineId"];
+    if(!uuid) {
+        uuid = [[NSUUID UUID] UUIDString];
+        [[NSUserDefaults standardUserDefaults] setObject:uuid forKey:@"machineId"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+    
+    return uuid;
+}
+
++ (NSString*)getUpdateStability {
+    return [[NSUserDefaults standardUserDefaults] stringForKey:@"updateStability"] ?: @"stable";
+}
+
++ (int)getUpdateStabilityScore:(NSString*)updateStability {
+    if([updateStability isEqualToString:@"stable"]) {
+        return 0;
+    } else if([updateStability isEqualToString:@"rc"]) {
+        return 1;
+    } else if([updateStability isEqualToString:@"beta"]) {
+        return 2;
+    } else if([updateStability isEqualToString:@"alpha"]) {
+        return 3;
+    } else if([updateStability isEqualToString:@"debug"]) {
+        return 4;
+    } else {
+        return 5;
+    }
+}
+
++ (BOOL)shouldSendProfileData {
+    if([[NSUserDefaults standardUserDefaults] objectForKey:@"sendProfileData"] == nil) {
+        return YES;
+    }
+    return [[NSUserDefaults standardUserDefaults] boolForKey:@"sendProfileData"];
 }
 
 @end

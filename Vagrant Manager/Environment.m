@@ -14,7 +14,6 @@ static Environment *sharedInstance = nil;
     
     self.aboutURL = [self getStringForKey:@"about_url"];
     self.githubURL = [self getStringForKey:@"github_url"];
-    self.appInfoURL = [self getStringForKey:@"app_info_url"];
 }
 
 + (Environment*)sharedInstance {
