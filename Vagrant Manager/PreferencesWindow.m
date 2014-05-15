@@ -75,9 +75,7 @@
 - (IBAction)statusBarIconThemePopUpButtonClicked:(id)sender {
     NSString *statusBarIconTheme;
     
-    if (self.statusBarIconThemePopUpButton.selectedItem.tag == 101) {
-        statusBarIconTheme = @"black";
-    } else if (self.statusBarIconThemePopUpButton.selectedItem.tag == 102) {
+    if (self.statusBarIconThemePopUpButton.selectedItem.tag == 102) {
         statusBarIconTheme = @"flat";
     } else if (self.statusBarIconThemePopUpButton.selectedItem.tag == 103) {
         statusBarIconTheme = @"clean";

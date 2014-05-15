@@ -68,13 +68,12 @@
                                 <popUpButton verticalHuggingPriority="750" id="swb-Aa-PIS">
                                     <rect key="frame" x="191" y="121" width="211" height="26"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <popUpButtonCell key="cell" type="push" title="Clean" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="103" imageScaling="proportionallyDown" inset="2" selectedItem="9TF-Wt-cNj" id="eYO-RJ-9Jl">
+                                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="eYO-RJ-9Jl">
                                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                         <font key="font" metaFont="menu"/>
                                         <menu key="menu" title="OtherViews" id="jT9-HU-3fd">
                                             <items>
                                                 <menuItem title="Default" tag="100" id="Fua-yp-Eko"/>
-                                                <menuItem title="Black" tag="101" id="nA4-hK-8jW"/>
                                                 <menuItem title="Flat" tag="102" id="5l8-Ry-mSP">
                                                     <modifierMask key="keyEquivalentModifierMask"/>
                                                 </menuItem>

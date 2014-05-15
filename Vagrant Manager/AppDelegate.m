@@ -266,7 +266,7 @@
     if (checkForUpdatesMenuItem) {
         if(available) {
             checkForUpdatesMenuItem.title = @"Update Available";
-            [checkForUpdatesMenuItem setImage:[[NSImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"problem" ofType:@"png"]]];
+            [checkForUpdatesMenuItem setImage:[NSImage imageNamed:@"problem"]];
         } else {
             checkForUpdatesMenuItem.title = @"Check For Updates";
             [checkForUpdatesMenuItem setImage:nil];
@@ -385,7 +385,6 @@
 }
 
 - (void)rebuildMenu:(BOOL)closeMenu {
-    NSBundle *bundle = [NSBundle mainBundle];
     
     if(closeMenu) {
         [statusMenu cancelTracking];
@@ -419,7 +418,7 @@
                 }
                 
                 [i setEnabled:YES];
-                [i setImage:[[NSImage alloc] initWithContentsOfFile:[bundle pathForResource:vagrantFileExists?([machine isSuspended]?@"suspended":([machine isRunning]?@"on":@"off")):@"problem" ofType:@"png"]]];
+                [i setImage:[NSImage imageNamed:vagrantFileExists?([machine isSuspended]?@"suspended":([machine isRunning]?@"on":@"off")):@"problem"]];
                 [i setTag:MenuItemDetected];
                 [i setRepresentedObject:bookmark];
                 
@@ -467,7 +466,7 @@
             }
             
             [i setEnabled:YES];
-            [i setImage:[[NSImage alloc] initWithContentsOfFile:[bundle pathForResource:vagrantFileExists?([machine isSuspended]?@"suspended":([machine isRunning]?@"on":@"off")):@"problem" ofType:@"png"]]];
+            [i setImage:[NSImage imageNamed:vagrantFileExists?([machine isSuspended]?@"suspended":([machine isRunning]?@"on":@"off")):@"problem"]];
             [i setTag:MenuItemDetected];
             [i setRepresentedObject:machine];
             
@@ -546,7 +545,7 @@
 }
 
 - (NSImage*)getThemedImage:(NSString*)imageName {
-    return [[NSImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:[NSString stringWithFormat:@"%@-%@", imageName, [self getCurrentTheme]] ofType:@"png"]];
+    return [NSImage imageNamed:[NSString stringWithFormat:@"%@-%@", imageName, [self getCurrentTheme]]];
 }
 
 - (void)removeDetectedMenuItems {
