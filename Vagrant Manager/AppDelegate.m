@@ -204,6 +204,12 @@
     [as executeAndReturnError:nil];
 }
 
+- (void)runVagrantAction:(NSString*)action withObjectArray:(NSArray*)objects {
+    for (id obj in objects) {
+        [self runVagrantAction:action withObject:obj];
+    }
+}
+
 - (void)runVagrantAction:(NSString*)action withObject:(id)obj {
     NSString *command;
     
@@ -268,6 +274,116 @@
     }
 }
 
+- (NSMenu*)initializeSubmenuForAllMachines: (NSMenu*)submenu {
+    
+    [submenu removeItem:[submenu itemWithTag:MENU_ITEM_VAGRANT_SSH]];
+    
+    NSMenuItem *vagrantUp = [submenu itemWithTag:MENU_ITEM_VAGRANT_UP];
+    [vagrantUp setAction:@selector(upAllMenuItemClicked:)];
+    
+    NSMenuItem *vagrantReload = [submenu itemWithTag:MENU_ITEM_VAGRANT_RELOAD];
+    [vagrantReload setAction:@selector(reloadAllMenuItemClicked:)];
+    
+    NSMenuItem *vagrantSuspend = [submenu itemWithTag:MENU_ITEM_VAGRANT_SUSPEND];
+    [vagrantSuspend setAction:@selector(suspendAllMenuItemClicked:)];
+    
+    NSMenuItem *vagrantHalt = [submenu itemWithTag:MENU_ITEM_VAGRANT_HALT];
+    [vagrantHalt setAction:@selector(haltAllMenuItemClicked:)];
+    
+    NSMenuItem *vagrantProvision = [submenu itemWithTag:MENU_ITEM_VAGRANT_PROVISION];
+    [vagrantProvision setAction:@selector(provisionAllMenuItemClicked:)];
+    
+    NSMenuItem *vagrantDestroy = [submenu itemWithTag:MENU_ITEM_VAGRANT_DESTROY];
+    [vagrantDestroy setAction:@selector(destroyAllMenuItemClicked:)];
+    
+    [submenu removeItem:[submenu itemWithTag:MENU_ITEM_OPEN_IN_FINDER]];
+    [submenu removeItem:[submenu itemWithTag:MENU_ITEM_OPEN_IN_TERMINAL]];
+    [submenu removeItem:[submenu itemWithTag:MENU_ITEM_ADD_BOOKMARK]];
+    [submenu removeItem:[submenu itemWithTag:MENU_ITEM_REMOVE_BOOKMARK]];
+    [submenu removeItem:[submenu itemWithTag:MENU_ITEM_DETAILS]];
+    
+    [submenu removeItemAtIndex:submenu.numberOfItems-1];
+    
+    return submenu;
+}
+
+- (NSMenu*)initializeSubmenuForMachine:(NSMenu*)submenu :(VirtualMachineInfo*)machine :(BOOL)pathExists :(BOOL)isBookmarkedMachine {
+    if(machine.isRunning) {
+        NSMenuItem *vagrantSsh = [submenu itemWithTag:MENU_ITEM_VAGRANT_SSH];
+        [vagrantSsh setAction:@selector(vagrantSshMenuItemClicked:)];
+        
+        NSMenuItem *vagrantUp = [submenu itemWithTag:MENU_ITEM_VAGRANT_UP];
+        [vagrantUp setEnabled:NO];
+        
+        NSMenuItem *vagrantReload = [submenu itemWithTag:MENU_ITEM_VAGRANT_RELOAD];
+        [vagrantReload setAction:@selector(vagrantReloadMenuItemClicked:)];
+        
+        NSMenuItem *vagrantSuspend = [submenu itemWithTag:MENU_ITEM_VAGRANT_SUSPEND];
+        [vagrantSuspend setAction:@selector(vagrantSuspendMenuItemClicked:)];
+        
+        NSMenuItem *vagrantHalt = [submenu itemWithTag:MENU_ITEM_VAGRANT_HALT];
+        [vagrantHalt setAction:@selector(vagrantHaltMenuItemClicked:)];
+        
+        NSMenuItem *vagrantProvision = [submenu itemWithTag:MENU_ITEM_VAGRANT_PROVISION];
+        [vagrantProvision setAction:@selector(vagrantProvisionMenuItemClicked:)];
+    } else {
+        NSMenuItem *vagrantSsh = [submenu itemWithTag:MENU_ITEM_VAGRANT_SSH];
+        [vagrantSsh setEnabled:NO];
+        
+        NSMenuItem *vagrantUp = [submenu itemWithTag:MENU_ITEM_VAGRANT_UP];
+        [vagrantUp setAction:@selector(vagrantUpMenuItemClicked:)];
+        
+        NSMenuItem *vagrantReload = [submenu itemWithTag:MENU_ITEM_VAGRANT_RELOAD];
+        [vagrantReload setEnabled:NO];
+        
+        NSMenuItem *vagrantSuspend = [submenu itemWithTag:MENU_ITEM_VAGRANT_SUSPEND];
+        [vagrantSuspend setEnabled:NO];
+        
+        NSMenuItem *vagrantHalt = [submenu itemWithTag:MENU_ITEM_VAGRANT_HALT];
+        [vagrantHalt setEnabled:NO];
+        
+        NSMenuItem *vagrantProvision = [submenu itemWithTag:MENU_ITEM_VAGRANT_PROVISION];
+        [vagrantProvision setEnabled:NO];
+    }
+    
+    NSMenuItem *vagrantDestroy = [submenu itemWithTag:MENU_ITEM_VAGRANT_DESTROY];
+    if(!machine) {
+        [vagrantDestroy setEnabled:NO];
+    } else {
+        [vagrantDestroy setAction:@selector(vagrantDestroyMenuItemClicked:)];
+    }
+    
+    NSMenuItem *virtualMachineDetails = [submenu itemWithTag:MENU_ITEM_DETAILS];
+    [virtualMachineDetails setAction:@selector(virtualMachineDetailsMenuItemClicked:)];
+    
+    NSMenuItem *openInFinder = [submenu itemWithTag:MENU_ITEM_OPEN_IN_FINDER];
+    NSMenuItem *openInTerminal = [submenu itemWithTag:MENU_ITEM_OPEN_IN_TERMINAL];
+    
+    if (pathExists) {
+        [openInFinder setAction:@selector(vagrantOpenInFinderMenuItemClicked:)];
+        [openInTerminal setAction:@selector(vagrantOpenInTerminalMenuItemClicked:)];
+    } else {
+        [openInFinder setEnabled:NO];
+        [openInTerminal setEnabled:NO];
+    }
+    
+    if (isBookmarkedMachine) {
+        NSMenuItem *addBookmark = [submenu itemWithTag:MENU_ITEM_ADD_BOOKMARK];
+        [addBookmark setHidden:YES];
+        
+        NSMenuItem *removeBookmark = [submenu itemWithTag:MENU_ITEM_REMOVE_BOOKMARK];
+        [removeBookmark setAction:@selector(removeBookmarkMenuItemClicked:)];
+    } else {
+        NSMenuItem *addBookmark = [submenu itemWithTag:MENU_ITEM_ADD_BOOKMARK];
+        [addBookmark setAction:@selector(addBookmarkMenuItemClicked:)];
+        
+        NSMenuItem *removeBookmark = [submenu itemWithTag:MENU_ITEM_REMOVE_BOOKMARK];
+        [removeBookmark setHidden:YES];
+    }
+    
+    return submenu;
+}
+
 - (void)rebuildMenu:(BOOL)closeMenu {
     NSBundle *bundle = [NSBundle mainBundle];
     
@@ -289,14 +405,7 @@
         [statusMenu addItem:[NSMenuItem separatorItem]];
         
         //add bookmarks
-        if(bookmarks.count == 0) {
-            /*
-             NSMenuItem *i = [[NSMenuItem alloc] init];
-             [i setTitle:@"No Bookmarks Added"];
-             [i setEnabled:NO];
-             [statusMenu addItem:i];
-             */
-        } else {
+        if (bookmarks.count != 0) {
             for(Bookmark *bookmark in bookmarks) {
                 VirtualMachineInfo *machine = bookmark.machine;
                 NSMenuItem *i = [[NSMenuItem alloc] init];
@@ -316,76 +425,9 @@
                 
                 [statusMenu addItem:i];
                 
-                NSMenu *submenu = [statusSubMenuTemplate copy];
-                
                 if (vagrantFileExists) {
-                    if(machine.isRunning) {
-                        NSMenuItem *vagrantSsh = [submenu itemWithTag:MENU_ITEM_VAGRANT_SSH];
-                        [vagrantSsh setAction:@selector(vagrantSshMenuItemClicked:)];
-                        
-                        NSMenuItem *vagrantUp = [submenu itemWithTag:MENU_ITEM_VAGRANT_UP];
-                        [vagrantUp setEnabled:NO];
-                        
-                        NSMenuItem *vagrantReload = [submenu itemWithTag:MENU_ITEM_VAGRANT_RELOAD];
-                        [vagrantReload setAction:@selector(vagrantReloadMenuItemClicked:)];
-                        
-                        NSMenuItem *vagrantSuspend = [submenu itemWithTag:MENU_ITEM_VAGRANT_SUSPEND];
-                        [vagrantSuspend setAction:@selector(vagrantSuspendMenuItemClicked:)];
-                        
-                        NSMenuItem *vagrantHalt = [submenu itemWithTag:MENU_ITEM_VAGRANT_HALT];
-                        [vagrantHalt setAction:@selector(vagrantHaltMenuItemClicked:)];
-                        
-                        NSMenuItem *vagrantProvision = [submenu itemWithTag:MENU_ITEM_VAGRANT_PROVISION];
-                        [vagrantProvision setAction:@selector(vagrantProvisionMenuItemClicked:)];
-                    } else {
-                        NSMenuItem *vagrantSsh = [submenu itemWithTag:MENU_ITEM_VAGRANT_SSH];
-                        [vagrantSsh setEnabled:NO];
-                        
-                        NSMenuItem *vagrantUp = [submenu itemWithTag:MENU_ITEM_VAGRANT_UP];
-                        [vagrantUp setAction:@selector(vagrantUpMenuItemClicked:)];
-                        
-                        NSMenuItem *vagrantReload = [submenu itemWithTag:MENU_ITEM_VAGRANT_RELOAD];
-                        [vagrantReload setEnabled:NO];
-                        
-                        NSMenuItem *vagrantSuspend = [submenu itemWithTag:MENU_ITEM_VAGRANT_SUSPEND];
-                        [vagrantSuspend setEnabled:NO];
-                        
-                        NSMenuItem *vagrantHalt = [submenu itemWithTag:MENU_ITEM_VAGRANT_HALT];
-                        [vagrantHalt setEnabled:NO];
-                        
-                        NSMenuItem *vagrantProvision = [submenu itemWithTag:MENU_ITEM_VAGRANT_PROVISION];
-                        [vagrantProvision setEnabled:NO];
-                    }
-                    
-                    NSMenuItem *vagrantDestroy = [submenu itemWithTag:MENU_ITEM_VAGRANT_DESTROY];
-                    if(!machine) {
-                        [vagrantDestroy setEnabled:NO];
-                    } else {
-                        [vagrantDestroy setAction:@selector(vagrantDestroyMenuItemClicked:)];
-                    }
+                    [statusMenu setSubmenu:[self initializeSubmenuForMachine:[statusSubMenuTemplate copy] :machine :pathExists :YES] forItem:i];
                 }
-                
-                NSMenuItem *virtualMachineDetails = [submenu itemWithTag:MENU_ITEM_DETAILS];
-                [virtualMachineDetails setAction:@selector(virtualMachineDetailsMenuItemClicked:)];
-                
-                NSMenuItem *openInFinder = [submenu itemWithTag:MENU_ITEM_OPEN_IN_FINDER];
-                NSMenuItem *openInTerminal = [submenu itemWithTag:MENU_ITEM_OPEN_IN_TERMINAL];
-                
-                if (pathExists) {
-                    [openInFinder setAction:@selector(vagrantOpenInFinderMenuItemClicked:)];
-                    [openInTerminal setAction:@selector(vagrantOpenInTerminalMenuItemClicked:)];
-                } else {
-                    [openInFinder setEnabled:NO];
-                    [openInTerminal setEnabled:NO];
-                }
-                
-                NSMenuItem *addBookmark = [submenu itemWithTag:MENU_ITEM_ADD_BOOKMARK];
-                [addBookmark setHidden:YES];
-                
-                NSMenuItem *removeBookmark = [submenu itemWithTag:MENU_ITEM_REMOVE_BOOKMARK];
-                [removeBookmark setAction:@selector(removeBookmarkMenuItemClicked:)];
-                
-                [statusMenu setSubmenu:submenu forItem:i];
             }
         }
         
@@ -431,72 +473,9 @@
             
             [statusMenu addItem:i];
             
-            NSMenu *submenu = [statusSubMenuTemplate copy];
-            
-            NSMenuItem *removeBookmark = [submenu itemWithTag:MENU_ITEM_REMOVE_BOOKMARK];
-            [removeBookmark setHidden:YES];
-            
             if (vagrantFileExists) {
-                if(machine.isRunning) {
-                    NSMenuItem *vagrantSsh = [submenu itemWithTag:MENU_ITEM_VAGRANT_SSH];
-                    [vagrantSsh setAction:@selector(vagrantSshMenuItemClicked:)];
-                    
-                    NSMenuItem *vagrantUp = [submenu itemWithTag:MENU_ITEM_VAGRANT_UP];
-                    [vagrantUp setEnabled:NO];
-                    
-                    NSMenuItem *vagrantReload = [submenu itemWithTag:MENU_ITEM_VAGRANT_RELOAD];
-                    [vagrantReload setAction:@selector(vagrantReloadMenuItemClicked:)];
-                    
-                    NSMenuItem *vagrantSuspend = [submenu itemWithTag:MENU_ITEM_VAGRANT_SUSPEND];
-                    [vagrantSuspend setAction:@selector(vagrantSuspendMenuItemClicked:)];
-                    
-                    NSMenuItem *vagrantHalt = [submenu itemWithTag:MENU_ITEM_VAGRANT_HALT];
-                    [vagrantHalt setAction:@selector(vagrantHaltMenuItemClicked:)];
-                    
-                    NSMenuItem *vagrantProvision = [submenu itemWithTag:MENU_ITEM_VAGRANT_PROVISION];
-                    [vagrantProvision setAction:@selector(vagrantProvisionMenuItemClicked:)];
-                } else {
-                    NSMenuItem *vagrantSsh = [submenu itemWithTag:MENU_ITEM_VAGRANT_SSH];
-                    [vagrantSsh setEnabled:NO];
-                    
-                    NSMenuItem *vagrantUp = [submenu itemWithTag:MENU_ITEM_VAGRANT_UP];
-                    [vagrantUp setAction:@selector(vagrantUpMenuItemClicked:)];
-                    
-                    NSMenuItem *vagrantReload = [submenu itemWithTag:MENU_ITEM_VAGRANT_RELOAD];
-                    [vagrantReload setEnabled:NO];
-                    
-                    NSMenuItem *vagrantSuspend = [submenu itemWithTag:MENU_ITEM_VAGRANT_SUSPEND];
-                    [vagrantSuspend setEnabled:NO];
-                    
-                    NSMenuItem *vagrantHalt = [submenu itemWithTag:MENU_ITEM_VAGRANT_HALT];
-                    [vagrantHalt setEnabled:NO];
-                    
-                    NSMenuItem *vagrantProvision = [submenu itemWithTag:MENU_ITEM_VAGRANT_PROVISION];
-                    [vagrantProvision setEnabled:NO];
-                }
-                
-                NSMenuItem *vagrantDestroy = [submenu itemWithTag:MENU_ITEM_VAGRANT_DESTROY];
-                [vagrantDestroy setAction:@selector(vagrantDestroyMenuItemClicked:)];
-                
-                NSMenuItem *virtualMachineDetails = [submenu itemWithTag:MENU_ITEM_DETAILS];
-                [virtualMachineDetails setAction:@selector(virtualMachineDetailsMenuItemClicked:)];
-                
-                NSMenuItem *addBookmark = [submenu itemWithTag:MENU_ITEM_ADD_BOOKMARK];
-                [addBookmark setAction:@selector(addBookmarkMenuItemClicked:)];
+                [statusMenu setSubmenu:[self initializeSubmenuForMachine:[statusSubMenuTemplate copy] :machine :pathExists :NO] forItem:i];
             }
-            
-            NSMenuItem *openInFinder = [submenu itemWithTag:MENU_ITEM_OPEN_IN_FINDER];
-            NSMenuItem *openInTerminal = [submenu itemWithTag:MENU_ITEM_OPEN_IN_TERMINAL];
-            
-            if (pathExists) {
-                [openInFinder setAction:@selector(vagrantOpenInFinderMenuItemClicked:)];
-                [openInTerminal setAction:@selector(vagrantOpenInTerminalMenuItemClicked:)];
-            } else {
-                [openInFinder setEnabled:NO];
-                [openInTerminal setEnabled:NO];
-            }
-            
-            [statusMenu setSubmenu:submenu forItem:i];
         }
     }
     
@@ -506,19 +485,18 @@
     
     [statusMenu addItem:detectedSeparatorMenuItem];
     
-    if([self getRunningVmCount] > 0) {
-        if(!haltAllMenuItem) {
-            haltAllMenuItem = [[NSMenuItem alloc] init];
-            [haltAllMenuItem setTitle:@"Halt All Machines"];
-            [haltAllMenuItem setAction:@selector(haltAllMenuItemClicked:)];
-        }
-        [statusMenu addItem:haltAllMenuItem];
-        
-        if(!globalCommandsSeparatorMenuItem) {
-            globalCommandsSeparatorMenuItem = [NSMenuItem separatorItem];
-        }
-        [statusMenu addItem:globalCommandsSeparatorMenuItem];
+    NSMenu *allMachinesSubMenu = [self initializeSubmenuForAllMachines:[statusSubMenuTemplate copy]];
+    if(!allMachinesMenuItem) {
+        allMachinesMenuItem = [[NSMenuItem alloc] init];
+        [allMachinesMenuItem setTitle:@"All Machines"];
+        [allMachinesMenuItem setSubmenu:allMachinesSubMenu];
     }
+    [statusMenu addItem:allMachinesMenuItem];
+    
+    if(!globalCommandsSeparatorMenuItem) {
+        globalCommandsSeparatorMenuItem = [NSMenuItem separatorItem];
+    }
+    [statusMenu addItem:globalCommandsSeparatorMenuItem];
     
     //add static items
     if(!windowMenuItem) {
@@ -621,17 +599,61 @@
     }
 }
 
-- (void)haltAllMenuItemClicked:(NSMenuItem*)menuItem {
+- (NSArray*)getAllBookmarksAndMachines {
+    NSMutableArray *machines = [[NSMutableArray alloc] init];
+    [machines addObjectsFromArray:bookmarks];
+    [machines addObjectsFromArray:detectedVagrantMachines];
+    return machines;
+}
+
+- (NSArray*)getAllBookmarksAndMachines :(PossibleVmStates)withState {
+    NSMutableArray *machines = [[NSMutableArray alloc] init];
     for(Bookmark *bookmark in bookmarks) {
-        if(bookmark.machine.isRunning) {
-            [self runVagrantAction:@"halt" withObject:bookmark];
+        if([bookmark.machine isState:withState]) {
+            [machines addObject:bookmark];
         }
     }
     
     for(VirtualMachineInfo *vm in detectedVagrantMachines) {
-        if(vm.isRunning) {
-            [self runVagrantAction:@"halt" withObject:vm];
+        if([vm isState:withState]) {
+            [machines addObject:vm];
         }
+    }
+    
+    return machines;
+}
+
+- (void)sshAllMenuItemClicked:(NSMenuItem*)menuItem {
+    [self runVagrantAction:@"ssh" withObjectArray:[self getAllBookmarksAndMachines:running]];
+}
+
+- (void)upAllMenuItemClicked:(NSMenuItem*)menuItem {
+    [self runVagrantAction:@"up" withObjectArray:[self getAllBookmarksAndMachines:suspended]];
+    [self runVagrantAction:@"up" withObjectArray:[self getAllBookmarksAndMachines:off]];
+}
+
+- (void)haltAllMenuItemClicked:(NSMenuItem*)menuItem {
+    [self runVagrantAction:@"halt" withObjectArray:[self getAllBookmarksAndMachines:running]];
+}
+
+- (void)reloadAllMenuItemClicked:(NSMenuItem*)menuItem {
+    [self runVagrantAction:@"reload" withObjectArray:[self getAllBookmarksAndMachines:running]];
+}
+
+- (void)suspendAllMenuItemClicked:(NSMenuItem*)menuItem {
+    [self runVagrantAction:@"suspend" withObjectArray:[self getAllBookmarksAndMachines:running]];
+}
+
+- (void)provisionAllMenuItemClicked:(NSMenuItem*)menuItem {
+    [self runVagrantAction:@"provision" withObjectArray:[self getAllBookmarksAndMachines:running]];
+}
+
+- (void)destroyAllMenuItemClicked:(NSMenuItem*)menuItem {
+    NSAlert *confirmAlert = [NSAlert alertWithMessageText:@"Are you sure you want to destroy all of your vagrant machines?" defaultButton:@"Confirm" alternateButton:@"Cancel" otherButton:nil informativeTextWithFormat:@""];
+    NSInteger button = [confirmAlert runModal];
+    
+    if(button == NSAlertDefaultReturn) {
+        [self runVagrantAction:@"destroy" withObjectArray:[self getAllBookmarksAndMachines]];
     }
 }
 
