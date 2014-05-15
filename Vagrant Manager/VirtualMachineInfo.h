@@ -6,6 +6,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "VirtualMachineServiceProvider.h"
 
 @interface VirtualMachineInfo : NSObject
 
@@ -15,11 +16,11 @@
 @property (strong, nonatomic) NSString *os;
 @property (strong, nonatomic) NSDictionary *sharedFolders;
 @property (strong, nonatomic) NSDictionary *properties;
-
-+ (VirtualMachineInfo*)fromInfo:(NSString*)infoString;
+@property id<VirtualMachineServiceProvider> provider;
 
 - (NSString*)getSharedFolderPathWithName:(NSString*)name;
 - (BOOL)isRunning;
 - (BOOL)isSuspended;
+- (id<VirtualMachineServiceProvider>)getProvider;
 
 @end

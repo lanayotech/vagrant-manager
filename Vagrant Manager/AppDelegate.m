@@ -32,6 +32,10 @@
     detectedVagrantMachines = [[NSMutableArray alloc] init];
     bookmarks = [self getSavedBookmarks];
     
+    //initialize service providers
+    serviceProviders = [[NSMutableDictionary alloc] init];
+    [serviceProviders setObject:[[VirtualBoxServiceProvider alloc] init] forKey:@"VirtualBoxServiceProvider"];
+    
     for(Bookmark *bookmark in bookmarks) {
         [bookmark loadId];
     }
@@ -176,24 +180,24 @@
 #pragma mark - Vagrant machine control
 - (void)runTerminalCommand:(NSString*)command {
     NSString *terminalName = [[NSUserDefaults standardUserDefaults] valueForKey:@"terminalPreference"];
-
+    
     NSString *s;
     if ([terminalName isEqualToString:@"iTerm"]) {
         s = [NSString stringWithFormat:@"tell application \"iTerm\"\n"
-                       "tell current terminal\n"
-                       "launch session \"Default Session\"\n"
-                       "delay .15\n"
-                       "activate\n"
-                       "tell the last session\n"
-                       "write text \"%@\"\n"
-                       "end tell\n"
-                       "end tell\n"
-                       "end tell\n", command];
+             "tell current terminal\n"
+             "launch session \"Default Session\"\n"
+             "delay .15\n"
+             "activate\n"
+             "tell the last session\n"
+             "write text \"%@\"\n"
+             "end tell\n"
+             "end tell\n"
+             "end tell\n", command];
     } else {
         s = [NSString stringWithFormat:@"tell application \"Terminal\"\n"
-                       "activate\n"
-                       "do script \"%@\"\n"
-                       "end tell\n", command];
+             "activate\n"
+             "do script \"%@\"\n"
+             "end tell\n", command];
     }
     
     NSAppleScript *as = [[NSAppleScript alloc] initWithSource: s];
@@ -272,7 +276,7 @@
     }
     
     [statusMenu removeAllItems];
-
+    
     @synchronized(detectedVagrantMachines) {
         //add refresh button
         if(!refreshDetectedMenuItem) {
@@ -287,11 +291,11 @@
         //add bookmarks
         if(bookmarks.count == 0) {
             /*
-            NSMenuItem *i = [[NSMenuItem alloc] init];
-            [i setTitle:@"No Bookmarks Added"];
-            [i setEnabled:NO];
-            [statusMenu addItem:i];
-            */
+             NSMenuItem *i = [[NSMenuItem alloc] init];
+             [i setTitle:@"No Bookmarks Added"];
+             [i setEnabled:NO];
+             [statusMenu addItem:i];
+             */
         } else {
             for(Bookmark *bookmark in bookmarks) {
                 VirtualMachineInfo *machine = bookmark.machine;
@@ -457,7 +461,7 @@
                     
                     NSMenuItem *vagrantUp = [submenu itemWithTag:MENU_ITEM_VAGRANT_UP];
                     [vagrantUp setAction:@selector(vagrantUpMenuItemClicked:)];
-
+                    
                     NSMenuItem *vagrantReload = [submenu itemWithTag:MENU_ITEM_VAGRANT_RELOAD];
                     [vagrantReload setEnabled:NO];
                     
@@ -499,6 +503,7 @@
     if(!detectedSeparatorMenuItem) {
         detectedSeparatorMenuItem = [NSMenuItem separatorItem];
     }
+    
     [statusMenu addItem:detectedSeparatorMenuItem];
     
     if([self getRunningVmCount] > 0) {
@@ -514,7 +519,6 @@
         }
         [statusMenu addItem:globalCommandsSeparatorMenuItem];
     }
-    
     
     //add static items
     if(!windowMenuItem) {
@@ -544,7 +548,7 @@
         [checkForUpdatesMenuItem setAction:@selector(checkForUpdatesMenuItemClicked:)];
     }
     [statusMenu addItem:checkForUpdatesMenuItem];
-
+    
     if(!quitMenuItem) {
         quitMenuItem = [[NSMenuItem alloc] init];
         [quitMenuItem setTitle:@"Quit"];
@@ -752,6 +756,10 @@
 
 #pragma mark - General Functions
 
+- (NSMutableDictionary*)getServiceProviders {
+    return serviceProviders;
+}
+
 - (VirtualMachineInfo*)getMachineFromObject:(id)obj {
     if([obj isKindOfClass:[VirtualMachineInfo class]]) {
         return obj;
@@ -815,7 +823,7 @@
                     NSComparisonResult versionComparison = [Util compareVersion:currentVersion toVersion:installedVersion];
                     
                     BOOL updateAvailable = (versionComparison == NSOrderedDescending);
-
+                    
                     if(updateAvailable) {
                         if(![[NSUserDefaults standardUserDefaults] boolForKey:@"dontShowUpdateNotification"]) {
                             [self updateCheckUpdatesIcon:YES];
@@ -846,7 +854,7 @@
                         dispatch_async(dispatch_get_main_queue(), ^{
                             NSAlert *errorAlert = [NSAlert alertWithMessageText:@"There was an error checking for a new version. Please try again later." defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@""];
                             [errorAlert runModal];
-                        });                        
+                        });
                     }
                 }
             }
@@ -855,166 +863,28 @@
 }
 
 #pragma mark - Virtual Machines
-
-- (VirtualMachineInfo*)getNFSVirtualMachineInfo:(NSString*)uuid NFSPath:(NSString*)NFSPath {
-    NSTask *task = [[NSTask alloc] init];
-    [task setLaunchPath:@"/bin/bash"];
-    [task setArguments:@[@"-c", [NSString stringWithFormat:@"VBoxManage showvminfo %@ --machinereadable", uuid]]];
-    
-    NSPipe *pipe = [NSPipe pipe];
-    [task setStandardInput:[NSPipe pipe]];
-    [task setStandardOutput:pipe];
-    
-    [task launch];
-    [task waitUntilExit];
-    
-    NSData *outputData = [[pipe fileHandleForReading] readDataToEndOfFile];
-    NSString *outputString = [[NSString alloc] initWithData:outputData encoding:NSUTF8StringEncoding];
-    
-    outputString = [NSString stringWithFormat:@"%@%@\n%@", outputString, @"SharedFolderNameMachineMapping1=\"/vagrant\"", [NSString stringWithFormat:@"SharedFolderPathMachineMapping1=\"%@\"", NFSPath]];
-    
-    if(task.terminationStatus != 0) {
-        return nil;
-    }
-    
-    VirtualMachineInfo *vmInfo = [VirtualMachineInfo fromInfo:outputString];
-    
-    return vmInfo;
-}
-
-- (VirtualMachineInfo*)getVirtualMachineInfo:(NSString*)uuid {
-    NSTask *task = [[NSTask alloc] init];
-    [task setLaunchPath:@"/bin/bash"];
-    [task setArguments:@[@"-c", [NSString stringWithFormat:@"VBoxManage showvminfo %@ --machinereadable", uuid]]];
-    
-    NSPipe *pipe = [NSPipe pipe];
-    [task setStandardInput:[NSPipe pipe]];
-    [task setStandardOutput:pipe];
-    
-    [task launch];
-    [task waitUntilExit];
-    
-    NSData *outputData = [[pipe fileHandleForReading] readDataToEndOfFile];
-    NSString *outputString = [[NSString alloc] initWithData:outputData encoding:NSUTF8StringEncoding];
-    
-    if(task.terminationStatus != 0) {
-        return nil;
-    }
-    
-    VirtualMachineInfo *vmInfo = [VirtualMachineInfo fromInfo:outputString];
-    
-    return vmInfo;
-}
-
-- (NSArray*)getAllVirtualMachinesInfo {
-    NSTask *task = [[NSTask alloc] init];
-    [task setLaunchPath:@"/bin/bash"];
-    
-    [task setArguments:@[@"-c", @"VBoxManage list vms | grep -Eo '[^ ]+$' | sed -e 's/[{}]//g'"]];
-    
-    NSPipe *pipe = [NSPipe pipe];
-    [task setStandardInput:[NSPipe pipe]];
-    [task setStandardOutput:pipe];
-    
-    [task launch];
-    [task waitUntilExit];
-    
-    NSData *outputData = [[pipe fileHandleForReading] readDataToEndOfFile];
-    NSString *outputString = [[NSString alloc] initWithData:outputData encoding:NSUTF8StringEncoding];
-    
-    NSMutableArray *vmUuids = [[outputString componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]] mutableCopy];
-    [vmUuids removeObject:@""];
-    
-    NSMutableArray *virtualMachines = [[NSMutableArray alloc] init];
-    
-    //remove nfs machines
-    if ([[NSFileManager defaultManager] isReadableFileAtPath:@"/etc/exports"]) {
-        task = [[NSTask alloc] init];
-        [task setLaunchPath:@"/bin/bash"];
-        
-        [task setArguments:@[@"-c", @"cat /etc/exports | grep '# VAGRANT-' | grep -Eo '[^ ]+$' | sort -u"]];
-        
-        pipe = [NSPipe pipe];
-        [task setStandardInput:[NSPipe pipe]];
-        [task setStandardOutput:pipe];
-        
-        [task launch];
-        [task waitUntilExit];
-        
-        outputData = [[pipe fileHandleForReading] readDataToEndOfFile];
-        outputString = [[NSString alloc] initWithData:outputData encoding:NSUTF8StringEncoding];
-        
-        NSMutableArray *nfsVmUuids = [[outputString componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]] mutableCopy];
-        [nfsVmUuids removeObject:@""];
-        
-        [vmUuids removeObjectsInArray:nfsVmUuids];
-    }
-    
-    for(NSString *uuid in vmUuids) {
-        VirtualMachineInfo *vmInfo = [self getVirtualMachineInfo:uuid];
-        if(vmInfo) {
-            [virtualMachines addObject:vmInfo];
-        }
-    }
-    
-    return [NSArray arrayWithArray:virtualMachines];
-}
-
-- (NSArray*)getAllNFSVagrantMachines {
-    NSMutableArray *virtualMachines = [[NSMutableArray alloc] init];
-    
-    if (![[NSFileManager defaultManager] isReadableFileAtPath:@"/etc/exports"]) {
-        return [NSArray arrayWithArray:virtualMachines];
-    }
-    
-    NSTask *task = [[NSTask alloc] init];
-    [task setLaunchPath:@"/bin/bash"];
-    [task setArguments:@[@"-c", @"cat /etc/exports"]];
-    
-    NSPipe *pipe = [NSPipe pipe];
-    [task setStandardInput:[NSPipe pipe]];
-    [task setStandardOutput:pipe];
-    
-    [task launch];
-    [task waitUntilExit];
-    
-    NSData *outputData = [[pipe fileHandleForReading] readDataToEndOfFile];
-    NSString *outputString = [[NSString alloc] initWithData:outputData encoding:NSUTF8StringEncoding];
-    
-    NSMutableArray *lines = [[outputString componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]] mutableCopy];
-    [lines removeObject:@""];
-
-    NSString *uuid = @"";
-    for(NSString *line in lines) {
-        
-        if([line rangeOfString:@"# VAGRANT-"].location != NSNotFound) {
-            uuid = [[line componentsSeparatedByString:@" "] lastObject];
-            continue;
-        }
-        
-        //get path
-        NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"(?<=\").*(?=\"\\ [0-9\\.]+)" options:0 error:nil];
-        NSArray *pathArr = [regex matchesInString:line options:0 range:NSMakeRange(0, [line length])];
-        if (pathArr.count == 1) {
-            NSTextCheckingResult *pathResult = [pathArr objectAtIndex:0];
-            NSString *path = [line substringWithRange:pathResult.range];
+- (NSMutableArray*)sortVirtualMachines:(NSArray*)virtualMachines {
+    //sort alphabetically with running machines at the top
+    return [[virtualMachines sortedArrayUsingComparator:^(id obj1, id obj2) {
+        if ([obj1 isKindOfClass:[VirtualMachineInfo class]] && [obj2 isKindOfClass:[VirtualMachineInfo class]]) {
+            VirtualMachineInfo *m1 = obj1;
+            VirtualMachineInfo *m2 = obj2;
             
-            BOOL vagrantFileExists = [[NSFileManager defaultManager] fileExistsAtPath:[NSString pathWithComponents:@[path, @"Vagrantfile"]]];
-            
-            if (vagrantFileExists && uuid.length) {
-                VirtualMachineInfo *vmInfo = [self getNFSVirtualMachineInfo:uuid NFSPath:path];
-                if(vmInfo) {
-                    [virtualMachines addObject:vmInfo];
-                }
+            if ([m1 isRunning] && ![m2 isRunning]) {
+                return (NSComparisonResult)NSOrderedAscending;
+            } else if (m2.isRunning && !m1.isRunning) {
+                return (NSComparisonResult)NSOrderedDescending;
             }
+            
+            return [m1.name caseInsensitiveCompare:m2.name];
         }
-    }
-    
-    return [NSArray arrayWithArray:virtualMachines];
+        
+        return NSOrderedSame;
+    }] mutableCopy];
 }
 
 - (void)updateVirtualMachineState:(VirtualMachineInfo*)machine {
-    VirtualMachineInfo *info = [self getVirtualMachineInfo:machine.uuid];
+    VirtualMachineInfo *info = [[machine getProvider] getVagrantMachineInfo:machine.uuid];
     
     if(!info) {
         for(Bookmark *bookmark in bookmarks) {
@@ -1058,26 +928,6 @@
     return runningCount;
 }
 
-- (NSMutableArray*)sortVirtualMachines:(NSArray*)virtualMachines {
-    //sort alphabetically with running machines at the top
-    return [[virtualMachines sortedArrayUsingComparator:^(id obj1, id obj2) {
-        if ([obj1 isKindOfClass:[VirtualMachineInfo class]] && [obj2 isKindOfClass:[VirtualMachineInfo class]]) {
-            VirtualMachineInfo *m1 = obj1;
-            VirtualMachineInfo *m2 = obj2;
-            
-            if ([m1 isRunning] && ![m2 isRunning]) {
-                return (NSComparisonResult)NSOrderedAscending;
-            } else if (m2.isRunning && !m1.isRunning) {
-                return (NSComparisonResult)NSOrderedDescending;
-            }
-            
-            return [m1.name caseInsensitiveCompare:m2.name];
-        }
-        
-        return NSOrderedSame;
-    }] mutableCopy];
-}
-
 - (void)detectVagrantMachines {
     
     [self removeDetectedMenuItems];
@@ -1093,36 +943,17 @@
     [statusMenu insertItem:i atIndex:[statusMenu indexOfItem:refreshDetectedMenuItem]];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        //detect all VMs
-        NSArray *virtualMachines = [self getAllVirtualMachinesInfo];
-        
-        //detect all vagrant machines
-        NSArray *nfsVagrantMachines = [self getAllNFSVagrantMachines];
-        
-        //filter only vagrant machines
         NSMutableArray *vagrantMachines = [[NSMutableArray alloc] init];
-        for(VirtualMachineInfo *vmInfo in virtualMachines) {
-            Bookmark *bookmark = [self getBookmarkById:vmInfo.uuid];
-            if(bookmark) {
-                bookmark.machine = vmInfo;
-            } else if([vmInfo getSharedFolderPathWithName:@"/vagrant"]) {
-                [vagrantMachines addObject:vmInfo];
-            }
-        }
         
-        for(VirtualMachineInfo *nfsVmInfo in nfsVagrantMachines) {
-            Bookmark *bookmark = [self getBookmarkById:nfsVmInfo.uuid];
-            if(bookmark) {
-                bookmark.machine = nfsVmInfo;
-            } else if([nfsVmInfo getSharedFolderPathWithName:@"/vagrant"]) {
-                [vagrantMachines addObject:nfsVmInfo];
-            }
+        for (NSString *key in [serviceProviders allKeys]) {
+            id<VirtualMachineServiceProvider> pr = [serviceProviders objectForKey:key];
+            [vagrantMachines addObjectsFromArray:[pr getAllVagrantMachines]];
         }
         
         vagrantMachines = [self sortVirtualMachines:vagrantMachines];
         
         @synchronized(detectedVagrantMachines) {
-            detectedVagrantMachines = vagrantMachines;
+            detectedVagrantMachines = [[NSMutableArray alloc] initWithArray:vagrantMachines];
         }
         
         dispatch_async(dispatch_get_main_queue(), ^{

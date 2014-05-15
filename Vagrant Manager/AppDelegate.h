@@ -11,7 +11,8 @@
 #import "PreferencesWindow.h"
 #import "AddBookmarkWindow.h"
 #import "VirtualMachineInfoWindow.h"
-#import "VirtualMachineInfo.h"
+#import "VirtualBoxMachineInfo.h"
+#import "VirtualBoxServiceProvider.h"
 
 #define MENU_ITEM_BOOKMARKED_VM 1
 #define MENU_ITEM_DETECTED_VM   2
@@ -31,6 +32,7 @@
     
     NSMutableArray *detectedVagrantMachines;
     NSMutableArray *bookmarks;
+    NSMutableDictionary *serviceProviders;
     
     NSMenuItem *addBookmarkMenuItem;
     NSMenuItem *bookmarksSeparatorMenuItem;
@@ -62,5 +64,8 @@
 - (void)rebuildMenu:(BOOL)closeMenu;
 - (void)detectVagrantMachines;
 - (void)saveBookmarks:(NSMutableArray*)bm;
+
+- (Bookmark*)getBookmarkById:(NSString*)uuid;
+- (NSMutableDictionary*)getServiceProviders;
 
 @end
