@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5056" systemVersion="13C64" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5056" systemVersion="13C1021" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="5056"/>
     </dependencies>
@@ -26,14 +26,14 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <box autoresizesSubviews="NO" borderType="line" titlePosition="noTitle" id="Y9d-dx-Ze1">
-                        <rect key="frame" x="17" y="52" width="446" height="288"/>
+                        <rect key="frame" x="17" y="50" width="446" height="290"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView">
-                            <rect key="frame" x="1" y="1" width="444" height="286"/>
+                            <rect key="frame" x="1" y="1" width="444" height="288"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="21L-o8-sFd">
-                                    <rect key="frame" x="25" y="251" width="155" height="17"/>
+                                    <rect key="frame" x="25" y="253" width="155" height="17"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Terminal Preference:" id="d09-Xe-nQf">
                                         <font key="font" metaFont="system"/>
@@ -42,7 +42,7 @@
                                     </textFieldCell>
                                 </textField>
                                 <popUpButton verticalHuggingPriority="750" id="5JC-yq-pDl">
-                                    <rect key="frame" x="191" y="244" width="211" height="26"/>
+                                    <rect key="frame" x="191" y="246" width="211" height="26"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <popUpButtonCell key="cell" type="push" title="iTerm/iTerm2" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="101" imageScaling="proportionallyDown" inset="2" selectedItem="nvj-E8-vFA" id="m4I-I4-1Um">
                                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -59,7 +59,7 @@
                                     </connections>
                                 </popUpButton>
                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="CmT-gf-Twe">
-                                    <rect key="frame" x="25" y="221" width="155" height="17"/>
+                                    <rect key="frame" x="25" y="223" width="155" height="17"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Status Bar Icon Theme:" id="zgd-Fw-BuU">
                                         <font key="font" metaFont="system"/>
@@ -68,7 +68,7 @@
                                     </textFieldCell>
                                 </textField>
                                 <popUpButton verticalHuggingPriority="750" id="swb-Aa-PIS">
-                                    <rect key="frame" x="191" y="214" width="211" height="26"/>
+                                    <rect key="frame" x="191" y="216" width="211" height="26"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="eYO-RJ-9Jl">
                                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -79,7 +79,7 @@
                                                 <menuItem title="Flat" tag="102" id="5l8-Ry-mSP">
                                                     <modifierMask key="keyEquivalentModifierMask"/>
                                                 </menuItem>
-                                                <menuItem title="Clean" state="on" tag="103" id="9TF-Wt-cNj">
+                                                <menuItem title="Clean" tag="103" id="9TF-Wt-cNj">
                                                     <modifierMask key="keyEquivalentModifierMask"/>
                                                 </menuItem>
                                             </items>
@@ -90,7 +90,7 @@
                                     </connections>
                                 </popUpButton>
                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="0kp-xR-4h2">
-                                    <rect key="frame" x="25" y="97" width="155" height="17"/>
+                                    <rect key="frame" x="25" y="99" width="155" height="17"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Allowed Updates:" id="egI-Bu-LEX">
                                         <font key="font" metaFont="system"/>
@@ -99,7 +99,7 @@
                                     </textFieldCell>
                                 </textField>
                                 <popUpButton verticalHuggingPriority="750" id="mcz-mt-v5X">
-                                    <rect key="frame" x="191" y="90" width="211" height="26"/>
+                                    <rect key="frame" x="191" y="92" width="211" height="26"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="nIq-Y6-gMo">
                                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -125,7 +125,7 @@
                                     </connections>
                                 </popUpButton>
                                 <button id="e4G-MV-FOy">
-                                    <rect key="frame" x="191" y="167" width="173" height="18"/>
+                                    <rect key="frame" x="191" y="169" width="173" height="18"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <buttonCell key="cell" type="check" title="Auto-close task window" bezelStyle="regularSquare" imagePosition="left" inset="2" id="6GI-LG-Uu4">
                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -136,7 +136,7 @@
                                     </connections>
                                 </button>
                                 <button id="oFT-5y-y4A">
-                                    <rect key="frame" x="191" y="57" width="206" height="18"/>
+                                    <rect key="frame" x="191" y="59" width="206" height="18"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <buttonCell key="cell" type="check" title="Send anonymous profile data" bezelStyle="regularSquare" imagePosition="left" inset="2" id="ZqL-QW-z6T">
                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -147,7 +147,7 @@
                                     </connections>
                                 </button>
                                 <button id="8v8-Ay-Er0">
-                                    <rect key="frame" x="191" y="191" width="216" height="18"/>
+                                    <rect key="frame" x="191" y="193" width="216" height="18"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <buttonCell key="cell" type="check" title="Don't show update notification" bezelStyle="regularSquare" imagePosition="left" inset="2" id="1Yx-3K-UFZ">
                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -158,7 +158,7 @@
                                     </connections>
                                 </button>
                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" setsMaxLayoutWidthAtFirstLayout="YES" id="i4T-vz-mDV">
-                                    <rect key="frame" x="205" y="122" width="188" height="39"/>
+                                    <rect key="frame" x="209" y="124" width="188" height="39"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Setting this option will automatically close the task output window if the task was successful" id="WYk-Ua-Uq2">
                                         <font key="font" size="10" name="LucidaGrande"/>
@@ -181,7 +181,7 @@
                         <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </box>
                     <button verticalHuggingPriority="750" id="GYW-18-bOU">
-                        <rect key="frame" x="392" y="8" width="74" height="32"/>
+                        <rect key="frame" x="392" y="13" width="74" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="push" title="Done" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="5dc-Ve-cwh">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
