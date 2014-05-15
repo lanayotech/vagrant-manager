@@ -60,7 +60,7 @@
     if(self.machine) {
         self.osTextField.stringValue = self.machine.os;
         self.uuidTextField.stringValue = self.machine.uuid;
-        self.stateTextField.stringValue = self.machine.state;
+        self.stateTextField.stringValue = self.machine.stateString;
     } else {
         self.osTextField.stringValue = @"N/A";
         self.uuidTextField.stringValue = self.bookmark.uuid ?: @"N/A";
