@@ -802,11 +802,17 @@
 
 - (NSString*)getCurrentTheme {
     NSString *theme = [[NSUserDefaults standardUserDefaults] objectForKey:@"statusBarIconTheme"];
+    
+    NSArray *validThemes = @[@"default",
+                           @"clean",
+                           @"flat"];
 
     if(!theme) {
         theme = @"clean";
         [[NSUserDefaults standardUserDefaults] setValue:theme forKey:@"statusBarIconTheme"];
         [[NSUserDefaults standardUserDefaults] synchronize];
+    } else if(![validThemes containsObject:theme]) {
+        theme = @"clean";
     }
 
     return theme;

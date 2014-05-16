@@ -28,14 +28,12 @@
     NSString *statusBarIconTheme = [[NSUserDefaults standardUserDefaults] stringForKey:@"statusBarIconTheme"];
     NSString *updateStability = [Util getUpdateStability];
     
-    if([statusBarIconTheme isEqualToString:@"black"]) {
-        [self.statusBarIconThemePopUpButton selectItemWithTag:101];
-    } else if([statusBarIconTheme isEqualToString:@"flat"]) {
+    if([statusBarIconTheme isEqualToString:@"flat"]) {
         [self.statusBarIconThemePopUpButton selectItemWithTag:102];
-    } else if([statusBarIconTheme isEqualToString:@"clean"]) {
-        [self.statusBarIconThemePopUpButton selectItemWithTag:103];
-    } else {
+    } else if([statusBarIconTheme isEqualToString:@"default"]) {
         [self.statusBarIconThemePopUpButton selectItemWithTag:100];
+    } else {
+        [self.statusBarIconThemePopUpButton selectItemWithTag:103];
     }
     
     if ([terminalPreference isEqualToString:@"iTerm"]) {
