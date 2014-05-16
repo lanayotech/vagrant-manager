@@ -21,4 +21,4 @@ We love code contributions! If you would like to contribute, here are some notes
 * The **master** branch only contains tagged releases
 * If you are going to be submitting a pull request, please branch from **develop**, and submit your pull request back to the **develop** branch
 * [Helpful article about forking](https://help.github.com/articles/fork-a-repo)
-* [Helpful article about pull request](https://help.github.com/articles/using-pull-requests)
+* [Helpful article about pull requests](https://help.github.com/articles/using-pull-requests)
