@@ -470,7 +470,7 @@
 				B1357A89187CEB3B00811CBC /* Images.xcassets in Resources */,
 				B15001361924A02C000A76E7 /* suspended@2x.png in Resources */,
 				B1357A87187CEB3B00811CBC /* MainMenu.xib in Resources */,
-83EAC43B18D067C900FF26A1 /* vagrant_logo_off-clean.png in Resources */,
+				83EAC43B18D067C900FF26A1 /* vagrant_logo_off-clean@2x.png in Resources */,
 				83EAC43B18D067C900FF26A1 /* vagrant_logo_off-clean@2x.png in Resources */,
 				83BCB0491921B6BF00206967 /* dsa_pub.pem in Resources */,
 				838B393E18CC85BC00A04C15 /* vagrant_logo_highlighted-flat.png in Resources */,
