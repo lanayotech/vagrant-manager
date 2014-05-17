@@ -66,8 +66,36 @@
         self.uuidTextField.stringValue = self.bookmark.uuid ?: @"N/A";
         self.stateTextField.stringValue = @"N/A";
     }
+    
+    for(NSTableColumn *col in self.propertiesTableView.tableColumns) {
+        [col addObserver:self forKeyPath:@"width" options:0 context:nil];
+    }
+
+    for(NSTableColumn *col in self.sharedFoldersTableView.tableColumns) {
+        [col addObserver:self forKeyPath:@"width" options:0 context:nil];
+    }
 }
 
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    
+    if([self.propertiesTableView.tableColumns containsObject:object]) {
+        NSInteger resizedColumn = self.propertiesTableView.headerView.resizedColumn;
+        if (resizedColumn != -1) {
+            NSTableColumn *column = [self.propertiesTableView.tableColumns objectAtIndex:resizedColumn];
+            if (object == column && object == [self.propertiesTableView.tableColumns objectAtIndex:resizedColumn]) {
+                [self.propertiesTableView reloadData];
+            }
+        }
+    } else if([self.sharedFoldersTableView.tableColumns containsObject:object]) {
+        NSInteger resizedColumn = self.sharedFoldersTableView.headerView.resizedColumn;
+        if (resizedColumn != -1) {
+            NSTableColumn *column = [self.sharedFoldersTableView.tableColumns objectAtIndex:resizedColumn];
+            if (object == column && object == [self.sharedFoldersTableView.tableColumns objectAtIndex:resizedColumn]) {
+                [self.sharedFoldersTableView reloadData];
+            }
+        }
+    }
+}
 
 - (void)keyUp:(NSEvent *)theEvent {
     [self.updateNameButton setEnabled:![[self.nameEditTextField stringValue] isEqualToString:self.bookmark.displayName] && [[self.nameEditTextField stringValue] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]].length > 0];
@@ -76,6 +104,14 @@
 - (void)windowWillClose:(NSNotification *)notification {
     AppDelegate *app = [Util getApp];
     
+    for(NSTableColumn *col in self.propertiesTableView.tableColumns) {
+        [col removeObserver:self forKeyPath:@"width"];
+    }
+    
+    for(NSTableColumn *col in self.sharedFoldersTableView.tableColumns) {
+        [col removeObserver:self forKeyPath:@"width"];
+    }
+
     [app removeInfoWindow:self];
 }
 
@@ -111,6 +147,24 @@
     view.stringValue = val ?: @"N/A";
     
     return view;
+}
+
+- (CGFloat)tableView:(NSTableView *)tableView heightOfRow:(NSInteger)row {
+    NSFont *font = [NSFont systemFontOfSize:13];
+    float height = 22;
+    for(NSTableColumn *col in tableView.tableColumns) {
+        NSString *val = [[properties objectAtIndex:row] objectForKey:col.identifier];
+        if(val) {
+            NSAttributedString *string = [[NSAttributedString alloc] initWithString:val attributes:@{NSFontAttributeName: font}];
+            CGRect rect = [string boundingRectWithSize:(CGSize){col.width, CGFLOAT_MAX} options:NSStringDrawingUsesLineFragmentOrigin];
+            
+            if(rect.size.height > height) {
+                height = rect.size.height;
+            }
+        }
+    }
+    
+    return height;
 }
 
 - (IBAction)closeWindowButtonClicked:(id)sender {
