@@ -65,6 +65,7 @@
 - (void)rebuildMenu:(BOOL)closeMenu;
 - (void)detectVagrantMachines;
 - (void)saveBookmarks:(NSMutableArray*)bm;
+- (void)updateRunningVmCount;
 
 - (Bookmark*)getBookmarkById:(NSString*)uuid;
 - (NSMutableDictionary*)getServiceProviders;

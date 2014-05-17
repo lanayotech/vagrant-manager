@@ -544,14 +544,7 @@
     }
     [statusMenu addItem:quitMenuItem];
 
-    int runningCount = [self getRunningVmCount];
-    if(runningCount > 0 ) {
-        [statusItem setTitle:[NSString stringWithFormat:@"%d", runningCount]];
-        [statusItem setImage:[self getThemedImage:@"vagrant_logo_on"]];
-    } else {
-        [statusItem setTitle:@""];
-        [statusItem setImage:[self getThemedImage:@"vagrant_logo_off"]];
-    }
+    [self updateRunningVmCount];
     [statusItem setAlternateImage:[self getThemedImage:@"vagrant_logo_highlighted"]];
 }
 
@@ -580,6 +573,16 @@
 }
 
 #pragma mark - Menu Item Handlers
+- (void)updateRunningVmCount {
+    int runningCount = [self getRunningVmCount];
+    if(runningCount && ![[NSUserDefaults standardUserDefaults] boolForKey:@"dontShowRunningVmCount"]) {
+        [statusItem setTitle:[NSString stringWithFormat:@"%d", runningCount]];
+        [statusItem setImage:[self getThemedImage:@"vagrant_logo_on"]];
+    } else {
+        [statusItem setTitle:@""];
+        [statusItem setImage:[self getThemedImage:@"vagrant_logo_off"]];
+    }
+}
 
 - (IBAction)refreshDetectedMenuItemClicked:(id)sender {
     [self detectVagrantMachines];
