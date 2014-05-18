@@ -6,72 +6,136 @@
 //
 
 #import "SlideMenuView.h"
-#import "MachineMenuItem.h"
 
 @implementation SlideMenuView {
-    NSScrollView *scrollView;
-    NSTrackingArea *trackingArea;
-    BOOL isHighlighted;
+    NSScrollView *_scrollView;
+    NSView *_scrollDocumentView;
+    
+    NSMutableArray *_instanceMenuItems;
 }
 
 - (id)initWithFrame:(NSRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
         //create scroll view
-        scrollView = [[NSScrollView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
-        [scrollView setBorderType:NSNoBorder];
-        [scrollView setHasVerticalScroller:YES];
-        [scrollView setVerticalScrollElasticity:NSScrollElasticityNone];
-        [scrollView setHorizontalScrollElasticity:NSScrollElasticityNone];
+        _scrollView = [[NSScrollView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
+        [_scrollView setBorderType:NSNoBorder];
+        [_scrollView setVerticalScrollElasticity:NSScrollElasticityNone];
+        [_scrollView setHorizontalScrollElasticity:NSScrollElasticityNone];
+        _scrollView.drawsBackground = NO;
+        [self addSubview:_scrollView];
         
         //create scroll document view
-        NSView *scrollDocumentView = [[NSView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
+        _scrollDocumentView = [[NSView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
         
-        NSTextView *textView = [[NSTextView alloc] initWithFrame:CGRectMake(0, 0, 100, 30)];
-        textView.backgroundColor = [NSColor redColor];
-        [scrollDocumentView addSubview:textView];
-        textView = [[NSTextView alloc] initWithFrame:CGRectMake(0, 40, 100, 30)];
-        textView.backgroundColor = [NSColor blueColor];
-        [scrollDocumentView addSubview:textView];
+        [_scrollView setDocumentView:_scrollDocumentView];
+        [self addSubview:_scrollView];
+        
+        [_scrollView setHasVerticalScroller:_scrollDocumentView.frame.size.height > _scrollView.frame.size.height];
+        [_scrollView setHasHorizontalScroller:_scrollDocumentView.frame.size.width > _scrollView.frame.size.width];
+        [_scrollView setScrollerStyle:NSScrollerStyleOverlay];
 
-        [self resizeToFitSubviews:scrollDocumentView];
-        [scrollView setDocumentView:scrollDocumentView];
-        [self addSubview:scrollView];
-        //initially scroll to top
-        [self scrollToTop];
+        _instanceMenuItems = [[NSMutableArray alloc] init];
     }
     return self;
 }
 
-- (void)addMenuItem:(MachineMenuItem*)item {
-    /*
-    item.statusImageView.image = [NSImage imageNamed:@"NSStatusUnavailable"];
-    [item.machineNameTextField setStringValue:@"Lanayo_default_123"];
-    item.view.frame = CGRectMake(0, 0, scrollDocumentView.frame.size.width, item.view.frame.size.height);
-    [scrollDocumentView addSubview:item.view];
+- (void)addInstance:(VagrantInstance*)instance {
+    InstanceMenuItem *item = [[InstanceMenuItem alloc] initWithNibName:@"InstanceMenuItem" bundle:nil];
     
-    //resize scroll document view to fit children and add to scroll view
-    [self resizeToFitSubviews:scrollDocumentView];
-     */
+    item.displayName = instance.displayName;
+    
+    CGRect frame = item.view.frame;
+    
+    float y;
+    if(_instanceMenuItems.count > 0) {
+        InstanceMenuItem *prevItem = [_instanceMenuItems lastObject];
+        y = prevItem.view.frame.origin.y + prevItem.view.frame.size.height;
+    } else {
+        y = 0;
+    }
+    
+    frame.origin.x = 0;
+    frame.origin.y = y;
+    frame.size.width = self.frame.size.width;
+    item.view.frame = frame;
+    
+    [_instanceMenuItems addObject:item];
+    [_scrollDocumentView addSubview:item.view];
+    
+    [self positionMenuItems];
+}
+
+- (void)updateMenuHeight {
+    float height = 0;
+    for(InstanceMenuItem *item in _instanceMenuItems) {
+        height += item.view.frame.size.height;
+    }
+
+    float heightDiff = height - _scrollDocumentView.frame.size.height;
+
+    [_scrollDocumentView setFrameSize:CGSizeMake(_scrollDocumentView.frame.size.width, height)];
+    
+    float outerHeight = MIN(100, height);
+    CGRect frame = self.frame;
+    frame.size.height = outerHeight;
+    self.frame = frame;
+    frame = _scrollView.frame;
+    frame.size.height = outerHeight;
+    _scrollView.frame = frame;
+    
+    [_scrollView setHasVerticalScroller:_scrollDocumentView.frame.size.height > _scrollView.frame.size.height];
+    [_scrollView setHasHorizontalScroller:_scrollDocumentView.frame.size.width > _scrollView.frame.size.width];
+    
+    if(heightDiff != 0) {
+        NSRect scrollRect = _scrollView.contentView.documentVisibleRect;
+        scrollRect.origin.y += heightDiff;
+        [[_scrollView documentView] scrollPoint:scrollRect.origin];
+    }
+}
+
+- (void)positionMenuItems {
+    [self updateMenuHeight];
+    
+    float y = _scrollDocumentView.frame.size.height;
+    for(InstanceMenuItem *item in _instanceMenuItems) {
+        CGRect frame = item.view.frame;
+        frame.origin.y = y - frame.size.height;
+        y -= frame.size.height;
+        item.view.frame = frame;
+    }
+    
+    [self.delegate slideMenuHeightUpdated:self];
 }
 
 - (void)scrollToTop {
     NSPoint newScrollOrigin;
     
-    if ([[scrollView documentView] isFlipped]) {
+    if ([[_scrollView documentView] isFlipped]) {
         newScrollOrigin=NSMakePoint(0.0,0.0);
     } else {
-        newScrollOrigin=NSMakePoint(0.0,NSMaxY([[scrollView documentView] frame])
-                                    -NSHeight([[scrollView contentView] bounds]));
+        newScrollOrigin=NSMakePoint(0.0,NSMaxY([[_scrollView documentView] frame])
+                                    -NSHeight([[_scrollView contentView] bounds]));
     }
     
-    [[scrollView documentView] scrollPoint:newScrollOrigin];
+    [[_scrollView documentView] scrollPoint:newScrollOrigin];
 }
 
 - (void)resizeToFitSubviews:(NSView*)view {
     float width = 0;
     float height = 0;
     for(NSView *subview in view.subviews) {
+        CGRect frame = subview.frame;
+        
+        if(frame.origin.x < 0) {
+            width -= frame.origin.x;
+            frame.origin.x = 0;
+        }
+        if(frame.origin.y < 0) {
+            height -= frame.origin.y;
+            frame.origin.y = 0;
+        }
+        
         if(subview.frame.origin.x + subview.frame.size.width > width) {
             width = subview.frame.origin.x + subview.frame.size.width;
         }
@@ -81,51 +145,6 @@
     }
     
     [view setFrameSize:NSMakeSize(width, height)];
-}
-
-- (void)updateTrackingAreas {
-    if(trackingArea != nil) {
-        [self removeTrackingArea:trackingArea];
-    }
-    
-    int opts = (NSTrackingMouseEnteredAndExited | NSTrackingActiveAlways);
-    trackingArea = [[NSTrackingArea alloc] initWithRect:[self bounds] options:opts owner:self userInfo:nil];
-    [self addTrackingArea:trackingArea];
-}
-
-- (void)drawRect:(NSRect)dirtyRect {
-    [super drawRect:dirtyRect];
-    
-    if(isHighlighted) {
-        [[NSColor lightGrayColor] setFill];
-    } else {
-        [[NSColor clearColor] setFill];
-    }
-    
-    NSRectFillUsingOperation(dirtyRect, NSCompositeSourceOver);
-}
-
-- (void)mouseEntered:(NSEvent *)theEvent {
-    isHighlighted = YES;
-    [self setNeedsDisplay:YES];
-    NSLog(@"entered");
-}
-
-- (void)mouseExited:(NSEvent *)theEvent {
-    isHighlighted = NO;
-    [self setNeedsDisplay:YES];
-    NSLog(@"exited");
-}
-
-- (void)mouseDown:(NSEvent *)theEvent {
-    NSLog(@"down");
-}
-
-- (void)mouseUp:(NSEvent *)theEvent {
-    NSLog(@"up");
-    if(isHighlighted) {
-        NSLog(@"click");
-    }
 }
 
 @end

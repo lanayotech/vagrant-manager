@@ -8,7 +8,7 @@
 #import <Cocoa/Cocoa.h>
 #import "SlideMenuView.h"
 
-@interface PopupContentViewController : NSViewController {
+@interface PopupContentViewController : NSViewController <SlideMenuDelegate> {
     PreferencesWindow *preferencesWindow;
     AboutWindow *aboutWindow;
 }
@@ -20,6 +20,9 @@
 @property (weak) IBOutlet NSButton *aboutButton;
 @property (weak) IBOutlet SlideMenuView *slideMenu;
 @property (weak) IBOutlet NSButton *refreshButton;
+
+- (void)setIsRefreshing:(BOOL)isRefreshing;
+- (void)addInstance:(VagrantInstance*)instance;
 
 - (IBAction)quitButtonClicked:(id)sender;
 - (IBAction)preferencesButtonClicked:(id)sender;

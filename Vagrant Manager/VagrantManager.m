@@ -106,6 +106,7 @@
             //instance already exists, check for changes
             int idx = (int)[_instances indexOfObject:existingInstance];
             if(instance.machines.count != existingInstance.machines.count) {
+                //different machine count for instance
                 [_instances replaceObjectAtIndex:idx withObject:instance];
                 [self.delegate vagrantManager:self instanceUpdated:existingInstance withInstance:instance];
             } else {
@@ -113,17 +114,19 @@
                     VagrantMachine *existingMachine = [existingInstance getMachineWithName:machine.name];
                     
                     if(!existingMachine || ![existingMachine.stateString isEqualToString:machine.stateString]) {
+                        //machine did not exist, or state has changed
                         [_instances replaceObjectAtIndex:idx withObject:instance];
                         [self.delegate vagrantManager:self instanceUpdated:existingInstance withInstance:instance];
                     }
                 }
             }
         } else {
-            //new instance, add to list
+            //new instance
             [_instances addObject:instance];
             [self.delegate vagrantManager:self instanceAdded:instance];
         }
         
+        //add path to list for pruning stale instances
         [validPaths addObject:instance.path];
     }
     
@@ -132,6 +135,8 @@
         if(![validPaths containsObject:instance.path]) {
             [_instances removeObjectAtIndex:i];
             [self.delegate vagrantManager:self instanceRemoved:instance];
+            
+            //TODO: "last seen" functionality may have to be implemented here as well so that this instance doesn't disappear from the list during this pass
         }
     }
 }

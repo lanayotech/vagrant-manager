@@ -67,6 +67,7 @@
     //create popup and status menu item
     _popupContentViewController = [[PopupContentViewController alloc] initWithNibName:@"PopupContentViewController" bundle:nil];
     statusItemPopup = [[AXStatusItemPopup alloc] initWithViewController:_popupContentViewController image:[self getThemedImage:@"vagrant_logo_off"] alternateImage:[self getThemedImage:@"vagrant_logo_highlighted"]];
+    statusItemPopup.animated = NO;
     _popupContentViewController.statusItemPopup = statusItemPopup;
     
     //create vagrant manager
@@ -79,24 +80,41 @@
     for(Bookmark *bookmark in bookmarks) {
         [_manager addBookmarkWithPath:bookmark.path displayName:bookmark.displayName];
     }
-    [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(refreshVagrantMachines) userInfo:nil repeats:NO];
+    
+    //initialize updates
+    [[SUUpdater sharedUpdater] setDelegate:self];
+    [[SUUpdater sharedUpdater] setSendsSystemProfile:[Util shouldSendProfileData]];
+    [[SUUpdater sharedUpdater] checkForUpdateInformation];
+    
+    //start initial vagrant machine detection
+    [self refreshVagrantMachines];
 }
 
+/**
+ Refresh list of vagrant machines
+ */
 - (void)refreshVagrantMachines {
+    //only run if not already refreshing
     if(!isRefreshingVagrantMachines) {
         isRefreshingVagrantMachines = YES;
-        [_popupContentViewController.refreshButton setEnabled:NO];
+        //tell popup controller refreshing has started
+        [_popupContentViewController setIsRefreshing:YES];
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            //tell manager to refresh all instances
             [_manager refreshInstances];
             
             dispatch_async(dispatch_get_main_queue(), ^{
-                [_popupContentViewController.refreshButton setEnabled:YES];
+                //tell popup controller refreshing has ended
                 isRefreshingVagrantMachines = NO;
+                [_popupContentViewController setIsRefreshing:NO];
             });
         });
     }
 }
 
+/**
+ Load saved bookmarks from user preferences
+ */
 - (NSMutableArray*)getSavedBookmarks {
     NSMutableArray *bookmarksArray = [[NSMutableArray alloc] init];
     
@@ -116,26 +134,29 @@
     return bookmarksArray;
 }
 
-#pragma mark - Menu management
-
-- (void)rebuildPopupMenu {
-    for(VagrantInstance *instance in _manager.instances) {
-        NSLog(@"(%@) %@", instance.displayName, instance.path);
-    }
-}
-
 #pragma mark - Vagrant Manager delegates
 
+/**
+ This is called when a new instance is added to the manager
+ */
 - (void)vagrantManager:(VagrantManager *)vagrantManger instanceAdded:(VagrantInstance *)instance {
-    NSLog(@"ADDED: (%@) %@", instance.displayName, instance.path);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [_popupContentViewController addInstance:instance];
+    });
 }
 
+/**
+ This is called when an instance is removed from the manager
+ */
 - (void)vagrantManager:(VagrantManager *)vagrantManger instanceRemoved:(VagrantInstance *)instance {
-    NSLog(@"REMOVED: (%@) %@", instance.displayName, instance.path);
+    //TODO: remove instance from menu
 }
 
+/**
+ This is called when an instance has been updated in the manager
+ */
 - (void)vagrantManager:(VagrantManager *)vagrantManger instanceUpdated:(VagrantInstance *)oldInstance withInstance:(VagrantInstance *)newInstance {
-    NSLog(@"UPDATED: (%@) %@", newInstance.displayName, newInstance.path);
+    //TODO: update instance in menu
 }
 
 /*
@@ -1025,11 +1046,11 @@
 }
 
 - (void)updater:(SUUpdater *)updater didFindValidUpdate:(SUAppcastItem *)update {
-    [self updateCheckUpdatesIcon:YES];
+    //TODO: indicate that there are updates available
 }
 
 - (void)updaterDidNotFindUpdate:(SUUpdater *)update {
-    [self updateCheckUpdatesIcon:NO];
+    //TODO: indicate that there are no updates available
 }
 
 - (id<SUVersionComparison>)versionComparatorForUpdater:(SUUpdater *)updater {

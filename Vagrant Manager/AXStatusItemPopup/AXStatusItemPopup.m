@@ -73,9 +73,13 @@
         if (!_popover) {
             _popover = [[NSPopover alloc] init];
             _popover.contentViewController = _viewController;
-        }        
+        }
     }
     return self;
+}
+
+- (NSPopover*)getPopover {
+    return _popover;
 }
 
 - (void)setTitle:(NSString*)title {
