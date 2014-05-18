@@ -9,6 +9,7 @@
                 <outlet property="aboutButton" destination="EMo-g7-0TF" id="cRc-TN-nSK"/>
                 <outlet property="preferencesButton" destination="9fb-md-rcU" id="FaP-EI-a2K"/>
                 <outlet property="quitButton" destination="wgv-8S-iZg" id="Ss6-mw-epY"/>
+                <outlet property="refreshButton" destination="nIn-kp-cDC" id="Bjy-BX-aIe"/>
                 <outlet property="slideMenu" destination="CaE-m1-MHP" id="ori-m1-g6B"/>
                 <outlet property="view" destination="Hz6-mo-xeY" id="0bl-1N-x8E"/>
             </connections>
@@ -79,6 +80,9 @@
                         <behavior key="behavior" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
+                    <connections>
+                        <action selector="refreshButtonClicked:" target="-2" id="KBR-EX-xJZ"/>
+                    </connections>
                 </button>
                 <customView id="CaE-m1-MHP" customClass="SlideMenuView">
                     <rect key="frame" x="0.0" y="125" width="192" height="34"/>

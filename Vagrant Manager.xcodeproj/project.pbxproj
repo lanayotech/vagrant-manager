@@ -10,7 +10,6 @@
 		8308E132188662BD001E0B45 /* AboutWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 8308E130188662BD001E0B45 /* AboutWindow.m */; };
 		8308E133188662BD001E0B45 /* AboutWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8308E131188662BD001E0B45 /* AboutWindow.xib */; };
 		8308E135188668A1001E0B45 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8308E134188668A1001E0B45 /* WebKit.framework */; };
-		8308E138188678A0001E0B45 /* VirtualMachineInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 8308E137188678A0001E0B45 /* VirtualMachineInfo.m */; };
 		8308E13C18868D52001E0B45 /* VirtualMachineInfoWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 8308E13A18868D52001E0B45 /* VirtualMachineInfoWindow.m */; };
 		8308E13D18868D52001E0B45 /* VirtualMachineInfoWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8308E13B18868D52001E0B45 /* VirtualMachineInfoWindow.xib */; };
 		8308E14018869FAC001E0B45 /* Bookmark.m in Sources */ = {isa = PBXBuildFile; fileRef = 8308E13F18869FAC001E0B45 /* Bookmark.m */; };
@@ -51,6 +50,10 @@
 		83BCB0471921B1D600206967 /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 83BCB0431921B02600206967 /* Sparkle.framework */; };
 		83BCB0491921B6BF00206967 /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 83BCB0481921B6BF00206967 /* dsa_pub.pem */; };
 		83DB6731192885090008CB57 /* AXTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 83DB6730192885090008CB57 /* AXTextView.m */; };
+		83DB673719288DD90008CB57 /* VagrantInstance.m in Sources */ = {isa = PBXBuildFile; fileRef = 83DB673619288DD90008CB57 /* VagrantInstance.m */; };
+		83DB673A1928AC0C0008CB57 /* VagrantMachine.m in Sources */ = {isa = PBXBuildFile; fileRef = 83DB67391928AC0C0008CB57 /* VagrantMachine.m */; };
+		83DB673D1928B3510008CB57 /* VagrantManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 83DB673C1928B3510008CB57 /* VagrantManager.m */; };
+		83E7CAB41928C2E9001C86F6 /* VirtualMachineInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 83E7CAB31928C2E9001C86F6 /* VirtualMachineInfo.m */; };
 		83EAC43518D05E9300FF26A1 /* AddBookmarkWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 83EAC43318D05E9300FF26A1 /* AddBookmarkWindow.m */; };
 		83EAC43618D05E9300FF26A1 /* AddBookmarkWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 83EAC43418D05E9300FF26A1 /* AddBookmarkWindow.xib */; };
 		83EAC43A18D067C900FF26A1 /* vagrant_logo_highlighted-clean.png in Resources */ = {isa = PBXBuildFile; fileRef = 83EAC43718D067C900FF26A1 /* vagrant_logo_highlighted-clean.png */; };
@@ -126,8 +129,6 @@
 		8308E130188662BD001E0B45 /* AboutWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AboutWindow.m; sourceTree = "<group>"; };
 		8308E131188662BD001E0B45 /* AboutWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AboutWindow.xib; sourceTree = "<group>"; };
 		8308E134188668A1001E0B45 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
-		8308E136188678A0001E0B45 /* VirtualMachineInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VirtualMachineInfo.h; sourceTree = "<group>"; };
-		8308E137188678A0001E0B45 /* VirtualMachineInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VirtualMachineInfo.m; sourceTree = "<group>"; };
 		8308E13918868D52001E0B45 /* VirtualMachineInfoWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VirtualMachineInfoWindow.h; sourceTree = "<group>"; };
 		8308E13A18868D52001E0B45 /* VirtualMachineInfoWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VirtualMachineInfoWindow.m; sourceTree = "<group>"; };
 		8308E13B18868D52001E0B45 /* VirtualMachineInfoWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VirtualMachineInfoWindow.xib; sourceTree = "<group>"; };
@@ -177,6 +178,14 @@
 		83BCB0481921B6BF00206967 /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dsa_pub.pem; sourceTree = "<group>"; };
 		83DB672F192885090008CB57 /* AXTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AXTextView.h; sourceTree = "<group>"; };
 		83DB6730192885090008CB57 /* AXTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AXTextView.m; sourceTree = "<group>"; };
+		83DB673519288DD90008CB57 /* VagrantInstance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VagrantInstance.h; sourceTree = "<group>"; };
+		83DB673619288DD90008CB57 /* VagrantInstance.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VagrantInstance.m; sourceTree = "<group>"; };
+		83DB67381928AC0C0008CB57 /* VagrantMachine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VagrantMachine.h; sourceTree = "<group>"; };
+		83DB67391928AC0C0008CB57 /* VagrantMachine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VagrantMachine.m; sourceTree = "<group>"; };
+		83DB673B1928B3510008CB57 /* VagrantManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VagrantManager.h; sourceTree = "<group>"; };
+		83DB673C1928B3510008CB57 /* VagrantManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VagrantManager.m; sourceTree = "<group>"; };
+		83E7CAB21928C2E9001C86F6 /* VirtualMachineInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VirtualMachineInfo.h; sourceTree = "<group>"; };
+		83E7CAB31928C2E9001C86F6 /* VirtualMachineInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VirtualMachineInfo.m; sourceTree = "<group>"; };
 		83EAC43218D05E9300FF26A1 /* AddBookmarkWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddBookmarkWindow.h; sourceTree = "<group>"; };
 		83EAC43318D05E9300FF26A1 /* AddBookmarkWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddBookmarkWindow.m; sourceTree = "<group>"; };
 		83EAC43418D05E9300FF26A1 /* AddBookmarkWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AddBookmarkWindow.xib; sourceTree = "<group>"; };
@@ -367,8 +376,8 @@
 		838A111A18839E1100A5E6DB /* Data */ = {
 			isa = PBXGroup;
 			children = (
-				8308E136188678A0001E0B45 /* VirtualMachineInfo.h */,
-				8308E137188678A0001E0B45 /* VirtualMachineInfo.m */,
+				83E7CAB21928C2E9001C86F6 /* VirtualMachineInfo.h */,
+				83E7CAB31928C2E9001C86F6 /* VirtualMachineInfo.m */,
 				B13DC35E19233051002E5A50 /* VirtualBoxMachineInfo.h */,
 				B13DC35F19233051002E5A50 /* VirtualBoxMachineInfo.m */,
 				8308E13E18869FAC001E0B45 /* Bookmark.h */,
@@ -376,6 +385,12 @@
 				B13DC35919232782002E5A50 /* VirtualBoxServiceProvider.h */,
 				B13DC35A19232782002E5A50 /* VirtualBoxServiceProvider.m */,
 				B1A5DE7D192354E900AF0CA5 /* VirtualMachineServiceProvider.h */,
+				83DB673519288DD90008CB57 /* VagrantInstance.h */,
+				83DB673619288DD90008CB57 /* VagrantInstance.m */,
+				83DB67381928AC0C0008CB57 /* VagrantMachine.h */,
+				83DB67391928AC0C0008CB57 /* VagrantMachine.m */,
+				83DB673B1928B3510008CB57 /* VagrantManager.h */,
+				83DB673C1928B3510008CB57 /* VagrantManager.m */,
 			);
 			name = Data;
 			sourceTree = "<group>";
@@ -618,14 +633,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83DB673719288DD90008CB57 /* VagrantInstance.m in Sources */,
+				83E7CAB41928C2E9001C86F6 /* VirtualMachineInfo.m in Sources */,
+				83DB673A1928AC0C0008CB57 /* VagrantMachine.m in Sources */,
 				83EAC43518D05E9300FF26A1 /* AddBookmarkWindow.m in Sources */,
 				B1357A84187CEB3B00811CBC /* AppDelegate.m in Sources */,
 				8372139519274E870052206D /* SlideMenuView.m in Sources */,
 				8360A05A18C2B39B002EA89B /* Environment.m in Sources */,
 				8308E13C18868D52001E0B45 /* VirtualMachineInfoWindow.m in Sources */,
-				8308E138188678A0001E0B45 /* VirtualMachineInfo.m in Sources */,
 				8372138A19272CB00052206D /* PopupContentViewController.m in Sources */,
 				8308E14018869FAC001E0B45 /* Bookmark.m in Sources */,
+				83DB673D1928B3510008CB57 /* VagrantManager.m in Sources */,
 				8308E132188662BD001E0B45 /* AboutWindow.m in Sources */,
 				8372138619272A5E0052206D /* AXStatusItemPopup.m in Sources */,
 				83DB6731192885090008CB57 /* AXTextView.m in Sources */,

@@ -69,6 +69,11 @@
         
         _active = NO;
         _animated = YES;
+        
+        if (!_popover) {
+            _popover = [[NSPopover alloc] init];
+            _popover.contentViewController = _viewController;
+        }        
     }
     return self;
 }
@@ -193,11 +198,6 @@
 - (void)showPopoverAnimated:(BOOL)animated
 {
     self.active = YES;
-    
-    if (!_popover) {
-        _popover = [[NSPopover alloc] init];
-        _popover.contentViewController = _viewController;
-    }
     
     if (!_popover.isShown) {
         _popover.animates = animated;

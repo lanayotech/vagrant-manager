@@ -63,7 +63,7 @@
         self.stateTextField.stringValue = self.machine.stateString;
     } else {
         self.osTextField.stringValue = @"N/A";
-        self.uuidTextField.stringValue = self.bookmark.uuid ?: @"N/A";
+        //self.uuidTextField.stringValue = self.bookmark.uuid ?: @"N/A";
         self.stateTextField.stringValue = @"N/A";
     }
     

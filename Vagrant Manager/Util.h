@@ -12,6 +12,7 @@
 
 + (AppDelegate*)getApp;
 + (NSString*)escapeShellArg:(NSString*)arg;
++ (NSString*)trimTrailingSlash:(NSString*)path;
 + (NSComparisonResult)compareVersion:(NSString*)version1 toVersion:(NSString*)version2;
 + (void)redirectConsoleLogToDocumentFolder;
 + (void)log:(NSObject*)message;

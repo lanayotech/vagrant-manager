@@ -16,17 +16,19 @@
 #import "AXStatusItemPopup/AXStatusItemPopup.h"
 #include <Sparkle/Sparkle.h>
 #import "PopupContentViewController.h"
+#import "VagrantManager.h"
 
 #define MENU_ITEM_BOOKMARKED_VM 1
 #define MENU_ITEM_DETECTED_VM   2
 
-@interface AppDelegate : NSObject <NSApplicationDelegate, NSMenuDelegate> {
+@interface AppDelegate : NSObject <NSApplicationDelegate, NSMenuDelegate, VagrantManagerDelegate> {
+    AXStatusItemPopup *statusItemPopup;
+    /*
     enum MenuItemType : NSUInteger {
         MenuItemBookmarked = 1,
         MenuItemDetected
     };
     
-    AXStatusItemPopup *statusItemPopup;
 
     IBOutlet NSMenu *statusMenu;
     IBOutlet NSMenu *statusSubMenuTemplate;
@@ -55,10 +57,18 @@
     AboutWindow *aboutWindow;
     PreferencesWindow *preferencesWindow;
     AddBookmarkWindow *addBookmarkWindow;
+     */
 }
 
 @property (assign) IBOutlet NSWindow *window;
+
 @property (weak) IBOutlet NSMenu *windowMenu;
+
+- (void)refreshVagrantMachines;
+
+
+
+
 
 - (void)removeOutputWindow:(TaskOutputWindow*)outputWindow;
 - (void)removeInfoWindow:(VirtualMachineInfoWindow*)infoWindow;
@@ -73,5 +83,6 @@
 
 - (Bookmark*)getBookmarkById:(NSString*)uuid;
 - (NSMutableDictionary*)getServiceProviders;
+
 
 @end

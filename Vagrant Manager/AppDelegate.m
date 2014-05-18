@@ -8,6 +8,7 @@
 #import "AppDelegate.h"
 #import "Environment.h"
 #import "VersionComparison.h"
+#import "VagrantInstance.h"
 
 #define MENU_ITEM_VAGRANT_SSH 7
 #define MENU_ITEM_VAGRANT_UP 1
@@ -22,28 +23,28 @@
 #define MENU_ITEM_ADD_BOOKMARK 5
 #define MENU_ITEM_REMOVE_BOOKMARK 6
 
-@implementation AppDelegate
+@implementation AppDelegate {
+    BOOL isRefreshingVagrantMachines;
+    
+    VagrantManager *_manager;
+    PopupContentViewController *_popupContentViewController;
+}
 
 #pragma mark - Application events
-
+/*
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     //initialize data
     taskOutputWindows = [[NSMutableArray alloc] init];
     infoWindows = [[NSMutableArray alloc] init];
     detectedVagrantMachines = [[NSMutableArray alloc] init];
-    bookmarks = [self getSavedBookmarks];
+    //bookmarks = [self getSavedBookmarks];
 
     //initialize service providers
     serviceProviders = [[NSMutableDictionary alloc] init];
     [serviceProviders setObject:[[VirtualBoxServiceProvider alloc] init] forKey:@"VirtualBoxServiceProvider"];
 
-    for(Bookmark *bookmark in bookmarks) {
-        [bookmark loadId];
-    }
-    
     [self rebuildPopupMenu];
 
-    /*
     //create status bar menu item
     statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength];
     [statusItem setImage:[self getThemedImage:@"vagrant_logo_off"]];
@@ -59,23 +60,85 @@
     [[SUUpdater sharedUpdater] setDelegate:self];
     [[SUUpdater sharedUpdater] setSendsSystemProfile:[Util shouldSendProfileData]];
     [[SUUpdater sharedUpdater] checkForUpdateInformation];
-     */
+}
+*/
+
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+    //create popup and status menu item
+    _popupContentViewController = [[PopupContentViewController alloc] initWithNibName:@"PopupContentViewController" bundle:nil];
+    statusItemPopup = [[AXStatusItemPopup alloc] initWithViewController:_popupContentViewController image:[self getThemedImage:@"vagrant_logo_off"] alternateImage:[self getThemedImage:@"vagrant_logo_highlighted"]];
+    _popupContentViewController.statusItemPopup = statusItemPopup;
     
-    PopupContentViewController *popupContentViewController = [[PopupContentViewController alloc] initWithNibName:@"PopupContentViewController" bundle:nil];
+    //create vagrant manager
+    _manager = [[VagrantManager alloc] init];
+    _manager.delegate = self;
+    [_manager addServiceProvider:[[VirtualBoxServiceProvider alloc] init]];
     
-    statusItemPopup = [[AXStatusItemPopup alloc] initWithViewController:popupContentViewController image:[self getThemedImage:@"vagrant_logo_off"] alternateImage:[self getThemedImage:@"vagrant_logo_highlighted"]];
-    
-    popupContentViewController.statusItemPopup = statusItemPopup;
-    
-    [self detectVagrantMachines];
+    //load bookmarks
+    NSArray *bookmarks = [self getSavedBookmarks];
+    for(Bookmark *bookmark in bookmarks) {
+        [_manager addBookmarkWithPath:bookmark.path displayName:bookmark.displayName];
+    }
+    [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(refreshVagrantMachines) userInfo:nil repeats:NO];
 }
 
-- (void)rebuildPopupMenu {
-    for(VirtualMachineInfo *machineInfo in detectedVagrantMachines) {
-        NSLog(@"%@", machineInfo.name);
+- (void)refreshVagrantMachines {
+    if(!isRefreshingVagrantMachines) {
+        isRefreshingVagrantMachines = YES;
+        [_popupContentViewController.refreshButton setEnabled:NO];
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            [_manager refreshInstances];
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [_popupContentViewController.refreshButton setEnabled:YES];
+                isRefreshingVagrantMachines = NO;
+            });
+        });
     }
 }
 
+- (NSMutableArray*)getSavedBookmarks {
+    NSMutableArray *bookmarksArray = [[NSMutableArray alloc] init];
+    
+    NSArray *savedBookmarks = [[NSUserDefaults standardUserDefaults] arrayForKey:@"bookmarks"];
+    if(savedBookmarks) {
+        for(NSDictionary *savedBookmark in savedBookmarks) {
+            Bookmark *bookmark = [[Bookmark alloc] init];
+            bookmark.displayName = [savedBookmark objectForKey:@"displayName"];
+            bookmark.path = [savedBookmark objectForKey:@"path"];
+            
+            if(bookmark.displayName && bookmark.path) {
+                [bookmarksArray addObject:bookmark];
+            }
+        }
+    }
+    
+    return bookmarksArray;
+}
+
+#pragma mark - Menu management
+
+- (void)rebuildPopupMenu {
+    for(VagrantInstance *instance in _manager.instances) {
+        NSLog(@"(%@) %@", instance.displayName, instance.path);
+    }
+}
+
+#pragma mark - Vagrant Manager delegates
+
+- (void)vagrantManager:(VagrantManager *)vagrantManger instanceAdded:(VagrantInstance *)instance {
+    NSLog(@"ADDED: (%@) %@", instance.displayName, instance.path);
+}
+
+- (void)vagrantManager:(VagrantManager *)vagrantManger instanceRemoved:(VagrantInstance *)instance {
+    NSLog(@"REMOVED: (%@) %@", instance.displayName, instance.path);
+}
+
+- (void)vagrantManager:(VagrantManager *)vagrantManger instanceUpdated:(VagrantInstance *)oldInstance withInstance:(VagrantInstance *)newInstance {
+    NSLog(@"UPDATED: (%@) %@", newInstance.displayName, newInstance.path);
+}
+
+/*
 - (void)menuWillOpen:(NSMenu *)menu {
     if(menu == statusMenu) {
         @synchronized(detectedVagrantMachines) {
@@ -565,11 +628,13 @@
     [self updateRunningVmCount];
     [statusItem setAlternateImage:[self getThemedImage:@"vagrant_logo_highlighted"]];
 }
+*/
 
 - (NSImage*)getThemedImage:(NSString*)imageName {
     return [NSImage imageNamed:[NSString stringWithFormat:@"%@-%@", imageName, [self getCurrentTheme]]];
 }
 
+/*
 - (void)removeDetectedMenuItems {
     while(true) {
         NSMenuItem *i = [statusMenu itemWithTag:MenuItemDetected];
@@ -830,6 +895,7 @@
 - (void)removeInfoWindow:(VirtualMachineInfoWindow*)infoWindow {
     [infoWindows removeObject:infoWindow];
 }
+*/
 
 - (NSString*)getCurrentTheme {
     NSString *theme = [[NSUserDefaults standardUserDefaults] objectForKey:@"statusBarIconTheme"];
@@ -848,6 +914,8 @@
 
     return theme;
 }
+
+/*
 
 #pragma mark - Virtual Machines
 
@@ -921,14 +989,6 @@
         [bookmark loadId];
     }
 
-    /*
-    NSMenuItem *i = [[NSMenuItem alloc] init];
-    [i setTitle:@"Refreshing..."];
-    [i setEnabled:NO];
-    [i setTag:MenuItemDetected];
-    [statusMenu insertItem:i atIndex:[statusMenu indexOfItem:refreshDetectedMenuItem]];
-    */
-
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSMutableArray *vagrantMachines = [[NSMutableArray alloc] init];
 
@@ -948,6 +1008,8 @@
         });
     });
 }
+
+*/
 
 #pragma mark - Sparkle updater delegates
 

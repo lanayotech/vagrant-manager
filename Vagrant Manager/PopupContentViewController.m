@@ -43,4 +43,8 @@
     [self.statusItemPopup hidePopover];    
 }
 
+- (IBAction)refreshButtonClicked:(id)sender {
+    [[Util getApp] refreshVagrantMachines];
+}
+
 @end

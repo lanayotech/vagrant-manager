@@ -10,6 +10,4 @@
 
 @interface VirtualBoxServiceProvider : NSObject <VirtualMachineServiceProvider>
 
-- (VirtualBoxMachineInfo*)getVagrantMachineInfo :(NSString*)uuid :(NSString*)NFSPath;
-
 @end

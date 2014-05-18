@@ -19,9 +19,11 @@
 @property (weak) IBOutlet NSButton *preferencesButton;
 @property (weak) IBOutlet NSButton *aboutButton;
 @property (weak) IBOutlet SlideMenuView *slideMenu;
+@property (weak) IBOutlet NSButton *refreshButton;
 
 - (IBAction)quitButtonClicked:(id)sender;
 - (IBAction)preferencesButtonClicked:(id)sender;
 - (IBAction)aboutButtonClicked:(id)sender;
+- (IBAction)refreshButtonClicked:(id)sender;
 
 @end

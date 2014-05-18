@@ -5,10 +5,17 @@
 //  Copyright (c) 2014 Lanayo. All rights reserved.
 //
 
-#import "VirtualMachineInfo.h"
+@interface VirtualBoxMachineInfo : NSObject
 
-@interface VirtualBoxMachineInfo : VirtualMachineInfo
+@property (strong, nonatomic) NSString *uuid;
+@property (strong, nonatomic) NSString *stateString;
+@property (strong, nonatomic) NSString *name;
+@property (strong, nonatomic) NSString *os;
+@property (strong, nonatomic) NSDictionary *sharedFolders;
+@property (strong, nonatomic) NSDictionary *properties;
 
-+ (VirtualBoxMachineInfo*)initWithInfo:(NSString*)infoString :(id<VirtualMachineServiceProvider>)provider;
++ (VirtualBoxMachineInfo*)initWithInfo:(NSString*)infoString;
+
+- (NSString*)getSharedFolderPathWithName:(NSString*)name;
 
 @end
