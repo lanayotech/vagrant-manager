@@ -13,7 +13,9 @@
 #import "VirtualMachineInfoWindow.h"
 #import "VirtualBoxMachineInfo.h"
 #import "VirtualBoxServiceProvider.h"
+#import "AXStatusItemPopup/AXStatusItemPopup.h"
 #include <Sparkle/Sparkle.h>
+#import "PopupContentViewController.h"
 
 #define MENU_ITEM_BOOKMARKED_VM 1
 #define MENU_ITEM_DETECTED_VM   2
@@ -23,6 +25,8 @@
         MenuItemBookmarked = 1,
         MenuItemDetected
     };
+    
+    AXStatusItemPopup *statusItemPopup;
 
     IBOutlet NSMenu *statusMenu;
     IBOutlet NSMenu *statusSubMenuTemplate;

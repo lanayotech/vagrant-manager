@@ -40,7 +40,10 @@
     for(Bookmark *bookmark in bookmarks) {
         [bookmark loadId];
     }
+    
+    [self rebuildPopupMenu];
 
+    /*
     //create status bar menu item
     statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength];
     [statusItem setImage:[self getThemedImage:@"vagrant_logo_off"]];
@@ -56,6 +59,21 @@
     [[SUUpdater sharedUpdater] setDelegate:self];
     [[SUUpdater sharedUpdater] setSendsSystemProfile:[Util shouldSendProfileData]];
     [[SUUpdater sharedUpdater] checkForUpdateInformation];
+     */
+    
+    PopupContentViewController *popupContentViewController = [[PopupContentViewController alloc] initWithNibName:@"PopupContentViewController" bundle:nil];
+    
+    statusItemPopup = [[AXStatusItemPopup alloc] initWithViewController:popupContentViewController image:[self getThemedImage:@"vagrant_logo_off"] alternateImage:[self getThemedImage:@"vagrant_logo_highlighted"]];
+    
+    popupContentViewController.statusItemPopup = statusItemPopup;
+    
+    [self detectVagrantMachines];
+}
+
+- (void)rebuildPopupMenu {
+    for(VirtualMachineInfo *machineInfo in detectedVagrantMachines) {
+        NSLog(@"%@", machineInfo.name);
+    }
 }
 
 - (void)menuWillOpen:(NSMenu *)menu {
@@ -899,17 +917,17 @@
 }
 
 - (void)detectVagrantMachines {
-    [self removeDetectedMenuItems];
-
     for(Bookmark *bookmark in bookmarks) {
         [bookmark loadId];
     }
 
+    /*
     NSMenuItem *i = [[NSMenuItem alloc] init];
     [i setTitle:@"Refreshing..."];
     [i setEnabled:NO];
     [i setTag:MenuItemDetected];
     [statusMenu insertItem:i atIndex:[statusMenu indexOfItem:refreshDetectedMenuItem]];
+    */
 
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSMutableArray *vagrantMachines = [[NSMutableArray alloc] init];
@@ -926,7 +944,7 @@
         }
 
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self rebuildMenu:YES];
+            [self rebuildPopupMenu];
         });
     });
 }

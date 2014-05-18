@@ -28,10 +28,10 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <scrollView autohidesScrollers="YES" horizontalLineScroll="24" horizontalPageScroll="10" verticalLineScroll="24" verticalPageScroll="10" usesPredominantAxisScrolling="NO" id="jEU-0j-S2G">
-                        <rect key="frame" x="20" y="58" width="514" height="261.0000096490603"/>
+                        <rect key="frame" x="20" y="58" width="514" height="261.00000859951166"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
                         <clipView key="contentView" id="oL6-sq-NrP">
-                            <rect key="frame" x="1" y="17.000009649060303" width="512" height="243"/>
+                            <rect key="frame" x="1" y="17.000008599511602" width="512" height="243"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="22" headerView="LJT-NO-8nt" id="3jZ-15-LLP">
