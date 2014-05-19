@@ -81,6 +81,7 @@
         
         NSAttributedString *string = [[NSAttributedString alloc] initWithString:item.nameTextField.stringValue attributes:@{NSFontAttributeName: item.nameTextField.font}];
         CGRect rect = [string boundingRectWithSize:(CGSize){CGFLOAT_MAX, item.nameTextField.frame.size.height} options:0];
+        //not sure why the extra 36 is needed, it seem to be missing 18 of the width for some reason, and then I added some padding
         float itemWidth = ceil(item.nameTextField.frame.origin.x + rect.size.width + 36);
         
         if(itemWidth > width) {
@@ -93,6 +94,7 @@
     [_scrollDocumentView setFrameSize:CGSizeMake(width, height)];
     
     float maxHeight = [[NSScreen mainScreen] frame].size.height - [NSStatusBar systemStatusBar].thickness - 60;
+    maxHeight = 200;
     
     float outerHeight = MIN(maxHeight, height);
     CGRect frame = self.frame;
