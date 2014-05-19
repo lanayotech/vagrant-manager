@@ -29,8 +29,10 @@
 - (void)loadView {
     [super loadView];
     
-    [self.refreshButton setEnabled:!_isRefreshing];
     self.slideMenu.delegate = self;
+    [self.moreUpIndicator setHidden:YES];
+    [self.moreDownIndicator setHidden:YES];
+    [self setIsRefreshing:_isRefreshing];
     
     for(VagrantInstance *instance in _vagrantInstances) {
         [self.slideMenu addInstance:instance];
@@ -43,6 +45,12 @@
     _isRefreshing = isRefreshing;
     
     [self.refreshButton setEnabled:!isRefreshing];
+    [self.refreshButton setHidden:isRefreshing];
+    if(isRefreshing) {
+        [self.refreshingIndicator startAnimation:self];
+    } else {
+        [self.refreshingIndicator stopAnimation:self];
+    }
 }
 
 #pragma mark - Menu management
@@ -59,12 +67,16 @@
     
     CGRect frame = self.view.frame;
     frame.size.height = slideMenuView.frame.size.height + gap;
+    frame.size.width = slideMenuView.frame.size.width - 16;
     [[self.statusItemPopup getPopover] setContentSize:frame.size];
     self.view.frame = frame;
     
     frame = slideMenuView.frame;
     frame.origin.y = 0;
     slideMenuView.frame = frame;
+    
+    [self.moreUpIndicator setHidden:![slideMenuView hasMoreUp]];
+    [self.moreDownIndicator setHidden:![slideMenuView hasMoreDown]];
 }
 
 #pragma mark - Button handlers

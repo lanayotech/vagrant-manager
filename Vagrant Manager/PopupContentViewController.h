@@ -20,6 +20,9 @@
 @property (weak) IBOutlet NSButton *aboutButton;
 @property (weak) IBOutlet SlideMenuView *slideMenu;
 @property (weak) IBOutlet NSButton *refreshButton;
+@property (weak) IBOutlet NSImageView *moreUpIndicator;
+@property (weak) IBOutlet NSImageView *moreDownIndicator;
+@property (weak) IBOutlet NSProgressIndicator *refreshingIndicator;
 
 - (void)setIsRefreshing:(BOOL)isRefreshing;
 - (void)addInstance:(VagrantInstance*)instance;

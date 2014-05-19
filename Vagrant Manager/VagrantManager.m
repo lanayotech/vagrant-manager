@@ -77,9 +77,6 @@
 
     //create instance for each bookmark
     for(Bookmark *bookmark in _bookmarks) {
-        VagrantInstance *instance = [[VagrantInstance alloc] initWithPath:bookmark.path displayName:bookmark.displayName];
-        [_instances addObject:instance];
-        [self.delegate vagrantManager:self instanceAdded:instance];
         [instances addObject:[[VagrantInstance alloc] initWithPath:bookmark.path displayName:bookmark.displayName]];
     }
     
@@ -96,39 +93,48 @@
     
     NSMutableArray *validPaths = [[NSMutableArray alloc] init];
     
-    //handle all known instances
+    //handle all known instances, process in parallel
+    dispatch_group_t queryMachinesGroup = dispatch_group_create();
+    dispatch_queue_t queryMachinesQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     for(VagrantInstance *instance in instances) {
-        //query instance machines
-        [instance queryMachines];
-        
-        VagrantInstance *existingInstance = [self getInstanceForPath:instance.path];
-        if(existingInstance) {
-            //instance already exists, check for changes
-            int idx = (int)[_instances indexOfObject:existingInstance];
-            if(instance.machines.count != existingInstance.machines.count) {
-                //different machine count for instance
-                [_instances replaceObjectAtIndex:idx withObject:instance];
-                [self.delegate vagrantManager:self instanceUpdated:existingInstance withInstance:instance];
-            } else {
-                for(VagrantMachine *machine in instance.machines) {
-                    VagrantMachine *existingMachine = [existingInstance getMachineWithName:machine.name];
-                    
-                    if(!existingMachine || ![existingMachine.stateString isEqualToString:machine.stateString]) {
-                        //machine did not exist, or state has changed
+        dispatch_group_async(queryMachinesGroup, queryMachinesQueue, ^{
+            //query instance machines
+            [instance queryMachines];
+            
+            @synchronized(_instances) {
+                VagrantInstance *existingInstance = [self getInstanceForPath:instance.path];
+                if(existingInstance) {
+                    //instance already exists, check for changes
+                    int idx = (int)[_instances indexOfObject:existingInstance];
+                    if(instance.machines.count != existingInstance.machines.count) {
+                        //different machine count for instance
                         [_instances replaceObjectAtIndex:idx withObject:instance];
                         [self.delegate vagrantManager:self instanceUpdated:existingInstance withInstance:instance];
+                    } else {
+                        for(VagrantMachine *machine in instance.machines) {
+                            VagrantMachine *existingMachine = [existingInstance getMachineWithName:machine.name];
+                            
+                            if(!existingMachine || ![existingMachine.stateString isEqualToString:machine.stateString]) {
+                                //machine did not exist, or state has changed
+                                [_instances replaceObjectAtIndex:idx withObject:instance];
+                                [self.delegate vagrantManager:self instanceUpdated:existingInstance withInstance:instance];
+                            }
+                        }
                     }
+                } else {
+                    //new instance
+                    [_instances addObject:instance];
+                    [self.delegate vagrantManager:self instanceAdded:instance];
                 }
+                
+                //add path to list for pruning stale instances
+                [validPaths addObject:instance.path];
             }
-        } else {
-            //new instance
-            [_instances addObject:instance];
-            [self.delegate vagrantManager:self instanceAdded:instance];
-        }
-        
-        //add path to list for pruning stale instances
-        [validPaths addObject:instance.path];
+        });
     }
+    
+    // you can do this to synchronously wait on the current thread:
+    dispatch_group_wait(queryMachinesGroup, DISPATCH_TIME_FOREVER);
     
     for(int i=(int)_instances.count-1; i>=0; --i) {
         VagrantInstance *instance = [_instances objectAtIndex:i];

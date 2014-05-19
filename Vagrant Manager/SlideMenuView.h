@@ -21,6 +21,9 @@
 
 @property (weak) id<SlideMenuDelegate> delegate;
 
+- (BOOL)hasMoreUp;
+- (BOOL)hasMoreDown;
+
 - (void)addInstance:(VagrantInstance*)instance;
 
 @end

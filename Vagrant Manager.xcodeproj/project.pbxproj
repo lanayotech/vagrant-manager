@@ -59,6 +59,8 @@
 		83E7CABF1929081D001C86F6 /* ClickableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 83E7CABE1929081D001C86F6 /* ClickableView.m */; };
 		83E7CAC219290A89001C86F6 /* arrow-down.png in Resources */ = {isa = PBXBuildFile; fileRef = 83E7CAC019290A89001C86F6 /* arrow-down.png */; };
 		83E7CAC319290A89001C86F6 /* arrow-down@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 83E7CAC119290A89001C86F6 /* arrow-down@2x.png */; };
+		83E7CAC61929F135001C86F6 /* arrow-up@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 83E7CAC41929F135001C86F6 /* arrow-up@2x.png */; };
+		83E7CAC71929F135001C86F6 /* arrow-up.png in Resources */ = {isa = PBXBuildFile; fileRef = 83E7CAC51929F135001C86F6 /* arrow-up.png */; };
 		83EAC43518D05E9300FF26A1 /* AddBookmarkWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 83EAC43318D05E9300FF26A1 /* AddBookmarkWindow.m */; };
 		83EAC43618D05E9300FF26A1 /* AddBookmarkWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 83EAC43418D05E9300FF26A1 /* AddBookmarkWindow.xib */; };
 		83EAC43A18D067C900FF26A1 /* vagrant_logo_highlighted-clean.png in Resources */ = {isa = PBXBuildFile; fileRef = 83EAC43718D067C900FF26A1 /* vagrant_logo_highlighted-clean.png */; };
@@ -198,6 +200,8 @@
 		83E7CABE1929081D001C86F6 /* ClickableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ClickableView.m; sourceTree = "<group>"; };
 		83E7CAC019290A89001C86F6 /* arrow-down.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrow-down.png"; sourceTree = "<group>"; };
 		83E7CAC119290A89001C86F6 /* arrow-down@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrow-down@2x.png"; sourceTree = "<group>"; };
+		83E7CAC41929F135001C86F6 /* arrow-up@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrow-up@2x.png"; sourceTree = "<group>"; };
+		83E7CAC51929F135001C86F6 /* arrow-up.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrow-up.png"; sourceTree = "<group>"; };
 		83EAC43218D05E9300FF26A1 /* AddBookmarkWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddBookmarkWindow.h; sourceTree = "<group>"; };
 		83EAC43318D05E9300FF26A1 /* AddBookmarkWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddBookmarkWindow.m; sourceTree = "<group>"; };
 		83EAC43418D05E9300FF26A1 /* AddBookmarkWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AddBookmarkWindow.xib; sourceTree = "<group>"; };
@@ -312,6 +316,8 @@
 		838A111718839D6900A5E6DB /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				83E7CAC41929F135001C86F6 /* arrow-up@2x.png */,
+				83E7CAC51929F135001C86F6 /* arrow-up.png */,
 				83E7CAC019290A89001C86F6 /* arrow-down.png */,
 				83E7CAC119290A89001C86F6 /* arrow-down@2x.png */,
 				83721396192757EA0052206D /* Icons */,
@@ -608,6 +614,7 @@
 				B15001361924A02C000A76E7 /* suspended@2x.png in Resources */,
 				B1357A87187CEB3B00811CBC /* MainMenu.xib in Resources */,
 				83EAC43B18D067C900FF26A1 /* vagrant_logo_off-clean@2x.png in Resources */,
+				83E7CAC71929F135001C86F6 /* arrow-up.png in Resources */,
 				837213A8192758CE0052206D /* close@2x.png in Resources */,
 				83EAC43B18D067C900FF26A1 /* vagrant_logo_off-clean@2x.png in Resources */,
 				83BCB0491921B6BF00206967 /* dsa_pub.pem in Resources */,
@@ -629,6 +636,7 @@
 				B1500128192498DD000A76E7 /* vagrant_logo_highlighted-default@2x.png in Resources */,
 				B1FAFC791920B62D009F0F86 /* suspended.png in Resources */,
 				838B394018CC85BC00A04C15 /* vagrant_logo_on-flat.png in Resources */,
+				83E7CAC61929F135001C86F6 /* arrow-up@2x.png in Resources */,
 				B150013319249FFD000A76E7 /* off@2x.png in Resources */,
 				838B393F18CC85BC00A04C15 /* vagrant_logo_off-flat.png in Resources */,
 				837213A2192758020052206D /* info.png in Resources */,

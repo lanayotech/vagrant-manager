@@ -28,6 +28,9 @@
         //create scroll document view
         _scrollDocumentView = [[NSView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
         
+        [_scrollView.contentView setPostsBoundsChangedNotifications:YES];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scrollBoundsDidChange:) name:NSViewBoundsDidChangeNotification object:_scrollView.contentView];
+        
         [_scrollView setDocumentView:_scrollDocumentView];
         [self addSubview:_scrollView];
         
@@ -38,6 +41,10 @@
         _instanceMenuItems = [[NSMutableArray alloc] init];
     }
     return self;
+}
+
+- (void)scrollBoundsDidChange:(id)sender {
+    [self.delegate slideMenuHeightUpdated:self];
 }
 
 - (void)addInstance:(VagrantInstance*)instance {
@@ -68,20 +75,33 @@
 
 - (void)updateMenuHeight {
     float height = 0;
+    float width = 200;
     for(InstanceMenuItem *item in _instanceMenuItems) {
         height += item.view.frame.size.height;
+        
+        NSAttributedString *string = [[NSAttributedString alloc] initWithString:item.nameTextField.stringValue attributes:@{NSFontAttributeName: item.nameTextField.font}];
+        CGRect rect = [string boundingRectWithSize:(CGSize){CGFLOAT_MAX, item.nameTextField.frame.size.height} options:0];
+        float itemWidth = ceil(item.nameTextField.frame.origin.x + rect.size.width + 36);
+        
+        if(itemWidth > width) {
+            width = itemWidth;
+        }
     }
 
     float heightDiff = height - _scrollDocumentView.frame.size.height;
 
-    [_scrollDocumentView setFrameSize:CGSizeMake(_scrollDocumentView.frame.size.width, height)];
+    [_scrollDocumentView setFrameSize:CGSizeMake(width, height)];
     
-    float outerHeight = MIN(100, height);
+    float maxHeight = [[NSScreen mainScreen] frame].size.height - [NSStatusBar systemStatusBar].thickness - 60;
+    
+    float outerHeight = MIN(maxHeight, height);
     CGRect frame = self.frame;
     frame.size.height = outerHeight;
+    frame.size.width = width;
     self.frame = frame;
     frame = _scrollView.frame;
     frame.size.height = outerHeight;
+    frame.size.width = width;
     _scrollView.frame = frame;
     
     [_scrollView setHasVerticalScroller:_scrollDocumentView.frame.size.height > _scrollView.frame.size.height];
@@ -92,6 +112,22 @@
         scrollRect.origin.y += heightDiff;
         [[_scrollView documentView] scrollPoint:scrollRect.origin];
     }
+    
+    for(InstanceMenuItem *item in _instanceMenuItems) {
+        CGRect frame = item.view.frame;
+        frame.size.width = width;
+        item.view.frame = frame;
+    }
+}
+
+- (BOOL)hasMoreUp {
+    NSRect scrollRect = _scrollView.contentView.documentVisibleRect;
+    return scrollRect.origin.y < (_scrollDocumentView.frame.size.height - _scrollView.frame.size.height);
+}
+
+- (BOOL)hasMoreDown {
+    NSRect scrollRect = _scrollView.contentView.documentVisibleRect;
+    return scrollRect.origin.y > 0;
 }
 
 - (void)positionMenuItems {
