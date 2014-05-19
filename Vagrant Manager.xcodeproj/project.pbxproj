@@ -56,11 +56,11 @@
 		83E7CAB41928C2E9001C86F6 /* VirtualMachineInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 83E7CAB31928C2E9001C86F6 /* VirtualMachineInfo.m */; };
 		83E7CABB1928EFF6001C86F6 /* InstanceMenuItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 83E7CAB91928EFF6001C86F6 /* InstanceMenuItem.m */; };
 		83E7CABC1928EFF6001C86F6 /* InstanceMenuItem.xib in Resources */ = {isa = PBXBuildFile; fileRef = 83E7CABA1928EFF6001C86F6 /* InstanceMenuItem.xib */; };
-		83E7CABF1929081D001C86F6 /* ClickableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 83E7CABE1929081D001C86F6 /* ClickableView.m */; };
 		83E7CAC219290A89001C86F6 /* arrow-down.png in Resources */ = {isa = PBXBuildFile; fileRef = 83E7CAC019290A89001C86F6 /* arrow-down.png */; };
 		83E7CAC319290A89001C86F6 /* arrow-down@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 83E7CAC119290A89001C86F6 /* arrow-down@2x.png */; };
 		83E7CAC61929F135001C86F6 /* arrow-up@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 83E7CAC41929F135001C86F6 /* arrow-up@2x.png */; };
 		83E7CAC71929F135001C86F6 /* arrow-up.png in Resources */ = {isa = PBXBuildFile; fileRef = 83E7CAC51929F135001C86F6 /* arrow-up.png */; };
+		83E7CAD3192A1091001C86F6 /* HighlightView.m in Sources */ = {isa = PBXBuildFile; fileRef = 83E7CAD2192A1091001C86F6 /* HighlightView.m */; };
 		83EAC43518D05E9300FF26A1 /* AddBookmarkWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 83EAC43318D05E9300FF26A1 /* AddBookmarkWindow.m */; };
 		83EAC43618D05E9300FF26A1 /* AddBookmarkWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 83EAC43418D05E9300FF26A1 /* AddBookmarkWindow.xib */; };
 		83EAC43A18D067C900FF26A1 /* vagrant_logo_highlighted-clean.png in Resources */ = {isa = PBXBuildFile; fileRef = 83EAC43718D067C900FF26A1 /* vagrant_logo_highlighted-clean.png */; };
@@ -196,12 +196,12 @@
 		83E7CAB81928EFF6001C86F6 /* InstanceMenuItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InstanceMenuItem.h; sourceTree = "<group>"; };
 		83E7CAB91928EFF6001C86F6 /* InstanceMenuItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InstanceMenuItem.m; sourceTree = "<group>"; };
 		83E7CABA1928EFF6001C86F6 /* InstanceMenuItem.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = InstanceMenuItem.xib; sourceTree = "<group>"; };
-		83E7CABD1929081D001C86F6 /* ClickableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClickableView.h; sourceTree = "<group>"; };
-		83E7CABE1929081D001C86F6 /* ClickableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ClickableView.m; sourceTree = "<group>"; };
 		83E7CAC019290A89001C86F6 /* arrow-down.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrow-down.png"; sourceTree = "<group>"; };
 		83E7CAC119290A89001C86F6 /* arrow-down@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrow-down@2x.png"; sourceTree = "<group>"; };
 		83E7CAC41929F135001C86F6 /* arrow-up@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrow-up@2x.png"; sourceTree = "<group>"; };
 		83E7CAC51929F135001C86F6 /* arrow-up.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrow-up.png"; sourceTree = "<group>"; };
+		83E7CAD1192A1091001C86F6 /* HighlightView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HighlightView.h; sourceTree = "<group>"; };
+		83E7CAD2192A1091001C86F6 /* HighlightView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HighlightView.m; sourceTree = "<group>"; };
 		83EAC43218D05E9300FF26A1 /* AddBookmarkWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddBookmarkWindow.h; sourceTree = "<group>"; };
 		83EAC43318D05E9300FF26A1 /* AddBookmarkWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddBookmarkWindow.m; sourceTree = "<group>"; };
 		83EAC43418D05E9300FF26A1 /* AddBookmarkWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AddBookmarkWindow.xib; sourceTree = "<group>"; };
@@ -370,8 +370,8 @@
 				83E7CAB81928EFF6001C86F6 /* InstanceMenuItem.h */,
 				83E7CAB91928EFF6001C86F6 /* InstanceMenuItem.m */,
 				83E7CABA1928EFF6001C86F6 /* InstanceMenuItem.xib */,
-				83E7CABD1929081D001C86F6 /* ClickableView.h */,
-				83E7CABE1929081D001C86F6 /* ClickableView.m */,
+				83E7CAD1192A1091001C86F6 /* HighlightView.h */,
+				83E7CAD2192A1091001C86F6 /* HighlightView.m */,
 			);
 			name = App;
 			sourceTree = "<group>";
@@ -676,9 +676,9 @@
 				83E7CABB1928EFF6001C86F6 /* InstanceMenuItem.m in Sources */,
 				83DB673D1928B3510008CB57 /* VagrantManager.m in Sources */,
 				8308E132188662BD001E0B45 /* AboutWindow.m in Sources */,
+				83E7CAD3192A1091001C86F6 /* HighlightView.m in Sources */,
 				8372138619272A5E0052206D /* AXStatusItemPopup.m in Sources */,
 				83DB6731192885090008CB57 /* AXTextView.m in Sources */,
-				83E7CABF1929081D001C86F6 /* ClickableView.m in Sources */,
 				B13DC35B19232782002E5A50 /* VirtualBoxServiceProvider.m in Sources */,
 				837213BC192769020052206D /* MachineMenuItem.m in Sources */,
 				B13DC36019233051002E5A50 /* VirtualBoxMachineInfo.m in Sources */,

@@ -6,10 +6,13 @@
 //
 
 #import "SlideMenuView.h"
+#import "HighlightView.h";
 
 @implementation SlideMenuView {
     NSScrollView *_scrollView;
     NSView *_scrollDocumentView;
+    NSTrackingArea *_trackingArea;
+    BOOL _isTracking;
     
     NSMutableArray *_instanceMenuItems;
 }
@@ -45,6 +48,7 @@
 
 - (void)scrollBoundsDidChange:(id)sender {
     [self.delegate slideMenuHeightUpdated:self];
+    [self handleMouseMoved];
 }
 
 - (void)addInstance:(VagrantInstance*)instance {
@@ -81,7 +85,7 @@
         
         NSAttributedString *string = [[NSAttributedString alloc] initWithString:item.nameTextField.stringValue attributes:@{NSFontAttributeName: item.nameTextField.font}];
         CGRect rect = [string boundingRectWithSize:(CGSize){CGFLOAT_MAX, item.nameTextField.frame.size.height} options:0];
-        //not sure why the extra 36 is needed, it seem to be missing 18 of the width for some reason, and then I added some padding
+        //not sure why the extra 36 is needed, it seems to be missing 18 of the width for some reason (which is the same as the nameTextField x origin), and then I added some padding
         float itemWidth = ceil(item.nameTextField.frame.origin.x + rect.size.width + 36);
         
         if(itemWidth > width) {
@@ -120,6 +124,8 @@
         frame.size.width = width;
         item.view.frame = frame;
     }
+    
+    [self updateTrackingAreas];
 }
 
 - (BOOL)hasMoreUp {
@@ -183,6 +189,70 @@
     }
     
     [view setFrameSize:NSMakeSize(width, height)];
+}
+
+- (void)updateTrackingAreas {
+    if(_trackingArea != nil) {
+        [self removeTrackingArea:_trackingArea];
+    }
+    
+    int opts = (NSTrackingMouseEnteredAndExited | NSTrackingMouseMoved | NSTrackingActiveAlways | NSTrackingEnabledDuringMouseDrag);
+    _trackingArea = [[NSTrackingArea alloc] initWithRect:[self bounds] options:opts owner:self userInfo:nil];
+    [self addTrackingArea:_trackingArea];
+}
+
+- (void)startTracking {
+    _isTracking = YES;
+    [self handleMouseMoved];
+}
+
+- (void)stopTracking {
+    _isTracking = NO;
+    for(InstanceMenuItem *item in _instanceMenuItems) {
+        HighlightView *v = (HighlightView*)item.view;
+        v.backgroundColor = [NSColor clearColor];
+    }
+}
+
+- (void)handleMouseMoved {
+    if(_isTracking) {
+        NSPoint mouseLocation = [self.window convertScreenToBase:[NSEvent mouseLocation]];
+        NSPoint pointInMenu = [self convertPoint:mouseLocation toView:_scrollView.documentView];
+        //not sure why this is needed... maybe some container layout padding?
+        pointInMenu.x -= 10;
+        pointInMenu.y -= 10;
+        for(InstanceMenuItem *item in _instanceMenuItems) {
+            if([item.view hitTest:pointInMenu]) {
+                HighlightView *v = (HighlightView*)item.view;
+                v.backgroundColor = [NSColor lightGrayColor];
+            } else {
+                HighlightView *v = (HighlightView*)item.view;
+                v.backgroundColor = [NSColor clearColor];
+            }
+        }
+    }
+}
+
+- (void)mouseEntered:(NSEvent *)theEvent {
+    [self startTracking];
+}
+
+- (void)mouseMoved:(NSEvent *)theEvent {
+    [self handleMouseMoved];
+}
+
+- (void)mouseExited:(NSEvent *)theEvent {
+    [self stopTracking];
+}
+
+- (void)mouseDown:(NSEvent *)theEvent {
+}
+
+- (void)mouseUp:(NSEvent *)theEvent {
+}
+
+- (void)mouseDragged:(NSEvent *)theEvent {
+    [self handleMouseMoved];
 }
 
 @end
