@@ -6,7 +6,7 @@
 //
 
 #import "SlideMenuView.h"
-#import "HighlightView.h";
+#import "HighlightView.h"
 
 @implementation SlideMenuView {
     NSScrollView *_scrollView;
@@ -124,8 +124,6 @@
         frame.size.width = width;
         item.view.frame = frame;
     }
-    
-    [self updateTrackingAreas];
 }
 
 - (BOOL)hasMoreUp {
@@ -150,6 +148,8 @@
     }
     
     [self.delegate slideMenuHeightUpdated:self];
+    
+    [self updateTrackingAreas];
 }
 
 - (void)scrollToTop {
