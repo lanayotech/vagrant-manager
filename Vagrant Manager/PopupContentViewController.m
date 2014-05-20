@@ -67,7 +67,7 @@
     
     CGRect frame = self.view.frame;
     frame.size.height = slideMenuView.frame.size.height + gap;
-    frame.size.width = slideMenuView.frame.size.width - 16;
+    frame.size.width = slideMenuView.frame.size.width;
     [[self.statusItemPopup getPopover] setContentSize:frame.size];
     self.view.frame = frame;
     
