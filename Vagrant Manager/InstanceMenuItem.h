@@ -14,5 +14,6 @@
 
 @property (weak) IBOutlet NSImageView *stateImageView;
 @property (weak) IBOutlet NSTextField *nameTextField;
+@property BOOL hasChildren;
 
 @end

@@ -82,6 +82,9 @@
     float width = 200;
     for(InstanceMenuItem *item in _instanceMenuItems) {
         height += item.view.frame.size.height;
+        if(item.hasChildren) {
+            height += 30;
+        }
         
         NSAttributedString *string = [[NSAttributedString alloc] initWithString:item.nameTextField.stringValue attributes:@{NSFontAttributeName: item.nameTextField.font}];
         CGRect rect = [string boundingRectWithSize:(CGSize){CGFLOAT_MAX, item.nameTextField.frame.size.height} options:0];
@@ -98,13 +101,13 @@
     [_scrollDocumentView setFrameSize:CGSizeMake(width, height)];
     
     float maxHeight = [[NSScreen mainScreen] frame].size.height - [NSStatusBar systemStatusBar].thickness - 60;
-    maxHeight = 200;
     
     float outerHeight = MIN(maxHeight, height);
     CGRect frame = self.frame;
     frame.size.height = outerHeight;
     frame.size.width = width;
     self.frame = frame;
+    
     frame = _scrollView.frame;
     frame.size.height = outerHeight;
     frame.size.width = width;
@@ -144,12 +147,15 @@
         CGRect frame = item.view.frame;
         frame.origin.y = y - frame.size.height;
         y -= frame.size.height;
+        if(item.hasChildren) {
+            y-= 30;
+        }
         item.view.frame = frame;
     }
     
-    [self.delegate slideMenuHeightUpdated:self];
-    
     [self updateTrackingAreas];
+    
+    [self.delegate slideMenuHeightUpdated:self];    
 }
 
 - (void)scrollToTop {
@@ -249,6 +255,24 @@
 }
 
 - (void)mouseUp:(NSEvent *)theEvent {
+    if(_isTracking) {
+        BOOL updated = NO;
+        NSPoint mouseLocation = [self.window convertScreenToBase:[NSEvent mouseLocation]];
+        NSPoint pointInMenu = [self convertPoint:mouseLocation toView:_scrollView.documentView];
+        //not sure why this is needed... maybe some container layout padding?
+        pointInMenu.x -= 10;
+        pointInMenu.y -= 10;
+        for(InstanceMenuItem *item in _instanceMenuItems) {
+            if([item.view hitTest:pointInMenu]) {
+                item.hasChildren = !item.hasChildren;
+                updated = YES;
+            }
+        }
+        
+        if(updated) {
+            [self positionMenuItems];
+        }
+    }
 }
 
 - (void)mouseDragged:(NSEvent *)theEvent {

@@ -15,7 +15,7 @@
         <customObject id="-3" userLabel="Application"/>
         <customView id="Hz6-mo-xeY" customClass="HighlightView">
             <rect key="frame" x="0.0" y="0.0" width="205" height="20"/>
-            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
             <subviews>
                 <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" id="1B0-nI-Riu">
                     <rect key="frame" x="0.0" y="2" width="16" height="16"/>
