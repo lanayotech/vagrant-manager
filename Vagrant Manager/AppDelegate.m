@@ -275,7 +275,7 @@
     }
 }
 
-- (NSMenu*)initializeSubmenuForAllMachines: (NSMenu*)submenu {
+- (NSMenu*)initializeSubmenuForAllMachines:(NSMenu*)submenu {
 
     [submenu removeItem:[submenu itemWithTag:MENU_ITEM_VAGRANT_SSH]];
 
@@ -308,7 +308,7 @@
     return submenu;
 }
 
-- (NSMenu*)initializeSubmenuForMachine:(NSMenu*)submenu :(VirtualMachineInfo*)machine :(BOOL)pathExists :(BOOL)isBookmarkedMachine {
+- (NSMenu*)initializeSubmenu:(NSMenu*)submenu forMachine:(VirtualMachineInfo*)machine pathExists:(BOOL)pathExists vagrantFileExists:(BOOL)vagrantFileExists isBookmarkedMachine:(BOOL)isBookmarkedMachine {
     if(machine.isRunning) {
         NSMenuItem *vagrantSsh = [submenu itemWithTag:MENU_ITEM_VAGRANT_SSH];
         [vagrantSsh setAction:@selector(vagrantSshMenuItemClicked:)];
@@ -332,7 +332,11 @@
         [vagrantSsh setEnabled:NO];
 
         NSMenuItem *vagrantUp = [submenu itemWithTag:MENU_ITEM_VAGRANT_UP];
-        [vagrantUp setAction:@selector(vagrantUpMenuItemClicked:)];
+        if(vagrantFileExists) {
+            [vagrantUp setAction:@selector(vagrantUpMenuItemClicked:)];
+        } else {
+            [vagrantUp setEnabled:NO];
+        }
 
         NSMenuItem *vagrantReload = [submenu itemWithTag:MENU_ITEM_VAGRANT_RELOAD];
         [vagrantReload setEnabled:NO];
@@ -351,11 +355,19 @@
     if(!machine) {
         [vagrantDestroy setEnabled:NO];
     } else {
-        [vagrantDestroy setAction:@selector(vagrantDestroyMenuItemClicked:)];
+        if(vagrantFileExists) {
+            [vagrantDestroy setAction:@selector(vagrantDestroyMenuItemClicked:)];
+        } else {
+            [vagrantDestroy setEnabled:NO];
+        }
     }
 
     NSMenuItem *virtualMachineDetails = [submenu itemWithTag:MENU_ITEM_DETAILS];
-    [virtualMachineDetails setAction:@selector(virtualMachineDetailsMenuItemClicked:)];
+    if(vagrantFileExists) {
+        [virtualMachineDetails setAction:@selector(virtualMachineDetailsMenuItemClicked:)];
+    } else {
+        [virtualMachineDetails setEnabled:NO];
+    }
 
     NSMenuItem *openInFinder = [submenu itemWithTag:MENU_ITEM_OPEN_IN_FINDER];
     NSMenuItem *openInTerminal = [submenu itemWithTag:MENU_ITEM_OPEN_IN_TERMINAL];
@@ -425,9 +437,7 @@
 
                 [statusMenu addItem:i];
 
-                if (vagrantFileExists) {
-                    [statusMenu setSubmenu:[self initializeSubmenuForMachine:[statusSubMenuTemplate copy] :machine :pathExists :YES] forItem:i];
-                }
+                [statusMenu setSubmenu:[self initializeSubmenu:[statusSubMenuTemplate copy] forMachine:machine pathExists:pathExists vagrantFileExists:vagrantFileExists isBookmarkedMachine:YES] forItem:i];
             }
         }
 
@@ -473,8 +483,8 @@
 
             [statusMenu addItem:i];
 
-            if (vagrantFileExists) {
-                [statusMenu setSubmenu:[self initializeSubmenuForMachine:[statusSubMenuTemplate copy] :machine :pathExists :NO] forItem:i];
+            if(vagrantFileExists) {
+                [statusMenu setSubmenu:[self initializeSubmenu:[statusSubMenuTemplate copy] forMachine:machine pathExists:pathExists vagrantFileExists:vagrantFileExists isBookmarkedMachine:NO] forItem:i];
             }
         }
     }
@@ -534,14 +544,7 @@
     }
     [statusMenu addItem:quitMenuItem];
 
-    int runningCount = [self getRunningVmCount];
-    if(runningCount > 0 ) {
-        [statusItem setTitle:[NSString stringWithFormat:@"%d", runningCount]];
-        [statusItem setImage:[self getThemedImage:@"vagrant_logo_on"]];
-    } else {
-        [statusItem setTitle:@""];
-        [statusItem setImage:[self getThemedImage:@"vagrant_logo_off"]];
-    }
+    [self updateRunningVmCount];
     [statusItem setAlternateImage:[self getThemedImage:@"vagrant_logo_highlighted"]];
 }
 
@@ -570,6 +573,16 @@
 }
 
 #pragma mark - Menu Item Handlers
+- (void)updateRunningVmCount {
+    int runningCount = [self getRunningVmCount];
+    if(runningCount && ![[NSUserDefaults standardUserDefaults] boolForKey:@"dontShowRunningVmCount"]) {
+        [statusItem setTitle:[NSString stringWithFormat:@"%d", runningCount]];
+        [statusItem setImage:[self getThemedImage:@"vagrant_logo_on"]];
+    } else {
+        [statusItem setTitle:@""];
+        [statusItem setImage:[self getThemedImage:@"vagrant_logo_off"]];
+    }
+}
 
 - (IBAction)refreshDetectedMenuItemClicked:(id)sender {
     [self detectVagrantMachines];

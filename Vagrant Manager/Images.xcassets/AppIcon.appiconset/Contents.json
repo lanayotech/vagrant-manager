@@ -3,56 +3,61 @@
     {
       "size" : "16x16",
       "idiom" : "mac",
-      "filename" : "vagrant_manager_16.png",
+      "filename" : "appicon-16x16.png",
       "scale" : "1x"
     },
     {
-      "idiom" : "mac",
       "size" : "16x16",
+      "idiom" : "mac",
+      "filename" : "appicon-16x16@2x.png",
       "scale" : "2x"
     },
     {
       "size" : "32x32",
       "idiom" : "mac",
-      "filename" : "vagrant_logo_32.png",
+      "filename" : "appicon-32x32.png",
       "scale" : "1x"
     },
     {
-      "idiom" : "mac",
       "size" : "32x32",
+      "idiom" : "mac",
+      "filename" : "appicon-32x32@2x.png",
       "scale" : "2x"
     },
     {
       "size" : "128x128",
       "idiom" : "mac",
-      "filename" : "vagrant_logo_128.png",
+      "filename" : "appicon-128x128.png",
       "scale" : "1x"
     },
     {
-      "idiom" : "mac",
       "size" : "128x128",
+      "idiom" : "mac",
+      "filename" : "appicon-128x128@2x.png",
       "scale" : "2x"
     },
     {
       "size" : "256x256",
       "idiom" : "mac",
-      "filename" : "vagrant_logo_256.png",
+      "filename" : "appicon-256x256.png",
       "scale" : "1x"
     },
     {
-      "idiom" : "mac",
       "size" : "256x256",
+      "idiom" : "mac",
+      "filename" : "appicon-256x256@2x.png",
       "scale" : "2x"
     },
     {
       "size" : "512x512",
       "idiom" : "mac",
-      "filename" : "vagrant_logo_512.png",
+      "filename" : "appicon-512x512.png",
       "scale" : "1x"
     },
     {
-      "idiom" : "mac",
       "size" : "512x512",
+      "idiom" : "mac",
+      "filename" : "appicon-512x512@2x.png",
       "scale" : "2x"
     }
   ],

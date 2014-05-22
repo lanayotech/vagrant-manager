@@ -25,6 +25,7 @@
     NSString *terminalPreference = [[NSUserDefaults standardUserDefaults] stringForKey:@"terminalPreference"];
     BOOL autoCloseTaskWindows = [[NSUserDefaults standardUserDefaults] boolForKey:@"autoCloseTaskWindows"];
     BOOL dontShowUpdateNotification = [[NSUserDefaults standardUserDefaults] boolForKey:@"dontShowUpdateNotification"];
+    BOOL dontShowRunningVmCount = [[NSUserDefaults standardUserDefaults] boolForKey:@"dontShowRunningVmCount"];
     NSString *statusBarIconTheme = [[NSUserDefaults standardUserDefaults] stringForKey:@"statusBarIconTheme"];
     NSString *updateStability = [Util getUpdateStability];
     
@@ -56,6 +57,7 @@
 
     [self.autoCloseCheckBox setState:autoCloseTaskWindows ? NSOnState : NSOffState];
     [self.dontShowUpdateCheckBox setState:dontShowUpdateNotification ? NSOnState : NSOffState];
+    [self.dontShowRunningVmCountCheckBox setState:dontShowRunningVmCount ? NSOnState : NSOffState];
     [self.sendProfileDataCheckBox setState:[Util shouldSendProfileData] ? NSOnState : NSOffState];
 }
 
@@ -69,6 +71,13 @@
     [[NSUserDefaults standardUserDefaults] synchronize];
     
     [[Util getApp] updateCheckUpdatesIcon:NO];
+}
+
+- (IBAction)dontShowRunningVmCountCheckBoxClicked:(id)sender {
+    [[NSUserDefaults standardUserDefaults] setBool:(self.dontShowRunningVmCountCheckBox.state == NSOnState) forKey:@"dontShowRunningVmCount"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    [[Util getApp] updateRunningVmCount];
 }
 
 - (IBAction)terminalPreferencePopUpButtonClicked:(id)sender {

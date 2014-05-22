@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5056" systemVersion="13C64" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5056" systemVersion="13C1021" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="5056"/>
     </dependencies>
@@ -28,10 +28,10 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <scrollView autohidesScrollers="YES" horizontalLineScroll="24" horizontalPageScroll="10" verticalLineScroll="24" verticalPageScroll="10" usesPredominantAxisScrolling="NO" id="jEU-0j-S2G">
-                        <rect key="frame" x="20" y="58" width="514" height="261"/>
+                        <rect key="frame" x="20" y="58" width="514" height="261.0000096490603"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
                         <clipView key="contentView" id="oL6-sq-NrP">
-                            <rect key="frame" x="1" y="17" width="512" height="243"/>
+                            <rect key="frame" x="1" y="17.000009649060303" width="512" height="243"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="22" headerView="LJT-NO-8nt" id="3jZ-15-LLP">
@@ -41,7 +41,7 @@
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                     <tableColumns>
-                                        <tableColumn identifier="name" width="176.796875" minWidth="40" maxWidth="1000" id="iBM-Qb-RUG">
+                                        <tableColumn identifier="name" width="221.35546875" minWidth="40" maxWidth="1000" id="iBM-Qb-RUG">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Name">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -54,7 +54,7 @@
                                             </textFieldCell>
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         </tableColumn>
-                                        <tableColumn identifier="value" width="329" minWidth="40" maxWidth="1000" id="eK1-PF-Koz">
+                                        <tableColumn identifier="value" width="285" minWidth="40" maxWidth="1000" id="eK1-PF-Koz">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Value">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -95,10 +95,10 @@
                         </textFieldCell>
                     </textField>
                     <scrollView autohidesScrollers="YES" horizontalLineScroll="24" horizontalPageScroll="10" verticalLineScroll="24" verticalPageScroll="10" usesPredominantAxisScrolling="NO" id="yPX-tq-x2x">
-                        <rect key="frame" x="20" y="346" width="514" height="66"/>
+                        <rect key="frame" x="20" y="346" width="514" height="66.000000759959221"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                         <clipView key="contentView" id="ndM-Tm-VXZ">
-                            <rect key="frame" x="1" y="17" width="512" height="48"/>
+                            <rect key="frame" x="1" y="17.000000759959221" width="512" height="48"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="22" headerView="r6v-ZJ-KJO" id="Egl-Vj-6B4">
@@ -108,7 +108,7 @@
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                     <tableColumns>
-                                        <tableColumn identifier="name" width="176.796875" minWidth="40" maxWidth="1000" id="vZP-5M-jZ9">
+                                        <tableColumn identifier="name" width="218.72265625" minWidth="40" maxWidth="1000" id="vZP-5M-jZ9">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Name">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -121,7 +121,7 @@
                                             </textFieldCell>
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         </tableColumn>
-                                        <tableColumn identifier="path" width="329" minWidth="40" maxWidth="1000" id="leU-nk-FXt">
+                                        <tableColumn identifier="path" width="287" minWidth="40" maxWidth="1000" id="leU-nk-FXt">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Path">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
