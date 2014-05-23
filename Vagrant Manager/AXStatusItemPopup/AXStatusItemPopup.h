@@ -7,6 +7,7 @@
 //
 
 #import <Cocoa/Cocoa.h>
+@class PopupContentViewController;
 
 @interface AXStatusItemPopup : NSView
 
@@ -19,9 +20,9 @@
 
 
 // init
-- (id)initWithViewController:(NSViewController *)controller;
-- (id)initWithViewController:(NSViewController *)controller image:(NSImage *)image;
-- (id)initWithViewController:(NSViewController *)controller image:(NSImage *)image alternateImage:(NSImage *)alternateImage;
+- (id)initWithViewController:(PopupContentViewController *)controller;
+- (id)initWithViewController:(PopupContentViewController *)controller image:(NSImage *)image;
+- (id)initWithViewController:(PopupContentViewController *)controller image:(NSImage *)image alternateImage:(NSImage *)alternateImage;
 
 - (void)setTitle:(NSString*)title;
 
@@ -32,6 +33,6 @@
 - (NSPopover*)getPopover;
 
 // view size
-- (void)setContentSize:(CGSize *)size;
+- (void)setContentSize:(CGSize)size;
 
 @end

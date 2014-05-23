@@ -98,7 +98,7 @@
             NSString *outputString = [[NSString alloc] initWithData:outputData encoding:NSUTF8StringEncoding];
             
             //search for machine state in output string
-            NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"(\\w+)\\s+([\\w\\s]+) \\(\\w+\\)" options:0 error:NULL];
+            NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"([\\w-_]+)\\s+([\\w\\s]+) \\(\\w+\\)" options:0 error:NULL];
             NSArray *matches = [regex matchesInString:outputString options:0 range:NSMakeRange(0, [outputString length])];
             for(NSTextCheckingResult *match in matches) {
                 NSRange nameRange = [match rangeAtIndex:1];

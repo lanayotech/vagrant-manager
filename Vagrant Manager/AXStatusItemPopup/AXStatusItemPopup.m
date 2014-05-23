@@ -15,7 +15,7 @@
 // Private variables
 //
 @interface AXStatusItemPopup () {
-    NSViewController *_viewController;
+    PopupContentViewController *_viewController;
     BOOL _active;
     NSImageView *_imageView;
     NSTextView *_titleView;
@@ -32,17 +32,17 @@
 //
 @implementation AXStatusItemPopup
 
-- (id)initWithViewController:(NSViewController *)controller
+- (id)initWithViewController:(PopupContentViewController *)controller
 {
     return [self initWithViewController:controller image:nil];
 }
 
-- (id)initWithViewController:(NSViewController *)controller image:(NSImage *)image
+- (id)initWithViewController:(PopupContentViewController *)controller image:(NSImage *)image
 {
     return [self initWithViewController:controller image:image alternateImage:nil];
 }
 
-- (id)initWithViewController:(NSViewController *)controller image:(NSImage *)image alternateImage:(NSImage *)alternateImage
+- (id)initWithViewController:(PopupContentViewController *)controller image:(NSImage *)image alternateImage:(NSImage *)alternateImage
 {
     CGFloat height = [NSStatusBar systemStatusBar].thickness;
     
@@ -197,6 +197,7 @@
 - (void)showPopover
 {
     [self showPopoverAnimated:_animated];
+    [_viewController resizeTableView];
 }
 
 - (void)showPopoverAnimated:(BOOL)animated
@@ -209,6 +210,7 @@
         _popoverTransiencyMonitor = [NSEvent addGlobalMonitorForEventsMatchingMask:NSLeftMouseDownMask|NSRightMouseDownMask handler:^(NSEvent* event) {
             [self hidePopover];
         }];
+        [_viewController resizeTableView];
     }
 }
 

@@ -9,12 +9,9 @@
 
 @implementation MachineMenuItem
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Initialization code here.
-    }
-    return self;
+- (void)drawRect:(NSRect)dirtyRect {
+    [[NSColor darkGrayColor] setFill];
+    NSRectFillUsingOperation(self.bounds, NSCompositeSourceOver);
 }
 
 @end

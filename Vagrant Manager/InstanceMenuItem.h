@@ -7,13 +7,9 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface InstanceMenuItem : NSViewController
-
-@property (strong) NSString *instancePath;
-@property (strong) NSString *displayName;
+@interface InstanceMenuItem : NSView
 
 @property (weak) IBOutlet NSImageView *stateImageView;
 @property (weak) IBOutlet NSTextField *nameTextField;
-@property BOOL hasChildren;
 
 @end

@@ -6,9 +6,9 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "SlideMenuView.h"
+#import "VagrantInstance.h"
 
-@interface PopupContentViewController : NSViewController <SlideMenuDelegate> {
+@interface PopupContentViewController : NSViewController <NSTableViewDelegate, NSTableViewDataSource> {
     PreferencesWindow *preferencesWindow;
     AboutWindow *aboutWindow;
 }
@@ -18,14 +18,15 @@
 @property (weak) IBOutlet NSButton *quitButton;
 @property (weak) IBOutlet NSButton *preferencesButton;
 @property (weak) IBOutlet NSButton *aboutButton;
-@property (weak) IBOutlet SlideMenuView *slideMenu;
 @property (weak) IBOutlet NSButton *refreshButton;
 @property (weak) IBOutlet NSImageView *moreUpIndicator;
 @property (weak) IBOutlet NSImageView *moreDownIndicator;
 @property (weak) IBOutlet NSProgressIndicator *refreshingIndicator;
+@property (weak) IBOutlet NSTableView *tableView;
 
 - (void)setIsRefreshing:(BOOL)isRefreshing;
 - (void)addInstance:(VagrantInstance*)instance;
+- (void)resizeTableView;
 
 - (IBAction)quitButtonClicked:(id)sender;
 - (IBAction)preferencesButtonClicked:(id)sender;

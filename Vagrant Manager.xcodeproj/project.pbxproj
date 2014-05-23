@@ -13,6 +13,9 @@
 		8308E13C18868D52001E0B45 /* VirtualMachineInfoWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 8308E13A18868D52001E0B45 /* VirtualMachineInfoWindow.m */; };
 		8308E13D18868D52001E0B45 /* VirtualMachineInfoWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8308E13B18868D52001E0B45 /* VirtualMachineInfoWindow.xib */; };
 		8308E14018869FAC001E0B45 /* Bookmark.m in Sources */ = {isa = PBXBuildFile; fileRef = 8308E13F18869FAC001E0B45 /* Bookmark.m */; };
+		830D063A192F2F310043CE3C /* InstanceRowView.m in Sources */ = {isa = PBXBuildFile; fileRef = 830D0639192F2F310043CE3C /* InstanceRowView.m */; };
+		830D063D192F69190043CE3C /* MenuItemObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 830D063C192F69190043CE3C /* MenuItemObject.m */; };
+		830D0640192F822B0043CE3C /* InstanceActionsMenuItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 830D063F192F822B0043CE3C /* InstanceActionsMenuItem.m */; };
 		8339DCA1187E756B0036E162 /* TaskOutputWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 8339DC9F187E756B0036E162 /* TaskOutputWindow.m */; };
 		8339DCA2187E756B0036E162 /* TaskOutputWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8339DCA0187E756B0036E162 /* TaskOutputWindow.xib */; };
 		8360A05718C2B37F002EA89B /* Environments.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8360A05618C2B37F002EA89B /* Environments.plist */; };
@@ -22,7 +25,6 @@
 		8372138B19272CB00052206D /* PopupContentViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8372138919272CB00052206D /* PopupContentViewController.xib */; };
 		8372138F192732330052206D /* lanayo.png in Resources */ = {isa = PBXBuildFile; fileRef = 8372138E192732330052206D /* lanayo.png */; };
 		83721391192737B40052206D /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 83721390192737B40052206D /* logo.png */; };
-		8372139519274E870052206D /* SlideMenuView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8372139419274E870052206D /* SlideMenuView.m */; };
 		8372139E192758020052206D /* gear.png in Resources */ = {isa = PBXBuildFile; fileRef = 83721397192758020052206D /* gear.png */; };
 		8372139F192758020052206D /* radio.png in Resources */ = {isa = PBXBuildFile; fileRef = 83721398192758020052206D /* radio.png */; };
 		837213A0192758020052206D /* about.png in Resources */ = {isa = PBXBuildFile; fileRef = 83721399192758020052206D /* about.png */; };
@@ -34,7 +36,6 @@
 		837213A8192758CE0052206D /* close@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 837213A7192758CE0052206D /* close@2x.png */; };
 		837213AA1927591F0052206D /* info@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 837213A91927591F0052206D /* info@2x.png */; };
 		837213AC1927599D0052206D /* refresh@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 837213AB1927599D0052206D /* refresh@2x.png */; };
-		837213B1192760230052206D /* MachineMenuItem.xib in Resources */ = {isa = PBXBuildFile; fileRef = 837213B0192760230052206D /* MachineMenuItem.xib */; };
 		837213BC192769020052206D /* MachineMenuItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 837213BB192769020052206D /* MachineMenuItem.m */; };
 		838A36FB191F56E4006244FA /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 832784C918A7483900222C71 /* Security.framework */; };
 		838A3726191F59FE006244FA /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 838A3701191F5798006244FA /* Foundation.framework */; };
@@ -55,12 +56,10 @@
 		83DB673D1928B3510008CB57 /* VagrantManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 83DB673C1928B3510008CB57 /* VagrantManager.m */; };
 		83E7CAB41928C2E9001C86F6 /* VirtualMachineInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 83E7CAB31928C2E9001C86F6 /* VirtualMachineInfo.m */; };
 		83E7CABB1928EFF6001C86F6 /* InstanceMenuItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 83E7CAB91928EFF6001C86F6 /* InstanceMenuItem.m */; };
-		83E7CABC1928EFF6001C86F6 /* InstanceMenuItem.xib in Resources */ = {isa = PBXBuildFile; fileRef = 83E7CABA1928EFF6001C86F6 /* InstanceMenuItem.xib */; };
 		83E7CAC219290A89001C86F6 /* arrow-down.png in Resources */ = {isa = PBXBuildFile; fileRef = 83E7CAC019290A89001C86F6 /* arrow-down.png */; };
 		83E7CAC319290A89001C86F6 /* arrow-down@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 83E7CAC119290A89001C86F6 /* arrow-down@2x.png */; };
 		83E7CAC61929F135001C86F6 /* arrow-up@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 83E7CAC41929F135001C86F6 /* arrow-up@2x.png */; };
 		83E7CAC71929F135001C86F6 /* arrow-up.png in Resources */ = {isa = PBXBuildFile; fileRef = 83E7CAC51929F135001C86F6 /* arrow-up.png */; };
-		83E7CAD3192A1091001C86F6 /* HighlightView.m in Sources */ = {isa = PBXBuildFile; fileRef = 83E7CAD2192A1091001C86F6 /* HighlightView.m */; };
 		83EAC43518D05E9300FF26A1 /* AddBookmarkWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 83EAC43318D05E9300FF26A1 /* AddBookmarkWindow.m */; };
 		83EAC43618D05E9300FF26A1 /* AddBookmarkWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 83EAC43418D05E9300FF26A1 /* AddBookmarkWindow.xib */; };
 		83EAC43A18D067C900FF26A1 /* vagrant_logo_highlighted-clean.png in Resources */ = {isa = PBXBuildFile; fileRef = 83EAC43718D067C900FF26A1 /* vagrant_logo_highlighted-clean.png */; };
@@ -141,6 +140,12 @@
 		8308E13B18868D52001E0B45 /* VirtualMachineInfoWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VirtualMachineInfoWindow.xib; sourceTree = "<group>"; };
 		8308E13E18869FAC001E0B45 /* Bookmark.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bookmark.h; sourceTree = "<group>"; };
 		8308E13F18869FAC001E0B45 /* Bookmark.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Bookmark.m; sourceTree = "<group>"; };
+		830D0638192F2F310043CE3C /* InstanceRowView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InstanceRowView.h; sourceTree = "<group>"; };
+		830D0639192F2F310043CE3C /* InstanceRowView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InstanceRowView.m; sourceTree = "<group>"; };
+		830D063B192F69190043CE3C /* MenuItemObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuItemObject.h; sourceTree = "<group>"; };
+		830D063C192F69190043CE3C /* MenuItemObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuItemObject.m; sourceTree = "<group>"; };
+		830D063E192F822B0043CE3C /* InstanceActionsMenuItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InstanceActionsMenuItem.h; sourceTree = "<group>"; };
+		830D063F192F822B0043CE3C /* InstanceActionsMenuItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InstanceActionsMenuItem.m; sourceTree = "<group>"; };
 		832784C918A7483900222C71 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		8339DC9E187E756B0036E162 /* TaskOutputWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskOutputWindow.h; sourceTree = "<group>"; };
 		8339DC9F187E756B0036E162 /* TaskOutputWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TaskOutputWindow.m; sourceTree = "<group>"; };
@@ -155,8 +160,6 @@
 		8372138919272CB00052206D /* PopupContentViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PopupContentViewController.xib; sourceTree = "<group>"; };
 		8372138E192732330052206D /* lanayo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lanayo.png; sourceTree = "<group>"; };
 		83721390192737B40052206D /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo.png; sourceTree = "<group>"; };
-		8372139319274E870052206D /* SlideMenuView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SlideMenuView.h; sourceTree = "<group>"; };
-		8372139419274E870052206D /* SlideMenuView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SlideMenuView.m; sourceTree = "<group>"; };
 		83721397192758020052206D /* gear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gear.png; sourceTree = "<group>"; };
 		83721398192758020052206D /* radio.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = radio.png; sourceTree = "<group>"; };
 		83721399192758020052206D /* about.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = about.png; sourceTree = "<group>"; };
@@ -168,7 +171,6 @@
 		837213A7192758CE0052206D /* close@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "close@2x.png"; sourceTree = "<group>"; };
 		837213A91927591F0052206D /* info@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "info@2x.png"; sourceTree = "<group>"; };
 		837213AB1927599D0052206D /* refresh@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "refresh@2x.png"; sourceTree = "<group>"; };
-		837213B0192760230052206D /* MachineMenuItem.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MachineMenuItem.xib; sourceTree = "<group>"; };
 		837213BA192769020052206D /* MachineMenuItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MachineMenuItem.h; path = ../MachineMenuItem.h; sourceTree = "<group>"; };
 		837213BB192769020052206D /* MachineMenuItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MachineMenuItem.m; path = ../MachineMenuItem.m; sourceTree = "<group>"; };
 		838A36F6191F53D8006244FA /* Askpass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Askpass.m; path = "../Vagrant Manager/Askpass.m"; sourceTree = "<group>"; };
@@ -195,13 +197,10 @@
 		83E7CAB31928C2E9001C86F6 /* VirtualMachineInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VirtualMachineInfo.m; sourceTree = "<group>"; };
 		83E7CAB81928EFF6001C86F6 /* InstanceMenuItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InstanceMenuItem.h; sourceTree = "<group>"; };
 		83E7CAB91928EFF6001C86F6 /* InstanceMenuItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InstanceMenuItem.m; sourceTree = "<group>"; };
-		83E7CABA1928EFF6001C86F6 /* InstanceMenuItem.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = InstanceMenuItem.xib; sourceTree = "<group>"; };
 		83E7CAC019290A89001C86F6 /* arrow-down.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrow-down.png"; sourceTree = "<group>"; };
 		83E7CAC119290A89001C86F6 /* arrow-down@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrow-down@2x.png"; sourceTree = "<group>"; };
 		83E7CAC41929F135001C86F6 /* arrow-up@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrow-up@2x.png"; sourceTree = "<group>"; };
 		83E7CAC51929F135001C86F6 /* arrow-up.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrow-up.png"; sourceTree = "<group>"; };
-		83E7CAD1192A1091001C86F6 /* HighlightView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HighlightView.h; sourceTree = "<group>"; };
-		83E7CAD2192A1091001C86F6 /* HighlightView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HighlightView.m; sourceTree = "<group>"; };
 		83EAC43218D05E9300FF26A1 /* AddBookmarkWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddBookmarkWindow.h; sourceTree = "<group>"; };
 		83EAC43318D05E9300FF26A1 /* AddBookmarkWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddBookmarkWindow.m; sourceTree = "<group>"; };
 		83EAC43418D05E9300FF26A1 /* AddBookmarkWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AddBookmarkWindow.xib; sourceTree = "<group>"; };
@@ -362,16 +361,16 @@
 				8372138719272CB00052206D /* PopupContentViewController.h */,
 				8372138819272CB00052206D /* PopupContentViewController.m */,
 				8372138919272CB00052206D /* PopupContentViewController.xib */,
-				8372139319274E870052206D /* SlideMenuView.h */,
-				8372139419274E870052206D /* SlideMenuView.m */,
 				837213BA192769020052206D /* MachineMenuItem.h */,
 				837213BB192769020052206D /* MachineMenuItem.m */,
-				837213B0192760230052206D /* MachineMenuItem.xib */,
 				83E7CAB81928EFF6001C86F6 /* InstanceMenuItem.h */,
 				83E7CAB91928EFF6001C86F6 /* InstanceMenuItem.m */,
-				83E7CABA1928EFF6001C86F6 /* InstanceMenuItem.xib */,
-				83E7CAD1192A1091001C86F6 /* HighlightView.h */,
-				83E7CAD2192A1091001C86F6 /* HighlightView.m */,
+				830D0638192F2F310043CE3C /* InstanceRowView.h */,
+				830D0639192F2F310043CE3C /* InstanceRowView.m */,
+				830D063B192F69190043CE3C /* MenuItemObject.h */,
+				830D063C192F69190043CE3C /* MenuItemObject.m */,
+				830D063E192F822B0043CE3C /* InstanceActionsMenuItem.h */,
+				830D063F192F822B0043CE3C /* InstanceActionsMenuItem.m */,
 			);
 			name = App;
 			sourceTree = "<group>";
@@ -596,9 +595,7 @@
 				8372139F192758020052206D /* radio.png in Resources */,
 				B1357A7B187CEB3B00811CBC /* InfoPlist.strings in Resources */,
 				B17AA1991887DB8C00B4C274 /* off.png in Resources */,
-				837213B1192760230052206D /* MachineMenuItem.xib in Resources */,
 				8372139E192758020052206D /* gear.png in Resources */,
-				83E7CABC1928EFF6001C86F6 /* InstanceMenuItem.xib in Resources */,
 				B17AA19A1887DB8C00B4C274 /* on.png in Resources */,
 				B150013419249FFD000A76E7 /* on@2x.png in Resources */,
 				B150012619249896000A76E7 /* vagrant_logo_off-default@2x.png in Resources */,
@@ -668,20 +665,21 @@
 				83DB673A1928AC0C0008CB57 /* VagrantMachine.m in Sources */,
 				83EAC43518D05E9300FF26A1 /* AddBookmarkWindow.m in Sources */,
 				B1357A84187CEB3B00811CBC /* AppDelegate.m in Sources */,
-				8372139519274E870052206D /* SlideMenuView.m in Sources */,
+				830D063A192F2F310043CE3C /* InstanceRowView.m in Sources */,
 				8360A05A18C2B39B002EA89B /* Environment.m in Sources */,
+				830D063D192F69190043CE3C /* MenuItemObject.m in Sources */,
 				8308E13C18868D52001E0B45 /* VirtualMachineInfoWindow.m in Sources */,
 				8372138A19272CB00052206D /* PopupContentViewController.m in Sources */,
 				8308E14018869FAC001E0B45 /* Bookmark.m in Sources */,
 				83E7CABB1928EFF6001C86F6 /* InstanceMenuItem.m in Sources */,
 				83DB673D1928B3510008CB57 /* VagrantManager.m in Sources */,
 				8308E132188662BD001E0B45 /* AboutWindow.m in Sources */,
-				83E7CAD3192A1091001C86F6 /* HighlightView.m in Sources */,
 				8372138619272A5E0052206D /* AXStatusItemPopup.m in Sources */,
 				83DB6731192885090008CB57 /* AXTextView.m in Sources */,
 				B13DC35B19232782002E5A50 /* VirtualBoxServiceProvider.m in Sources */,
 				837213BC192769020052206D /* MachineMenuItem.m in Sources */,
 				B13DC36019233051002E5A50 /* VirtualBoxMachineInfo.m in Sources */,
+				830D0640192F822B0043CE3C /* InstanceActionsMenuItem.m in Sources */,
 				8339DCA1187E756B0036E162 /* TaskOutputWindow.m in Sources */,
 				B1357A7D187CEB3B00811CBC /* main.m in Sources */,
 				B17AA18B1887A75300B4C274 /* Util.m in Sources */,
