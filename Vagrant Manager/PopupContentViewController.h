@@ -42,6 +42,8 @@
 
 - (void)setIsRefreshing:(BOOL)isRefreshing;
 - (void)addInstance:(VagrantInstance*)instance;
+- (void)updateInstance:(VagrantInstance*)oldInstance withInstance:(VagrantInstance*)newInstance;
+- (void)removeInstance:(VagrantInstance*)instance;
 - (void)resizeTableView;
 - (void)collapseAllChildMenuItems;
 

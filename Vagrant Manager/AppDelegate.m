@@ -154,14 +154,18 @@
  This is called when an instance is removed from the manager
  */
 - (void)vagrantManager:(VagrantManager *)vagrantManger instanceRemoved:(VagrantInstance *)instance {
-    //TODO: remove instance from menu
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [_popupContentViewController removeInstance:instance];
+    });
 }
 
 /**
  This is called when an instance has been updated in the manager
  */
 - (void)vagrantManager:(VagrantManager *)vagrantManger instanceUpdated:(VagrantInstance *)oldInstance withInstance:(VagrantInstance *)newInstance {
-    //TODO: update instance in menu
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [_popupContentViewController updateInstance:oldInstance withInstance:newInstance];
+    });
 }
 
 #pragma mark - Menu item handlers
