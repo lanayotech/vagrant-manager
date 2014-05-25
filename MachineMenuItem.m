@@ -14,4 +14,32 @@
     NSRectFillUsingOperation(self.bounds, NSCompositeSourceOver);
 }
 
+- (IBAction)sshButtonClicked:(id)sender {
+    [self.delegate machineMenuItem:self vagrantAction:@"ssh"];
+}
+
+- (IBAction)upButtonClicked:(id)sender {
+    [self.delegate machineMenuItem:self vagrantAction:@"up"];
+}
+
+- (IBAction)reloadButtonClicked:(id)sender {
+    [self.delegate machineMenuItem:self vagrantAction:@"reload"];
+}
+
+- (IBAction)suspendButtonClicked:(id)sender {
+    [self.delegate machineMenuItem:self vagrantAction:@"suspend"];
+}
+
+- (IBAction)haltButtonClicked:(id)sender {
+    [self.delegate machineMenuItem:self vagrantAction:@"halt"];
+}
+
+- (IBAction)provisionButtonClicked:(id)sender {
+    [self.delegate machineMenuItem:self vagrantAction:@"provision"];
+}
+
+- (IBAction)destroyButtonClicked:(id)sender {
+    [self.delegate machineMenuItem:self vagrantAction:@"destroy"];
+}
+
 @end

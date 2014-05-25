@@ -7,8 +7,22 @@
 
 #import <Cocoa/Cocoa.h>
 #import "VagrantInstance.h"
+#import "MenuItemObject.h"
+#import "InstanceRowView.h"
+#import "InstanceMenuItem.h"
+#import "InstanceActionsMenuItem.h"
+#import "MachineMenuItem.h"
 
-@interface PopupContentViewController : NSViewController <NSTableViewDelegate, NSTableViewDataSource> {
+@class PopupContentViewController;
+
+@protocol MenuDelegate <NSObject>
+
+- (void)machineMenuItem:(MachineMenuItem*)menuItem vagrantAction:(NSString*)action;
+- (void)instanceActionsMenuItem:(InstanceActionsMenuItem*)menuItem vagrantAction:(NSString*)action;
+
+@end
+
+@interface PopupContentViewController : NSViewController <NSTableViewDelegate, NSTableViewDataSource, MachineMenuItemDelegate, InstanceActionsMenuItemDelegate> {
     PreferencesWindow *preferencesWindow;
     AboutWindow *aboutWindow;
 }
@@ -24,9 +38,12 @@
 @property (weak) IBOutlet NSProgressIndicator *refreshingIndicator;
 @property (weak) IBOutlet NSTableView *tableView;
 
+@property (weak) id<MenuDelegate> delegate;
+
 - (void)setIsRefreshing:(BOOL)isRefreshing;
 - (void)addInstance:(VagrantInstance*)instance;
 - (void)resizeTableView;
+- (void)collapseAllChildMenuItems;
 
 - (IBAction)quitButtonClicked:(id)sender;
 - (IBAction)preferencesButtonClicked:(id)sender;

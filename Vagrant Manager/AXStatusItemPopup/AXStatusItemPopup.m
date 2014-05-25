@@ -220,6 +220,8 @@
     
     if (_popover && _popover.isShown) {
         [_popover close];
+        
+        [_viewController collapseAllChildMenuItems];
 
 		if (_popoverTransiencyMonitor) {
             [NSEvent removeMonitor:_popoverTransiencyMonitor];

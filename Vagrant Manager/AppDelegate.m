@@ -28,6 +28,7 @@
     
     VagrantManager *_manager;
     PopupContentViewController *_popupContentViewController;
+    NSMutableArray *taskOutputWindows;
 }
 
 #pragma mark - Application events
@@ -64,11 +65,15 @@
 */
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+    //initialize data
+    taskOutputWindows = [[NSMutableArray alloc] init];
+    
     //create popup and status menu item
     _popupContentViewController = [[PopupContentViewController alloc] initWithNibName:@"PopupContentViewController" bundle:nil];
     statusItemPopup = [[AXStatusItemPopup alloc] initWithViewController:_popupContentViewController image:[self getThemedImage:@"vagrant_logo_off"] alternateImage:[self getThemedImage:@"vagrant_logo_highlighted"]];
     statusItemPopup.animated = NO;
     _popupContentViewController.statusItemPopup = statusItemPopup;
+    _popupContentViewController.delegate = self;
     
     //create vagrant manager
     _manager = [[VagrantManager alloc] init];
@@ -157,6 +162,137 @@
  */
 - (void)vagrantManager:(VagrantManager *)vagrantManger instanceUpdated:(VagrantInstance *)oldInstance withInstance:(VagrantInstance *)newInstance {
     //TODO: update instance in menu
+}
+
+#pragma mark - Menu item handlers
+
+/**
+ This is called when a machine menu item action is selected
+ */
+- (void)machineMenuItem:(MachineMenuItem *)menuItem vagrantAction:(NSString *)action {
+    if([action isEqualToString:@"ssh"]) {
+        NSString *action = [NSString stringWithFormat:@"cd %@ && vagrant ssh %@", [Util escapeShellArg:menuItem.machine.instance.path], menuItem.machine.name];
+        [self runTerminalCommand:action];
+    } else {
+        [self runVagrantAction:action withMachine:menuItem.machine];
+    }
+}
+
+/**
+ this is called when an instance menu item action is selected
+ */
+- (void)instanceActionsMenuItem:(InstanceActionsMenuItem *)menuItem vagrantAction:(NSString *)action {
+    [self runVagrantAction:action withInstance:menuItem.instance];
+}
+
+#pragma mark - Vagrant Machine control
+
+- (void)runVagrantAction:(NSString*)action withMachine:(VagrantMachine*)machine {
+    NSString *command;
+    
+    if([action isEqualToString:@"up"]) {
+        command = @"vagrant up";
+    } else if([action isEqualToString:@"reload"]) {
+        command = @"vagrant reload";
+    } else if([action isEqualToString:@"suspend"]) {
+        command = @"vagrant suspend";
+    } else if([action isEqualToString:@"halt"]) {
+        command = @"vagrant halt";
+    } else if([action isEqualToString:@"provision"]) {
+        command = @"vagrant provision";
+    } else if([action isEqualToString:@"destroy"]) {
+        command = @"vagrant destroy -f";
+    } else {
+        return;
+    }
+    
+    NSTask *task = [[NSTask alloc] init];
+    [task setLaunchPath:@"/bin/bash"];
+    
+    NSString *taskCommand = [NSString stringWithFormat:@"cd %@ && %@ %@", [Util escapeShellArg:machine.instance.path], command, [Util escapeShellArg:machine.name]];
+    
+    [task setArguments:@[@"-c", taskCommand]];
+    
+    TaskOutputWindow *outputWindow = [[TaskOutputWindow alloc] initWithWindowNibName:@"TaskOutputWindow"];
+    outputWindow.task = task;
+    outputWindow.taskCommand = taskCommand;
+    outputWindow.target = machine;
+    outputWindow.taskAction = command;
+    
+    [NSApp activateIgnoringOtherApps:YES];
+    [outputWindow showWindow:self];
+    
+    [taskOutputWindows addObject:outputWindow];
+}
+
+- (void)runVagrantAction:(NSString*)action withInstance:(VagrantInstance*)instance {
+    NSString *command;
+    
+    if([action isEqualToString:@"up"]) {
+        command = @"vagrant up";
+    } else if([action isEqualToString:@"reload"]) {
+        command = @"vagrant reload";
+    } else if([action isEqualToString:@"suspend"]) {
+        command = @"vagrant suspend";
+    } else if([action isEqualToString:@"halt"]) {
+        command = @"vagrant halt";
+    } else if([action isEqualToString:@"provision"]) {
+        command = @"vagrant provision";
+    } else if([action isEqualToString:@"destroy"]) {
+        command = @"vagrant destroy -f";
+    } else {
+        return;
+    }
+    
+    NSTask *task = [[NSTask alloc] init];
+    [task setLaunchPath:@"/bin/bash"];
+    
+    NSString *taskCommand = [NSString stringWithFormat:@"cd %@ && %@", [Util escapeShellArg:instance.path], command];
+    
+    [task setArguments:@[@"-c", taskCommand]];
+    
+    TaskOutputWindow *outputWindow = [[TaskOutputWindow alloc] initWithWindowNibName:@"TaskOutputWindow"];
+    outputWindow.task = task;
+    outputWindow.taskCommand = taskCommand;
+    outputWindow.target = instance;
+    outputWindow.taskAction = command;
+    
+    [NSApp activateIgnoringOtherApps:YES];
+    [outputWindow showWindow:self];
+    
+    [taskOutputWindows addObject:outputWindow];
+}
+
+- (void)runTerminalCommand:(NSString*)command {
+    NSString *terminalName = [[NSUserDefaults standardUserDefaults] valueForKey:@"terminalPreference"];
+    
+    NSString *s;
+    if ([terminalName isEqualToString:@"iTerm"]) {
+        s = [NSString stringWithFormat:@"tell application \"iTerm\"\n"
+             "tell current terminal\n"
+             "launch session \"Default Session\"\n"
+             "delay .15\n"
+             "activate\n"
+             "tell the last session\n"
+             "write text \"%@\"\n"
+             "end tell\n"
+             "end tell\n"
+             "end tell\n", command];
+    } else {
+        s = [NSString stringWithFormat:@"tell application \"Terminal\"\n"
+             "activate\n"
+             "do script \"%@\"\n"
+             "end tell\n", command];
+    }
+    
+    NSAppleScript *as = [[NSAppleScript alloc] initWithSource: s];
+    [as executeAndReturnError:nil];
+}
+
+#pragma mark - Window management
+
+- (void)removeTaskOutputWindow:(TaskOutputWindow*)taskOutputWindow {
+    [taskOutputWindows removeObject:taskOutputWindow];
 }
 
 /*

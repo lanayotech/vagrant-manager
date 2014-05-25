@@ -21,7 +21,7 @@
 #define MENU_ITEM_BOOKMARKED_VM 1
 #define MENU_ITEM_DETECTED_VM   2
 
-@interface AppDelegate : NSObject <NSApplicationDelegate, NSMenuDelegate, VagrantManagerDelegate> {
+@interface AppDelegate : NSObject <NSApplicationDelegate, VagrantManagerDelegate, MenuDelegate> {
     AXStatusItemPopup *statusItemPopup;
     /*
     enum MenuItemType : NSUInteger {
@@ -65,12 +65,12 @@
 @property (weak) IBOutlet NSMenu *windowMenu;
 
 - (void)refreshVagrantMachines;
+- (void)removeTaskOutputWindow:(TaskOutputWindow*)taskOutputWindow;
 
 
 
 
 
-- (void)removeOutputWindow:(TaskOutputWindow*)outputWindow;
 - (void)removeInfoWindow:(VirtualMachineInfoWindow*)infoWindow;
 - (void)updateVirtualMachineState:(VirtualMachineInfo*)machine;
 - (void)updateBookmarkState:(Bookmark*)bookmark;

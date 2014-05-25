@@ -6,10 +6,6 @@
 //
 
 #import "PopupContentViewController.h"
-#import "InstanceMenuItem.h"
-#import "MachineMenuItem.h"
-#import "InstanceRowView.h"
-#import "MenuItemObject.h"
 
 @interface PopupContentViewController ()
 
@@ -76,13 +72,13 @@
     
     MenuItemObject *menuItem = [_menuItems objectAtIndex:row];
     
-    if([menuItem.target isKindOfClass:[VagrantInstance class]]) {
+    if([menuItem.target isKindOfClass:[VagrantInstance class]] && !menuItem.isChildMenuItem) {
         VagrantInstance *instance = menuItem.target;
         
         if(menuItem.isExpanded) {
             long nextRow = row + 1;
             [self.tableView beginUpdates];
-            while(nextRow < _menuItems.count && [((MenuItemObject*)[_menuItems objectAtIndex:nextRow]).target isKindOfClass:[VagrantMachine class]]) {
+            while(nextRow < _menuItems.count && ((MenuItemObject*)[_menuItems objectAtIndex:nextRow]).isChildMenuItem) {
                 [_menuItems removeObjectAtIndex:nextRow];
                 [self.tableView removeRowsAtIndexes:[NSIndexSet indexSetWithIndex:nextRow] withAnimation:NSTableViewAnimationSlideUp|NSTableViewAnimationEffectFade];
             }
@@ -91,8 +87,15 @@
         } else {
             int i = 1;
             [self.tableView beginUpdates];
+            MenuItemObject *obj = [[MenuItemObject alloc] initWithTarget:instance];
+            obj.isChildMenuItem = YES;
+            [_menuItems insertObject:obj atIndex:row+i];
+            [self.tableView insertRowsAtIndexes:[NSIndexSet indexSetWithIndex:row+i] withAnimation:NSTableViewAnimationSlideDown|NSTableViewAnimationEffectFade];
+            ++i;
             for(VagrantMachine *machine in instance.machines) {
-                [_menuItems insertObject:[[MenuItemObject alloc] initWithTarget:machine] atIndex:row+i];
+                MenuItemObject *obj = [[MenuItemObject alloc] initWithTarget:machine];
+                obj.isChildMenuItem = YES;
+                [_menuItems insertObject:obj atIndex:row+i];
                 [self.tableView insertRowsAtIndexes:[NSIndexSet indexSetWithIndex:row+i] withAnimation:NSTableViewAnimationSlideDown|NSTableViewAnimationEffectFade];
                 ++i;
             }
@@ -108,20 +111,52 @@
     MenuItemObject *itemObj = [_menuItems objectAtIndex:row];
     
     if([itemObj.target isKindOfClass:[VagrantInstance class]]) {
-        InstanceMenuItem *item = [tableView makeViewWithIdentifier:@"InstanceMenuItem" owner:self];
-        
-        VagrantInstance *instance = itemObj.target;
-        item.nameTextField.stringValue = instance.displayName;
-        
-        [self updateScrollIndicators];
-        [self resizeTableView];
-        
-        return item;
+        if(itemObj.isChildMenuItem) {
+            InstanceActionsMenuItem *item;
+            item = [tableView makeViewWithIdentifier:@"InstanceActionsMenuItem" owner:self];
+            
+            VagrantInstance *instance = itemObj.target;
+            item.instance = instance;
+            item.delegate = self;
+            
+            [self updateScrollIndicators];
+            [self resizeTableView];
+            
+            return item;
+        } else {
+            InstanceMenuItem *item;
+            item = [tableView makeViewWithIdentifier:@"InstanceMenuItem" owner:self];
+            
+            VagrantInstance *instance = itemObj.target;
+            item.instance = instance;
+            int runningCount = 0;
+            for(VagrantMachine *machine in instance.machines) {
+                if(machine.state == RunningState) {
+                    ++runningCount;
+                }
+            }
+            if(runningCount == 0) {
+                item.stateImageView.image = [NSImage imageNamed:@"NSStatusUnavailable"];
+            } else if(runningCount == instance.machines.count) {
+                item.stateImageView.image = [NSImage imageNamed:@"NSStatusAvailable"];
+            } else {
+                item.stateImageView.image = [NSImage imageNamed:@"NSStatusPartiallyAvailable"];
+            }
+            item.nameTextField.stringValue = instance.displayName;
+            
+            [self updateScrollIndicators];
+            [self resizeTableView];
+            
+            return item;
+        }
     } else if([itemObj.target isKindOfClass:[VagrantMachine class]]) {
         MachineMenuItem *item = [tableView makeViewWithIdentifier:@"MachineMenuItem" owner:self];
         
         VagrantMachine *machine = itemObj.target;
+        item.machine = machine;
+        item.stateImageView.image = machine.state == RunningState ? [NSImage imageNamed:@"NSStatusAvailable"] : [NSImage imageNamed:@"NSStatusUnavailable"];
         item.nameTextField.stringValue = machine.name;
+        item.delegate = self;
         
         [self updateScrollIndicators];
         [self resizeTableView];
@@ -136,7 +171,7 @@
     MenuItemObject *itemObj = [_menuItems objectAtIndex:row];
 
     if([itemObj.target isKindOfClass:[VagrantInstance class]]) {
-        return 20;
+        return itemObj.isChildMenuItem ? 28 : 20;
     } else {
         return 42;
     }
@@ -146,7 +181,7 @@
     float height = 0;
     for(MenuItemObject *menuItem in _menuItems) {
         if([menuItem.target isKindOfClass:[VagrantInstance class]]) {
-            height += 20;
+            height += menuItem.isChildMenuItem ? 28 : 20;
         } else {
             height += 42;
         }
@@ -175,7 +210,6 @@
     float width = 200;
     for(MenuItemObject *menuItem in _menuItems) {
         NSString *name = [menuItem.target isKindOfClass:[VagrantInstance class]] ? ((VagrantInstance*)menuItem.target).displayName : ((VagrantMachine*)menuItem.target).name;
-        NSLog(@"%@", name);
         float padLeft = [menuItem.target isKindOfClass:[VagrantInstance class]] ? 18 : 28;
         NSAttributedString *string = [[NSAttributedString alloc] initWithString:name attributes:@{NSFontAttributeName: [NSFont systemFontOfSize:11]}];
         CGRect rect = [string boundingRectWithSize:(CGSize){CGFLOAT_MAX, CGFLOAT_MAX} options:0];
@@ -225,17 +259,33 @@
     [self.tableView insertRowsAtIndexes:[NSIndexSet indexSetWithIndex:_menuItems.count - 1] withAnimation:NSTableViewAnimationSlideDown|NSTableViewAnimationEffectFade];
     [self.tableView endUpdates];
     [self resizeTableView];
+}
 
-    /*
+- (void)collapseAllChildMenuItems {
     [self.tableView beginUpdates];
-    [self.tableView insertRowsAtIndexes:[NSIndexSet indexSetWithIndex:_vagrantInstances.count - 1] withAnimation:NSTableViewAnimationEffectFade];
+    for(long i = _menuItems.count - 1; i >= 0; --i) {
+        MenuItemObject *menuItem = [_menuItems objectAtIndex:i];
+        if(menuItem.isChildMenuItem) {
+            [_menuItems removeObjectAtIndex:i];
+            [self.tableView removeRowsAtIndexes:[NSIndexSet indexSetWithIndex:i] withAnimation:NSTableViewAnimationSlideUp|NSTableViewAnimationEffectFade];
+        } else {
+            menuItem.isExpanded = NO;
+        }
+    }
     [self.tableView endUpdates];
-    [[NSAnimationContext currentContext] setCompletionHandler:^{
-        [self resizeTableView];
-    }];
-     */
-//    [self performSelector:@selector(resizeTableView) withObject:nil afterDelay:.2f];
-    //[self.tableView reloadData];
+    [self performSelector:@selector(resizeTableView) withObject:nil afterDelay:.25f];
+}
+
+#pragma mark - Action handlers
+
+- (void)machineMenuItem:(MachineMenuItem*)menuItem vagrantAction:(NSString*)action {
+    [self.delegate machineMenuItem:menuItem vagrantAction:action];
+    [self.statusItemPopup hidePopover];
+}
+
+- (void)instanceActionsMenuItem:(InstanceActionsMenuItem*)menuItem vagrantAction:(NSString*)action {
+    [self.delegate instanceActionsMenuItem:menuItem vagrantAction:action];
+    [self.statusItemPopup hidePopover];
 }
 
 #pragma mark - Button handlers

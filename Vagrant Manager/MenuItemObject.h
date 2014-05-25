@@ -10,6 +10,7 @@
 @interface MenuItemObject : NSObject
 
 @property (strong) id target;
+@property BOOL isChildMenuItem;
 @property BOOL isExpanded;
 
 - initWithTarget:(id)target;
