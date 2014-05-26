@@ -103,6 +103,10 @@
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
+- (void)reloadBookmarks {
+    bookmarks = [self getSavedBookmarks];
+}
+
 - (void)addBookmarkForVirtualMachine:(VirtualMachineInfo*)machine {
     for(Bookmark *b in bookmarks) {
         if([b.path isEqualToString:[machine getSharedFolderPathWithName:@"/vagrant"]]) {
@@ -415,9 +419,16 @@
         [statusMenu addItem:refreshDetectedMenuItem];
 
         [statusMenu addItem:[NSMenuItem separatorItem]];
+        
+        if(!manageBookmarksMenuItem) {
+            manageBookmarksMenuItem = [[NSMenuItem alloc] init];
+            manageBookmarksMenuItem.title = @"Manage Bookmarks";
+            [manageBookmarksMenuItem setAction:@selector(manageBookmarksMenuItemClicked:)];
+        }
+        [statusMenu addItem:manageBookmarksMenuItem];
 
         //add bookmarks
-        if (bookmarks.count != 0) {
+        if (bookmarks.count) {
             for(Bookmark *bookmark in bookmarks) {
                 VirtualMachineInfo *machine = bookmark.machine;
                 NSMenuItem *i = [[NSMenuItem alloc] init];
@@ -440,13 +451,6 @@
                 [statusMenu setSubmenu:[self initializeSubmenu:[statusSubMenuTemplate copy] forMachine:machine pathExists:pathExists vagrantFileExists:vagrantFileExists isBookmarkedMachine:YES] forItem:i];
             }
         }
-
-        if(!addBookmarkMenuItem) {
-            addBookmarkMenuItem = [[NSMenuItem alloc] init];
-            addBookmarkMenuItem.title = @"Add Bookmark";
-            [addBookmarkMenuItem setAction:@selector(addCustomBookmarkMenuItemClicked:)];
-        }
-        [statusMenu addItem:addBookmarkMenuItem];
 
         if(!bookmarksSeparatorMenuItem) {
             bookmarksSeparatorMenuItem = [NSMenuItem separatorItem];
@@ -759,10 +763,10 @@
     }
 }
 
-- (void)addCustomBookmarkMenuItemClicked:(NSMenuItem*)menuItem {
-    addBookmarkWindow = [[AddBookmarkWindow alloc] initWithWindowNibName:@"AddBookmarkWindow"];
+- (void)manageBookmarksMenuItemClicked:(NSMenuItem*)menuItem {
+    manageBookmarksWindow = [[ManageBookmarksWindow alloc] initWithWindowNibName:@"ManageBookmarksWindow"];
     [NSApp activateIgnoringOtherApps:YES];
-    [addBookmarkWindow showWindow:self];
+    [manageBookmarksWindow showWindow:self];
 }
 
 #pragma mark - General Functions

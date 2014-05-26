@@ -9,7 +9,7 @@
 #import "TaskOutputWindow.h"
 #import "AboutWindow.h"
 #import "PreferencesWindow.h"
-#import "AddBookmarkWindow.h"
+#import "ManageBookmarksWindow.h"
 #import "VirtualMachineInfoWindow.h"
 #import "VirtualBoxMachineInfo.h"
 #import "VirtualBoxServiceProvider.h"
@@ -35,7 +35,7 @@
     NSMutableArray *bookmarks;
     NSMutableDictionary *serviceProviders;
 
-    NSMenuItem *addBookmarkMenuItem;
+    NSMenuItem *manageBookmarksMenuItem;
     NSMenuItem *bookmarksSeparatorMenuItem;
     NSMenuItem *refreshDetectedMenuItem;
     NSMenuItem *detectedSeparatorMenuItem;
@@ -50,7 +50,7 @@
 
     AboutWindow *aboutWindow;
     PreferencesWindow *preferencesWindow;
-    AddBookmarkWindow *addBookmarkWindow;
+    ManageBookmarksWindow *manageBookmarksWindow;
 }
 
 @property (assign) IBOutlet NSWindow *window;
@@ -69,5 +69,7 @@
 
 - (Bookmark*)getBookmarkById:(NSString*)uuid;
 - (NSMutableDictionary*)getServiceProviders;
+- (NSMutableArray*)getSavedBookmarks;
+- (void)reloadBookmarks;
 
 @end
