@@ -141,21 +141,9 @@
         return [NSArray arrayWithArray:virtualMachines];
     }
     
-    NSTask *task = [[NSTask alloc] init];
-    [task setLaunchPath:@"/bin/bash"];
-    [task setArguments:@[@"-c", @"cat /etc/exports"]];
+    NSString *exports = [NSString stringWithContentsOfFile:@"/etc/exports" encoding:NSUTF8StringEncoding error:nil];
     
-    NSPipe *pipe = [NSPipe pipe];
-    [task setStandardInput:[NSPipe pipe]];
-    [task setStandardOutput:pipe];
-    
-    [task launch];
-    [task waitUntilExit];
-    
-    NSData *outputData = [[pipe fileHandleForReading] readDataToEndOfFile];
-    NSString *outputString = [[NSString alloc] initWithData:outputData encoding:NSUTF8StringEncoding];
-    
-    NSMutableArray *lines = [[outputString componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]] mutableCopy];
+    NSMutableArray *lines = [[exports componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]] mutableCopy];
     [lines removeObject:@""];
     
     NSString *uuid = @"";

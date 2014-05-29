@@ -31,8 +31,8 @@
 		83BCB0441921B02600206967 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83BCB0431921B02600206967 /* Sparkle.framework */; };
 		83BCB0471921B1D600206967 /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 83BCB0431921B02600206967 /* Sparkle.framework */; };
 		83BCB0491921B6BF00206967 /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 83BCB0481921B6BF00206967 /* dsa_pub.pem */; };
-		83EAC43518D05E9300FF26A1 /* AddBookmarkWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 83EAC43318D05E9300FF26A1 /* AddBookmarkWindow.m */; };
-		83EAC43618D05E9300FF26A1 /* AddBookmarkWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 83EAC43418D05E9300FF26A1 /* AddBookmarkWindow.xib */; };
+		83EAC43518D05E9300FF26A1 /* ManageBookmarksWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 83EAC43318D05E9300FF26A1 /* ManageBookmarksWindow.m */; };
+		83EAC43618D05E9300FF26A1 /* ManageBookmarksWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 83EAC43418D05E9300FF26A1 /* ManageBookmarksWindow.xib */; };
 		83EAC43A18D067C900FF26A1 /* vagrant_logo_highlighted-clean.png in Resources */ = {isa = PBXBuildFile; fileRef = 83EAC43718D067C900FF26A1 /* vagrant_logo_highlighted-clean.png */; };
 		83EAC43B18D067C900FF26A1 /* vagrant_logo_off-clean@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 83EAC43818D067C900FF26A1 /* vagrant_logo_off-clean@2x.png */; };
 		83EAC43C18D067C900FF26A1 /* vagrant_logo_on-clean.png in Resources */ = {isa = PBXBuildFile; fileRef = 83EAC43918D067C900FF26A1 /* vagrant_logo_on-clean.png */; };
@@ -132,9 +132,9 @@
 		838B393D18CC85BC00A04C15 /* vagrant_logo_on-flat.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "vagrant_logo_on-flat.png"; sourceTree = "<group>"; };
 		83BCB0431921B02600206967 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = "<group>"; };
 		83BCB0481921B6BF00206967 /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dsa_pub.pem; sourceTree = "<group>"; };
-		83EAC43218D05E9300FF26A1 /* AddBookmarkWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddBookmarkWindow.h; sourceTree = "<group>"; };
-		83EAC43318D05E9300FF26A1 /* AddBookmarkWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddBookmarkWindow.m; sourceTree = "<group>"; };
-		83EAC43418D05E9300FF26A1 /* AddBookmarkWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AddBookmarkWindow.xib; sourceTree = "<group>"; };
+		83EAC43218D05E9300FF26A1 /* ManageBookmarksWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ManageBookmarksWindow.h; sourceTree = "<group>"; };
+		83EAC43318D05E9300FF26A1 /* ManageBookmarksWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ManageBookmarksWindow.m; sourceTree = "<group>"; };
+		83EAC43418D05E9300FF26A1 /* ManageBookmarksWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ManageBookmarksWindow.xib; sourceTree = "<group>"; };
 		83EAC43718D067C900FF26A1 /* vagrant_logo_highlighted-clean.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "vagrant_logo_highlighted-clean.png"; sourceTree = "<group>"; };
 		83EAC43818D067C900FF26A1 /* vagrant_logo_off-clean@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "vagrant_logo_off-clean@2x.png"; sourceTree = "<group>"; };
 		83EAC43918D067C900FF26A1 /* vagrant_logo_on-clean.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "vagrant_logo_on-clean.png"; sourceTree = "<group>"; };
@@ -265,9 +265,9 @@
 				B17AA18C1887CA4600B4C274 /* PreferencesWindow.h */,
 				B17AA18D1887CA4600B4C274 /* PreferencesWindow.m */,
 				B17AA18E1887CA4600B4C274 /* PreferencesWindow.xib */,
-				83EAC43218D05E9300FF26A1 /* AddBookmarkWindow.h */,
-				83EAC43318D05E9300FF26A1 /* AddBookmarkWindow.m */,
-				83EAC43418D05E9300FF26A1 /* AddBookmarkWindow.xib */,
+				83EAC43218D05E9300FF26A1 /* ManageBookmarksWindow.h */,
+				83EAC43318D05E9300FF26A1 /* ManageBookmarksWindow.m */,
+				83EAC43418D05E9300FF26A1 /* ManageBookmarksWindow.xib */,
 			);
 			name = Windows;
 			sourceTree = "<group>";
@@ -474,7 +474,7 @@
 				83EAC43B18D067C900FF26A1 /* vagrant_logo_off-clean@2x.png in Resources */,
 				83BCB0491921B6BF00206967 /* dsa_pub.pem in Resources */,
 				838B393E18CC85BC00A04C15 /* vagrant_logo_highlighted-flat.png in Resources */,
-				83EAC43618D05E9300FF26A1 /* AddBookmarkWindow.xib in Resources */,
+				83EAC43618D05E9300FF26A1 /* ManageBookmarksWindow.xib in Resources */,
 				B150012419249833000A76E7 /* vagrant_logo_on-default@2x.png in Resources */,
 				B150012A19249B19000A76E7 /* problem@2x.png in Resources */,
 				B150013019249D06000A76E7 /* vagrant_logo_highlighted-flat@2x.png in Resources */,
@@ -509,7 +509,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				83EAC43518D05E9300FF26A1 /* AddBookmarkWindow.m in Sources */,
+				83EAC43518D05E9300FF26A1 /* ManageBookmarksWindow.m in Sources */,
 				B1357A84187CEB3B00811CBC /* AppDelegate.m in Sources */,
 				8360A05A18C2B39B002EA89B /* Environment.m in Sources */,
 				8308E13C18868D52001E0B45 /* VirtualMachineInfoWindow.m in Sources */,
