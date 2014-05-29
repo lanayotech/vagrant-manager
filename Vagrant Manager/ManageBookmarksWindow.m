@@ -26,6 +26,8 @@
     
     self.bookmarkTableView.delegate = self;
     self.bookmarkTableView.dataSource = self;
+    
+    [self.recursiveScanCheckbox setState:[[NSUserDefaults standardUserDefaults] integerForKey:@"recursiveBookmarkScan"] ? NSOnState : NSOffState];
 }
 
 - (IBAction)addBookmarksButtonClicked:(id)sender {
@@ -38,21 +40,27 @@
     [openDlg beginSheetModalForWindow:self.window completionHandler:^(NSInteger result) {
         if(result == NSFileHandlingPanelOKButton) {
             NSArray *urls = [openDlg URLs];
+            
+            NSFileManager *fileManager = [[NSFileManager alloc] init];
+            
+            NSMutableArray *bookmarkPaths = [[NSMutableArray alloc] init];
+            for(Bookmark *b in bookmarks) {
+                [bookmarkPaths addObject:b.path];
+            }
+            
             for(NSURL *directoryURL in urls) {
-                
-                NSFileManager *fileManager = [[NSFileManager alloc] init];
-                
-                NSMutableArray *bookmarkPaths = [[NSMutableArray alloc] init];
-                for(Bookmark *b in bookmarks) {
-                    [bookmarkPaths addObject:b.path];
-                }
-                
-                NSDirectoryEnumerator *enumerator = [fileManager enumeratorAtURL:directoryURL includingPropertiesForKeys:nil options:NSDirectoryEnumerationSkipsHiddenFiles errorHandler:nil];
-                
-                for (NSURL *url in enumerator) {
-                    NSString *path = [url.path stringByDeletingLastPathComponent];
-                    if ([[url.path lastPathComponent] isEqualToString:@"Vagrantfile"] && ![bookmarkPaths containsObject:path]) {
-                        [self addBookmarkWithPath:path displayName:[path lastPathComponent]];
+                if ([[NSUserDefaults standardUserDefaults] integerForKey:@"recursiveBookmarkScan"] == NSOnState) {
+                    NSDirectoryEnumerator *enumerator = [fileManager enumeratorAtURL:directoryURL includingPropertiesForKeys:nil options:NSDirectoryEnumerationSkipsHiddenFiles errorHandler:nil];
+                    
+                    for (NSURL *url in enumerator) {
+                        NSString *path = [url.path stringByDeletingLastPathComponent];
+                        if ([[url.path lastPathComponent] isEqualToString:@"Vagrantfile"] && ![bookmarkPaths containsObject:path]) {
+                            [self addBookmarkWithPath:path displayName:[path lastPathComponent]];
+                        }
+                    }
+                } else {
+                    if ([fileManager fileExistsAtPath:[NSString stringWithFormat:@"%@/Vagrantfile", directoryURL.path]] && ![bookmarkPaths containsObject:directoryURL.path]) {
+                        [self addBookmarkWithPath:directoryURL.path displayName:[directoryURL.path lastPathComponent]];
                     }
                 }
             }
@@ -73,6 +81,10 @@
 - (IBAction)removeBookmarksButtonClicked:(id)sender {
     [bookmarks removeObjectsAtIndexes:[self.bookmarkTableView selectedRowIndexes]];
     [self.bookmarkTableView reloadData];
+}
+
+- (IBAction)recursiveScanCheckboxClicked:(id)sender {
+    [[NSUserDefaults standardUserDefaults] setBool:self.recursiveScanCheckbox.state forKey:@"recursiveBookmarkScan"];
 }
 
 - (IBAction)cancelButtonClicked:(id)sender {

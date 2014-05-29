@@ -7,6 +7,7 @@
         <customObject id="-2" userLabel="File's Owner" customClass="ManageBookmarksWindow">
             <connections>
                 <outlet property="bookmarkTableView" destination="XQ1-Lr-8sU" id="t4F-3l-txJ"/>
+                <outlet property="recursiveScanCheckbox" destination="4Ln-CR-ton" id="T4t-3d-oEp"/>
                 <outlet property="window" destination="F0z-JX-Cv5" id="gIp-Ho-8D9"/>
             </connections>
         </customObject>
@@ -21,15 +22,6 @@
                 <rect key="frame" x="0.0" y="0.0" width="480" height="338"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="yzL-Ns-hNS">
-                        <rect key="frame" x="18" y="301" width="339" height="17"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Recursively scans selected directories for Vagrantfiles" id="G9q-Pi-wh1">
-                            <font key="font" metaFont="system"/>
-                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
                     <button id="BT0-kM-woq">
                         <rect key="frame" x="20" y="44" width="31" height="22"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -135,6 +127,26 @@ Gw
                             <autoresizingMask key="autoresizingMask"/>
                         </tableHeaderView>
                     </scrollView>
+                    <button id="4Ln-CR-ton">
+                        <rect key="frame" x="18" y="299" width="444" height="18"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="check" title="Recursively scan directories when added" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="PTv-21-ckW">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="recursiveScanCheckboxClicked:" target="-2" id="fUd-hX-oTl"/>
+                        </connections>
+                    </button>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="ocC-O6-zr5">
+                        <rect key="frame" x="18" y="19" width="196" height="17"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Note: Display Name is editable" id="OuX-nZ-Ow3">
+                            <font key="font" metaFont="system" size="10"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
                 </subviews>
             </view>
             <connections>
