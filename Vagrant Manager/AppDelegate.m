@@ -250,7 +250,7 @@
         bookmark = obj;
     }
 
-    NSString *taskCommand = [NSString stringWithFormat:@"cd %@ && %@", bookmark ? [Util escapeShellArg:bookmark.path] : [Util escapeShellArg:[machine getSharedFolderPathWithName:@"/vagrant"]], command];
+    NSString *taskCommand = [NSString stringWithFormat:@"cd %@; %@", bookmark ? [Util escapeShellArg:bookmark.path] : [Util escapeShellArg:[machine getSharedFolderPathWithName:@"/vagrant"]], command];
 
     [task setArguments:@[@"-c", taskCommand]];
 
@@ -419,7 +419,7 @@
         [statusMenu addItem:refreshDetectedMenuItem];
 
         [statusMenu addItem:[NSMenuItem separatorItem]];
-        
+
         if(!manageBookmarksMenuItem) {
             manageBookmarksMenuItem = [[NSMenuItem alloc] init];
             manageBookmarksMenuItem.title = @"Manage Bookmarks";
@@ -819,7 +819,7 @@
 
 - (NSString*)getCurrentTheme {
     NSString *theme = [[NSUserDefaults standardUserDefaults] objectForKey:@"statusBarIconTheme"];
-    
+
     NSArray *validThemes = @[@"default",
                            @"clean",
                            @"flat"];
@@ -962,9 +962,9 @@
 
 - (SUAppcastItem *)bestValidUpdateInAppcast:(SUAppcast *)appcast forUpdater:(SUUpdater *)bundle {
     SUAppcastItem *bestItem = nil;
-    
+
     NSString *appVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
-    
+
     for(SUAppcastItem *item in [appcast items]) {
         if([Util compareVersion:appVersion toVersion:item.versionString] == NSOrderedAscending) {
             if([Util getUpdateStabilityScore:[Util getVersionStability:item.versionString]] <= [Util getUpdateStabilityScore:[Util getUpdateStability]]) {
@@ -974,7 +974,7 @@
             }
         }
     }
-    
+
     return bestItem;
 }
 
