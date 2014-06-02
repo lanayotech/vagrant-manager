@@ -611,7 +611,7 @@
 - (void)vagrantSshMenuItemClicked:(NSMenuItem*)menuItem {
     VirtualMachineInfo* machine = [self getMachineFromObject:menuItem.parentItem.representedObject];
     if(machine) {
-        NSString *action = [NSString stringWithFormat:@"cd %@ && vagrant ssh", [Util escapeShellArg:[machine getSharedFolderPathWithName:@"/vagrant"]]];
+        NSString *action = [NSString stringWithFormat:@"cd %@; vagrant ssh", [Util escapeShellArg:[machine getSharedFolderPathWithName:@"/vagrant"]]];
         [self runTerminalCommand:action];
     }
 }
