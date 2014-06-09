@@ -65,6 +65,10 @@
 */
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+    //configure logging
+    [DDLog addLogger:[DDASLLogger sharedInstance]];
+    [DDLog addLogger:[DDTTYLogger sharedInstance]];
+    
     //initialize data
     taskOutputWindows = [[NSMutableArray alloc] init];
     
@@ -99,6 +103,11 @@
  Refresh list of vagrant machines
  */
 - (void)refreshVagrantMachines {
+    DDLogError(@"This is an error.");
+    DDLogWarn(@"This is a warning.");
+    DDLogInfo(@"This is just a message.");
+    DDLogVerbose(@"This is a verbose message.");
+    
     //only run if not already refreshing
     if(!isRefreshingVagrantMachines) {
         isRefreshingVagrantMachines = YES;

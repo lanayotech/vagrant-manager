@@ -50,6 +50,17 @@
 		83BCB0441921B02600206967 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83BCB0431921B02600206967 /* Sparkle.framework */; };
 		83BCB0471921B1D600206967 /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 83BCB0431921B02600206967 /* Sparkle.framework */; };
 		83BCB0491921B6BF00206967 /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 83BCB0481921B6BF00206967 /* dsa_pub.pem */; };
+		83C7C8321945825B007AC491 /* CLIColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 83C7C81C1945825B007AC491 /* CLIColor.m */; };
+		83C7C8331945825B007AC491 /* DDAbstractDatabaseLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 83C7C81E1945825B007AC491 /* DDAbstractDatabaseLogger.m */; };
+		83C7C8341945825B007AC491 /* DDASLLogCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 83C7C8201945825B007AC491 /* DDASLLogCapture.m */; };
+		83C7C8351945825B007AC491 /* DDASLLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 83C7C8221945825B007AC491 /* DDASLLogger.m */; };
+		83C7C8361945825B007AC491 /* DDFileLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 83C7C8241945825B007AC491 /* DDFileLogger.m */; };
+		83C7C8371945825B007AC491 /* DDLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 83C7C8271945825B007AC491 /* DDLog.m */; };
+		83C7C8381945825B007AC491 /* DDTTYLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 83C7C8291945825B007AC491 /* DDTTYLogger.m */; };
+		83C7C8391945825B007AC491 /* DDContextFilterLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 83C7C82C1945825B007AC491 /* DDContextFilterLogFormatter.m */; };
+		83C7C83A1945825B007AC491 /* DDDispatchQueueLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 83C7C82E1945825B007AC491 /* DDDispatchQueueLogFormatter.m */; };
+		83C7C83B1945825B007AC491 /* DDMultiFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 83C7C8301945825B007AC491 /* DDMultiFormatter.m */; };
+		83C7C83C1945825B007AC491 /* README.txt in Resources */ = {isa = PBXBuildFile; fileRef = 83C7C8311945825B007AC491 /* README.txt */; };
 		83DB6731192885090008CB57 /* AXTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 83DB6730192885090008CB57 /* AXTextView.m */; };
 		83DB673719288DD90008CB57 /* VagrantInstance.m in Sources */ = {isa = PBXBuildFile; fileRef = 83DB673619288DD90008CB57 /* VagrantInstance.m */; };
 		83DB673A1928AC0C0008CB57 /* VagrantMachine.m in Sources */ = {isa = PBXBuildFile; fileRef = 83DB67391928AC0C0008CB57 /* VagrantMachine.m */; };
@@ -185,6 +196,28 @@
 		838B393D18CC85BC00A04C15 /* vagrant_logo_on-flat.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "vagrant_logo_on-flat.png"; sourceTree = "<group>"; };
 		83BCB0431921B02600206967 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = "<group>"; };
 		83BCB0481921B6BF00206967 /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dsa_pub.pem; sourceTree = "<group>"; };
+		83C7C81B1945825B007AC491 /* CLIColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLIColor.h; sourceTree = "<group>"; };
+		83C7C81C1945825B007AC491 /* CLIColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLIColor.m; sourceTree = "<group>"; };
+		83C7C81D1945825B007AC491 /* DDAbstractDatabaseLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDAbstractDatabaseLogger.h; sourceTree = "<group>"; };
+		83C7C81E1945825B007AC491 /* DDAbstractDatabaseLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDAbstractDatabaseLogger.m; sourceTree = "<group>"; };
+		83C7C81F1945825B007AC491 /* DDASLLogCapture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDASLLogCapture.h; sourceTree = "<group>"; };
+		83C7C8201945825B007AC491 /* DDASLLogCapture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDASLLogCapture.m; sourceTree = "<group>"; };
+		83C7C8211945825B007AC491 /* DDASLLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDASLLogger.h; sourceTree = "<group>"; };
+		83C7C8221945825B007AC491 /* DDASLLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDASLLogger.m; sourceTree = "<group>"; };
+		83C7C8231945825B007AC491 /* DDFileLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDFileLogger.h; sourceTree = "<group>"; };
+		83C7C8241945825B007AC491 /* DDFileLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDFileLogger.m; sourceTree = "<group>"; };
+		83C7C8251945825B007AC491 /* DDLog+LOGV.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DDLog+LOGV.h"; sourceTree = "<group>"; };
+		83C7C8261945825B007AC491 /* DDLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDLog.h; sourceTree = "<group>"; };
+		83C7C8271945825B007AC491 /* DDLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDLog.m; sourceTree = "<group>"; };
+		83C7C8281945825B007AC491 /* DDTTYLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDTTYLogger.h; sourceTree = "<group>"; };
+		83C7C8291945825B007AC491 /* DDTTYLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDTTYLogger.m; sourceTree = "<group>"; };
+		83C7C82B1945825B007AC491 /* DDContextFilterLogFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDContextFilterLogFormatter.h; sourceTree = "<group>"; };
+		83C7C82C1945825B007AC491 /* DDContextFilterLogFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDContextFilterLogFormatter.m; sourceTree = "<group>"; };
+		83C7C82D1945825B007AC491 /* DDDispatchQueueLogFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDDispatchQueueLogFormatter.h; sourceTree = "<group>"; };
+		83C7C82E1945825B007AC491 /* DDDispatchQueueLogFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDDispatchQueueLogFormatter.m; sourceTree = "<group>"; };
+		83C7C82F1945825B007AC491 /* DDMultiFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDMultiFormatter.h; sourceTree = "<group>"; };
+		83C7C8301945825B007AC491 /* DDMultiFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDMultiFormatter.m; sourceTree = "<group>"; };
+		83C7C8311945825B007AC491 /* README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.txt; sourceTree = "<group>"; };
 		83DB672F192885090008CB57 /* AXTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AXTextView.h; sourceTree = "<group>"; };
 		83DB6730192885090008CB57 /* AXTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AXTextView.m; sourceTree = "<group>"; };
 		83DB673519288DD90008CB57 /* VagrantInstance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VagrantInstance.h; sourceTree = "<group>"; };
@@ -438,6 +471,51 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		83C7C8191945825B007AC491 /* Lumberjack */ = {
+			isa = PBXGroup;
+			children = (
+				83C7C81A1945825B007AC491 /* CLI */,
+				83C7C81D1945825B007AC491 /* DDAbstractDatabaseLogger.h */,
+				83C7C81E1945825B007AC491 /* DDAbstractDatabaseLogger.m */,
+				83C7C81F1945825B007AC491 /* DDASLLogCapture.h */,
+				83C7C8201945825B007AC491 /* DDASLLogCapture.m */,
+				83C7C8211945825B007AC491 /* DDASLLogger.h */,
+				83C7C8221945825B007AC491 /* DDASLLogger.m */,
+				83C7C8231945825B007AC491 /* DDFileLogger.h */,
+				83C7C8241945825B007AC491 /* DDFileLogger.m */,
+				83C7C8251945825B007AC491 /* DDLog+LOGV.h */,
+				83C7C8261945825B007AC491 /* DDLog.h */,
+				83C7C8271945825B007AC491 /* DDLog.m */,
+				83C7C8281945825B007AC491 /* DDTTYLogger.h */,
+				83C7C8291945825B007AC491 /* DDTTYLogger.m */,
+				83C7C82A1945825B007AC491 /* Extensions */,
+			);
+			path = Lumberjack;
+			sourceTree = "<group>";
+		};
+		83C7C81A1945825B007AC491 /* CLI */ = {
+			isa = PBXGroup;
+			children = (
+				83C7C81B1945825B007AC491 /* CLIColor.h */,
+				83C7C81C1945825B007AC491 /* CLIColor.m */,
+			);
+			path = CLI;
+			sourceTree = "<group>";
+		};
+		83C7C82A1945825B007AC491 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				83C7C82B1945825B007AC491 /* DDContextFilterLogFormatter.h */,
+				83C7C82C1945825B007AC491 /* DDContextFilterLogFormatter.m */,
+				83C7C82D1945825B007AC491 /* DDDispatchQueueLogFormatter.h */,
+				83C7C82E1945825B007AC491 /* DDDispatchQueueLogFormatter.m */,
+				83C7C82F1945825B007AC491 /* DDMultiFormatter.h */,
+				83C7C8301945825B007AC491 /* DDMultiFormatter.m */,
+				83C7C8311945825B007AC491 /* README.txt */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		B1357A64187CEB3B00811CBC = {
 			isa = PBXGroup;
 			children = (
@@ -496,6 +574,7 @@
 		B1357A77187CEB3B00811CBC /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				83C7C8191945825B007AC491 /* Lumberjack */,
 				8372138319272A5E0052206D /* AXStatusItemPopup */,
 				83BCB0481921B6BF00206967 /* dsa_pub.pem */,
 				8360A05818C2B39B002EA89B /* Environment.h */,
@@ -601,6 +680,7 @@
 				B150012619249896000A76E7 /* vagrant_logo_off-default@2x.png in Resources */,
 				8339DCA2187E756B0036E162 /* TaskOutputWindow.xib in Resources */,
 				B1357ABD187DF58C00811CBC /* vagrant_logo_highlighted-default.png in Resources */,
+				83C7C83C1945825B007AC491 /* README.txt in Resources */,
 				B17AA1901887CA4600B4C274 /* PreferencesWindow.xib in Resources */,
 				B150012E19249CA2000A76E7 /* vagrant_logo_on-flat@2x.png in Resources */,
 				B150011D1924940A000A76E7 /* vagrant_logo_off-clean.png in Resources */,
@@ -662,10 +742,16 @@
 			files = (
 				83DB673719288DD90008CB57 /* VagrantInstance.m in Sources */,
 				83E7CAB41928C2E9001C86F6 /* VirtualMachineInfo.m in Sources */,
+				83C7C8341945825B007AC491 /* DDASLLogCapture.m in Sources */,
+				83C7C8391945825B007AC491 /* DDContextFilterLogFormatter.m in Sources */,
 				83DB673A1928AC0C0008CB57 /* VagrantMachine.m in Sources */,
+				83C7C83A1945825B007AC491 /* DDDispatchQueueLogFormatter.m in Sources */,
 				83EAC43518D05E9300FF26A1 /* AddBookmarkWindow.m in Sources */,
 				B1357A84187CEB3B00811CBC /* AppDelegate.m in Sources */,
+				83C7C8331945825B007AC491 /* DDAbstractDatabaseLogger.m in Sources */,
 				830D063A192F2F310043CE3C /* InstanceRowView.m in Sources */,
+				83C7C83B1945825B007AC491 /* DDMultiFormatter.m in Sources */,
+				83C7C8321945825B007AC491 /* CLIColor.m in Sources */,
 				8360A05A18C2B39B002EA89B /* Environment.m in Sources */,
 				830D063D192F69190043CE3C /* MenuItemObject.m in Sources */,
 				8308E13C18868D52001E0B45 /* VirtualMachineInfoWindow.m in Sources */,
@@ -674,12 +760,16 @@
 				83E7CABB1928EFF6001C86F6 /* InstanceMenuItem.m in Sources */,
 				83DB673D1928B3510008CB57 /* VagrantManager.m in Sources */,
 				8308E132188662BD001E0B45 /* AboutWindow.m in Sources */,
+				83C7C8381945825B007AC491 /* DDTTYLogger.m in Sources */,
 				8372138619272A5E0052206D /* AXStatusItemPopup.m in Sources */,
+				83C7C8371945825B007AC491 /* DDLog.m in Sources */,
 				83DB6731192885090008CB57 /* AXTextView.m in Sources */,
+				83C7C8361945825B007AC491 /* DDFileLogger.m in Sources */,
 				B13DC35B19232782002E5A50 /* VirtualBoxServiceProvider.m in Sources */,
 				837213BC192769020052206D /* MachineMenuItem.m in Sources */,
 				B13DC36019233051002E5A50 /* VirtualBoxMachineInfo.m in Sources */,
 				830D0640192F822B0043CE3C /* InstanceActionsMenuItem.m in Sources */,
+				83C7C8351945825B007AC491 /* DDASLLogger.m in Sources */,
 				8339DCA1187E756B0036E162 /* TaskOutputWindow.m in Sources */,
 				B1357A7D187CEB3B00811CBC /* main.m in Sources */,
 				B17AA18B1887A75300B4C274 /* Util.m in Sources */,

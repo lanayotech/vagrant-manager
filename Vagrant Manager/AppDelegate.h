@@ -17,6 +17,9 @@
 #include <Sparkle/Sparkle.h>
 #import "PopupContentViewController.h"
 #import "VagrantManager.h"
+#import "DDASLLogger.h"
+#import "DDTTYLogger.h"
+#import "DDFileLogger.h"
 
 #define MENU_ITEM_BOOKMARKED_VM 1
 #define MENU_ITEM_DETECTED_VM   2
