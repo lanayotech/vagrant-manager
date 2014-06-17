@@ -105,7 +105,9 @@
         [self.outputTextView scrollRangeToVisible: NSMakeRange(self.outputTextView.string.length, 0)];
     }
     
-    [fh waitForDataInBackgroundAndNotify];
+    if(self.task.isRunning) {
+        [fh waitForDataInBackgroundAndNotify];
+    }
 }
 
 - (IBAction)closeButtonClicked:(id)sender {
