@@ -33,10 +33,12 @@
         NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:tableColumn.identifier ascending:YES selector:@selector(localizedCaseInsensitiveCompare:)];
         [tableColumn setSortDescriptorPrototype:sortDescriptor];
     }
+    
+    [self.bookmarkTableView registerForDraggedTypes:[NSArray arrayWithObjects:NSPasteboardTypeString, nil]];
 }
 
 - (void)tableView:(NSTableView *)tableView sortDescriptorsDidChange:(NSArray *)oldDescriptors {
-    bookmarks = (NSMutableArray*)[bookmarks sortedArrayUsingDescriptors:self.bookmarkTableView.sortDescriptors];
+    bookmarks = [NSMutableArray arrayWithArray:[bookmarks sortedArrayUsingDescriptors:self.bookmarkTableView.sortDescriptors]];
     [self.bookmarkTableView reloadData];
 }
 
@@ -80,12 +82,53 @@
     }];
 }
 
+- (BOOL)tableView:(NSTableView *)tableView acceptDrop:(id < NSDraggingInfo >)info row:(NSInteger)row dropOperation:(NSTableViewDropOperation)operation {
+    NSIndexSet *rowIndexes = [NSKeyedUnarchiver unarchiveObjectWithData:[[info draggingPasteboard] dataForType:NSPasteboardTypeString]];
+    Bookmark *targetObject = [bookmarks objectAtIndex:row];
+    
+	NSArray *bookmarksToMove = [bookmarks objectsAtIndexes:rowIndexes];
+    [bookmarks removeObjectsAtIndexes:rowIndexes];
+    
+    NSUInteger targetIndex = [bookmarks indexOfObjectIdenticalTo:targetObject];
+    
+    [bookmarksToMove enumerateObjectsUsingBlock:^(Bookmark *bookmark, NSUInteger idx, BOOL *stop) {
+        [bookmarks insertObject:bookmark atIndex:targetIndex+idx];
+    }];
+    
+	[tableView reloadData];
+    return YES;
+}
+
+- (NSDragOperation)tableView:(NSTableView *)tableView validateDrop:(id <NSDraggingInfo>)info proposedRow:(NSInteger)row proposedDropOperation:(NSTableViewDropOperation)operation {
+    
+    NSIndexSet *rowIndexes = [NSKeyedUnarchiver unarchiveObjectWithData:[[info draggingPasteboard] dataForType:NSPasteboardTypeString]];
+ 
+    if ([info draggingSource] == self.bookmarkTableView && operation == NSTableViewDropAbove && ![rowIndexes containsIndex:row] && row < bookmarks.count) {
+        return operation;
+    }
+    
+    return NSDragOperationNone;
+}
+
+- (BOOL)tableView:(NSTableView *)tableView writeRowsWithIndexes:(NSIndexSet *)rowIndexes toPasteboard:(NSPasteboard *)pasteboard {
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:rowIndexes];
+    [pasteboard declareTypes:[NSArray arrayWithObject:NSPasteboardTypeString] owner:self];
+    [pasteboard setData:data forType:NSPasteboardTypeString];
+    return YES;
+}
+
 - (void)addBookmarkWithPath:(NSString*)path displayName:(NSString*)displayName {
     Bookmark *bookmark = [[Bookmark alloc] init];
     bookmark.displayName = displayName;
     bookmark.path = path;
     
     [bookmarks addObject:bookmark];
+}
+
+- (void)controlTextDidEndEditing:(NSNotification *)notification {
+    NSTextField *textField = notification.object;
+    Bookmark *bookmark = [bookmarks objectAtIndex:textField.tag];
+    bookmark.displayName = textField.stringValue;
 }
 
 - (IBAction)removeBookmarksButtonClicked:(id)sender {
@@ -102,12 +145,6 @@
 }
 
 - (IBAction)saveButtonClicked:(id)sender {
-    for(int i = 0; i < bookmarks.count; i++) {
-        NSTextField *textField = [self.bookmarkTableView viewAtColumn:1 row:i makeIfNecessary:FALSE];
-        Bookmark *bookmark = [bookmarks objectAtIndex:i];
-        bookmark.displayName = textField.stringValue;
-    }
-    
     [[Util getApp] saveBookmarks:bookmarks];
     [[Util getApp] reloadBookmarks];
     [[Util getApp] detectVagrantMachines];
@@ -119,16 +156,18 @@
     if(!view) {
         view = [[NSTextField alloc] initWithFrame:CGRectMake(0, 0, tableColumn.width, 22)];
         [view setBezeled:NO];
+        [view.cell setEditable:NO];
         [view setDrawsBackground:NO];
-        [view setEditable:NO];
         view.delegate = self;
         [view.cell setLineBreakMode:NSLineBreakByTruncatingTail];
         view.identifier = @"TableCellView";
+        view.tag = row;
     }
     
     Bookmark *bookmark = [bookmarks objectAtIndex:row];
     
     if ([tableColumn.identifier isEqualToString:@"path"]) {
+        [view.cell setEditable:NO];
         view.stringValue = bookmark.path;
     }
     if ([tableColumn.identifier isEqualToString:@"displayName"]) {
