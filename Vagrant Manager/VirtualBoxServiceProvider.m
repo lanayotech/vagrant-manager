@@ -154,19 +154,18 @@
             continue;
         }
         
-        //get path
-        NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"(?<=\").*(?=\"\\ [0-9\\.]+)" options:0 error:nil];
+        NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"(?<!\\\\)\"((?:\\\\\"|[^\"])*+)\"" options:0 error:nil];
         NSArray *pathArr = [regex matchesInString:line options:0 range:NSMakeRange(0, [line length])];
-        if (pathArr.count == 1) {
-            NSTextCheckingResult *pathResult = [pathArr objectAtIndex:0];
-            NSString *path = [line substringWithRange:pathResult.range];
-            
-            BOOL vagrantFileExists = [[NSFileManager defaultManager] fileExistsAtPath:[NSString pathWithComponents:@[path, @"Vagrantfile"]]];
-            
-            if (vagrantFileExists && uuid.length) {
-                VirtualBoxMachineInfo *vmInfo = [self getVirtualMachineInfo:uuid NFSPath:path];
-                if(vmInfo) {
-                    [virtualMachines addObject:vmInfo];
+        for (NSTextCheckingResult *pathResult in pathArr) {
+            if (pathResult.range.length > 1) {
+                NSString *path = [line substringWithRange:[pathResult rangeAtIndex:1]];
+                BOOL vagrantFileExists = [[NSFileManager defaultManager] fileExistsAtPath:[NSString pathWithComponents:@[path, @"Vagrantfile"]]];
+                
+                if (vagrantFileExists && uuid.length) {
+                    VirtualBoxMachineInfo *vmInfo = [self getVirtualMachineInfo:uuid NFSPath:path];
+                    if(vmInfo) {
+                        [virtualMachines addObject:vmInfo];
+                    }
                 }
             }
         }

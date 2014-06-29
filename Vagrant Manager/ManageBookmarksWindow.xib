@@ -76,7 +76,7 @@ Gw
                             <rect key="frame" x="1" y="17" width="438" height="201"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" autosaveColumns="NO" headerView="o2E-Ef-OW4" id="XQ1-Lr-8sU">
+                                <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" columnSelection="YES" autosaveColumns="NO" headerView="o2E-Ef-OW4" id="XQ1-Lr-8sU">
                                     <rect key="frame" x="0.0" y="0.0" width="438" height="201"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <size key="intercellSpacing" width="3" height="2"/>
