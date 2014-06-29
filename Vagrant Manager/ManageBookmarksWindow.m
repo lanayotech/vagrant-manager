@@ -28,6 +28,16 @@
     self.bookmarkTableView.dataSource = self;
     
     [self.recursiveScanCheckbox setState:[[NSUserDefaults standardUserDefaults] integerForKey:@"recursiveBookmarkScan"] ? NSOnState : NSOffState];
+    
+    for (NSTableColumn *tableColumn in self.bookmarkTableView.tableColumns ) {
+        NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:tableColumn.identifier ascending:YES selector:@selector(localizedCaseInsensitiveCompare:)];
+        [tableColumn setSortDescriptorPrototype:sortDescriptor];
+    }
+}
+
+- (void)tableView:(NSTableView *)tableView sortDescriptorsDidChange:(NSArray *)oldDescriptors {
+    bookmarks = (NSMutableArray*)[bookmarks sortedArrayUsingDescriptors:self.bookmarkTableView.sortDescriptors];
+    [self.bookmarkTableView reloadData];
 }
 
 - (IBAction)addBookmarksButtonClicked:(id)sender {
