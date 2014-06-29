@@ -156,18 +156,18 @@
     if(!view) {
         view = [[NSTextField alloc] initWithFrame:CGRectMake(0, 0, tableColumn.width, 22)];
         [view setBezeled:NO];
-        [view.cell setEditable:NO];
         [view setDrawsBackground:NO];
         view.delegate = self;
         [view.cell setLineBreakMode:NSLineBreakByTruncatingTail];
         view.identifier = @"TableCellView";
-        view.tag = row;
     }
+    
+    [view.cell setEditable:NO];
+    view.tag = row;
     
     Bookmark *bookmark = [bookmarks objectAtIndex:row];
     
     if ([tableColumn.identifier isEqualToString:@"path"]) {
-        [view.cell setEditable:NO];
         view.stringValue = bookmark.path;
     }
     if ([tableColumn.identifier isEqualToString:@"displayName"]) {
