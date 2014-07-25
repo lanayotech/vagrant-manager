@@ -28,6 +28,10 @@
     self = [super init];
     
     if(self) {
+        //provider identifier not passed in, try to determine it
+        if(!providerIdentifier || [providerIdentifier length] == 0) {
+            providerIdentifier = [[VagrantManager sharedManager] detectVagrantProvider:path];
+        }
         _path = path;
         _providerIdentifier = providerIdentifier;
         

@@ -6,6 +6,7 @@
 //
 
 #import "AddBookmarkWindow.h"
+#import "BookmarkManager.h"
 
 @interface AddBookmarkWindow ()
 
@@ -43,8 +44,7 @@
         NSAlert *alert = [NSAlert alertWithMessageText:@"You must enter a display name" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@""];
         [alert runModal];
     } else {
-        [[Util getApp] addBookmarkWithPath:dir withDisplayName:displayName];
-        [[Util getApp] detectVagrantMachines];
+        [[BookmarkManager sharedManager] addBookmarkWithPath:dir displayName:displayName providerIdentifier:nil];
         [self close];
     }
 }

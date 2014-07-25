@@ -10,7 +10,6 @@
 #import "AboutWindow.h"
 #import "PreferencesWindow.h"
 #import "AddBookmarkWindow.h"
-#import "VirtualMachineInfoWindow.h"
 #import "VirtualBoxMachineInfo.h"
 #import "VirtualBoxServiceProvider.h"
 #import "ParallelsServiceProvider.h"
@@ -27,66 +26,14 @@
 
 @interface AppDelegate : NSObject <NSApplicationDelegate, VagrantManagerDelegate, MenuDelegate> {
     AXStatusItemPopup *statusItemPopup;
-    /*
-    enum MenuItemType : NSUInteger {
-        MenuItemBookmarked = 1,
-        MenuItemDetected
-    };
-    
-
-    IBOutlet NSMenu *statusMenu;
-    IBOutlet NSMenu *statusSubMenuTemplate;
-    NSStatusItem *statusItem;
-
-    NSMutableArray *taskOutputWindows;
-    NSMutableArray *infoWindows;
-
-    NSMutableArray *detectedVagrantMachines;
     NSMutableArray *bookmarks;
-    NSMutableDictionary *serviceProviders;
-
-    NSMenuItem *addBookmarkMenuItem;
-    NSMenuItem *bookmarksSeparatorMenuItem;
-    NSMenuItem *refreshDetectedMenuItem;
-    NSMenuItem *detectedSeparatorMenuItem;
-    NSMenuItem *preferencesMenuItem;
-    NSMenuItem *aboutMenuItem;
-    NSMenuItem *quitMenuItem;
-    NSMenuItem *windowMenuItem;
-    NSMenuItem *expirationMenuItem;
-    NSMenuItem *checkForUpdatesMenuItem;
-    NSMenuItem *globalCommandsSeparatorMenuItem;
-    NSMenuItem *allMachinesMenuItem;
-
-    AboutWindow *aboutWindow;
-    PreferencesWindow *preferencesWindow;
-    AddBookmarkWindow *addBookmarkWindow;
-     */
 }
 
 @property (assign) IBOutlet NSWindow *window;
-
 @property (weak) IBOutlet NSMenu *windowMenu;
 
 - (void)refreshVagrantMachines;
 - (void)removeTaskOutputWindow:(TaskOutputWindow*)taskOutputWindow;
 - (void)updateRunningVmCount;
-
-
-
-
-
-- (void)removeInfoWindow:(VirtualMachineInfoWindow*)infoWindow;
-- (void)updateVirtualMachineState:(VirtualMachineInfo*)machine;
-- (void)updateBookmarkState:(Bookmark*)bookmark;
-- (void)addBookmarkWithPath:(NSString*)path withDisplayName:(NSString*)displayName;
-- (void)updateCheckUpdatesIcon:(BOOL)available;
-- (void)rebuildMenu:(BOOL)closeMenu;
-- (void)detectVagrantMachines;
-- (void)saveBookmarks:(NSMutableArray*)bm;
-
-- (Bookmark*)getBookmarkById:(NSString*)uuid;
-- (NSMutableDictionary*)getServiceProviders;
-
 
 @end

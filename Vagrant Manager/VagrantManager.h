@@ -26,11 +26,12 @@
 
 @property (readonly) NSArray *instances;
 
++ (VagrantManager*)sharedManager;
+
 - (void)addServiceProvider:(id<VirtualMachineServiceProvider>)provider;
-- (void)addBookmarkWithPath:(NSString*)path displayName:(NSString*)displayName;
 - (void)refreshInstances;
-- (Bookmark*)getBookmarkForPath:(NSString*)path;
 - (VagrantInstance*)getInstanceForPath:(NSString*)path;
 - (int)getRunningVmCount;
+- (NSString*)detectVagrantProvider:(NSString*)path;
 
 @end

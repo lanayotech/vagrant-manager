@@ -6,24 +6,34 @@
 //
 
 #import "VagrantManager.h"
+#import "NFSScanner.h"
+#import "BookmarkManager.h"
 
 @implementation VagrantManager {
     //all known vagrant instances
     NSMutableArray *_instances;
     
-    //bookmarks
-    NSMutableArray *_bookmarks;
-    
     //map provider identifiers to providers
     NSMutableDictionary *_providers;
 }
+
++ (VagrantManager*)sharedManager {
+    static VagrantManager *manager;
+    @synchronized(self) {
+        if(manager == nil) {
+            manager = [[VagrantManager alloc] init];
+        }
+    }
+    
+    return manager;
+}
+
 
 - (id)init {
     self = [super init];
     
     if(self) {
         _instances = [[NSMutableArray alloc] init];
-        _bookmarks = [[NSMutableArray alloc] init];
         _providers = [[NSMutableDictionary alloc] init];
     }
     
@@ -54,16 +64,6 @@
     [_providers setObject:provider forKey:[provider getProviderIdentifier]];
 }
 
-- (Bookmark*)getBookmarkForPath:(NSString*)path {
-    for(Bookmark *bookmark in _bookmarks) {
-        if([bookmark.path isEqualToString:path]) {
-            return bookmark;
-        }
-    }
-    
-    return nil;
-}
-
 - (VagrantInstance*)getInstanceForPath:(NSString*)path {
     path = [Util trimTrailingSlash:path];
     
@@ -76,35 +76,38 @@
     return nil;
 }
 
-- (void)addBookmarkWithPath:(NSString*)path displayName:(NSString*)displayName {
-    if(![self getBookmarkForPath:path]) {
-        Bookmark *bookmark = [[Bookmark alloc] init];
-        bookmark.path = [Util trimTrailingSlash:path];
-        bookmark.displayName = displayName;
-        [_bookmarks addObject:bookmark];
-    }
-}
-
-/*
- Detect all Vagrant machine instances
- */
 - (void)refreshInstances {
     NSMutableArray *instances = [[NSMutableArray alloc] init];
+    
+    BookmarkManager *bookmarkManager = [BookmarkManager sharedManager];
 
     //create instance for each bookmark
-    for(Bookmark *bookmark in _bookmarks) {
+    NSMutableArray *bookmarks = [[BookmarkManager sharedManager] getBookmarks];
+    for(Bookmark *bookmark in bookmarks) {
         [instances addObject:[[VagrantInstance alloc] initWithPath:bookmark.path displayName:bookmark.displayName providerIdentifier:bookmark.providerIdentifier]];
     }
     
     //create instance for each detected path
     NSDictionary *detectedPaths = [self detectInstancePaths];
+    NSMutableArray *allPaths = [[NSMutableArray alloc] init];
     for(NSString *providerIdentifier in [detectedPaths allKeys]) {
         NSArray *paths = [detectedPaths objectForKey:providerIdentifier];
         for(NSString *path in paths) {
-            //make sure it is not a bookmark
-            if(![self getBookmarkForPath:path]) {
+            //make sure it is not a bookmark and has not already been detected
+            if(![bookmarkManager getBookmarkWithPath:path] && ![allPaths containsObject:path]) {
+                [allPaths addObject:path];
                 [instances addObject:[[VagrantInstance alloc] initWithPath:path providerIdentifier:providerIdentifier]];
             }
+        }
+    }
+    
+    NFSScanner *nfsScanner = [[NFSScanner alloc] init];
+    NSArray *paths = [nfsScanner getNFSInstancePaths];
+    for(NSString *path in paths) {
+        //make sure it is not a bookmark and has not already been detected
+        if(![bookmarkManager getBookmarkWithPath:path] && ![allPaths containsObject:path]) {
+            [allPaths addObject:path];
+            [instances addObject:[[VagrantInstance alloc] initWithPath:path providerIdentifier:nil]];
         }
     }
     
@@ -189,6 +192,24 @@
     }
     
     return [NSDictionary dictionaryWithDictionary:keyedPaths];
+}
+
+- (NSString*)detectVagrantProvider:(NSString*)path {
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSError *error = nil;
+    NSArray *machinePaths = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:[NSString stringWithFormat:@"%@/.vagrant/machines", path] error:&error];
+    
+    if(!error && machinePaths) {
+        for(NSString *machinePath in machinePaths) {
+            if([fileManager fileExistsAtPath:[NSString stringWithFormat:@"%@/.vagrant/machines/%@/virtualbox", path, machinePath]]) {
+                return @"virtualbox";
+            } else if([fileManager fileExistsAtPath:[NSString stringWithFormat:@"%@/.vagrant/machines/%@/parallels", path, machinePath]]) {
+                return @"parallels";
+            }
+        }
+    }
+    
+    return nil;
 }
 
 @end

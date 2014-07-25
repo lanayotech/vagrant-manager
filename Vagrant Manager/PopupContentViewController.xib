@@ -7,6 +7,7 @@
         <customObject id="-2" userLabel="File's Owner" customClass="PopupContentViewController">
             <connections>
                 <outlet property="aboutButton" destination="EMo-g7-0TF" id="cRc-TN-nSK"/>
+                <outlet property="bookmarkButton" destination="DJp-Mb-RDX" id="Ebv-zO-fCd"/>
                 <outlet property="moreDownIndicator" destination="PFk-H3-Ies" id="Krg-zD-Hec"/>
                 <outlet property="moreUpIndicator" destination="9K5-So-jVw" id="uxH-Yz-uKP"/>
                 <outlet property="preferencesButton" destination="9fb-md-rcU" id="FaP-EI-a2K"/>
@@ -55,6 +56,17 @@
                             <action selector="aboutButtonClicked:" target="-2" id="rlI-YM-5ei"/>
                         </connections>
                     </buttonCell>
+                </button>
+                <button toolTip="About Vagrant Manager" id="DJp-Mb-RDX" userLabel="About Button">
+                    <rect key="frame" x="109" y="130" width="16" height="16"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                    <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="bookmark" imagePosition="only" alignment="left" imageScaling="proportionallyDown" inset="2" id="dQR-h7-hOH">
+                        <behavior key="behavior" lightByContents="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="bookmarkButtonClicked:" target="-2" id="3v0-Rz-bTy"/>
+                    </connections>
                 </button>
                 <button toolTip="Refresh Detected Machines" id="nIn-kp-cDC" userLabel="Refresh Button">
                     <rect key="frame" x="5" y="130" width="16" height="16"/>
@@ -201,6 +213,7 @@
         <image name="arrow-down" width="16" height="8"/>
         <image name="arrow-up" width="16" height="8"/>
         <image name="arrow_right" width="10" height="16"/>
+        <image name="bookmark" width="11" height="20"/>
         <image name="close" width="20" height="20"/>
         <image name="gear" width="20" height="20"/>
         <image name="info" width="20" height="20"/>

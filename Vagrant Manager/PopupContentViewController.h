@@ -12,6 +12,7 @@
 #import "InstanceRowView.h"
 #import "InstanceMenuItem.h"
 #import "MachineMenuItem.h"
+#import "ManageBookmarksWindow.h"
 
 @class PopupContentViewController;
 
@@ -29,6 +30,7 @@
 @interface PopupContentViewController : NSViewController <NSTableViewDelegate, NSTableViewDataSource, InstanceMenuItemDelegate> {
     PreferencesWindow *preferencesWindow;
     AboutWindow *aboutWindow;
+    ManageBookmarksWindow *manageBookmarksWindow;
 }
 
 @property (weak) AXStatusItemPopup *statusItemPopup;
@@ -37,6 +39,7 @@
 @property (weak) IBOutlet NSButton *preferencesButton;
 @property (weak) IBOutlet NSButton *aboutButton;
 @property (weak) IBOutlet NSButton *refreshButton;
+@property (weak) IBOutlet NSButton *bookmarkButton;
 @property (weak) IBOutlet NSImageView *moreUpIndicator;
 @property (weak) IBOutlet NSImageView *moreDownIndicator;
 @property (weak) IBOutlet NSProgressIndicator *refreshingIndicator;
@@ -53,6 +56,7 @@
 
 - (IBAction)quitButtonClicked:(id)sender;
 - (IBAction)preferencesButtonClicked:(id)sender;
+- (IBAction)bookmarkButtonClicked:(id)sender;
 - (IBAction)aboutButtonClicked:(id)sender;
 - (IBAction)refreshButtonClicked:(id)sender;
 

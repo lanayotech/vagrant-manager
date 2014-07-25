@@ -580,6 +580,13 @@
     [self.statusItemPopup hidePopover];
 }
 
+- (IBAction)bookmarkButtonClicked:(id)sender {
+    manageBookmarksWindow = [[ManageBookmarksWindow alloc] initWithWindowNibName:@"ManageBookmarksWindow"];
+    [NSApp activateIgnoringOtherApps:YES];
+    [manageBookmarksWindow showWindow:self];
+    [self.statusItemPopup hidePopover];
+}
+
 - (IBAction)aboutButtonClicked:(id)sender {
     aboutWindow = [[AboutWindow alloc] initWithWindowNibName:@"AboutWindow"];
     [NSApp activateIgnoringOtherApps:YES];
