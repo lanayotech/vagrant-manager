@@ -71,14 +71,14 @@
     [[NSUserDefaults standardUserDefaults] setBool:(self.dontShowUpdateCheckBox.state == NSOnState) forKey:@"dontShowUpdateNotification"];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
-    [[Util getApp] updateCheckUpdatesIcon:NO];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"vagrant-manager.show-update-notification-preference-changed" object:nil];
 }
 
 - (IBAction)dontShowRunningVmCountCheckBoxClicked:(id)sender {
     [[NSUserDefaults standardUserDefaults] setBool:(self.dontShowRunningVmCountCheckBox.state == NSOnState) forKey:@"dontShowRunningVmCount"];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
-    [[Util getApp] updateRunningVmCount];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"vagrant-manager.show-running-vm-count-preference-changed" object:nil];
 }
 
 - (IBAction)terminalPreferencePopUpButtonClicked:(id)sender {
@@ -108,7 +108,7 @@
     [[NSUserDefaults standardUserDefaults] setValue:statusBarIconTheme forKey:@"statusBarIconTheme"];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
-    [[Util getApp] rebuildMenu:NO];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"vagrant-manager.theme-changed" object:nil];
 }
 
 - (IBAction)updateStabilityPopUpButtonClicked:(id)sender {

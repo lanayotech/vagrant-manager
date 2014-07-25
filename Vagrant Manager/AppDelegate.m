@@ -74,6 +74,9 @@
     
     //register notification listeners
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(taskCompleted:) name:@"vagrant-manager.task-completed" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(themeChanged:) name:@"vagrant-manager.theme-changed" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showRunningVmCountPreferenceChanged:) name:@"vagrant-manager.show-running-vm-count-preference-changed" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showUpdateNotificationPreferenceChanged:) name:@"vagrant-manager.show-update-notification-preference-changed" object:nil];
     
     //create popup and status menu item
     _popupContentViewController = [[PopupContentViewController alloc] initWithNibName:@"PopupContentViewController" bundle:nil];
@@ -105,6 +108,18 @@
 
 - (void)taskCompleted:(NSNotification*)notification {
     [self refreshVagrantMachines];
+}
+
+- (void)themeChanged:(NSNotification*)notification {
+    [self updateRunningVmCount];
+}
+
+- (void)showRunningVmCountPreferenceChanged:(NSNotification*)notification {
+    [self updateRunningVmCount];
+}
+
+- (void)showUpdateNotificationPreferenceChanged:(NSNotification*)notification {
+    //TODO: handle this notification
 }
 
 /**
@@ -188,23 +203,53 @@
 
 #pragma mark - Menu item handlers
 
-/**
- This is called when a machine menu item action is selected
- */
-- (void)machineMenuItem:(MachineMenuItem *)menuItem vagrantAction:(NSString *)action {
+- (void)performVagrantAction:(NSString *)action withInstance:(VagrantInstance *)instance {
     if([action isEqualToString:@"ssh"]) {
-        NSString *action = [NSString stringWithFormat:@"cd %@ && vagrant ssh %@", [Util escapeShellArg:menuItem.machine.instance.path], menuItem.machine.name];
+        NSString *action = [NSString stringWithFormat:@"cd %@ && vagrant ssh", [Util escapeShellArg:instance.path]];
         [self runTerminalCommand:action];
     } else {
-        [self runVagrantAction:action withMachine:menuItem.machine];
+        [self runVagrantAction:action withInstance:instance];
     }
 }
 
-/**
- this is called when an instance menu item action is selected
- */
-- (void)instanceActionsMenuItem:(InstanceActionsMenuItem *)menuItem vagrantAction:(NSString *)action {
-    [self runVagrantAction:action withInstance:menuItem.instance];
+- (void)performVagrantAction:(NSString *)action withMachine:(VagrantMachine *)machine {
+    if([action isEqualToString:@"ssh"]) {
+        NSString *action = [NSString stringWithFormat:@"cd %@ && vagrant ssh %@", [Util escapeShellArg:machine.instance.path], machine.name];
+        [self runTerminalCommand:action];
+    } else {
+        [self runVagrantAction:action withMachine:machine];
+    }
+}
+
+- (void)openInstanceInFinder:(VagrantInstance *)instance {
+    NSString *path = instance.path;
+    
+    BOOL isDir = NO;
+    if([[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isDir] && isDir) {
+        NSURL *fileURL = [NSURL fileURLWithPath:path];
+        [[NSWorkspace sharedWorkspace] openURL:fileURL];
+    } else {
+        [[NSAlert alertWithMessageText:[NSString stringWithFormat:@"Path not found: %@", path] defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@""] runModal];
+    }
+}
+
+- (void)openInstanceInTerminal:(VagrantInstance *)instance {
+    NSString *path = instance.path;
+    
+    BOOL isDir = NO;
+    if([[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isDir] && isDir) {
+        [self runTerminalCommand:[NSString stringWithFormat:@"cd %@", [Util escapeShellArg:path]]];
+    } else {
+        [[NSAlert alertWithMessageText:[NSString stringWithFormat:@"Path not found: %@", path] defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@""] runModal];
+    }
+}
+
+- (void)addBookmarkWithInstance:(VagrantInstance *)instance {
+    
+}
+
+- (void)removeBookmarkWithInstance:(VagrantInstance *)instance {
+    
 }
 
 #pragma mark - Vagrant Machine control

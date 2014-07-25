@@ -67,41 +67,128 @@
     }
     
     [self.tableView deselectRow:row];
+    NSView *rowView = [self.tableView rowViewAtRow:row makeIfNecessary:NO];
     
     MenuItemObject *menuItem = [_menuItems objectAtIndex:row];
     
-    if([menuItem.target isKindOfClass:[VagrantInstance class]] && !menuItem.isChildMenuItem) {
+    if([menuItem.target isKindOfClass:[VagrantInstance class]]) {
         VagrantInstance *instance = menuItem.target;
         
-        if(menuItem.isExpanded) {
-            long nextRow = row + 1;
-            [self.tableView beginUpdates];
-            while(nextRow < _menuItems.count && ((MenuItemObject*)[_menuItems objectAtIndex:nextRow]).isChildMenuItem) {
-                [_menuItems removeObjectAtIndex:nextRow];
-                [self.tableView removeRowsAtIndexes:[NSIndexSet indexSetWithIndex:nextRow] withAnimation:NSTableViewAnimationSlideUp|NSTableViewAnimationEffectFade];
-            }
-            [self.tableView endUpdates];
-            [self performSelector:@selector(resizeTableView) withObject:nil afterDelay:.25f];
-        } else {
-            int i = 1;
-            [self.tableView beginUpdates];
-            MenuItemObject *obj = [[MenuItemObject alloc] initWithTarget:instance];
-            obj.isChildMenuItem = YES;
-            [_menuItems insertObject:obj atIndex:row+i];
-            [self.tableView insertRowsAtIndexes:[NSIndexSet indexSetWithIndex:row+i] withAnimation:NSTableViewAnimationSlideDown|NSTableViewAnimationEffectFade];
-            ++i;
-            for(VagrantMachine *machine in instance.machines) {
-                MenuItemObject *obj = [[MenuItemObject alloc] initWithTarget:machine];
-                obj.isChildMenuItem = YES;
-                [_menuItems insertObject:obj atIndex:row+i];
-                [self.tableView insertRowsAtIndexes:[NSIndexSet indexSetWithIndex:row+i] withAnimation:NSTableViewAnimationSlideDown|NSTableViewAnimationEffectFade];
-                ++i;
-            }
-            [self.tableView endUpdates];
-            [self resizeTableView];
+        NSMenu *menu = [[NSMenu alloc] init];
+        
+        [menu addItem:[[NSMenuItem alloc] initWithTitle:instance.displayName action:nil keyEquivalent:@""]];
+        
+        [menu addItem:[NSMenuItem separatorItem]];
+        
+        if([instance getRunningMachineCount] < instance.machines.count) {
+            NSMenuItem *menuItem = [[NSMenuItem alloc] initWithTitle:@"vagrant up" action:@selector(upMenuItemClicked:) keyEquivalent:@""];
+            menuItem.target = self;
+            menuItem.representedObject = instance;
+            [menu addItem:menuItem];
+        }
+
+        if([instance getRunningMachineCount] > 0) {
+            NSMenuItem *menuItem = [[NSMenuItem alloc] initWithTitle:@"vagrant ssh" action:@selector(sshMenuItemClicked:) keyEquivalent:@""];
+            menuItem.target = self;
+            menuItem.representedObject = instance;
+            [menu addItem:menuItem];
+            
+            menuItem = [[NSMenuItem alloc] initWithTitle:@"vagrant reload" action:@selector(reloadMenuItemClicked:) keyEquivalent:@""];
+            menuItem.target = self;
+            menuItem.representedObject = instance;
+            [menu addItem:menuItem];
+            
+            menuItem = [[NSMenuItem alloc] initWithTitle:@"vagrant suspend" action:@selector(suspendMenuItemClicked:) keyEquivalent:@""];
+            menuItem.target = self;
+            menuItem.representedObject = instance;
+            [menu addItem:menuItem];
+            
+            menuItem = [[NSMenuItem alloc] initWithTitle:@"vagrant halt" action:@selector(haltMenuItemClicked:) keyEquivalent:@""];
+            menuItem.target = self;
+            menuItem.representedObject = instance;
+            [menu addItem:menuItem];
+            
+            menuItem = [[NSMenuItem alloc] initWithTitle:@"vagrant provision" action:@selector(provisionMenuItemClicked:) keyEquivalent:@""];
+            menuItem.target = self;
+            menuItem.representedObject = instance;
+            [menu addItem:menuItem];
         }
         
-        menuItem.isExpanded = !menuItem.isExpanded;
+        NSMenuItem *menuItem = [[NSMenuItem alloc] initWithTitle:@"vagrant destroy" action:@selector(destroyMenuItemClicked:) keyEquivalent:@""];
+        menuItem.target = self;
+        menuItem.representedObject = instance;
+        [menu addItem:menuItem];
+        
+        [menu addItem:[NSMenuItem separatorItem]];
+        
+        menuItem = [[NSMenuItem alloc] initWithTitle:@"Open in Finder" action:@selector(finderMenuItemClicked:) keyEquivalent:@""];
+        menuItem.target = self;
+        menuItem.representedObject = instance;
+        [menu addItem:menuItem];
+        
+        menuItem = [[NSMenuItem alloc] initWithTitle:@"Open in Terminal" action:@selector(terminalMenuItemClicked:) keyEquivalent:@""];
+        menuItem.target = self;
+        menuItem.representedObject = instance;
+        [menu addItem:menuItem];
+        
+        menuItem = [[NSMenuItem alloc] initWithTitle:@"Add to bookmarks" action:@selector(addBookmarkMenuItemClicked:) keyEquivalent:@""];
+        menuItem.target = self;
+        menuItem.representedObject = instance;
+        [menu addItem:menuItem];
+        
+        [NSMenu popUpContextMenu:menu withEvent:[[NSApplication sharedApplication] currentEvent] forView:rowView];
+    } else if([menuItem.target isKindOfClass:[VagrantMachine class]]){
+        VagrantMachine *machine = menuItem.target;
+        
+        NSMenu *menu = [[NSMenu alloc] init];
+        
+        [menu addItem:[[NSMenuItem alloc] initWithTitle:[NSString stringWithFormat:@"%@ - %@", machine.instance.displayName, machine.name] action:nil keyEquivalent:@""]];
+        
+        [menu addItem:[NSMenuItem separatorItem]];
+        
+        if(machine.state == RunningState) {
+            NSMenuItem *menuItem = [[NSMenuItem alloc] initWithTitle:@"vagrant ssh" action:@selector(sshMenuItemClicked:) keyEquivalent:@""];
+            menuItem.target = self;
+            menuItem.representedObject = machine;
+            [menu addItem:menuItem];
+            
+            menuItem = [[NSMenuItem alloc] initWithTitle:@"vagrant reload" action:@selector(reloadMenuItemClicked:) keyEquivalent:@""];
+            menuItem.target = self;
+            menuItem.representedObject = machine;
+            [menu addItem:menuItem];
+            
+            menuItem = [[NSMenuItem alloc] initWithTitle:@"vagrant suspend" action:@selector(suspendMenuItemClicked:) keyEquivalent:@""];
+            menuItem.target = self;
+            menuItem.representedObject = machine;
+            [menu addItem:menuItem];
+            
+            menuItem = [[NSMenuItem alloc] initWithTitle:@"vagrant halt" action:@selector(haltMenuItemClicked:) keyEquivalent:@""];
+            menuItem.target = self;
+            menuItem.representedObject = machine;
+            [menu addItem:menuItem];
+            
+            menuItem = [[NSMenuItem alloc] initWithTitle:@"vagrant provision" action:@selector(provisionMenuItemClicked:) keyEquivalent:@""];
+            menuItem.target = self;
+            menuItem.representedObject = machine;
+            [menu addItem:menuItem];
+            
+            menuItem = [[NSMenuItem alloc] initWithTitle:@"vagrant destroy" action:@selector(destroyMenuItemClicked:) keyEquivalent:@""];
+            menuItem.target = self;
+            menuItem.representedObject = machine;
+            [menu addItem:menuItem];
+        } else {
+            NSMenuItem *menuItem = [[NSMenuItem alloc] initWithTitle:@"vagrant up" action:@selector(upMenuItemClicked:) keyEquivalent:@""];
+            menuItem.target = self;
+            menuItem.representedObject = machine;
+            [menu addItem:menuItem];
+            
+            menuItem = [[NSMenuItem alloc] initWithTitle:@"vagrant destroy" action:@selector(destroyMenuItemClicked:) keyEquivalent:@""];
+            menuItem.target = self;
+            menuItem.representedObject = machine;
+            [menu addItem:menuItem];
+        }
+        
+        [NSMenu popUpContextMenu:menu withEvent:[[NSApplication sharedApplication] currentEvent] forView:rowView];
     }
 }
 
@@ -109,44 +196,26 @@
     MenuItemObject *itemObj = [_menuItems objectAtIndex:row];
     
     if([itemObj.target isKindOfClass:[VagrantInstance class]]) {
-        if(itemObj.isChildMenuItem) {
-            InstanceActionsMenuItem *item;
-            item = [tableView makeViewWithIdentifier:@"InstanceActionsMenuItem" owner:self];
-            
-            VagrantInstance *instance = itemObj.target;
-            item.instance = instance;
-            item.delegate = self;
-            
-            [self updateScrollIndicators];
-            [self resizeTableView];
-            
-            return item;
+        InstanceMenuItem *item;
+        item = [tableView makeViewWithIdentifier:@"InstanceMenuItem" owner:self];
+        
+        VagrantInstance *instance = itemObj.target;
+        item.instance = instance;
+        item.delegate = self;
+        int runningCount = [instance getRunningMachineCount];
+        if(runningCount == 0) {
+            item.stateImageView.image = [NSImage imageNamed:@"NSStatusUnavailable"];
+        } else if(runningCount == instance.machines.count) {
+            item.stateImageView.image = [NSImage imageNamed:@"NSStatusAvailable"];
         } else {
-            InstanceMenuItem *item;
-            item = [tableView makeViewWithIdentifier:@"InstanceMenuItem" owner:self];
-            
-            VagrantInstance *instance = itemObj.target;
-            item.instance = instance;
-            int runningCount = 0;
-            for(VagrantMachine *machine in instance.machines) {
-                if(machine.state == RunningState) {
-                    ++runningCount;
-                }
-            }
-            if(runningCount == 0) {
-                item.stateImageView.image = [NSImage imageNamed:@"NSStatusUnavailable"];
-            } else if(runningCount == instance.machines.count) {
-                item.stateImageView.image = [NSImage imageNamed:@"NSStatusAvailable"];
-            } else {
-                item.stateImageView.image = [NSImage imageNamed:@"NSStatusPartiallyAvailable"];
-            }
-            item.nameTextField.stringValue = instance.displayName;
-            
-            [self updateScrollIndicators];
-            [self resizeTableView];
-            
-            return item;
+            item.stateImageView.image = [NSImage imageNamed:@"NSStatusPartiallyAvailable"];
         }
+        item.nameTextField.stringValue = instance.displayName;
+        
+        [self updateScrollIndicators];
+        [self resizeTableView];
+        
+        return item;
     } else if([itemObj.target isKindOfClass:[VagrantMachine class]]) {
         MachineMenuItem *item = [tableView makeViewWithIdentifier:@"MachineMenuItem" owner:self];
         
@@ -154,7 +223,6 @@
         item.machine = machine;
         item.stateImageView.image = machine.state == RunningState ? [NSImage imageNamed:@"NSStatusAvailable"] : [NSImage imageNamed:@"NSStatusUnavailable"];
         item.nameTextField.stringValue = machine.name;
-        item.delegate = self;
         
         [self updateScrollIndicators];
         [self resizeTableView];
@@ -166,13 +234,7 @@
 }
 
 - (CGFloat)tableView:(NSTableView *)tableView heightOfRow:(NSInteger)row {
-    MenuItemObject *itemObj = [_menuItems objectAtIndex:row];
-
-    if([itemObj.target isKindOfClass:[VagrantInstance class]]) {
-        return itemObj.isChildMenuItem ? 28 : 20;
-    } else {
-        return 42;
-    }
+    return 20;
 }
 
 - (float)getTableHeight {
@@ -247,7 +309,55 @@
     }
 }
 
+- (int)getIndexOfMenuItemWithTarget:(id)target {
+    for(int i=0; i<[_menuItems count]; ++i) {
+        MenuItemObject *menuItem = [_menuItems objectAtIndex:i];
+        
+        if(menuItem.target == target) {
+            return i;
+        }
+    }
+    
+    return -1;
+}
+
 #pragma mark - Menu management
+
+- (void)instanceMenuItem:(InstanceMenuItem *)menuItem toggleOpenButtonClicked:(id)sender {
+    int row = [self getIndexOfMenuItemWithTarget:menuItem.instance];
+    
+    MenuItemObject *menuItemObject = [_menuItems objectAtIndex:row];
+    
+    if([menuItemObject.target isKindOfClass:[VagrantInstance class]] && !menuItemObject.isChildMenuItem) {
+        VagrantInstance *instance = menuItemObject.target;
+        
+        if(menuItemObject.isExpanded) {
+            long nextRow = row + 1;
+            [self.tableView beginUpdates];
+            while(nextRow < _menuItems.count && ((MenuItemObject*)[_menuItems objectAtIndex:nextRow]).isChildMenuItem) {
+                [_menuItems removeObjectAtIndex:nextRow];
+                [self.tableView removeRowsAtIndexes:[NSIndexSet indexSetWithIndex:nextRow] withAnimation:NSTableViewAnimationSlideUp|NSTableViewAnimationEffectFade];
+            }
+            [self.tableView endUpdates];
+            [self performSelector:@selector(resizeTableView) withObject:nil afterDelay:.25f];
+        } else {
+            int i = 1;
+            [self.tableView beginUpdates];
+            for(VagrantMachine *machine in instance.machines) {
+                MenuItemObject *obj = [[MenuItemObject alloc] initWithTarget:machine];
+                obj.isChildMenuItem = YES;
+                [_menuItems insertObject:obj atIndex:row+i];
+                [self.tableView insertRowsAtIndexes:[NSIndexSet indexSetWithIndex:row+i] withAnimation:NSTableViewAnimationSlideDown|NSTableViewAnimationEffectFade];
+                ++i;
+            }
+            [self.tableView endUpdates];
+            [self resizeTableView];
+        }
+        
+        menuItemObject.isExpanded = !menuItemObject.isExpanded;
+        [((NSButton*)sender) setImage:[NSImage imageNamed:menuItemObject.isExpanded ? @"minus" : @"plus"]];
+    }
+}
 
 - (void)addInstance:(VagrantInstance*)instance {
     [_menuItems addObject:[[MenuItemObject alloc] initWithTarget:instance]];
@@ -340,6 +450,13 @@
             [_menuItems removeObjectAtIndex:i];
             [self.tableView removeRowsAtIndexes:[NSIndexSet indexSetWithIndex:i] withAnimation:NSTableViewAnimationSlideUp|NSTableViewAnimationEffectFade];
         } else {
+            if([menuItem.target isKindOfClass:[VagrantInstance class]]) {
+                InstanceRowView *rowView = [_tableView rowViewAtRow:i makeIfNecessary:NO];
+                InstanceMenuItem *instanceMenuItem = [rowView viewAtColumn:0];
+                if([instanceMenuItem isKindOfClass:[InstanceMenuItem class]]) {
+                    [instanceMenuItem.toggleOpenButton setImage:[NSImage imageNamed:@"plus"]];
+                }
+            }
             menuItem.isExpanded = NO;
         }
     }
@@ -347,15 +464,106 @@
     [self performSelector:@selector(resizeTableView) withObject:nil afterDelay:.25f];
 }
 
-#pragma mark - Action handlers
+#pragma mark - Action Menu Item Handlers
 
-- (void)machineMenuItem:(MachineMenuItem*)menuItem vagrantAction:(NSString*)action {
-    [self.delegate machineMenuItem:menuItem vagrantAction:action];
+- (IBAction)finderMenuItemClicked:(NSMenuItem*)sender {
+    if([sender.representedObject isKindOfClass:[VagrantInstance class]]) {
+        [self.delegate openInstanceInFinder:sender.representedObject];
+        [self.statusItemPopup hidePopover];
+    }
+}
+
+- (IBAction)terminalMenuItemClicked:(NSMenuItem*)sender {
+    if([sender.representedObject isKindOfClass:[VagrantInstance class]]) {
+        [self.delegate openInstanceInTerminal:sender.representedObject];
+        [self.statusItemPopup hidePopover];
+    }
+}
+
+- (IBAction)addBookmarkMenuItemClicked:(NSMenuItem*)sender {
+    if([sender.representedObject isKindOfClass:[VagrantInstance class]]) {
+        [self.delegate addBookmarkWithInstance:sender.representedObject];
+        [self.statusItemPopup hidePopover];
+    }
+}
+
+- (IBAction)removeBookmarkMenuItemClicked:(NSMenuItem*)sender {
+    if([sender.representedObject isKindOfClass:[VagrantInstance class]]) {
+        [self.delegate removeBookmarkWithInstance:sender.representedObject];
+        [self.statusItemPopup hidePopover];
+    }
+}
+
+- (IBAction)sshMenuItemClicked:(NSMenuItem*)sender {
+    if([sender.representedObject isKindOfClass:[VagrantInstance class]]) {
+        [self performAction:@"ssh" withInstance:sender.representedObject];
+    } else {
+        [self performAction:@"ssh" withMachine:sender.representedObject];
+    }
+}
+
+- (IBAction)upMenuItemClicked:(NSMenuItem*)sender {
+    if([sender.representedObject isKindOfClass:[VagrantInstance class]]) {
+        [self performAction:@"up" withInstance:sender.representedObject];
+    } else {
+        [self performAction:@"up" withMachine:sender.representedObject];
+    }
+}
+
+- (IBAction)reloadMenuItemClicked:(NSMenuItem*)sender {
+    if([sender.representedObject isKindOfClass:[VagrantInstance class]]) {
+        [self performAction:@"reload" withInstance:sender.representedObject];
+    } else {
+        [self performAction:@"reload" withMachine:sender.representedObject];
+    }
+}
+
+- (IBAction)suspendMenuItemClicked:(NSMenuItem*)sender {
+    if([sender.representedObject isKindOfClass:[VagrantInstance class]]) {
+        [self performAction:@"suspend" withInstance:sender.representedObject];
+    } else {
+        [self performAction:@"suspend" withMachine:sender.representedObject];
+    }
+}
+
+- (IBAction)haltMenuItemClicked:(NSMenuItem*)sender {
+    if([sender.representedObject isKindOfClass:[VagrantInstance class]]) {
+        [self performAction:@"halt" withInstance:sender.representedObject];
+    } else {
+        [self performAction:@"halt" withMachine:sender.representedObject];
+    }
+}
+
+- (IBAction)provisionMenuItemClicked:(NSMenuItem*)sender {
+    if([sender.representedObject isKindOfClass:[VagrantInstance class]]) {
+        [self performAction:@"provision" withInstance:sender.representedObject];
+    } else {
+        [self performAction:@"provision" withMachine:sender.representedObject];
+    }
+}
+
+- (IBAction)destroyMenuItemClicked:(NSMenuItem*)sender {
+    NSAlert *confirmAlert = [NSAlert alertWithMessageText:[NSString stringWithFormat:@"Are you sure you want to destroy %@?", [sender.target isKindOfClass:[VagrantInstance class]] ? @" all machines in this group" : @"this machine"] defaultButton:@"Confirm" alternateButton:@"Cancel" otherButton:nil informativeTextWithFormat:@""];
+    NSInteger button = [confirmAlert runModal];
+    
+    if(button == NSAlertDefaultReturn) {
+        if([sender.representedObject isKindOfClass:[VagrantInstance class]]) {
+            [self performAction:@"destroy" withInstance:sender.representedObject];
+        } else {
+            [self performAction:@"destroy" withMachine:sender.representedObject];
+        }
+    }
+}
+
+#pragma mark - Vagrant Actions
+
+- (void)performAction:(NSString*)action withInstance:(VagrantInstance*)instance {
+    [self.delegate performVagrantAction:action withInstance:instance];
     [self.statusItemPopup hidePopover];
 }
 
-- (void)instanceActionsMenuItem:(InstanceActionsMenuItem*)menuItem vagrantAction:(NSString*)action {
-    [self.delegate instanceActionsMenuItem:menuItem vagrantAction:action];
+- (void)performAction:(NSString*)action withMachine:(VagrantMachine *)machine {
+    [self.delegate performVagrantAction:action withMachine:machine];
     [self.statusItemPopup hidePopover];
 }
 

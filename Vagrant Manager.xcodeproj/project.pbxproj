@@ -13,11 +13,12 @@
 		8308E13C18868D52001E0B45 /* VirtualMachineInfoWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 8308E13A18868D52001E0B45 /* VirtualMachineInfoWindow.m */; };
 		8308E13D18868D52001E0B45 /* VirtualMachineInfoWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8308E13B18868D52001E0B45 /* VirtualMachineInfoWindow.xib */; };
 		8308E14018869FAC001E0B45 /* Bookmark.m in Sources */ = {isa = PBXBuildFile; fileRef = 8308E13F18869FAC001E0B45 /* Bookmark.m */; };
-		830D063A192F2F310043CE3C /* InstanceRowView.m in Sources */ = {isa = PBXBuildFile; fileRef = 830D0639192F2F310043CE3C /* InstanceRowView.m */; };
 		830D063D192F69190043CE3C /* MenuItemObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 830D063C192F69190043CE3C /* MenuItemObject.m */; };
-		830D0640192F822B0043CE3C /* InstanceActionsMenuItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 830D063F192F822B0043CE3C /* InstanceActionsMenuItem.m */; };
 		83103A571982180C00B340BB /* ParallelsServiceProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 83103A561982180C00B340BB /* ParallelsServiceProvider.m */; };
 		83103A5A19821A9E00B340BB /* ParallelsMachineInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 83103A5919821A9E00B340BB /* ParallelsMachineInfo.m */; };
+		83103A69198228B700B340BB /* bookmark.png in Resources */ = {isa = PBXBuildFile; fileRef = 83103A67198228B700B340BB /* bookmark.png */; };
+		83103A6A198228B700B340BB /* bookmark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 83103A68198228B700B340BB /* bookmark@2x.png */; };
+		83103A7D19824BBF00B340BB /* InstanceRowView.m in Sources */ = {isa = PBXBuildFile; fileRef = 83103A7C19824BBF00B340BB /* InstanceRowView.m */; };
 		8339DCA1187E756B0036E162 /* TaskOutputWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 8339DC9F187E756B0036E162 /* TaskOutputWindow.m */; };
 		8339DCA2187E756B0036E162 /* TaskOutputWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8339DCA0187E756B0036E162 /* TaskOutputWindow.xib */; };
 		8360A05718C2B37F002EA89B /* Environments.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8360A05618C2B37F002EA89B /* Environments.plist */; };
@@ -33,11 +34,9 @@
 		837213A1192758020052206D /* close.png in Resources */ = {isa = PBXBuildFile; fileRef = 8372139A192758020052206D /* close.png */; };
 		837213A2192758020052206D /* info.png in Resources */ = {isa = PBXBuildFile; fileRef = 8372139B192758020052206D /* info.png */; };
 		837213A3192758020052206D /* refresh.png in Resources */ = {isa = PBXBuildFile; fileRef = 8372139C192758020052206D /* refresh.png */; };
-		837213A4192758020052206D /* plus.png in Resources */ = {isa = PBXBuildFile; fileRef = 8372139D192758020052206D /* plus.png */; };
 		837213A6192758890052206D /* gear@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 837213A5192758890052206D /* gear@2x.png */; };
 		837213A8192758CE0052206D /* close@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 837213A7192758CE0052206D /* close@2x.png */; };
 		837213AA1927591F0052206D /* info@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 837213A91927591F0052206D /* info@2x.png */; };
-		837213AC1927599D0052206D /* refresh@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 837213AB1927599D0052206D /* refresh@2x.png */; };
 		837213BC192769020052206D /* MachineMenuItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 837213BB192769020052206D /* MachineMenuItem.m */; };
 		838A36FB191F56E4006244FA /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 832784C918A7483900222C71 /* Security.framework */; };
 		838A3726191F59FE006244FA /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 838A3701191F5798006244FA /* Foundation.framework */; };
@@ -79,6 +78,13 @@
 		83EAC43B18D067C900FF26A1 /* vagrant_logo_off-clean@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 83EAC43818D067C900FF26A1 /* vagrant_logo_off-clean@2x.png */; };
 		83EAC43C18D067C900FF26A1 /* vagrant_logo_on-clean.png in Resources */ = {isa = PBXBuildFile; fileRef = 83EAC43918D067C900FF26A1 /* vagrant_logo_on-clean.png */; };
 		83F1696F1923789900C54F13 /* VersionComparison.m in Sources */ = {isa = PBXBuildFile; fileRef = 83F1696E1923789900C54F13 /* VersionComparison.m */; };
+		83FD352D19826029002EEA2D /* arrow_right.png in Resources */ = {isa = PBXBuildFile; fileRef = 83FD352B19826029002EEA2D /* arrow_right.png */; };
+		83FD352E19826029002EEA2D /* arrow_right@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 83FD352C19826029002EEA2D /* arrow_right@2x.png */; };
+		83FD3533198261AB002EEA2D /* minus.png in Resources */ = {isa = PBXBuildFile; fileRef = 83FD352F198261AB002EEA2D /* minus.png */; };
+		83FD3534198261AB002EEA2D /* minus@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 83FD3530198261AB002EEA2D /* minus@2x.png */; };
+		83FD3535198261AB002EEA2D /* plus.png in Resources */ = {isa = PBXBuildFile; fileRef = 83FD3531198261AB002EEA2D /* plus.png */; };
+		83FD3536198261AB002EEA2D /* plus@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 83FD3532198261AB002EEA2D /* plus@2x.png */; };
+		83FD3539198263D4002EEA2D /* MachineRowView.m in Sources */ = {isa = PBXBuildFile; fileRef = 83FD3538198263D4002EEA2D /* MachineRowView.m */; };
 		B1357A71187CEB3B00811CBC /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B1357A70187CEB3B00811CBC /* Cocoa.framework */; };
 		B1357A7B187CEB3B00811CBC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = B1357A79187CEB3B00811CBC /* InfoPlist.strings */; };
 		B1357A7D187CEB3B00811CBC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B1357A7C187CEB3B00811CBC /* main.m */; };
@@ -153,16 +159,16 @@
 		8308E13B18868D52001E0B45 /* VirtualMachineInfoWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VirtualMachineInfoWindow.xib; sourceTree = "<group>"; };
 		8308E13E18869FAC001E0B45 /* Bookmark.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bookmark.h; sourceTree = "<group>"; };
 		8308E13F18869FAC001E0B45 /* Bookmark.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Bookmark.m; sourceTree = "<group>"; };
-		830D0638192F2F310043CE3C /* InstanceRowView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InstanceRowView.h; sourceTree = "<group>"; };
-		830D0639192F2F310043CE3C /* InstanceRowView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InstanceRowView.m; sourceTree = "<group>"; };
 		830D063B192F69190043CE3C /* MenuItemObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuItemObject.h; sourceTree = "<group>"; };
 		830D063C192F69190043CE3C /* MenuItemObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuItemObject.m; sourceTree = "<group>"; };
-		830D063E192F822B0043CE3C /* InstanceActionsMenuItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InstanceActionsMenuItem.h; sourceTree = "<group>"; };
-		830D063F192F822B0043CE3C /* InstanceActionsMenuItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InstanceActionsMenuItem.m; sourceTree = "<group>"; };
 		83103A551982180C00B340BB /* ParallelsServiceProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParallelsServiceProvider.h; sourceTree = "<group>"; };
 		83103A561982180C00B340BB /* ParallelsServiceProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ParallelsServiceProvider.m; sourceTree = "<group>"; };
 		83103A5819821A9E00B340BB /* ParallelsMachineInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParallelsMachineInfo.h; sourceTree = "<group>"; };
 		83103A5919821A9E00B340BB /* ParallelsMachineInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ParallelsMachineInfo.m; sourceTree = "<group>"; };
+		83103A67198228B700B340BB /* bookmark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bookmark.png; sourceTree = "<group>"; };
+		83103A68198228B700B340BB /* bookmark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bookmark@2x.png"; sourceTree = "<group>"; };
+		83103A7B19824BBF00B340BB /* InstanceRowView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InstanceRowView.h; sourceTree = "<group>"; };
+		83103A7C19824BBF00B340BB /* InstanceRowView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InstanceRowView.m; sourceTree = "<group>"; };
 		832784C918A7483900222C71 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		8339DC9E187E756B0036E162 /* TaskOutputWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskOutputWindow.h; sourceTree = "<group>"; };
 		8339DC9F187E756B0036E162 /* TaskOutputWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TaskOutputWindow.m; sourceTree = "<group>"; };
@@ -183,11 +189,9 @@
 		8372139A192758020052206D /* close.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = close.png; sourceTree = "<group>"; };
 		8372139B192758020052206D /* info.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = info.png; sourceTree = "<group>"; };
 		8372139C192758020052206D /* refresh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = refresh.png; sourceTree = "<group>"; };
-		8372139D192758020052206D /* plus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = plus.png; sourceTree = "<group>"; };
 		837213A5192758890052206D /* gear@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gear@2x.png"; sourceTree = "<group>"; };
 		837213A7192758CE0052206D /* close@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "close@2x.png"; sourceTree = "<group>"; };
 		837213A91927591F0052206D /* info@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "info@2x.png"; sourceTree = "<group>"; };
-		837213AB1927599D0052206D /* refresh@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "refresh@2x.png"; sourceTree = "<group>"; };
 		837213BA192769020052206D /* MachineMenuItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MachineMenuItem.h; path = ../MachineMenuItem.h; sourceTree = "<group>"; };
 		837213BB192769020052206D /* MachineMenuItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MachineMenuItem.m; path = ../MachineMenuItem.m; sourceTree = "<group>"; };
 		838A36F6191F53D8006244FA /* Askpass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Askpass.m; path = "../Vagrant Manager/Askpass.m"; sourceTree = "<group>"; };
@@ -248,6 +252,14 @@
 		83EAC43918D067C900FF26A1 /* vagrant_logo_on-clean.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "vagrant_logo_on-clean.png"; sourceTree = "<group>"; };
 		83F1696D1923789900C54F13 /* VersionComparison.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VersionComparison.h; sourceTree = "<group>"; };
 		83F1696E1923789900C54F13 /* VersionComparison.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VersionComparison.m; sourceTree = "<group>"; };
+		83FD352B19826029002EEA2D /* arrow_right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrow_right.png; sourceTree = "<group>"; };
+		83FD352C19826029002EEA2D /* arrow_right@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrow_right@2x.png"; sourceTree = "<group>"; };
+		83FD352F198261AB002EEA2D /* minus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = minus.png; sourceTree = "<group>"; };
+		83FD3530198261AB002EEA2D /* minus@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "minus@2x.png"; sourceTree = "<group>"; };
+		83FD3531198261AB002EEA2D /* plus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = plus.png; sourceTree = "<group>"; };
+		83FD3532198261AB002EEA2D /* plus@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "plus@2x.png"; sourceTree = "<group>"; };
+		83FD3537198263D4002EEA2D /* MachineRowView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MachineRowView.h; sourceTree = "<group>"; };
+		83FD3538198263D4002EEA2D /* MachineRowView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MachineRowView.m; sourceTree = "<group>"; };
 		B1357A6D187CEB3B00811CBC /* Vagrant Manager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Vagrant Manager.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B1357A70187CEB3B00811CBC /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		B1357A73187CEB3B00811CBC /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -336,17 +348,23 @@
 		83721396192757EA0052206D /* Icons */ = {
 			isa = PBXGroup;
 			children = (
-				837213AB1927599D0052206D /* refresh@2x.png */,
-				837213A91927591F0052206D /* info@2x.png */,
-				837213A7192758CE0052206D /* close@2x.png */,
-				837213A5192758890052206D /* gear@2x.png */,
-				83721397192758020052206D /* gear.png */,
-				83721398192758020052206D /* radio.png */,
 				83721399192758020052206D /* about.png */,
+				83FD352B19826029002EEA2D /* arrow_right.png */,
+				83FD352C19826029002EEA2D /* arrow_right@2x.png */,
+				83103A67198228B700B340BB /* bookmark.png */,
+				83103A68198228B700B340BB /* bookmark@2x.png */,
 				8372139A192758020052206D /* close.png */,
+				837213A7192758CE0052206D /* close@2x.png */,
+				83721397192758020052206D /* gear.png */,
+				837213A5192758890052206D /* gear@2x.png */,
 				8372139B192758020052206D /* info.png */,
+				837213A91927591F0052206D /* info@2x.png */,
+				83FD352F198261AB002EEA2D /* minus.png */,
+				83FD3530198261AB002EEA2D /* minus@2x.png */,
+				83FD3531198261AB002EEA2D /* plus.png */,
+				83FD3532198261AB002EEA2D /* plus@2x.png */,
+				83721398192758020052206D /* radio.png */,
 				8372139C192758020052206D /* refresh.png */,
-				8372139D192758020052206D /* plus.png */,
 			);
 			name = Icons;
 			sourceTree = "<group>";
@@ -394,6 +412,10 @@
 		838A111818839D8200A5E6DB /* App */ = {
 			isa = PBXGroup;
 			children = (
+				83103A7B19824BBF00B340BB /* InstanceRowView.h */,
+				83103A7C19824BBF00B340BB /* InstanceRowView.m */,
+				83FD3537198263D4002EEA2D /* MachineRowView.h */,
+				83FD3538198263D4002EEA2D /* MachineRowView.m */,
 				B1357A82187CEB3B00811CBC /* AppDelegate.h */,
 				B1357A83187CEB3B00811CBC /* AppDelegate.m */,
 				B1357A85187CEB3B00811CBC /* MainMenu.xib */,
@@ -404,12 +426,8 @@
 				837213BB192769020052206D /* MachineMenuItem.m */,
 				83E7CAB81928EFF6001C86F6 /* InstanceMenuItem.h */,
 				83E7CAB91928EFF6001C86F6 /* InstanceMenuItem.m */,
-				830D0638192F2F310043CE3C /* InstanceRowView.h */,
-				830D0639192F2F310043CE3C /* InstanceRowView.m */,
 				830D063B192F69190043CE3C /* MenuItemObject.h */,
 				830D063C192F69190043CE3C /* MenuItemObject.m */,
-				830D063E192F822B0043CE3C /* InstanceActionsMenuItem.h */,
-				830D063F192F822B0043CE3C /* InstanceActionsMenuItem.m */,
 			);
 			name = App;
 			sourceTree = "<group>";
@@ -676,18 +694,19 @@
 			files = (
 				B150012019249645000A76E7 /* vagrant_logo_on-clean@2x.png in Resources */,
 				8372138F192732330052206D /* lanayo.png in Resources */,
-				837213AC1927599D0052206D /* refresh@2x.png in Resources */,
 				838A3736191F5AAB006244FA /* Askpass in Resources */,
 				83EAC43C18D067C900FF26A1 /* vagrant_logo_on-clean.png in Resources */,
 				83721391192737B40052206D /* logo.png in Resources */,
 				838B393418CC78E800A04C15 /* vagrant_logo_off-default.png in Resources */,
 				8372139F192758020052206D /* radio.png in Resources */,
 				B1357A7B187CEB3B00811CBC /* InfoPlist.strings in Resources */,
+				83FD3533198261AB002EEA2D /* minus.png in Resources */,
 				B17AA1991887DB8C00B4C274 /* off.png in Resources */,
 				8372139E192758020052206D /* gear.png in Resources */,
 				B17AA19A1887DB8C00B4C274 /* on.png in Resources */,
 				B150013419249FFD000A76E7 /* on@2x.png in Resources */,
 				B150012619249896000A76E7 /* vagrant_logo_off-default@2x.png in Resources */,
+				83103A6A198228B700B340BB /* bookmark@2x.png in Resources */,
 				8339DCA2187E756B0036E162 /* TaskOutputWindow.xib in Resources */,
 				B1357ABD187DF58C00811CBC /* vagrant_logo_highlighted-default.png in Resources */,
 				83C7C83C1945825B007AC491 /* README.txt in Resources */,
@@ -711,8 +730,10 @@
 				837213A3192758020052206D /* refresh.png in Resources */,
 				B150012A19249B19000A76E7 /* problem@2x.png in Resources */,
 				83E7CAC219290A89001C86F6 /* arrow-down.png in Resources */,
+				83FD352E19826029002EEA2D /* arrow_right@2x.png in Resources */,
 				B150013019249D06000A76E7 /* vagrant_logo_highlighted-flat@2x.png in Resources */,
 				837213A0192758020052206D /* about.png in Resources */,
+				83FD352D19826029002EEA2D /* arrow_right.png in Resources */,
 				B150012C19249C34000A76E7 /* vagrant_logo_off-flat@2x.png in Resources */,
 				8308E133188662BD001E0B45 /* AboutWindow.xib in Resources */,
 				837213A6192758890052206D /* gear@2x.png in Resources */,
@@ -728,9 +749,12 @@
 				838B393F18CC85BC00A04C15 /* vagrant_logo_off-flat.png in Resources */,
 				837213A2192758020052206D /* info.png in Resources */,
 				8308E13D18868D52001E0B45 /* VirtualMachineInfoWindow.xib in Resources */,
+				83FD3534198261AB002EEA2D /* minus@2x.png in Resources */,
 				B17AA1961887DA5800B4C274 /* problem.png in Resources */,
+				83FD3536198261AB002EEA2D /* plus@2x.png in Resources */,
+				83FD3535198261AB002EEA2D /* plus.png in Resources */,
+				83103A69198228B700B340BB /* bookmark.png in Resources */,
 				83E7CAC319290A89001C86F6 /* arrow-down@2x.png in Resources */,
-				837213A4192758020052206D /* plus.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -754,13 +778,14 @@
 				83103A571982180C00B340BB /* ParallelsServiceProvider.m in Sources */,
 				83E7CAB41928C2E9001C86F6 /* VirtualMachineInfo.m in Sources */,
 				83C7C8341945825B007AC491 /* DDASLLogCapture.m in Sources */,
+				83103A7D19824BBF00B340BB /* InstanceRowView.m in Sources */,
 				83C7C8391945825B007AC491 /* DDContextFilterLogFormatter.m in Sources */,
 				83DB673A1928AC0C0008CB57 /* VagrantMachine.m in Sources */,
 				83C7C83A1945825B007AC491 /* DDDispatchQueueLogFormatter.m in Sources */,
 				83EAC43518D05E9300FF26A1 /* AddBookmarkWindow.m in Sources */,
+				83FD3539198263D4002EEA2D /* MachineRowView.m in Sources */,
 				B1357A84187CEB3B00811CBC /* AppDelegate.m in Sources */,
 				83C7C8331945825B007AC491 /* DDAbstractDatabaseLogger.m in Sources */,
-				830D063A192F2F310043CE3C /* InstanceRowView.m in Sources */,
 				83C7C83B1945825B007AC491 /* DDMultiFormatter.m in Sources */,
 				83103A5A19821A9E00B340BB /* ParallelsMachineInfo.m in Sources */,
 				83C7C8321945825B007AC491 /* CLIColor.m in Sources */,
@@ -780,7 +805,6 @@
 				B13DC35B19232782002E5A50 /* VirtualBoxServiceProvider.m in Sources */,
 				837213BC192769020052206D /* MachineMenuItem.m in Sources */,
 				B13DC36019233051002E5A50 /* VirtualBoxMachineInfo.m in Sources */,
-				830D0640192F822B0043CE3C /* InstanceActionsMenuItem.m in Sources */,
 				83C7C8351945825B007AC491 /* DDASLLogger.m in Sources */,
 				8339DCA1187E756B0036E162 /* TaskOutputWindow.m in Sources */,
 				B1357A7D187CEB3B00811CBC /* main.m in Sources */,

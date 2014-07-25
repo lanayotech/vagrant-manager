@@ -1,14 +1,13 @@
 //
-//  InstanceRowView.m
+//  MachineRowView.m
 //  Vagrant Manager
 //
 //  Copyright (c) 2014 Lanayo. All rights reserved.
 //
 
-#import "InstanceRowView.h"
-#import "InstanceMenuItem.h"
+#import "MachineRowView.h"
 
-@implementation InstanceRowView {
+@implementation MachineRowView {
     NSTrackingArea *_trackingArea;
     BOOL _mouseInside;
 }
@@ -43,21 +42,21 @@
     [[NSColor colorWithRed:.7 green:.7 blue:1 alpha:1.0] setFill];
     NSBezierPath *selectionPath = [NSBezierPath bezierPathWithRoundedRect:selectionRect xRadius:4 yRadius:4];
     /*
-    NSBezierPath *selectionPath = [NSBezierPath bezierPath];
-    
-    // Draw top border and a top-right rounded corner
-    NSPoint topRightCorner = NSMakePoint(NSMaxX(self.bounds), NSMinY(self.bounds));
-    [path lineToPoint:NSMakePoint(NSMaxX(self.bounds) - cornerRadius, NSMinY(self.bounds))];
-    [path curveToPoint:NSMakePoint(NSMaxX(self.bounds), NSMinY(self.bounds) + cornerRadius)
-         controlPoint1:topRightCorner
-         controlPoint2:topRightCorner];
-    
-    // Draw right border, bottom border and left border
-    [path lineToPoint:NSMakePoint(NSMaxX(self.bounds), NSMaxY(self.bounds))];
-    [path lineToPoint:NSMakePoint(NSMinX(self.bounds), NSMaxY(self.bounds))];
-    [path lineToPoint:NSMakePoint(NSMinX(self.bounds), NSMinY(self.bounds))];
-    
-    [selectionPath moveToPoint:NSMinX(self.bounds), NSMinY(self.bounds)];
+     NSBezierPath *selectionPath = [NSBezierPath bezierPath];
+     
+     // Draw top border and a top-right rounded corner
+     NSPoint topRightCorner = NSMakePoint(NSMaxX(self.bounds), NSMinY(self.bounds));
+     [path lineToPoint:NSMakePoint(NSMaxX(self.bounds) - cornerRadius, NSMinY(self.bounds))];
+     [path curveToPoint:NSMakePoint(NSMaxX(self.bounds), NSMinY(self.bounds) + cornerRadius)
+     controlPoint1:topRightCorner
+     controlPoint2:topRightCorner];
+     
+     // Draw right border, bottom border and left border
+     [path lineToPoint:NSMakePoint(NSMaxX(self.bounds), NSMaxY(self.bounds))];
+     [path lineToPoint:NSMakePoint(NSMinX(self.bounds), NSMaxY(self.bounds))];
+     [path lineToPoint:NSMakePoint(NSMinX(self.bounds), NSMinY(self.bounds))];
+     
+     [selectionPath moveToPoint:NSMinX(self.bounds), NSMinY(self.bounds)];
      */
     [selectionPath fill];
     [selectionPath stroke];

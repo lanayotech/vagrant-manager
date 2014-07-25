@@ -13,4 +13,8 @@
 
 @implementation InstanceMenuItem
 
+- (IBAction)toggleOpenButtonClicked:(id)sender {
+    [self.delegate instanceMenuItem:self toggleOpenButtonClicked:sender];
+}
+
 @end

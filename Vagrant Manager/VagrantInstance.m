@@ -52,6 +52,17 @@
     return _displayName;
 }
 
+- (int)getRunningMachineCount {
+    int runningCount = 0;
+    for(VagrantMachine *machine in _machines) {
+        if(machine.state == RunningState) {
+            ++runningCount;
+        }
+    }
+    
+    return runningCount;
+}
+
 - (BOOL)hasVagrantfile {
     return [self getVagrantfilePath]!=nil;
 }

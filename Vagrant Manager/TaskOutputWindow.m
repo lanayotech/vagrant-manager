@@ -71,7 +71,7 @@
     }
 
     //notify app task is complete
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"vagrant-manager.task-completed" object:self userInfo:@{@"target": self.target}];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"vagrant-manager.task-completed" object:nil userInfo:@{@"target": self.target}];
     
     if([[NSUserDefaults standardUserDefaults] boolForKey:@"autoCloseTaskWindows"] && task.terminationStatus == 0) {
         dispatch_async(dispatch_get_global_queue(0,0), ^{

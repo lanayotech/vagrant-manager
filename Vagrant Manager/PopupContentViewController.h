@@ -7,22 +7,26 @@
 
 #import <Cocoa/Cocoa.h>
 #import "VagrantInstance.h"
+#import "VagrantMachine.h"
 #import "MenuItemObject.h"
 #import "InstanceRowView.h"
 #import "InstanceMenuItem.h"
-#import "InstanceActionsMenuItem.h"
 #import "MachineMenuItem.h"
 
 @class PopupContentViewController;
 
 @protocol MenuDelegate <NSObject>
 
-- (void)machineMenuItem:(MachineMenuItem*)menuItem vagrantAction:(NSString*)action;
-- (void)instanceActionsMenuItem:(InstanceActionsMenuItem*)menuItem vagrantAction:(NSString*)action;
+- (void)performVagrantAction:(NSString*)action withInstance:(VagrantInstance*)instance;
+- (void)performVagrantAction:(NSString*)action withMachine:(VagrantMachine*)machine;
+- (void)openInstanceInFinder:(VagrantInstance*)instance;
+- (void)openInstanceInTerminal:(VagrantInstance*)instance;
+- (void)addBookmarkWithInstance:(VagrantInstance*)instance;
+- (void)removeBookmarkWithInstance:(VagrantInstance*)instance;
 
 @end
 
-@interface PopupContentViewController : NSViewController <NSTableViewDelegate, NSTableViewDataSource, MachineMenuItemDelegate, InstanceActionsMenuItemDelegate> {
+@interface PopupContentViewController : NSViewController <NSTableViewDelegate, NSTableViewDataSource, InstanceMenuItemDelegate> {
     PreferencesWindow *preferencesWindow;
     AboutWindow *aboutWindow;
 }

@@ -21,6 +21,7 @@
 
 - (VagrantMachine*)getMachineWithName:(NSString*)name;
 - (void)queryMachines;
+- (int)getRunningMachineCount;
 
 - (NSString*)getPath;
 
