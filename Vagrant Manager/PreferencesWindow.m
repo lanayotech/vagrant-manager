@@ -59,6 +59,7 @@
     [self.dontShowUpdateCheckBox setState:dontShowUpdateNotification ? NSOnState : NSOffState];
     [self.dontShowRunningVmCountCheckBox setState:dontShowRunningVmCount ? NSOnState : NSOffState];
     [self.sendProfileDataCheckBox setState:[Util shouldSendProfileData] ? NSOnState : NSOffState];
+    [self.launchAtLoginCheckBox setState:[self willStartAtLogin] ? NSOnState : NSOffState];
 }
 
 - (IBAction)autoCloseCheckBoxClicked:(id)sender {
@@ -135,6 +136,73 @@
     [[NSUserDefaults standardUserDefaults] setBool:(self.sendProfileDataCheckBox.state == NSOnState) forKey:@"sendProfileData"];
     [[NSUserDefaults standardUserDefaults] synchronize];
     [[SUUpdater sharedUpdater] setSendsSystemProfile:[Util shouldSendProfileData]];
+}
+
+- (IBAction)launchAtLoginCheckBoxClicked:(id)sender {
+    [self setLaunchOnLogin:(self.launchAtLoginCheckBox.state == NSOnState)];
+}
+
+- (void)setLaunchOnLogin:(BOOL)launchOnLogin {
+    NSURL *bundleURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] bundlePath]];
+    
+    LSSharedFileListItemRef existingItem = NULL;
+    
+    LSSharedFileListRef loginItems = LSSharedFileListCreate(NULL, kLSSharedFileListSessionLoginItems, NULL);
+    if (loginItems) {
+        UInt32 seed = 0U;
+        NSArray *currentLoginItems = (__bridge NSArray *)(LSSharedFileListCopySnapshot(loginItems, &seed));
+        for (id itemObject in currentLoginItems) {
+            LSSharedFileListItemRef item = (__bridge LSSharedFileListItemRef)itemObject;
+            
+            UInt32 resolutionFlags = kLSSharedFileListNoUserInteraction | kLSSharedFileListDoNotMountVolumes;
+            CFURLRef URL = NULL;
+            OSStatus err = LSSharedFileListItemResolve(item, resolutionFlags, &URL, NULL);
+            if (err == noErr) {
+                Boolean foundIt = CFEqual(URL, (__bridge CFTypeRef)(bundleURL));
+                CFRelease(URL);
+                
+                if (foundIt) {
+                    existingItem = item;
+                    break;
+                }
+            }
+        }
+        
+        if (launchOnLogin && (existingItem == NULL)) {
+            LSSharedFileListInsertItemURL(loginItems, kLSSharedFileListItemBeforeFirst, NULL, NULL, (__bridge CFURLRef)bundleURL, NULL, NULL);
+            
+        } else if (!launchOnLogin && (existingItem != NULL))
+            LSSharedFileListItemRemove(loginItems, existingItem);
+        
+        CFRelease(loginItems);
+    }
+}
+
+- (BOOL)willStartAtLogin {
+    NSURL *bundleURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] bundlePath]];
+    BOOL foundIt = NO;
+    
+    LSSharedFileListRef loginItems = LSSharedFileListCreate(NULL, kLSSharedFileListSessionLoginItems, NULL);
+    if (loginItems) {
+        UInt32 seed = 0U;
+        NSArray *currentLoginItems = (__bridge NSArray *)(LSSharedFileListCopySnapshot(loginItems, &seed));
+        for (id itemObject in currentLoginItems) {
+            LSSharedFileListItemRef item = (__bridge LSSharedFileListItemRef)itemObject;
+            
+            UInt32 resolutionFlags = kLSSharedFileListNoUserInteraction | kLSSharedFileListDoNotMountVolumes;
+            CFURLRef URL = NULL;
+            OSStatus err = LSSharedFileListItemResolve(item, resolutionFlags, &URL, NULL);
+            if (err == noErr) {
+                foundIt = (BOOL)CFEqual(URL, (__bridge CFTypeRef)(bundleURL));
+                CFRelease(URL);
+                
+                if (foundIt)
+                    break;
+            }
+        }
+        CFRelease(loginItems);
+    }
+    return foundIt;
 }
 
 @end
