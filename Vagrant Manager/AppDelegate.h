@@ -13,6 +13,7 @@
 #import "VirtualMachineInfoWindow.h"
 #import "VirtualBoxMachineInfo.h"
 #import "VirtualBoxServiceProvider.h"
+#import "ParallelsServiceProvider.h"
 #import "AXStatusItemPopup/AXStatusItemPopup.h"
 #include <Sparkle/Sparkle.h>
 #import "PopupContentViewController.h"

@@ -83,6 +83,7 @@
     _manager = [[VagrantManager alloc] init];
     _manager.delegate = self;
     [_manager addServiceProvider:[[VirtualBoxServiceProvider alloc] init]];
+    [_manager addServiceProvider:[[ParallelsServiceProvider alloc] init]];
         
     //load bookmarks
     NSArray *bookmarks = [self getSavedBookmarks];
