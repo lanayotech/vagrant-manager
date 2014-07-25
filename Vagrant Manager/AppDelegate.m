@@ -72,6 +72,9 @@
     //initialize data
     taskOutputWindows = [[NSMutableArray alloc] init];
     
+    //register notification listeners
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(taskCompleted:) name:@"vagrant-manager.task-completed" object:nil];
+    
     //create popup and status menu item
     _popupContentViewController = [[PopupContentViewController alloc] initWithNibName:@"PopupContentViewController" bundle:nil];
     statusItemPopup = [[AXStatusItemPopup alloc] initWithViewController:_popupContentViewController image:[self getThemedImage:@"vagrant_logo_off"] alternateImage:[self getThemedImage:@"vagrant_logo_highlighted"]];
@@ -97,6 +100,10 @@
     [[SUUpdater sharedUpdater] checkForUpdateInformation];
     
     //start initial vagrant machine detection
+    [self refreshVagrantMachines];
+}
+
+- (void)taskCompleted:(NSNotification*)notification {
     [self refreshVagrantMachines];
 }
 
