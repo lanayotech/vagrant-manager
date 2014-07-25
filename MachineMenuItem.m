@@ -39,7 +39,12 @@
 }
 
 - (IBAction)destroyButtonClicked:(id)sender {
-    [self.delegate machineMenuItem:self vagrantAction:@"destroy"];
+    NSAlert *confirmAlert = [NSAlert alertWithMessageText:@"Are you sure you want to destroy this vagrant machine?" defaultButton:@"Confirm" alternateButton:@"Cancel" otherButton:nil informativeTextWithFormat:@""];
+    NSInteger button = [confirmAlert runModal];
+    
+    if(button == NSAlertDefaultReturn) {
+        [self.delegate machineMenuItem:self vagrantAction:@"destroy"];
+    }
 }
 
 @end
