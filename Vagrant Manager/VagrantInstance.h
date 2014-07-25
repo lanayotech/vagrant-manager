@@ -14,9 +14,10 @@
 @property (readonly) NSString *path;
 @property (readonly) NSString *displayName;
 @property (readonly) NSArray *machines;
+@property (readonly) NSString *providerIdentifier;
 
-- (id)initWithPath:(NSString*)path;
-- (id)initWithPath:(NSString*)path displayName:(NSString*)displayName;
+- (id)initWithPath:(NSString*)path providerIdentifier:(NSString*)providerIdentifier;
+- (id)initWithPath:(NSString*)path displayName:(NSString*)displayName providerIdentifier:(NSString*)providerIdentifier;
 
 - (VagrantMachine*)getMachineWithName:(NSString*)name;
 - (void)queryMachines;

@@ -83,7 +83,7 @@
     _manager = [[VagrantManager alloc] init];
     _manager.delegate = self;
     [_manager addServiceProvider:[[VirtualBoxServiceProvider alloc] init]];
-    
+        
     //load bookmarks
     NSArray *bookmarks = [self getSavedBookmarks];
     for(Bookmark *bookmark in bookmarks) {
@@ -204,7 +204,7 @@
     NSString *command;
     
     if([action isEqualToString:@"up"]) {
-        command = @"vagrant up";
+        command = [NSString stringWithFormat:@"vagrant up --provider=%@", machine.instance.providerIdentifier];
     } else if([action isEqualToString:@"reload"]) {
         command = @"vagrant reload";
     } else if([action isEqualToString:@"suspend"]) {
@@ -242,7 +242,7 @@
     NSString *command;
     
     if([action isEqualToString:@"up"]) {
-        command = @"vagrant up";
+        command = [NSString stringWithFormat:@"vagrant up --provider=%@", instance.providerIdentifier];
     } else if([action isEqualToString:@"reload"]) {
         command = @"vagrant reload";
     } else if([action isEqualToString:@"suspend"]) {

@@ -9,6 +9,10 @@
 
 @implementation VirtualBoxServiceProvider
 
+- (NSString*)getProviderIdentifier {
+    return @"virtualbox";
+}
+
 - (NSArray*)getVagrantInstancePaths {
     NSMutableArray *paths = [[NSMutableArray alloc] init];
     

@@ -14,8 +14,8 @@
     //bookmarks
     NSMutableArray *_bookmarks;
     
-    //virtual machine service providers
-    NSMutableArray *_providers;
+    //map provider identifiers to providers
+    NSMutableDictionary *_providers;
 }
 
 - (id)init {
@@ -24,7 +24,7 @@
     if(self) {
         _instances = [[NSMutableArray alloc] init];
         _bookmarks = [[NSMutableArray alloc] init];
-        _providers = [[NSMutableArray alloc] init];
+        _providers = [[NSMutableDictionary alloc] init];
     }
     
     return self;
@@ -35,7 +35,7 @@
 }
 
 - (void)addServiceProvider:(id<VirtualMachineServiceProvider>)provider {
-    [_providers addObject:provider];
+    [_providers setObject:provider forKey:[provider getProviderIdentifier]];
 }
 
 - (Bookmark*)getBookmarkForPath:(NSString*)path {
@@ -77,15 +77,18 @@
 
     //create instance for each bookmark
     for(Bookmark *bookmark in _bookmarks) {
-        [instances addObject:[[VagrantInstance alloc] initWithPath:bookmark.path displayName:bookmark.displayName]];
+        [instances addObject:[[VagrantInstance alloc] initWithPath:bookmark.path displayName:bookmark.displayName providerIdentifier:bookmark.providerIdentifier]];
     }
     
     //create instance for each detected path
-    NSArray *detectedPaths = [self detectInstancePaths];
-    for(NSString *path in detectedPaths) {
-        //make sure it is not a bookmark
-        if(![self getBookmarkForPath:path]) {
-            [instances addObject:[[VagrantInstance alloc] initWithPath:path]];
+    NSDictionary *detectedPaths = [self detectInstancePaths];
+    for(NSString *providerIdentifier in [detectedPaths allKeys]) {
+        NSArray *paths = [detectedPaths objectForKey:providerIdentifier];
+        for(NSString *path in paths) {
+            //make sure it is not a bookmark
+            if(![self getBookmarkForPath:path]) {
+                [instances addObject:[[VagrantInstance alloc] initWithPath:path providerIdentifier:providerIdentifier]];
+            }
         }
     }
     
@@ -150,22 +153,26 @@
 /*
  Query providers for all Vagrant instance paths
  */
-- (NSArray*)detectInstancePaths {
+- (NSDictionary*)detectInstancePaths {
     NSMutableArray *allPaths = [[NSMutableArray alloc] init];
+    NSMutableDictionary *keyedPaths = [[NSMutableDictionary alloc] init];
     
     //find Vagrant instances for each registered provider
-    for(id<VirtualMachineServiceProvider> provider in _providers) {
+    for(id<VirtualMachineServiceProvider> provider in [_providers allValues]) {
         NSArray *paths = [provider getVagrantInstancePaths];
+        NSMutableArray *uniquePaths = [[NSMutableArray alloc] init];
         //make sure we haven't already detected this path
         for(NSString *path in paths) {
             NSString *p = [Util trimTrailingSlash:path];
             if(![allPaths containsObject:p]) {
                 [allPaths addObject:p];
+                [uniquePaths addObject:p];
             }
         }
+        [keyedPaths setObject:uniquePaths forKey:[provider getProviderIdentifier]];
     }
     
-    return [NSArray arrayWithArray:allPaths];
+    return [NSDictionary dictionaryWithDictionary:keyedPaths];
 }
 
 @end

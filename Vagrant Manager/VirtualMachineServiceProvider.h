@@ -11,5 +11,6 @@
 @protocol VirtualMachineServiceProvider <NSObject>
 
 - (NSArray*)getVagrantInstancePaths;
+- (NSString*)getProviderIdentifier;
 
 @end

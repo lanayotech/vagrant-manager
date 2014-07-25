@@ -8,13 +8,14 @@
 #import "VagrantInstance.h"
 
 @implementation VagrantInstance {
+    NSString *_providerIdentifier;
     NSString *_path;
     NSString *_displayName;
     NSMutableArray *_machines;
 }
 
-- (id)initWithPath:(NSString*)path displayName:(NSString*)displayName {
-    self = [self initWithPath:path];
+- (id)initWithPath:(NSString*)path displayName:(NSString*)displayName providerIdentifier:(NSString*)providerIdentifier {
+    self = [self initWithPath:path providerIdentifier:providerIdentifier];
     
     if(self) {
         _displayName = displayName;
@@ -23,11 +24,12 @@
     return self;
 }
 
-- (id)initWithPath:(NSString*)path {
+- (id)initWithPath:(NSString*)path providerIdentifier:(NSString*)providerIdentifier {
     self = [super init];
     
     if(self) {
         _path = path;
+        _providerIdentifier = providerIdentifier;
         
         //get display name based on last part of path
         NSArray *parts = [path componentsSeparatedByString:@"/"];
