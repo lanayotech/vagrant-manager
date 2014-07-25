@@ -129,6 +129,7 @@
                 //tell popup controller refreshing has ended
                 isRefreshingVagrantMachines = NO;
                 [_popupContentViewController setIsRefreshing:NO];
+                [self updateRunningVmCount];
             });
         });
     }
@@ -1091,6 +1092,22 @@
     }
 
     return theme;
+}
+
+- (void)updateRunningVmCount {
+    int runningCount = [_manager getRunningVmCount];
+    
+    if(runningCount) {
+        if(![[NSUserDefaults standardUserDefaults] boolForKey:@"dontShowRunningVmCount"]) {
+            [statusItemPopup setTitle:[NSString stringWithFormat:@"%d", runningCount]];
+        } else {
+            [statusItemPopup setTitle:@""];
+        }
+        [statusItemPopup setImage:[self getThemedImage:@"vagrant_logo_on"]];
+    } else {
+        [statusItemPopup setTitle:@""];
+        [statusItemPopup setImage:[self getThemedImage:@"vagrant_logo_off"]];
+    }
 }
 
 /*

@@ -34,6 +34,22 @@
     return [NSArray arrayWithArray:_instances];
 }
 
+- (int)getRunningVmCount {
+    int count = 0;
+    
+    @synchronized(_instances) {
+        for(VagrantInstance *instance in _instances) {
+            for(VagrantMachine *machine in instance.machines) {
+                if(machine.state == RunningState) {
+                    ++count;
+                }
+            }
+        }
+    }
+    
+    return count;
+}
+
 - (void)addServiceProvider:(id<VirtualMachineServiceProvider>)provider {
     [_providers setObject:provider forKey:[provider getProviderIdentifier]];
 }

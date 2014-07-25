@@ -31,5 +31,6 @@
 - (void)refreshInstances;
 - (Bookmark*)getBookmarkForPath:(NSString*)path;
 - (VagrantInstance*)getInstanceForPath:(NSString*)path;
+- (int)getRunningVmCount;
 
 @end
