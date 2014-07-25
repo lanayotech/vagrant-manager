@@ -355,7 +355,7 @@
         }
         
         menuItemObject.isExpanded = !menuItemObject.isExpanded;
-        [((NSButton*)sender) setImage:[NSImage imageNamed:menuItemObject.isExpanded ? @"minus" : @"plus"]];
+        [((NSButton*)sender) setImage:[NSImage imageNamed:menuItemObject.isExpanded ? @"arrow_down" : @"arrow_right"]];
     }
 }
 
@@ -454,7 +454,7 @@
                 InstanceRowView *rowView = [_tableView rowViewAtRow:i makeIfNecessary:NO];
                 InstanceMenuItem *instanceMenuItem = [rowView viewAtColumn:0];
                 if([instanceMenuItem isKindOfClass:[InstanceMenuItem class]]) {
-                    [instanceMenuItem.toggleOpenButton setImage:[NSImage imageNamed:@"plus"]];
+                    [instanceMenuItem.toggleOpenButton setImage:[NSImage imageNamed:@"arrow_right"]];
                 }
             }
             menuItem.isExpanded = NO;

@@ -114,9 +114,9 @@
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                 <subviews>
                                                     <button toolTip="Add to Bookmarks" verticalHuggingPriority="750" id="Dfr-Af-KFE" userLabel="Toggle">
-                                                        <rect key="frame" x="5" y="5" width="10" height="10"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="20" height="20"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                                        <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="plus" imagePosition="overlaps" alignment="center" state="on" imageScaling="proportionallyDown" inset="2" id="H6b-Oo-e1Q">
+                                                        <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="arrow_right" imagePosition="overlaps" alignment="center" state="on" inset="2" id="H6b-Oo-e1Q">
                                                             <behavior key="behavior" lightByContents="YES"/>
                                                             <font key="font" metaFont="system"/>
                                                         </buttonCell>
@@ -139,7 +139,7 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" id="JUX-pG-ao9">
-                                                        <rect key="frame" x="184" y="5" width="6" height="10"/>
+                                                        <rect key="frame" x="170" y="0.0" width="20" height="20"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="arrow_right" id="ZaU-qP-Zgn"/>
                                                     </imageView>
@@ -169,7 +169,7 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" id="qwJ-lR-EHL">
-                                                        <rect key="frame" x="184" y="5" width="6" height="10"/>
+                                                        <rect key="frame" x="170" y="0.0" width="20" height="20"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="arrow_right" id="whp-sa-CIg"/>
                                                     </imageView>
@@ -212,12 +212,11 @@
         <image name="NSStatusAvailable" width="16" height="16"/>
         <image name="arrow-down" width="16" height="8"/>
         <image name="arrow-up" width="16" height="8"/>
-        <image name="arrow_right" width="10" height="16"/>
+        <image name="arrow_right" width="20" height="20"/>
         <image name="bookmark" width="11" height="20"/>
         <image name="close" width="20" height="20"/>
         <image name="gear" width="20" height="20"/>
         <image name="info" width="20" height="20"/>
-        <image name="plus" width="20" height="20"/>
         <image name="refresh" width="20" height="19"/>
     </resources>
 </document>

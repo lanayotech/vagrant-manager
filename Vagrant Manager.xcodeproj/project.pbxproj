@@ -74,12 +74,6 @@
 		83EAC43B18D067C900FF26A1 /* vagrant_logo_off-clean@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 83EAC43818D067C900FF26A1 /* vagrant_logo_off-clean@2x.png */; };
 		83EAC43C18D067C900FF26A1 /* vagrant_logo_on-clean.png in Resources */ = {isa = PBXBuildFile; fileRef = 83EAC43918D067C900FF26A1 /* vagrant_logo_on-clean.png */; };
 		83F1696F1923789900C54F13 /* VersionComparison.m in Sources */ = {isa = PBXBuildFile; fileRef = 83F1696E1923789900C54F13 /* VersionComparison.m */; };
-		83FD352D19826029002EEA2D /* arrow_right.png in Resources */ = {isa = PBXBuildFile; fileRef = 83FD352B19826029002EEA2D /* arrow_right.png */; };
-		83FD352E19826029002EEA2D /* arrow_right@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 83FD352C19826029002EEA2D /* arrow_right@2x.png */; };
-		83FD3533198261AB002EEA2D /* minus.png in Resources */ = {isa = PBXBuildFile; fileRef = 83FD352F198261AB002EEA2D /* minus.png */; };
-		83FD3534198261AB002EEA2D /* minus@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 83FD3530198261AB002EEA2D /* minus@2x.png */; };
-		83FD3535198261AB002EEA2D /* plus.png in Resources */ = {isa = PBXBuildFile; fileRef = 83FD3531198261AB002EEA2D /* plus.png */; };
-		83FD3536198261AB002EEA2D /* plus@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 83FD3532198261AB002EEA2D /* plus@2x.png */; };
 		83FD3539198263D4002EEA2D /* MachineRowView.m in Sources */ = {isa = PBXBuildFile; fileRef = 83FD3538198263D4002EEA2D /* MachineRowView.m */; };
 		83FD353D19826945002EEA2D /* ManageBookmarksWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 83FD353B19826945002EEA2D /* ManageBookmarksWindow.m */; };
 		83FD353E19826945002EEA2D /* ManageBookmarksWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 83FD353C19826945002EEA2D /* ManageBookmarksWindow.xib */; };
@@ -87,6 +81,10 @@
 		83FD354219826C80002EEA2D /* bookmark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 83FD354019826C80002EEA2D /* bookmark@2x.png */; };
 		83FD354519826DDC002EEA2D /* NFSScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 83FD354419826DDC002EEA2D /* NFSScanner.m */; };
 		83FD354819827545002EEA2D /* BookmarkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 83FD354719827545002EEA2D /* BookmarkManager.m */; };
+		83FD355519828164002EEA2D /* arrow_down.png in Resources */ = {isa = PBXBuildFile; fileRef = 83FD355119828164002EEA2D /* arrow_down.png */; };
+		83FD355619828164002EEA2D /* arrow_down@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 83FD355219828164002EEA2D /* arrow_down@2x.png */; };
+		83FD355719828164002EEA2D /* arrow_right.png in Resources */ = {isa = PBXBuildFile; fileRef = 83FD355319828164002EEA2D /* arrow_right.png */; };
+		83FD355819828164002EEA2D /* arrow_right@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 83FD355419828164002EEA2D /* arrow_right@2x.png */; };
 		B1357A71187CEB3B00811CBC /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B1357A70187CEB3B00811CBC /* Cocoa.framework */; };
 		B1357A7B187CEB3B00811CBC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = B1357A79187CEB3B00811CBC /* InfoPlist.strings */; };
 		B1357A7D187CEB3B00811CBC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B1357A7C187CEB3B00811CBC /* main.m */; };
@@ -249,12 +247,6 @@
 		83EAC43918D067C900FF26A1 /* vagrant_logo_on-clean.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "vagrant_logo_on-clean.png"; sourceTree = "<group>"; };
 		83F1696D1923789900C54F13 /* VersionComparison.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VersionComparison.h; sourceTree = "<group>"; };
 		83F1696E1923789900C54F13 /* VersionComparison.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VersionComparison.m; sourceTree = "<group>"; };
-		83FD352B19826029002EEA2D /* arrow_right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrow_right.png; sourceTree = "<group>"; };
-		83FD352C19826029002EEA2D /* arrow_right@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrow_right@2x.png"; sourceTree = "<group>"; };
-		83FD352F198261AB002EEA2D /* minus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = minus.png; sourceTree = "<group>"; };
-		83FD3530198261AB002EEA2D /* minus@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "minus@2x.png"; sourceTree = "<group>"; };
-		83FD3531198261AB002EEA2D /* plus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = plus.png; sourceTree = "<group>"; };
-		83FD3532198261AB002EEA2D /* plus@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "plus@2x.png"; sourceTree = "<group>"; };
 		83FD3537198263D4002EEA2D /* MachineRowView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MachineRowView.h; sourceTree = "<group>"; };
 		83FD3538198263D4002EEA2D /* MachineRowView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MachineRowView.m; sourceTree = "<group>"; };
 		83FD353A19826945002EEA2D /* ManageBookmarksWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ManageBookmarksWindow.h; sourceTree = "<group>"; };
@@ -266,6 +258,10 @@
 		83FD354419826DDC002EEA2D /* NFSScanner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NFSScanner.m; sourceTree = "<group>"; };
 		83FD354619827545002EEA2D /* BookmarkManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BookmarkManager.h; sourceTree = "<group>"; };
 		83FD354719827545002EEA2D /* BookmarkManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BookmarkManager.m; sourceTree = "<group>"; };
+		83FD355119828164002EEA2D /* arrow_down.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrow_down.png; sourceTree = "<group>"; };
+		83FD355219828164002EEA2D /* arrow_down@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrow_down@2x.png"; sourceTree = "<group>"; };
+		83FD355319828164002EEA2D /* arrow_right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrow_right.png; sourceTree = "<group>"; };
+		83FD355419828164002EEA2D /* arrow_right@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrow_right@2x.png"; sourceTree = "<group>"; };
 		B1357A6D187CEB3B00811CBC /* Vagrant Manager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Vagrant Manager.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B1357A70187CEB3B00811CBC /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		B1357A73187CEB3B00811CBC /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -355,9 +351,11 @@
 			isa = PBXGroup;
 			children = (
 				83721399192758020052206D /* about.png */,
-				83FD352B19826029002EEA2D /* arrow_right.png */,
-				83FD352C19826029002EEA2D /* arrow_right@2x.png */,
 				83FD353F19826C80002EEA2D /* bookmark.png */,
+				83FD355119828164002EEA2D /* arrow_down.png */,
+				83FD355219828164002EEA2D /* arrow_down@2x.png */,
+				83FD355319828164002EEA2D /* arrow_right.png */,
+				83FD355419828164002EEA2D /* arrow_right@2x.png */,
 				83FD354019826C80002EEA2D /* bookmark@2x.png */,
 				8372139A192758020052206D /* close.png */,
 				837213A7192758CE0052206D /* close@2x.png */,
@@ -365,10 +363,6 @@
 				837213A5192758890052206D /* gear@2x.png */,
 				8372139B192758020052206D /* info.png */,
 				837213A91927591F0052206D /* info@2x.png */,
-				83FD352F198261AB002EEA2D /* minus.png */,
-				83FD3530198261AB002EEA2D /* minus@2x.png */,
-				83FD3531198261AB002EEA2D /* plus.png */,
-				83FD3532198261AB002EEA2D /* plus@2x.png */,
 				83721398192758020052206D /* radio.png */,
 				8372139C192758020052206D /* refresh.png */,
 			);
@@ -711,7 +705,6 @@
 				838B393418CC78E800A04C15 /* vagrant_logo_off-default.png in Resources */,
 				8372139F192758020052206D /* radio.png in Resources */,
 				B1357A7B187CEB3B00811CBC /* InfoPlist.strings in Resources */,
-				83FD3533198261AB002EEA2D /* minus.png in Resources */,
 				B17AA1991887DB8C00B4C274 /* off.png in Resources */,
 				8372139E192758020052206D /* gear.png in Resources */,
 				B17AA19A1887DB8C00B4C274 /* on.png in Resources */,
@@ -724,6 +717,7 @@
 				B17AA1901887CA4600B4C274 /* PreferencesWindow.xib in Resources */,
 				B150012E19249CA2000A76E7 /* vagrant_logo_on-flat@2x.png in Resources */,
 				B150011D1924940A000A76E7 /* vagrant_logo_off-clean.png in Resources */,
+				83FD355619828164002EEA2D /* arrow_down@2x.png in Resources */,
 				837213A1192758020052206D /* close.png in Resources */,
 				B1500122192496E9000A76E7 /* vagrant_logo_highlighted-clean@2x.png in Resources */,
 				B1357A89187CEB3B00811CBC /* Images.xcassets in Resources */,
@@ -731,6 +725,7 @@
 				B15001361924A02C000A76E7 /* suspended@2x.png in Resources */,
 				B1357A87187CEB3B00811CBC /* MainMenu.xib in Resources */,
 				83EAC43B18D067C900FF26A1 /* vagrant_logo_off-clean@2x.png in Resources */,
+				83FD355519828164002EEA2D /* arrow_down.png in Resources */,
 				83E7CAC71929F135001C86F6 /* arrow-up.png in Resources */,
 				837213A8192758CE0052206D /* close@2x.png in Resources */,
 				83EAC43B18D067C900FF26A1 /* vagrant_logo_off-clean@2x.png in Resources */,
@@ -740,11 +735,11 @@
 				B150012419249833000A76E7 /* vagrant_logo_on-default@2x.png in Resources */,
 				837213A3192758020052206D /* refresh.png in Resources */,
 				B150012A19249B19000A76E7 /* problem@2x.png in Resources */,
+				83FD355819828164002EEA2D /* arrow_right@2x.png in Resources */,
 				83E7CAC219290A89001C86F6 /* arrow-down.png in Resources */,
-				83FD352E19826029002EEA2D /* arrow_right@2x.png in Resources */,
 				B150013019249D06000A76E7 /* vagrant_logo_highlighted-flat@2x.png in Resources */,
+				83FD355719828164002EEA2D /* arrow_right.png in Resources */,
 				837213A0192758020052206D /* about.png in Resources */,
-				83FD352D19826029002EEA2D /* arrow_right.png in Resources */,
 				B150012C19249C34000A76E7 /* vagrant_logo_off-flat@2x.png in Resources */,
 				8308E133188662BD001E0B45 /* AboutWindow.xib in Resources */,
 				837213A6192758890052206D /* gear@2x.png in Resources */,
@@ -760,10 +755,7 @@
 				B150013319249FFD000A76E7 /* off@2x.png in Resources */,
 				838B393F18CC85BC00A04C15 /* vagrant_logo_off-flat.png in Resources */,
 				837213A2192758020052206D /* info.png in Resources */,
-				83FD3534198261AB002EEA2D /* minus@2x.png in Resources */,
 				B17AA1961887DA5800B4C274 /* problem.png in Resources */,
-				83FD3536198261AB002EEA2D /* plus@2x.png in Resources */,
-				83FD3535198261AB002EEA2D /* plus.png in Resources */,
 				83E7CAC319290A89001C86F6 /* arrow-down@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
