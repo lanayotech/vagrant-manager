@@ -138,11 +138,6 @@
                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                     </textField>
-                                                    <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" id="JUX-pG-ao9">
-                                                        <rect key="frame" x="170" y="0.0" width="20" height="20"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="arrow_right" id="ZaU-qP-Zgn"/>
-                                                    </imageView>
                                                 </subviews>
                                                 <connections>
                                                     <outlet property="nameTextField" destination="OjF-CH-UzX" id="kzB-fA-S2W"/>
@@ -168,11 +163,6 @@
                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                     </textField>
-                                                    <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" id="qwJ-lR-EHL">
-                                                        <rect key="frame" x="170" y="0.0" width="20" height="20"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="arrow_right" id="whp-sa-CIg"/>
-                                                    </imageView>
                                                 </subviews>
                                                 <connections>
                                                     <outlet property="nameTextField" destination="JCh-6d-prW" id="dWs-UI-CrE"/>

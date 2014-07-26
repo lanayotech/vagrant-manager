@@ -212,6 +212,12 @@
         }
         item.nameTextField.stringValue = instance.displayName;
         
+        if(instance.machines.count < 2) {
+            [item.toggleOpenButton setHidden:YES];
+        } else {
+            [item.toggleOpenButton setHidden:NO];
+        }
+        
         [self updateScrollIndicators];
         [self resizeTableView];
         
