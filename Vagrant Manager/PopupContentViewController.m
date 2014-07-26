@@ -370,18 +370,15 @@
     if([menuItemObject.target isKindOfClass:[VagrantInstance class]] && !menuItemObject.isChildMenuItem) {
         VagrantInstance *instance = menuItemObject.target;
         
+        [self.tableView beginUpdates];
         if(menuItemObject.isExpanded) {
             long nextRow = row + 1;
-            [self.tableView beginUpdates];
             while(nextRow < _menuItems.count && ((MenuItemObject*)[_menuItems objectAtIndex:nextRow]).isChildMenuItem) {
                 [_menuItems removeObjectAtIndex:nextRow];
                 [self.tableView removeRowsAtIndexes:[NSIndexSet indexSetWithIndex:nextRow] withAnimation:NSTableViewAnimationSlideUp|NSTableViewAnimationEffectFade];
             }
-            [self.tableView endUpdates];
-            [self performSelector:@selector(resizeTableView) withObject:nil afterDelay:.25f];
         } else {
             int i = 1;
-            [self.tableView beginUpdates];
             for(VagrantMachine *machine in instance.machines) {
                 MenuItemObject *obj = [[MenuItemObject alloc] initWithTarget:machine];
                 obj.isChildMenuItem = YES;
@@ -389,12 +386,13 @@
                 [self.tableView insertRowsAtIndexes:[NSIndexSet indexSetWithIndex:row+i] withAnimation:NSTableViewAnimationSlideDown|NSTableViewAnimationEffectFade];
                 ++i;
             }
-            [self.tableView endUpdates];
-            [self resizeTableView];
         }
         
         menuItemObject.isExpanded = !menuItemObject.isExpanded;
-        [((NSButton*)sender) setImage:[NSImage imageNamed:menuItemObject.isExpanded ? @"arrow_down" : @"arrow_right"]];
+        
+        [self.tableView reloadData];
+        [self.tableView endUpdates];
+        [self performSelector:@selector(resizeTableView) withObject:nil afterDelay:.25f];
     }
 }
 
@@ -494,6 +492,7 @@
             menuItem.isExpanded = NO;
         }
     }
+    [self.tableView reloadData];
     [self.tableView endUpdates];
     [self performSelector:@selector(resizeTableView) withObject:nil afterDelay:.25f];
 }
