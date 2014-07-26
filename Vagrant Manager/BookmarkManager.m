@@ -128,4 +128,15 @@
     return nil;
 }
 
+- (int)getIndexOfBookmarkWithPath:(NSString*)path {
+    for(int i=0; i<_bookmarks.count; ++i) {
+        Bookmark *bookmark = [_bookmarks objectAtIndex:i];
+        if([bookmark.path isEqualToString:path]) {
+            return i;
+        }
+    }
+    
+    return -1;
+}
+
 @end

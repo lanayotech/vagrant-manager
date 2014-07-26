@@ -435,7 +435,16 @@
             } else if(secondRunningCount > 0 && firstRunningCount == 0) {
                 return NSOrderedDescending;
             } else {
-                return [firstInstance.displayName compare:secondInstance.displayName];
+                int firstIdx = [bookmarkManager getIndexOfBookmarkWithPath:firstInstance.path];
+                int secondIdx = [bookmarkManager getIndexOfBookmarkWithPath:secondInstance.path];
+                
+                if(firstIdx < secondIdx) {
+                    return NSOrderedAscending;
+                } else if(secondIdx < firstIdx) {
+                    return NSOrderedDescending;
+                } else {
+                    return NSOrderedSame;
+                }
             }
         }
     }];

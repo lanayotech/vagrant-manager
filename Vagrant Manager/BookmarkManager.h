@@ -21,5 +21,6 @@
 - (Bookmark*)addBookmarkWithPath:(NSString*)path displayName:(NSString*)displayName providerIdentifier:(NSString*)providerIdentifier;
 - (void)removeBookmarkWithPath:(NSString*)path;
 - (Bookmark*)getBookmarkWithPath:(NSString*)path;
+- (int)getIndexOfBookmarkWithPath:(NSString*)path;
 
 @end
