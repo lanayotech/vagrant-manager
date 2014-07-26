@@ -231,7 +231,11 @@
 }
 
 - (NSArray*)getProviderIdentifiers {
-    return [_providers allKeys];
+    NSMutableArray *providerIdentifiers = [NSMutableArray arrayWithArray:[_providers allKeys]];
+    [providerIdentifiers addObject:@"vmware_workstation"];
+    [providerIdentifiers addObject:@"vmware_fusion"];
+    [providerIdentifiers addObject:@"docker"];
+    return providerIdentifiers;
 }
 
 @end
