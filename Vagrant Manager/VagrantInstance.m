@@ -138,4 +138,16 @@
     return [NSArray arrayWithArray:_machines];
 }
 
+- (int)getMachineCountWithState:(VagrantMachineState)state {
+    int count = 0;
+    
+    for(VagrantMachine *machine in _machines) {
+        if(machine.state == state) {
+            count++;
+        }
+    }
+    
+    return count;
+}
+
 @end

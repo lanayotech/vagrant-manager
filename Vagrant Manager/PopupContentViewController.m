@@ -263,7 +263,8 @@
         item.instance = instance;
         item.delegate = self;
         int runningCount = [instance getRunningMachineCount];
-        if(runningCount == 0) {
+        int suspendedCount = [instance getMachineCountWithState:SavedState];
+        if(runningCount == 0 && suspendedCount == 0) {
             item.stateImageView.image = [NSImage imageNamed:@"status_icon_off"];
         } else if(runningCount == instance.machines.count) {
             item.stateImageView.image = [NSImage imageNamed:@"status_icon_on"];
@@ -297,7 +298,7 @@
         
         VagrantMachine *machine = itemObj.target;
         item.machine = machine;
-        item.stateImageView.image = machine.state == RunningState ? [NSImage imageNamed:@"status_icon_on"] : [NSImage imageNamed:@"status_icon_off"];
+        item.stateImageView.image = machine.state == RunningState ? [NSImage imageNamed:@"status_icon_on"] : machine.state == SavedState ? [NSImage imageNamed:@"status_icon_suspended"] : [NSImage imageNamed:@"status_icon_off"];
         item.nameTextField.stringValue = machine.name;
         
         [self updateScrollIndicators];
