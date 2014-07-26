@@ -489,14 +489,12 @@
 - (IBAction)addBookmarkMenuItemClicked:(NSMenuItem*)sender {
     if([sender.representedObject isKindOfClass:[VagrantInstance class]]) {
         [self.delegate addBookmarkWithInstance:sender.representedObject];
-        [self.statusItemPopup hidePopover];
     }
 }
 
 - (IBAction)removeBookmarkMenuItemClicked:(NSMenuItem*)sender {
     if([sender.representedObject isKindOfClass:[VagrantInstance class]]) {
         [self.delegate removeBookmarkWithInstance:sender.representedObject];
-        [self.statusItemPopup hidePopover];
     }
 }
 
@@ -565,12 +563,10 @@
 
 - (void)performAction:(NSString*)action withInstance:(VagrantInstance*)instance {
     [self.delegate performVagrantAction:action withInstance:instance];
-    [self.statusItemPopup hidePopover];
 }
 
 - (void)performAction:(NSString*)action withMachine:(VagrantMachine *)machine {
     [self.delegate performVagrantAction:action withMachine:machine];
-    [self.statusItemPopup hidePopover];
 }
 
 #pragma mark - Button handlers
