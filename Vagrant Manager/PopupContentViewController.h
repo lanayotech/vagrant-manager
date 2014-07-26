@@ -45,6 +45,7 @@
 
 @property (weak) id<MenuDelegate> delegate;
 
+- (void)setUpdatesAvailable:(BOOL)updatesAvailable;
 - (void)setIsRefreshing:(BOOL)isRefreshing;
 - (void)addInstance:(VagrantInstance*)instance;
 - (void)updateInstance:(VagrantInstance*)oldInstance withInstance:(VagrantInstance*)newInstance;

@@ -25,8 +25,15 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         _menuItems = [[NSMutableArray alloc] init];
-        _footerMenuItems = [[NSMutableArray alloc] init];
+        
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(bookmarksUpdated:) name:@"vagrant-manager.bookmarks-updated" object:nil];
+        
+        _footerMenuItems = [[NSMutableArray alloc] init];
+        [_footerMenuItems addObject:[NSMutableDictionary dictionaryWithObjectsAndKeys:@"All Machines", @"text", @"all_machines", @"id", @"", @"image", nil]];
+        [_footerMenuItems addObject:[NSMutableDictionary dictionaryWithObjectsAndKeys:@"Preferences", @"text", @"preferences", @"id", @"", @"image", nil]];
+        [_footerMenuItems addObject:[NSMutableDictionary dictionaryWithObjectsAndKeys:@"About", @"text", @"about", @"id", @"", @"image", nil]];
+        [_footerMenuItems addObject:[NSMutableDictionary dictionaryWithObjectsAndKeys:@"Check For Updates", @"text", @"check_for_updates", @"id", @"", @"image", nil]];
+        [_footerMenuItems addObject:[NSMutableDictionary dictionaryWithObjectsAndKeys:@"Quit", @"text", @"quit", @"id", @"", @"image", nil]];
     }
     return self;
 }
@@ -50,13 +57,6 @@
     
     [self.tableView.enclosingScrollView.contentView setPostsBoundsChangedNotifications:YES];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scrollBoundsDidChange:) name:NSViewBoundsDidChangeNotification object:self.tableView.enclosingScrollView.contentView];
-    
-    [_footerMenuItems removeAllObjects];
-    [_footerMenuItems addObject:@{@"text": @"All Machines", @"id": @"all_machines"}];
-    [_footerMenuItems addObject:@{@"text": @"Preferences", @"id": @"preferences"}];
-    [_footerMenuItems addObject:@{@"text": @"About", @"id": @"about"}];
-    [_footerMenuItems addObject:@{@"text": @"Check For Updates", @"id": @"check_for_updates"}];
-    [_footerMenuItems addObject:@{@"text": @"Quit", @"id": @"quit"}];
     
     [self.tableView reloadData];
 }
@@ -248,7 +248,12 @@
             item.hasTopBorder = NO;
         }
         
-        [item.imageView setHidden:YES];
+        if([[itemObj objectForKey:@"image"] isEqualToString:@""]) {
+            [item.imageView setHidden:YES];
+        } else {
+            [item.imageView setHidden:NO];
+            [item.imageView setImage:[NSImage imageNamed:[itemObj objectForKey:@"image"]]];
+        }
         
         return item;
     }
@@ -379,6 +384,17 @@
     }
 }
 
+- (void)setUpdatesAvailable:(BOOL)updatesAvailable {
+    NSMutableDictionary *menuItem = [self getFooterMenuItemWithId:@"check_for_updates"];
+    if(updatesAvailable) {
+        [menuItem setObject:@"status_icon_problem" forKey:@"image"];
+    } else {
+        [menuItem setObject:@"" forKey:@"image"];
+    }
+    
+    [self.tableView reloadData];
+}
+
 - (int)getIndexOfMenuItemWithTarget:(id)target {
     for(int i=0; i<[_menuItems count]; ++i) {
         MenuItemObject *menuItem = [_menuItems objectAtIndex:i];
@@ -392,6 +408,16 @@
 }
 
 #pragma mark - Menu management
+
+- (NSMutableDictionary*)getFooterMenuItemWithId:(NSString*)itemId {
+    for(NSMutableDictionary *menuItem in _footerMenuItems) {
+        if([[menuItem objectForKey:@"id"] isEqualToString:itemId]) {
+            return menuItem;
+        }
+    }
+    
+    return nil;
+}
 
 - (NSMutableArray*)sortMenuItems {
     NSMutableArray *instanceItems = [[NSMutableArray alloc] init];
@@ -672,6 +698,8 @@
         [menu addItem:menuItem];
         
         [NSMenu popUpContextMenu:menu withEvent:[[NSApplication sharedApplication] currentEvent] forView:textMenuItem];
+    } else if([itemId isEqualToString:@"check_for_updates"]) {
+        [[SUUpdater sharedUpdater] checkForUpdates:self];
     }
 }
 

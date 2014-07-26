@@ -79,7 +79,9 @@
 }
 
 - (void)showUpdateNotificationPreferenceChanged:(NSNotification*)notification {
-    //TODO: handle this notification
+    if([[NSUserDefaults standardUserDefaults] boolForKey:@"dontShowUpdateNotification"]) {
+        [_popupContentViewController setUpdatesAvailable:NO];
+    }
 }
 
 - (void)refreshVagrantMachines {
@@ -348,11 +350,13 @@
 }
 
 - (void)updater:(SUUpdater *)updater didFindValidUpdate:(SUAppcastItem *)update {
-    //TODO: indicate that there are updates available
+    if(![[NSUserDefaults standardUserDefaults] boolForKey:@"dontShowUpdateNotification"]) {
+        [_popupContentViewController setUpdatesAvailable:YES];
+    }
 }
 
 - (void)updaterDidNotFindUpdate:(SUUpdater *)update {
-    //TODO: indicate that there are no updates available
+    [_popupContentViewController setUpdatesAvailable:NO];
 }
 
 - (id<SUVersionComparison>)versionComparatorForUpdater:(SUUpdater *)updater {
