@@ -7,7 +7,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface ManageBookmarksWindow : NSWindowController <NSTableViewDataSource, NSTableViewDelegate, NSWindowDelegate, NSTextFieldDelegate> {
+@interface ManageBookmarksWindow : NSWindowController <NSTableViewDataSource, NSTableViewDelegate, NSWindowDelegate, NSTextFieldDelegate, NSComboBoxDelegate> {
     NSMutableArray *bookmarks;
 }
 

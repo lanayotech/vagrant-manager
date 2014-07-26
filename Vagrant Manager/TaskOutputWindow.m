@@ -39,9 +39,11 @@
     [fh waitForDataInBackgroundAndNotify];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receivedOutput:) name:NSFileHandleDataAvailableNotification object:fh];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(taskCompletion:)  name: NSTaskDidTerminateNotification object:self.task];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(taskCompletion:) name: NSTaskDidTerminateNotification object:self.task];
     
-    self.window.title = [NSString stringWithFormat:@"%@ %@", (self.bookmark ? self.bookmark.displayName : self.machine.name), self.taskAction];
+    NSString *name = [self.target isKindOfClass:[VagrantMachine class]] ? [NSString stringWithFormat:@"%@ - %@",((VagrantMachine*)self.target).instance.displayName, ((VagrantMachine*)self.target).name] : ((VagrantInstance*)self.target).displayName;
+    
+    self.window.title = [NSString stringWithFormat:@"%@ %@", name, self.taskAction];
     
     self.taskCommandLabel.stringValue = self.taskCommand;
     self.taskStatusLabel.stringValue = @"Running task...";
@@ -67,13 +69,9 @@
     } else {
         self.taskStatusLabel.stringValue = @"Completed successfully";
     }
-    
-    AppDelegate *app = [Util getApp];
-    if(self.machine) {
-        [app updateVirtualMachineState:self.machine];
-    } else if(self.bookmark) {
-        [app updateBookmarkState:self.bookmark];
-    }
+
+    //notify app task is complete
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"vagrant-manager.task-completed" object:nil userInfo:@{@"target": self.target}];
     
     if([[NSUserDefaults standardUserDefaults] boolForKey:@"autoCloseTaskWindows"] && task.terminationStatus == 0) {
         dispatch_async(dispatch_get_global_queue(0,0), ^{
@@ -85,7 +83,7 @@
 - (void)windowWillClose:(NSNotification *)notification {
     AppDelegate *app = [Util getApp];
     
-    [app removeOutputWindow:self];
+    [app removeTaskOutputWindow:self];
 }
 
 - (void)receivedOutput:(NSNotification*)notif {

@@ -9,6 +9,8 @@
 @class VirtualMachineInfo;
 
 @protocol VirtualMachineServiceProvider <NSObject>
-- (NSArray*)getAllVagrantMachines;
-- (VirtualMachineInfo*)getVagrantMachineInfo :(NSString*)uuid;
+
+- (NSArray*)getVagrantInstancePaths;
+- (NSString*)getProviderIdentifier;
+
 @end

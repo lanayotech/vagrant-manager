@@ -9,17 +9,4 @@
 
 @implementation Bookmark
 
-- (void)loadId {
-    NSString *idFilePath = [self.path stringByAppendingPathComponent:@"/.vagrant/machines/default/virtualbox/id"];
-    
-    if([[NSFileManager defaultManager] isReadableFileAtPath:idFilePath]) {
-        NSError *err;
-        NSString *machineId = [NSString stringWithContentsOfFile:idFilePath encoding:NSUTF8StringEncoding error:&err];
-        
-        if(!err) {
-            self.uuid = machineId;
-        }
-    }
-}
-
 @end

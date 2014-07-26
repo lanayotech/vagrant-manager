@@ -6,6 +6,7 @@
 //
 
 #import "ManageBookmarksWindow.h"
+#import "BookmarkManager.h"
 
 @interface ManageBookmarksWindow ()
 
@@ -22,7 +23,7 @@
 - (void)windowDidLoad {
     [super windowDidLoad];
     
-    bookmarks = [NSMutableArray arrayWithArray:[[Util getApp] getSavedBookmarks]];
+    bookmarks = [[BookmarkManager sharedManager] getBookmarks];
     
     self.bookmarkTableView.delegate = self;
     self.bookmarkTableView.dataSource = self;
@@ -120,15 +121,18 @@
 - (void)addBookmarkWithPath:(NSString*)path displayName:(NSString*)displayName {
     Bookmark *bookmark = [[Bookmark alloc] init];
     bookmark.displayName = displayName;
-    bookmark.path = path;
+    bookmark.path = [Util trimTrailingSlash:path];
+    bookmark.providerIdentifier = [[VagrantManager sharedManager] detectVagrantProvider:path];
     
     [bookmarks addObject:bookmark];
 }
 
 - (void)controlTextDidEndEditing:(NSNotification *)notification {
     NSTextField *textField = notification.object;
-    Bookmark *bookmark = [bookmarks objectAtIndex:textField.tag];
-    bookmark.displayName = textField.stringValue;
+    if(![textField isKindOfClass:[NSComboBox class]]) {
+        Bookmark *bookmark = [bookmarks objectAtIndex:textField.tag];
+        bookmark.displayName = textField.stringValue;
+    }
 }
 
 - (IBAction)removeBookmarksButtonClicked:(id)sender {
@@ -145,16 +149,39 @@
 }
 
 - (IBAction)saveButtonClicked:(id)sender {
-    [[Util getApp] saveBookmarks:bookmarks];
-    [[Util getApp] reloadBookmarks];
-    [[Util getApp] detectVagrantMachines];
+    [[BookmarkManager sharedManager] clearBookmarks];
+    for(Bookmark *bookmark in bookmarks) {
+        [[BookmarkManager sharedManager] addBookmark:bookmark];
+    }
+    [[BookmarkManager sharedManager] saveBookmarks];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"vagrant-manager.bookmarks-updated" object:nil];
     [self close];
 }
 
 - (NSView *)tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
+    Bookmark *bookmark = [bookmarks objectAtIndex:row];
+    
+    if([tableColumn.identifier isEqualToString:@"providerIdentifier"]) {
+        NSComboBox *view = [tableView makeViewWithIdentifier:@"ProviderCellView" owner:self];
+        
+        if(!view) {
+            view = [[NSComboBox alloc] initWithFrame:CGRectMake(0, 0, tableColumn.width, 24)];
+            NSArray *providerIdentifiers = [[VagrantManager sharedManager] getProviderIdentifiers];
+            for(NSString *providerIdentifier in providerIdentifiers) {
+                [view addItemWithObjectValue:providerIdentifier];
+            }
+            view.identifier = @"ProviderCellView";
+        }
+        view.tag = row;
+        view.delegate = self;
+        [view setStringValue:bookmark.providerIdentifier];
+        
+        return view;
+    }
+    
     NSTextField *view = [tableView makeViewWithIdentifier:@"TableCellView" owner:self];
     if(!view) {
-        view = [[NSTextField alloc] initWithFrame:CGRectMake(0, 0, tableColumn.width, 22)];
+        view = [[NSTextField alloc] initWithFrame:CGRectMake(0, 0, tableColumn.width, 24)];
         [view setBezeled:NO];
         [view setDrawsBackground:NO];
         view.delegate = self;
@@ -165,17 +192,21 @@
     [view.cell setEditable:NO];
     view.tag = row;
     
-    Bookmark *bookmark = [bookmarks objectAtIndex:row];
     
     if ([tableColumn.identifier isEqualToString:@"path"]) {
         view.stringValue = bookmark.path;
-    }
-    if ([tableColumn.identifier isEqualToString:@"displayName"]) {
+    } else if ([tableColumn.identifier isEqualToString:@"displayName"]) {
         [view.cell setEditable:YES];
         view.stringValue = bookmark.displayName;
     }
     
     return view;
+}
+
+- (void)comboBoxSelectionDidChange:(NSNotification *)notification {
+    NSComboBox *comboBox = notification.object;
+    Bookmark *bookmark = [bookmarks objectAtIndex:comboBox.tag];
+    bookmark.providerIdentifier = [comboBox objectValueOfSelectedItem];
 }
 
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView {
