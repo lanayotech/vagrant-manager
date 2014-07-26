@@ -171,8 +171,9 @@
         if (launchOnLogin && (existingItem == NULL)) {
             LSSharedFileListInsertItemURL(loginItems, kLSSharedFileListItemBeforeFirst, NULL, NULL, (__bridge CFURLRef)bundleURL, NULL, NULL);
             
-        } else if (!launchOnLogin && (existingItem != NULL))
+        } else if (!launchOnLogin && (existingItem != NULL)) {
             LSSharedFileListItemRemove(loginItems, existingItem);
+        }
         
         CFRelease(loginItems);
     }
