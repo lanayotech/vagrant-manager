@@ -60,6 +60,19 @@
     return count;
 }
 
+- (NSArray*)getMachinesWithState:(VagrantMachineState)state {
+    NSMutableArray *machines = [[NSMutableArray alloc] init];
+    for(VagrantInstance *instance in _instances) {
+        for(VagrantMachine *machine in instance.machines) {
+            if(machine.state == state) {
+                [machines addObject:machine];
+            }
+        }
+    }
+    
+    return machines;
+}
+
 - (void)addServiceProvider:(id<VirtualMachineServiceProvider>)provider {
     [_providers setObject:provider forKey:[provider getProviderIdentifier]];
 }

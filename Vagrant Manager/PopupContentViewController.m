@@ -7,6 +7,7 @@
 
 #import "PopupContentViewController.h"
 #import "BookmarkManager.h"
+#import "TextMenuItem.h"
 
 @interface PopupContentViewController ()
 
@@ -15,6 +16,7 @@
 @implementation PopupContentViewController {
     BOOL _isRefreshing;
     NSMutableArray *_menuItems;
+    NSMutableArray *_footerMenuItems;
 }
 
 #pragma mark - Init
@@ -23,6 +25,7 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         _menuItems = [[NSMutableArray alloc] init];
+        _footerMenuItems = [[NSMutableArray alloc] init];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(bookmarksUpdated:) name:@"vagrant-manager.bookmarks-updated" object:nil];
     }
     return self;
@@ -47,6 +50,15 @@
     
     [self.tableView.enclosingScrollView.contentView setPostsBoundsChangedNotifications:YES];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scrollBoundsDidChange:) name:NSViewBoundsDidChangeNotification object:self.tableView.enclosingScrollView.contentView];
+    
+    [_footerMenuItems removeAllObjects];
+    [_footerMenuItems addObject:@{@"text": @"All Machines", @"id": @"all_machines"}];
+    [_footerMenuItems addObject:@{@"text": @"Preferences", @"id": @"preferences"}];
+    [_footerMenuItems addObject:@{@"text": @"About", @"id": @"about"}];
+    [_footerMenuItems addObject:@{@"text": @"Check For Updates", @"id": @"check_for_updates"}];
+    [_footerMenuItems addObject:@{@"text": @"Quit", @"id": @"quit"}];
+    
+    [self.tableView reloadData];
 }
 
 - (void)scrollBoundsDidChange:(id)sender {
@@ -60,7 +72,7 @@
 #pragma mark - TableView delegates
 
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView {
-    return _menuItems.count;
+    return _menuItems.count + _footerMenuItems.count;
 }
 
 - (NSTableRowView *)tableView:(NSTableView *)tableView rowViewForRow:(NSInteger)row {
@@ -75,6 +87,11 @@
     
     [self.tableView deselectRow:row];
     NSView *rowView = [self.tableView rowViewAtRow:row makeIfNecessary:NO];
+    
+    if(row >= _menuItems.count) {
+        [self handleTextMenuItemClick:[((InstanceRowView*)rowView) viewAtColumn:0]];
+        return;
+    }
     
     MenuItemObject *menuItem = [_menuItems objectAtIndex:row];
     
@@ -219,6 +236,23 @@
 }
 
 - (NSView *)tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
+    if(row >= _menuItems.count) {
+        NSInteger footerRow = row - _menuItems.count;
+        NSDictionary *itemObj = [_footerMenuItems objectAtIndex:footerRow];
+        TextMenuItem *item = [tableView makeViewWithIdentifier:@"TextMenuItem" owner:self];
+        [item.textField setStringValue:[itemObj objectForKey:@"text"]];
+        item.itemId = [itemObj objectForKey:@"id"];
+        if(footerRow == 0) {
+            item.hasTopBorder = YES;
+        } else {
+            item.hasTopBorder = NO;
+        }
+        
+        [item.imageView setHidden:YES];
+        
+        return item;
+    }
+    
     MenuItemObject *itemObj = [_menuItems objectAtIndex:row];
     
     if([itemObj.target isKindOfClass:[VagrantInstance class]]) {
@@ -230,11 +264,11 @@
         item.delegate = self;
         int runningCount = [instance getRunningMachineCount];
         if(runningCount == 0) {
-            item.stateImageView.image = [NSImage imageNamed:@"NSStatusUnavailable"];
+            item.stateImageView.image = [NSImage imageNamed:@"status_icon_off"];
         } else if(runningCount == instance.machines.count) {
-            item.stateImageView.image = [NSImage imageNamed:@"NSStatusAvailable"];
+            item.stateImageView.image = [NSImage imageNamed:@"status_icon_on"];
         } else {
-            item.stateImageView.image = [NSImage imageNamed:@"NSStatusPartiallyAvailable"];
+            item.stateImageView.image = [NSImage imageNamed:@"status_icon_suspended"];
         }
         
         if(instance.machines.count < 2) {
@@ -263,7 +297,7 @@
         
         VagrantMachine *machine = itemObj.target;
         item.machine = machine;
-        item.stateImageView.image = machine.state == RunningState ? [NSImage imageNamed:@"NSStatusAvailable"] : [NSImage imageNamed:@"NSStatusUnavailable"];
+        item.stateImageView.image = machine.state == RunningState ? [NSImage imageNamed:@"status_icon_on"] : [NSImage imageNamed:@"status_icon_off"];
         item.nameTextField.stringValue = machine.name;
         
         [self updateScrollIndicators];
@@ -280,7 +314,7 @@
 }
 
 - (float)getTableHeight {
-    float height = 20 * [_menuItems count];
+    float height = 20 * (_menuItems.count + _footerMenuItems.count);
     
     return height;
 }
@@ -581,6 +615,56 @@
 
 #pragma mark - Action Menu Item Handlers
 
+- (void)handleTextMenuItemClick:(TextMenuItem*)textMenuItem {
+    NSString *itemId = textMenuItem.itemId;
+    
+    if([itemId isEqualToString:@"quit"]) {
+        [[NSApplication sharedApplication] terminate:self];
+    } else if([itemId isEqualToString:@"preferences"]) {
+        preferencesWindow = [[PreferencesWindow alloc] initWithWindowNibName:@"PreferencesWindow"];
+        [NSApp activateIgnoringOtherApps:YES];
+        [preferencesWindow showWindow:self];
+        [self.statusItemPopup hidePopover];
+    } else if([itemId isEqualToString:@"about"]) {
+        aboutWindow = [[AboutWindow alloc] initWithWindowNibName:@"AboutWindow"];
+        [NSApp activateIgnoringOtherApps:YES];
+        [aboutWindow showWindow:self];
+        [self.statusItemPopup hidePopover];
+    } else if([itemId isEqualToString:@"all_machines"]) {
+        NSMenu *menu = [[NSMenu alloc] init];
+        
+        [menu addItem:[[NSMenuItem alloc] initWithTitle:@"All Machines" action:nil keyEquivalent:@""]];
+        
+        [menu addItem:[NSMenuItem separatorItem]];
+
+        NSMenuItem *menuItem = [[NSMenuItem alloc] initWithTitle:@"vagrant up" action:@selector(allUpMenuItemClicked:) keyEquivalent:@""];
+        menuItem.target = self;
+        [menu addItem:menuItem];
+        
+        menuItem = [[NSMenuItem alloc] initWithTitle:@"vagrant reload" action:@selector(allReloadMenuItemClicked:) keyEquivalent:@""];
+        menuItem.target = self;
+        [menu addItem:menuItem];
+
+        menuItem = [[NSMenuItem alloc] initWithTitle:@"vagrant suspend" action:@selector(allSuspendMenuItemClicked:) keyEquivalent:@""];
+        menuItem.target = self;
+        [menu addItem:menuItem];
+        
+        menuItem = [[NSMenuItem alloc] initWithTitle:@"vagrant halt" action:@selector(allHaltMenuItemClicked:) keyEquivalent:@""];
+        menuItem.target = self;
+        [menu addItem:menuItem];
+        
+        menuItem = [[NSMenuItem alloc] initWithTitle:@"vagrant provision" action:@selector(allProvisionMenuItemClicked:) keyEquivalent:@""];
+        menuItem.target = self;
+        [menu addItem:menuItem];
+        
+        menuItem = [[NSMenuItem alloc] initWithTitle:@"vagrant destroy" action:@selector(allDestroyMenuItemClicked:) keyEquivalent:@""];
+        menuItem.target = self;
+        [menu addItem:menuItem];
+        
+        [NSMenu popUpContextMenu:menu withEvent:[[NSApplication sharedApplication] currentEvent] forView:textMenuItem];
+    }
+}
+
 - (IBAction)finderMenuItemClicked:(NSMenuItem*)sender {
     if([sender.representedObject isKindOfClass:[VagrantInstance class]]) {
         [self.delegate openInstanceInFinder:sender.representedObject];
@@ -674,6 +758,78 @@
     }
 }
 
+- (IBAction)allUpMenuItemClicked:(NSMenuItem*)sender {
+    NSArray *instances = [[VagrantManager sharedManager] instances];
+    
+    for(VagrantInstance *instance in instances) {
+        for(VagrantMachine *machine in instance.machines) {
+            if(machine.state != RunningState) {
+                [self performAction:@"up" withMachine:machine];
+            }
+        }
+    }
+}
+
+- (IBAction)allReloadMenuItemClicked:(NSMenuItem*)sender {
+    NSArray *instances = [[VagrantManager sharedManager] instances];
+    
+    for(VagrantInstance *instance in instances) {
+        for(VagrantMachine *machine in instance.machines) {
+            if(machine.state == RunningState) {
+                [self performAction:@"reload" withMachine:machine];
+            }
+        }
+    }
+}
+
+- (IBAction)allSuspendMenuItemClicked:(NSMenuItem*)sender {
+    NSArray *instances = [[VagrantManager sharedManager] instances];
+    
+    for(VagrantInstance *instance in instances) {
+        for(VagrantMachine *machine in instance.machines) {
+            if(machine.state == RunningState) {
+                [self performAction:@"suspend" withMachine:machine];
+            }
+        }
+    }
+}
+
+- (IBAction)allHaltMenuItemClicked:(NSMenuItem*)sender {
+    NSArray *instances = [[VagrantManager sharedManager] instances];
+    
+    for(VagrantInstance *instance in instances) {
+        for(VagrantMachine *machine in instance.machines) {
+            if(machine.state == RunningState) {
+                [self performAction:@"halt" withMachine:machine];
+            }
+        }
+    }
+}
+
+- (IBAction)allProvisionMenuItemClicked:(NSMenuItem*)sender {
+    NSArray *instances = [[VagrantManager sharedManager] instances];
+    
+    for(VagrantInstance *instance in instances) {
+        for(VagrantMachine *machine in instance.machines) {
+            [self performAction:@"provision" withMachine:machine];
+        }
+    }
+}
+
+- (IBAction)allDestroyMenuItemClicked:(NSMenuItem*)sender {
+    NSAlert *confirmAlert = [NSAlert alertWithMessageText:@"Are you sure you want to destroy all machines?" defaultButton:@"Confirm" alternateButton:@"Cancel" otherButton:nil informativeTextWithFormat:@""];
+    NSInteger button = [confirmAlert runModal];
+    
+    if(button == NSAlertDefaultReturn) {
+        NSArray *instances = [[VagrantManager sharedManager] instances];
+        for(VagrantInstance *instance in instances) {
+            for(VagrantMachine *machine in instance.machines) {
+                [self performAction:@"destroy" withMachine:machine];
+            }
+        }
+    }
+}
+
 #pragma mark - Vagrant Actions
 
 - (void)performAction:(NSString*)action withInstance:(VagrantInstance*)instance {
@@ -686,14 +842,7 @@
 
 #pragma mark - Button handlers
 
-- (IBAction)quitButtonClicked:(id)sender {
-    [[NSApplication sharedApplication] terminate:self];
-}
-
-- (IBAction)preferencesButtonClicked:(id)sender {
-    preferencesWindow = [[PreferencesWindow alloc] initWithWindowNibName:@"PreferencesWindow"];
-    [NSApp activateIgnoringOtherApps:YES];
-    [preferencesWindow showWindow:self];
+- (IBAction)closeButtonClicked:(id)sender {
     [self.statusItemPopup hidePopover];
 }
 
@@ -702,13 +851,6 @@
     [NSApp activateIgnoringOtherApps:YES];
     [manageBookmarksWindow showWindow:self];
     [self.statusItemPopup hidePopover];
-}
-
-- (IBAction)aboutButtonClicked:(id)sender {
-    aboutWindow = [[AboutWindow alloc] initWithWindowNibName:@"AboutWindow"];
-    [NSApp activateIgnoringOtherApps:YES];
-    [aboutWindow showWindow:self];
-    [self.statusItemPopup hidePopover];    
 }
 
 - (IBAction)refreshButtonClicked:(id)sender {

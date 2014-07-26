@@ -35,9 +35,7 @@
 
 @property (weak) AXStatusItemPopup *statusItemPopup;
 
-@property (weak) IBOutlet NSButton *quitButton;
-@property (weak) IBOutlet NSButton *preferencesButton;
-@property (weak) IBOutlet NSButton *aboutButton;
+@property (weak) IBOutlet NSButton *closeButton;
 @property (weak) IBOutlet NSButton *refreshButton;
 @property (weak) IBOutlet NSButton *bookmarkButton;
 @property (weak) IBOutlet NSImageView *moreUpIndicator;
@@ -54,10 +52,8 @@
 - (void)resizeTableView;
 - (void)collapseAllChildMenuItems;
 
-- (IBAction)quitButtonClicked:(id)sender;
-- (IBAction)preferencesButtonClicked:(id)sender;
+- (IBAction)closeButtonClicked:(id)sender;
 - (IBAction)bookmarkButtonClicked:(id)sender;
-- (IBAction)aboutButtonClicked:(id)sender;
 - (IBAction)refreshButtonClicked:(id)sender;
 
 @end

@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5056" systemVersion="13E28" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
+        <deployment defaultVersion="1080" identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="5056"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="PopupContentViewController">
             <connections>
-                <outlet property="aboutButton" destination="EMo-g7-0TF" id="cRc-TN-nSK"/>
                 <outlet property="bookmarkButton" destination="DJp-Mb-RDX" id="Ebv-zO-fCd"/>
+                <outlet property="closeButton" destination="wgv-8S-iZg" id="jXU-jI-Oqq"/>
                 <outlet property="moreDownIndicator" destination="PFk-H3-Ies" id="Krg-zD-Hec"/>
                 <outlet property="moreUpIndicator" destination="9K5-So-jVw" id="uxH-Yz-uKP"/>
-                <outlet property="preferencesButton" destination="9fb-md-rcU" id="FaP-EI-a2K"/>
-                <outlet property="quitButton" destination="wgv-8S-iZg" id="Ss6-mw-epY"/>
                 <outlet property="refreshButton" destination="nIn-kp-cDC" id="Bjy-BX-aIe"/>
                 <outlet property="refreshingIndicator" destination="Dcd-Dq-mao" id="Cks-Wv-rKu"/>
                 <outlet property="tableView" destination="k9b-91-cfY" id="nRY-sw-220"/>
@@ -24,41 +23,19 @@
             <rect key="frame" x="0.0" y="0.0" width="192" height="151"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <button toolTip="Quit Vagrant Manager" id="wgv-8S-iZg" userLabel="Quit Button">
+                <button toolTip="Close Menu" id="wgv-8S-iZg" userLabel="Quit Button">
                     <rect key="frame" x="171" y="130" width="16" height="16"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="close" imagePosition="overlaps" alignment="center" state="on" imageScaling="proportionallyDown" inset="2" id="H41-Tf-hIp">
                         <behavior key="behavior" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
-                        <connections>
-                            <action selector="quitButtonClicked:" target="-2" id="lt8-g0-hSc"/>
-                        </connections>
                     </buttonCell>
-                </button>
-                <button toolTip="Preferences" id="9fb-md-rcU" userLabel="Preferences Button">
-                    <rect key="frame" x="151" y="130" width="16" height="16"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                    <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="gear" imagePosition="only" alignment="center" imageScaling="proportionallyDown" inset="2" id="Pm2-iY-Zid">
-                        <behavior key="behavior" lightByContents="YES"/>
-                        <font key="font" metaFont="system"/>
-                        <connections>
-                            <action selector="preferencesButtonClicked:" target="-2" id="fHx-pz-xAh"/>
-                        </connections>
-                    </buttonCell>
-                </button>
-                <button toolTip="About Vagrant Manager" id="EMo-g7-0TF" userLabel="About Button">
-                    <rect key="frame" x="130" y="130" width="16" height="16"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                    <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="info" imagePosition="only" alignment="left" imageScaling="proportionallyDown" inset="2" id="lbx-dL-Kmv">
-                        <behavior key="behavior" lightByContents="YES"/>
-                        <font key="font" metaFont="system"/>
-                        <connections>
-                            <action selector="aboutButtonClicked:" target="-2" id="rlI-YM-5ei"/>
-                        </connections>
-                    </buttonCell>
+                    <connections>
+                        <action selector="closeButtonClicked:" target="-2" id="72i-HK-1Mx"/>
+                    </connections>
                 </button>
                 <button toolTip="Manage Bookmarks" id="DJp-Mb-RDX" userLabel="Bookmarks Button">
-                    <rect key="frame" x="109" y="130" width="16" height="16"/>
+                    <rect key="frame" x="151" y="130" width="16" height="16"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="bookmark" imagePosition="only" alignment="left" imageScaling="proportionallyDown" inset="2" id="dQR-h7-hOH">
                         <behavior key="behavior" lightByContents="YES"/>
@@ -68,7 +45,7 @@
                         <action selector="bookmarkButtonClicked:" target="-2" id="3v0-Rz-bTy"/>
                     </connections>
                 </button>
-                <button toolTip="Refresh Detected Machines" id="nIn-kp-cDC" userLabel="Refresh Button">
+                <button toolTip="Refresh List" id="nIn-kp-cDC" userLabel="Refresh Button">
                     <rect key="frame" x="5" y="130" width="16" height="16"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="refresh" imagePosition="only" alignment="center" imageScaling="proportionallyDown" inset="2" id="zNf-vz-g0S">
@@ -125,9 +102,9 @@
                                                         </connections>
                                                     </button>
                                                     <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" id="BDN-im-xql" userLabel="Status">
-                                                        <rect key="frame" x="17" y="2" width="16" height="16"/>
+                                                        <rect key="frame" x="17" y="3" width="16" height="16"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="NSStatusAvailable" id="gkh-Ev-RHX"/>
+                                                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="status_icon_on" id="gkh-Ev-RHX"/>
                                                     </imageView>
                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="OjF-CH-UzX">
                                                         <rect key="frame" x="33" y="3" width="141" height="14"/>
@@ -156,9 +133,9 @@
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                 <subviews>
                                                     <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" id="IRv-Cw-wnO" userLabel="Status">
-                                                        <rect key="frame" x="17" y="2" width="16" height="16"/>
+                                                        <rect key="frame" x="17" y="3" width="16" height="16"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="NSStatusAvailable" id="Gpc-ha-2yb"/>
+                                                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="status_icon_on" id="Gpc-ha-2yb"/>
                                                     </imageView>
                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="JCh-6d-prW">
                                                         <rect key="frame" x="33" y="3" width="148" height="14"/>
@@ -173,6 +150,30 @@
                                                 <connections>
                                                     <outlet property="nameTextField" destination="JCh-6d-prW" id="dWs-UI-CrE"/>
                                                     <outlet property="stateImageView" destination="IRv-Cw-wnO" id="GhD-zi-ToE"/>
+                                                </connections>
+                                            </customView>
+                                            <customView identifier="TextMenuItem" id="RcJ-cc-8fK" userLabel="Text Menu Item" customClass="TextMenuItem">
+                                                <rect key="frame" x="0.0" y="40" width="192" height="20"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                                <subviews>
+                                                    <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" id="dDG-yJ-5vp" userLabel="Status">
+                                                        <rect key="frame" x="5" y="3" width="16" height="16"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="status_icon_on" id="lT9-kG-ddy"/>
+                                                    </imageView>
+                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="Tvj-fq-Tlg">
+                                                        <rect key="frame" x="20" y="3" width="148" height="14"/>
+                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Menu Item" id="htN-qi-fVX">
+                                                            <font key="font" metaFont="smallSystem"/>
+                                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                        </textFieldCell>
+                                                    </textField>
+                                                </subviews>
+                                                <connections>
+                                                    <outlet property="imageView" destination="dDG-yJ-5vp" id="dve-Qx-zzX"/>
+                                                    <outlet property="textField" destination="Tvj-fq-Tlg" id="pcg-oR-ZHg"/>
                                                 </connections>
                                             </customView>
                                         </prototypeCellViews>
@@ -205,14 +206,12 @@
         </customView>
     </objects>
     <resources>
-        <image name="NSStatusAvailable" width="16" height="16"/>
         <image name="arrow-down" width="16" height="8"/>
         <image name="arrow-up" width="16" height="8"/>
         <image name="arrow_right" width="20" height="20"/>
         <image name="bookmark" width="11" height="20"/>
         <image name="close" width="20" height="20"/>
-        <image name="gear" width="20" height="20"/>
-        <image name="info" width="20" height="20"/>
         <image name="refresh" width="20" height="19"/>
+        <image name="status_icon_on" width="15" height="20"/>
     </resources>
 </document>
