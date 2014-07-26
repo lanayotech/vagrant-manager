@@ -18,16 +18,26 @@
     
     if(fileContents) {
         //search for vagrant NFS paths
-        NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"#\\s+VAGRANT-BEGIN[^\\n]*\n\"([^\"]*)\"[^\\n]*\\n#\\s+VAGRANT-END" options:0 error:NULL];
-        NSArray *matches = [regex matchesInString:fileContents options:0 range:NSMakeRange(0, [fileContents length])];
-        for(NSTextCheckingResult *match in matches) {
-            NSRange pathRange = [match rangeAtIndex:1];
+        NSMutableArray *lines = [[fileContents componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]] mutableCopy];
+        [lines removeObject:@""];
+        
+        for(NSString *line in lines) {
             
-            //found valid NFS path definition, check for Vagrantfile
-            NSString *path = [fileContents substringWithRange:pathRange];
+            if([line rangeOfString:@"# VAGRANT-"].location != NSNotFound) {
+                continue;
+            }
             
-            if([[NSFileManager defaultManager] fileExistsAtPath:[NSString stringWithFormat:@"%@/Vagrantfile", path]]) {
-                [paths addObject:path];
+            NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"(?<!\\\\)\"((?:\\\\\"|[^\"])*+)\"" options:0 error:nil];
+            NSArray *pathArr = [regex matchesInString:line options:0 range:NSMakeRange(0, [line length])];
+            for (NSTextCheckingResult *pathResult in pathArr) {
+                if (pathResult.range.length > 1) {
+                    NSString *path = [line substringWithRange:[pathResult rangeAtIndex:1]];
+                    BOOL vagrantFileExists = [[NSFileManager defaultManager] fileExistsAtPath:[NSString pathWithComponents:@[path, @"Vagrantfile"]]];
+                    
+                    if(vagrantFileExists) {
+                        [paths addObject:path];
+                    }
+                }
             }
         }
     }
