@@ -277,14 +277,7 @@
 }
 
 - (float)getTableHeight {
-    float height = 0;
-    for(MenuItemObject *menuItem in _menuItems) {
-        if([menuItem.target isKindOfClass:[VagrantInstance class]]) {
-            height += menuItem.isChildMenuItem ? 28 : 20;
-        } else {
-            height += 42;
-        }
-    }
+    float height = 20 * [_menuItems count];
     
     return height;
 }
