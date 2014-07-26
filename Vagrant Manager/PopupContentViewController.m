@@ -235,7 +235,6 @@
         } else {
             item.stateImageView.image = [NSImage imageNamed:@"NSStatusPartiallyAvailable"];
         }
-        item.nameTextField.stringValue = instance.displayName;
         
         if(instance.machines.count < 2) {
             [item.toggleOpenButton setHidden:YES];
@@ -245,9 +244,12 @@
         
         [((NSButton*)item.toggleOpenButton) setImage:[NSImage imageNamed:itemObj.isExpanded ? @"arrow_down" : @"arrow_right"]];
         
-        if([[BookmarkManager sharedManager] getBookmarkWithPath:instance.path]) {
+        Bookmark *bookmark = [[BookmarkManager sharedManager] getBookmarkWithPath:instance.path];
+        if(bookmark) {
             [item.bookmarkIconImageView setHidden:NO];
+            item.nameTextField.stringValue = bookmark.displayName;
         } else {
+            item.nameTextField.stringValue = instance.displayName;
             [item.bookmarkIconImageView setHidden:YES];
         }
         
