@@ -29,6 +29,7 @@
 }
 
 - (void)bookmarksUpdated:(NSNotification*)notification {
+    _menuItems = [self sortMenuItems];
     [self.tableView reloadData];
 }
 
@@ -357,6 +358,80 @@
 
 #pragma mark - Menu management
 
+- (NSMutableArray*)sortMenuItems {
+    NSMutableArray *instanceItems = [[NSMutableArray alloc] init];
+
+    
+    NSMutableDictionary *curObj = nil;
+    
+    for(MenuItemObject *menuItemObject in _menuItems) {
+        if([menuItemObject.target isKindOfClass:[VagrantInstance class]]) {
+            curObj = [[NSMutableDictionary alloc] init];
+            [curObj setObject:menuItemObject forKey:@"instance"];
+            [curObj setObject:[[NSMutableArray alloc] init] forKey:@"machines"];
+            [instanceItems addObject:curObj];
+        } else if([menuItemObject.target isKindOfClass:[VagrantMachine class]]) {
+            NSMutableArray *machines = [curObj objectForKey:@"machines"];
+            [machines addObject:menuItemObject];
+        }
+    }
+    
+    BookmarkManager *bookmarkManager = [BookmarkManager sharedManager];
+    NSArray *sortedArray;
+    sortedArray = [instanceItems sortedArrayUsingComparator:^NSComparisonResult(id a, id b) {
+        NSMutableDictionary *first = a;
+        NSMutableDictionary *second = b;
+        
+        VagrantInstance *firstInstance = ((MenuItemObject*)[first objectForKey:@"instance"]).target;
+        VagrantInstance *secondInstance = ((MenuItemObject*)[second objectForKey:@"instance"]).target;
+        
+        BOOL firstIsBookmarked = [bookmarkManager getBookmarkWithPath:firstInstance.path] != nil;
+        BOOL secondIsBookmarked = [bookmarkManager getBookmarkWithPath:secondInstance.path] != nil;
+        
+        int firstRunningCount = [firstInstance getRunningMachineCount];
+        int secondRunningCount = [secondInstance getRunningMachineCount];
+        
+        if(firstIsBookmarked && !secondIsBookmarked) {
+            return NSOrderedAscending;
+        } else if(secondIsBookmarked && !firstIsBookmarked) {
+            return NSOrderedDescending;
+        } else {
+            if(firstRunningCount > 0 && secondRunningCount == 0) {
+                return NSOrderedAscending;
+            } else if(secondRunningCount > 0 && firstRunningCount == 0) {
+                return NSOrderedDescending;
+            } else {
+                return [firstInstance.displayName compare:secondInstance.displayName];
+            }
+        }
+    }];
+    
+    NSMutableArray *menuItems = [[NSMutableArray alloc] init];
+    
+    for(NSMutableDictionary *sortedObj in sortedArray) {
+        [menuItems addObject:[sortedObj objectForKey:@"instance"]];
+        
+        NSArray *sortedMachinesArray = [[sortedObj objectForKey:@"machines"] sortedArrayUsingComparator:^NSComparisonResult(id a, id b) {
+            VagrantMachine *firstMachine = ((MenuItemObject*)a).target;
+            VagrantMachine *secondMachine = ((MenuItemObject*)b).target;
+            
+            if(firstMachine.state == RunningState && secondMachine.state != RunningState) {
+                return NSOrderedAscending;
+            } else if(secondMachine.state == RunningState && firstMachine.state != RunningState) {
+                return NSOrderedDescending;
+            } else {
+                return [firstMachine.name compare:secondMachine.name];
+            }
+        }];
+        
+        for(MenuItemObject *machineObj in sortedMachinesArray) {
+            [menuItems addObject:machineObj];
+        }
+    }
+    
+    return menuItems;
+}
+
 - (void)instanceMenuItem:(InstanceMenuItem *)menuItem toggleOpenButtonClicked:(id)sender {
     int row = [self getIndexOfMenuItemWithTarget:menuItem.instance];
     
@@ -385,6 +460,8 @@
         
         menuItemObject.isExpanded = !menuItemObject.isExpanded;
         
+        _menuItems = [self sortMenuItems];
+        
         [self.tableView reloadData];
         [self.tableView endUpdates];
         [self performSelector:@selector(resizeTableView) withObject:nil afterDelay:.25f];
@@ -397,6 +474,9 @@
     [self.tableView beginUpdates];
     [self.tableView insertRowsAtIndexes:[NSIndexSet indexSetWithIndex:_menuItems.count - 1] withAnimation:NSTableViewAnimationSlideDown|NSTableViewAnimationEffectFade];
     [self.tableView endUpdates];
+    
+    _menuItems = [self sortMenuItems];
+    [self.tableView reloadData];
     [self resizeTableView];
 }
 
@@ -440,6 +520,8 @@
         }
     }
     
+    _menuItems = [self sortMenuItems];
+    
     [self.tableView reloadData];
     [self resizeTableView];
     [self.tableView endUpdates];
@@ -465,6 +547,11 @@
             }
         }
     }
+    
+    _menuItems = [self sortMenuItems];
+    
+    [self.tableView reloadData];
+    
     [self.tableView endUpdates];
     [self performSelector:@selector(resizeTableView) withObject:nil afterDelay:.25f];
 }
