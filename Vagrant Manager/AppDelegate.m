@@ -182,7 +182,7 @@
     NSString *command;
     
     if([action isEqualToString:@"up"]) {
-        command = [NSString stringWithFormat:@"vagrant up --provider=%@", machine.instance.providerIdentifier];
+        command = [NSString stringWithFormat:@"vagrant up%@", machine.instance.providerIdentifier ? [NSString stringWithFormat:@" --provider=%@", machine.instance.providerIdentifier] : @""];
     } else if([action isEqualToString:@"reload"]) {
         command = @"vagrant reload";
     } else if([action isEqualToString:@"suspend"]) {
@@ -220,7 +220,7 @@
     NSString *command;
     
     if([action isEqualToString:@"up"]) {
-        command = [NSString stringWithFormat:@"vagrant up --provider=%@", instance.providerIdentifier];
+        command = [NSString stringWithFormat:@"vagrant up%@", instance.providerIdentifier ? [NSString stringWithFormat:@" --provider=%@", instance.providerIdentifier] : @""];
     } else if([action isEqualToString:@"reload"]) {
         command = @"vagrant reload";
     } else if([action isEqualToString:@"suspend"]) {
