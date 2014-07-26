@@ -159,6 +159,19 @@
         menuItem.representedObject = instance;
         [menu addItem:menuItem];
         
+        menuItem = [[NSMenuItem alloc] initWithTitle:[NSString stringWithFormat:@"Provider: %@", instance.providerIdentifier ?: @"Unknown"] action:nil keyEquivalent:@""];
+        NSMenu *submenu = [[NSMenu alloc] init];
+        NSArray *providerIdentifiers = [[VagrantManager sharedManager] getProviderIdentifiers];
+        for(NSString *providerIdentifier in providerIdentifiers) {
+            NSMenuItem *submenuItem = [[NSMenuItem alloc] initWithTitle:providerIdentifier action:@selector(updateProviderIdentifier:) keyEquivalent:@""];
+            submenuItem.representedObject = @{@"provider_identifier":providerIdentifier, @"instance":instance};
+            submenuItem.target = self;
+            [submenu addItem:submenuItem];
+        }
+        [menuItem setSubmenu:submenu];
+        [menu addItem:menuItem];
+        
+        
         if([[BookmarkManager sharedManager] getBookmarkWithPath:instance.path]) {
             menuItem = [[NSMenuItem alloc] initWithTitle:@"Remove from bookmarks" action:@selector(removeBookmarkMenuItemClicked:) keyEquivalent:@""];
             menuItem.target = self;
@@ -633,6 +646,21 @@
 }
 
 #pragma mark - Action Menu Item Handlers
+
+- (void)updateProviderIdentifier:(NSMenuItem*)sender {
+    VagrantInstance *instance = [sender.representedObject objectForKey:@"instance"];
+    NSString *providerIdentifier = [sender.representedObject objectForKey:@"provider_identifier"];
+    
+    Bookmark *bookmark = [[BookmarkManager sharedManager] getBookmarkWithPath:instance.path];
+    
+    if(bookmark) {
+        bookmark.providerIdentifier = providerIdentifier;
+        [[BookmarkManager sharedManager] saveBookmarks];
+    }
+    
+    instance.providerIdentifier = providerIdentifier;
+    [self.tableView reloadData];
+}
 
 - (void)handleTextMenuItemClick:(TextMenuItem*)textMenuItem {
     NSString *itemId = textMenuItem.itemId;

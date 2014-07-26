@@ -147,8 +147,8 @@
                 if(existingInstance) {
                     //instance already exists, check for changes
                     int idx = (int)[_instances indexOfObject:existingInstance];
-                    if(instance.machines.count != existingInstance.machines.count) {
-                        //different machine count for instance
+                    if(instance.machines.count != existingInstance.machines.count || ![existingInstance.displayName isEqualToString:instance.displayName] || ![existingInstance.providerIdentifier isEqualToString:instance.providerIdentifier]) {
+                        //instance has updated
                         [_instances replaceObjectAtIndex:idx withObject:instance];
                         [self.delegate vagrantManager:self instanceUpdated:existingInstance withInstance:instance];
                     } else {
@@ -228,6 +228,10 @@
     }
     
     return nil;
+}
+
+- (NSArray*)getProviderIdentifiers {
+    return [_providers allKeys];
 }
 
 @end

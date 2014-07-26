@@ -2,7 +2,6 @@
 //  TextMenuItem.m
 //  Vagrant Manager
 //
-//  Created by Chris Ayoub on 7/26/14.
 //  Copyright (c) 2014 Lanayo. All rights reserved.
 //
 

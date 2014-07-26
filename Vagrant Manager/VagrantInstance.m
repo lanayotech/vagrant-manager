@@ -8,7 +8,6 @@
 #import "VagrantInstance.h"
 
 @implementation VagrantInstance {
-    NSString *_providerIdentifier;
     NSString *_path;
     NSString *_displayName;
     NSMutableArray *_machines;
@@ -33,7 +32,7 @@
             providerIdentifier = [[VagrantManager sharedManager] detectVagrantProvider:path];
         }
         _path = path;
-        _providerIdentifier = providerIdentifier;
+        self.providerIdentifier = providerIdentifier;
         
         //get display name based on last part of path
         NSArray *parts = [path componentsSeparatedByString:@"/"];

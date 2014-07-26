@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5056" systemVersion="13E28" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
+        <deployment defaultVersion="1080" identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="5056"/>
     </dependencies>
     <objects>
@@ -15,11 +16,11 @@
         <customObject id="-3" userLabel="Application"/>
         <window title="Manage Bookmarks" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" animationBehavior="default" id="F0z-JX-Cv5">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" resizable="YES"/>
-            <rect key="contentRect" x="196" y="240" width="480" height="338"/>
+            <rect key="contentRect" x="196" y="240" width="564" height="338"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1178"/>
             <value key="minSize" type="size" width="480" height="338"/>
             <view key="contentView" id="se5-gp-TjO">
-                <rect key="frame" x="0.0" y="0.0" width="480" height="338"/>
+                <rect key="frame" x="0.0" y="0.0" width="564" height="338"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <button id="BT0-kM-woq">
@@ -69,15 +70,15 @@ Gw
                             <action selector="cancelButtonClicked:" target="-2" id="KlF-5W-fOb"/>
                         </connections>
                     </button>
-                    <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" id="fgO-WB-Wlg">
-                        <rect key="frame" x="20" y="74" width="440" height="219"/>
+                    <scrollView autohidesScrollers="YES" horizontalLineScroll="26" horizontalPageScroll="10" verticalLineScroll="26" verticalPageScroll="10" usesPredominantAxisScrolling="NO" id="fgO-WB-Wlg">
+                        <rect key="frame" x="20" y="74" width="524" height="219"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <clipView key="contentView" id="85Q-sq-jj3">
-                            <rect key="frame" x="1" y="17" width="438" height="201"/>
+                            <rect key="frame" x="1" y="17" width="522" height="201"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" columnSelection="YES" autosaveColumns="NO" headerView="o2E-Ef-OW4" id="XQ1-Lr-8sU">
-                                    <rect key="frame" x="0.0" y="0.0" width="438" height="201"/>
+                                <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" columnSelection="YES" autosaveColumns="NO" rowHeight="24" headerView="o2E-Ef-OW4" id="XQ1-Lr-8sU">
+                                    <rect key="frame" x="0.0" y="0.0" width="522" height="201"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <size key="intercellSpacing" width="3" height="2"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -109,7 +110,7 @@ Gw
                                             </textFieldCell>
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         </tableColumn>
-                                        <tableColumn identifier="providerIdentifier" width="72.42578125" minWidth="10" maxWidth="3.4028234663852886e+38" id="3rG-p4-apY">
+                                        <tableColumn identifier="providerIdentifier" width="165.85546875" minWidth="10" maxWidth="3.4028234663852886e+38" id="3rG-p4-apY">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Provider">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -127,8 +128,8 @@ Gw
                             </subviews>
                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </clipView>
-                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="JKr-7S-pyk">
-                            <rect key="frame" x="1" y="203" width="438" height="15"/>
+                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="JKr-7S-pyk">
+                            <rect key="frame" x="1" y="203" width="522" height="15"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                         <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="q6v-Si-6rf">
@@ -136,7 +137,7 @@ Gw
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                         <tableHeaderView key="headerView" id="o2E-Ef-OW4">
-                            <rect key="frame" x="0.0" y="0.0" width="438" height="17"/>
+                            <rect key="frame" x="0.0" y="0.0" width="522" height="17"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </tableHeaderView>
                     </scrollView>

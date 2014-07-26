@@ -129,8 +129,10 @@
 
 - (void)controlTextDidEndEditing:(NSNotification *)notification {
     NSTextField *textField = notification.object;
-    Bookmark *bookmark = [bookmarks objectAtIndex:textField.tag];
-    bookmark.displayName = textField.stringValue;
+    if(![textField isKindOfClass:[NSComboBox class]]) {
+        Bookmark *bookmark = [bookmarks objectAtIndex:textField.tag];
+        bookmark.displayName = textField.stringValue;
+    }
 }
 
 - (IBAction)removeBookmarksButtonClicked:(id)sender {
@@ -157,9 +159,29 @@
 }
 
 - (NSView *)tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
+    Bookmark *bookmark = [bookmarks objectAtIndex:row];
+    
+    if([tableColumn.identifier isEqualToString:@"providerIdentifier"]) {
+        NSComboBox *view = [tableView makeViewWithIdentifier:@"ProviderCellView" owner:self];
+        
+        if(!view) {
+            view = [[NSComboBox alloc] initWithFrame:CGRectMake(0, 0, tableColumn.width, 24)];
+            NSArray *providerIdentifiers = [[VagrantManager sharedManager] getProviderIdentifiers];
+            for(NSString *providerIdentifier in providerIdentifiers) {
+                [view addItemWithObjectValue:providerIdentifier];
+            }
+            view.identifier = @"ProviderCellView";
+        }
+        view.tag = row;
+        view.delegate = self;
+        [view setStringValue:bookmark.providerIdentifier];
+        
+        return view;
+    }
+    
     NSTextField *view = [tableView makeViewWithIdentifier:@"TableCellView" owner:self];
     if(!view) {
-        view = [[NSTextField alloc] initWithFrame:CGRectMake(0, 0, tableColumn.width, 22)];
+        view = [[NSTextField alloc] initWithFrame:CGRectMake(0, 0, tableColumn.width, 24)];
         [view setBezeled:NO];
         [view setDrawsBackground:NO];
         view.delegate = self;
@@ -170,19 +192,21 @@
     [view.cell setEditable:NO];
     view.tag = row;
     
-    Bookmark *bookmark = [bookmarks objectAtIndex:row];
     
     if ([tableColumn.identifier isEqualToString:@"path"]) {
         view.stringValue = bookmark.path;
     } else if ([tableColumn.identifier isEqualToString:@"displayName"]) {
         [view.cell setEditable:YES];
         view.stringValue = bookmark.displayName;
-    } else if([tableColumn.identifier isEqualToString:@"providerIdentifier"]) {
-        [view.cell setEditable:NO];
-        view.stringValue = bookmark.providerIdentifier ?: @"";
     }
     
     return view;
+}
+
+- (void)comboBoxSelectionDidChange:(NSNotification *)notification {
+    NSComboBox *comboBox = notification.object;
+    Bookmark *bookmark = [bookmarks objectAtIndex:comboBox.tag];
+    bookmark.providerIdentifier = [comboBox objectValueOfSelectedItem];
 }
 
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView {

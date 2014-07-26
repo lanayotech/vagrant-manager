@@ -34,5 +34,6 @@
 - (VagrantInstance*)getInstanceForPath:(NSString*)path;
 - (int)getRunningVmCount;
 - (NSString*)detectVagrantProvider:(NSString*)path;
+- (NSArray*)getProviderIdentifiers;
 
 @end

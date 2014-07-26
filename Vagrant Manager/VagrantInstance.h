@@ -14,7 +14,7 @@
 @property (readonly) NSString *path;
 @property (readonly) NSString *displayName;
 @property (readonly) NSArray *machines;
-@property (readonly) NSString *providerIdentifier;
+@property (strong, nonatomic) NSString *providerIdentifier;
 
 - (id)initWithPath:(NSString*)path providerIdentifier:(NSString*)providerIdentifier;
 - (id)initWithPath:(NSString*)path displayName:(NSString*)displayName providerIdentifier:(NSString*)providerIdentifier;
