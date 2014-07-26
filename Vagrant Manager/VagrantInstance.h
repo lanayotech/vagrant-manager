@@ -23,6 +23,7 @@
 - (void)queryMachines;
 - (int)getRunningMachineCount;
 - (int)getMachineCountWithState:(VagrantMachineState)state;
+- (BOOL)hasVagrantfile;
 
 - (NSString*)getPath;
 

@@ -104,48 +104,52 @@
         
         [menu addItem:[NSMenuItem separatorItem]];
         
-        if([instance getRunningMachineCount] < instance.machines.count) {
-            NSMenuItem *menuItem = [[NSMenuItem alloc] initWithTitle:@"vagrant up" action:@selector(upMenuItemClicked:) keyEquivalent:@""];
-            menuItem.target = self;
-            menuItem.representedObject = instance;
-            [menu addItem:menuItem];
-        }
+        if([instance hasVagrantfile]) {
+            if([instance getRunningMachineCount] < instance.machines.count) {
+                NSMenuItem *menuItem = [[NSMenuItem alloc] initWithTitle:@"vagrant up" action:@selector(upMenuItemClicked:) keyEquivalent:@""];
+                menuItem.target = self;
+                menuItem.representedObject = instance;
+                [menu addItem:menuItem];
+            }
 
-        if([instance getRunningMachineCount] > 0) {
-            NSMenuItem *menuItem = [[NSMenuItem alloc] initWithTitle:@"vagrant ssh" action:@selector(sshMenuItemClicked:) keyEquivalent:@""];
-            menuItem.target = self;
-            menuItem.representedObject = instance;
-            [menu addItem:menuItem];
+            if([instance getRunningMachineCount] > 0) {
+                NSMenuItem *menuItem = [[NSMenuItem alloc] initWithTitle:@"vagrant ssh" action:@selector(sshMenuItemClicked:) keyEquivalent:@""];
+                menuItem.target = self;
+                menuItem.representedObject = instance;
+                [menu addItem:menuItem];
+                
+                menuItem = [[NSMenuItem alloc] initWithTitle:@"vagrant reload" action:@selector(reloadMenuItemClicked:) keyEquivalent:@""];
+                menuItem.target = self;
+                menuItem.representedObject = instance;
+                [menu addItem:menuItem];
+                
+                menuItem = [[NSMenuItem alloc] initWithTitle:@"vagrant suspend" action:@selector(suspendMenuItemClicked:) keyEquivalent:@""];
+                menuItem.target = self;
+                menuItem.representedObject = instance;
+                [menu addItem:menuItem];
+                
+                menuItem = [[NSMenuItem alloc] initWithTitle:@"vagrant halt" action:@selector(haltMenuItemClicked:) keyEquivalent:@""];
+                menuItem.target = self;
+                menuItem.representedObject = instance;
+                [menu addItem:menuItem];
+                
+                menuItem = [[NSMenuItem alloc] initWithTitle:@"vagrant provision" action:@selector(provisionMenuItemClicked:) keyEquivalent:@""];
+                menuItem.target = self;
+                menuItem.representedObject = instance;
+                [menu addItem:menuItem];
+            }
             
-            menuItem = [[NSMenuItem alloc] initWithTitle:@"vagrant reload" action:@selector(reloadMenuItemClicked:) keyEquivalent:@""];
+            NSMenuItem *menuItem = [[NSMenuItem alloc] initWithTitle:@"vagrant destroy" action:@selector(destroyMenuItemClicked:) keyEquivalent:@""];
             menuItem.target = self;
             menuItem.representedObject = instance;
             [menu addItem:menuItem];
-            
-            menuItem = [[NSMenuItem alloc] initWithTitle:@"vagrant suspend" action:@selector(suspendMenuItemClicked:) keyEquivalent:@""];
-            menuItem.target = self;
-            menuItem.representedObject = instance;
-            [menu addItem:menuItem];
-            
-            menuItem = [[NSMenuItem alloc] initWithTitle:@"vagrant halt" action:@selector(haltMenuItemClicked:) keyEquivalent:@""];
-            menuItem.target = self;
-            menuItem.representedObject = instance;
-            [menu addItem:menuItem];
-            
-            menuItem = [[NSMenuItem alloc] initWithTitle:@"vagrant provision" action:@selector(provisionMenuItemClicked:) keyEquivalent:@""];
-            menuItem.target = self;
-            menuItem.representedObject = instance;
-            [menu addItem:menuItem];
+        } else {
+            [menu addItem:[[NSMenuItem alloc] initWithTitle:@"No Vagrantfile found" action:nil keyEquivalent:@""]];
         }
-        
-        NSMenuItem *menuItem = [[NSMenuItem alloc] initWithTitle:@"vagrant destroy" action:@selector(destroyMenuItemClicked:) keyEquivalent:@""];
-        menuItem.target = self;
-        menuItem.representedObject = instance;
-        [menu addItem:menuItem];
         
         [menu addItem:[NSMenuItem separatorItem]];
         
-        menuItem = [[NSMenuItem alloc] initWithTitle:@"Open in Finder" action:@selector(finderMenuItemClicked:) keyEquivalent:@""];
+        NSMenuItem *menuItem = [[NSMenuItem alloc] initWithTitle:@"Open in Finder" action:@selector(finderMenuItemClicked:) keyEquivalent:@""];
         menuItem.target = self;
         menuItem.representedObject = instance;
         [menu addItem:menuItem];
@@ -267,14 +271,18 @@
         VagrantInstance *instance = itemObj.target;
         item.instance = instance;
         item.delegate = self;
-        int runningCount = [instance getRunningMachineCount];
-        int suspendedCount = [instance getMachineCountWithState:SavedState];
-        if(runningCount == 0 && suspendedCount == 0) {
-            item.stateImageView.image = [NSImage imageNamed:@"status_icon_off"];
-        } else if(runningCount == instance.machines.count) {
-            item.stateImageView.image = [NSImage imageNamed:@"status_icon_on"];
+        if([instance hasVagrantfile]) {
+            int runningCount = [instance getRunningMachineCount];
+            int suspendedCount = [instance getMachineCountWithState:SavedState];
+            if(runningCount == 0 && suspendedCount == 0) {
+                item.stateImageView.image = [NSImage imageNamed:@"status_icon_off"];
+            } else if(runningCount == instance.machines.count) {
+                item.stateImageView.image = [NSImage imageNamed:@"status_icon_on"];
+            } else {
+                item.stateImageView.image = [NSImage imageNamed:@"status_icon_suspended"];
+            }
         } else {
-            item.stateImageView.image = [NSImage imageNamed:@"status_icon_suspended"];
+            item.stateImageView.image = [NSImage imageNamed:@"status_icon_problem"];
         }
         
         if(instance.machines.count < 2) {
