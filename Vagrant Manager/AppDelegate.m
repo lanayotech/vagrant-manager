@@ -17,6 +17,8 @@
     VagrantManager *_manager;
     PopupContentViewController *_popupContentViewController;
     NSMutableArray *taskOutputWindows;
+    
+    int queuedRefreshes;
 }
 
 #pragma mark - Application events
@@ -95,8 +97,15 @@
                 isRefreshingVagrantMachines = NO;
                 [_popupContentViewController setIsRefreshing:NO];
                 [self updateRunningVmCount];
+                
+                if(queuedRefreshes > 0) {
+                    --queuedRefreshes;
+                    [self refreshVagrantMachines];
+                }
             });
         });
+    } else {
+        ++queuedRefreshes;
     }
 }
 
