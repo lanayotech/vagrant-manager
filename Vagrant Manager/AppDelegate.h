@@ -9,7 +9,6 @@
 #import "TaskOutputWindow.h"
 #import "AboutWindow.h"
 #import "PreferencesWindow.h"
-#import "AddBookmarkWindow.h"
 #import "VirtualBoxMachineInfo.h"
 #import "VirtualBoxServiceProvider.h"
 #import "ParallelsServiceProvider.h"

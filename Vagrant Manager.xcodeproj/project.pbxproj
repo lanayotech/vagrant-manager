@@ -59,8 +59,6 @@
 		83E7CAC319290A89001C86F6 /* arrow-down@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 83E7CAC119290A89001C86F6 /* arrow-down@2x.png */; };
 		83E7CAC61929F135001C86F6 /* arrow-up@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 83E7CAC41929F135001C86F6 /* arrow-up@2x.png */; };
 		83E7CAC71929F135001C86F6 /* arrow-up.png in Resources */ = {isa = PBXBuildFile; fileRef = 83E7CAC51929F135001C86F6 /* arrow-up.png */; };
-		83EAC43518D05E9300FF26A1 /* AddBookmarkWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 83EAC43318D05E9300FF26A1 /* AddBookmarkWindow.m */; };
-		83EAC43618D05E9300FF26A1 /* AddBookmarkWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 83EAC43418D05E9300FF26A1 /* AddBookmarkWindow.xib */; };
 		83EAC43A18D067C900FF26A1 /* vagrant_logo_highlighted-clean.png in Resources */ = {isa = PBXBuildFile; fileRef = 83EAC43718D067C900FF26A1 /* vagrant_logo_highlighted-clean.png */; };
 		83EAC43B18D067C900FF26A1 /* vagrant_logo_off-clean@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 83EAC43818D067C900FF26A1 /* vagrant_logo_off-clean@2x.png */; };
 		83EAC43C18D067C900FF26A1 /* vagrant_logo_on-clean.png in Resources */ = {isa = PBXBuildFile; fileRef = 83EAC43918D067C900FF26A1 /* vagrant_logo_on-clean.png */; };
@@ -221,9 +219,6 @@
 		83E7CAC119290A89001C86F6 /* arrow-down@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrow-down@2x.png"; sourceTree = "<group>"; };
 		83E7CAC41929F135001C86F6 /* arrow-up@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrow-up@2x.png"; sourceTree = "<group>"; };
 		83E7CAC51929F135001C86F6 /* arrow-up.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrow-up.png"; sourceTree = "<group>"; };
-		83EAC43218D05E9300FF26A1 /* AddBookmarkWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddBookmarkWindow.h; sourceTree = "<group>"; };
-		83EAC43318D05E9300FF26A1 /* AddBookmarkWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddBookmarkWindow.m; sourceTree = "<group>"; };
-		83EAC43418D05E9300FF26A1 /* AddBookmarkWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AddBookmarkWindow.xib; sourceTree = "<group>"; };
 		83EAC43718D067C900FF26A1 /* vagrant_logo_highlighted-clean.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "vagrant_logo_highlighted-clean.png"; sourceTree = "<group>"; };
 		83EAC43818D067C900FF26A1 /* vagrant_logo_off-clean@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "vagrant_logo_off-clean@2x.png"; sourceTree = "<group>"; };
 		83EAC43918D067C900FF26A1 /* vagrant_logo_on-clean.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "vagrant_logo_on-clean.png"; sourceTree = "<group>"; };
@@ -377,9 +372,6 @@
 				B17AA18C1887CA4600B4C274 /* PreferencesWindow.h */,
 				B17AA18D1887CA4600B4C274 /* PreferencesWindow.m */,
 				B17AA18E1887CA4600B4C274 /* PreferencesWindow.xib */,
-				83EAC43218D05E9300FF26A1 /* AddBookmarkWindow.h */,
-				83EAC43318D05E9300FF26A1 /* AddBookmarkWindow.m */,
-				83EAC43418D05E9300FF26A1 /* AddBookmarkWindow.xib */,
 			);
 			name = Windows;
 			sourceTree = "<group>";
@@ -741,7 +733,6 @@
 				83EAC43B18D067C900FF26A1 /* vagrant_logo_off-clean@2x.png in Resources */,
 				83BCB0491921B6BF00206967 /* dsa_pub.pem in Resources */,
 				838B393E18CC85BC00A04C15 /* vagrant_logo_highlighted-flat.png in Resources */,
-				83EAC43618D05E9300FF26A1 /* AddBookmarkWindow.xib in Resources */,
 				B150012419249833000A76E7 /* vagrant_logo_on-default@2x.png in Resources */,
 				B150012A19249B19000A76E7 /* status_icon_problem@2x.png in Resources */,
 				83FD355819828164002EEA2D /* arrow_right@2x.png in Resources */,
@@ -791,7 +782,6 @@
 				83DB673A1928AC0C0008CB57 /* VagrantMachine.m in Sources */,
 				83C7C83A1945825B007AC491 /* DDDispatchQueueLogFormatter.m in Sources */,
 				83FD354519826DDC002EEA2D /* NFSScanner.m in Sources */,
-				83EAC43518D05E9300FF26A1 /* AddBookmarkWindow.m in Sources */,
 				83FD3539198263D4002EEA2D /* MachineRowView.m in Sources */,
 				B1357A84187CEB3B00811CBC /* AppDelegate.m in Sources */,
 				83C7C8331945825B007AC491 /* DDAbstractDatabaseLogger.m in Sources */,
