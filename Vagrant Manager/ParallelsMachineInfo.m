@@ -9,6 +9,7 @@
 
 @implementation ParallelsMachineInfo
 
+//get a shared folder path by its name
 - (NSString*)getSharedFolderPathWithName:(NSString*)name {
     NSString *folder = [self.sharedFolders objectForKey:name];
     if(!folder && [[name substringToIndex:1] isEqualToString:@"/"]) {
@@ -18,6 +19,7 @@
     return folder;
 }
 
+//parse Parallels machine info
 + (ParallelsMachineInfo*)initWithInfo:(NSDictionary*)infoDictionary {
     ParallelsMachineInfo *vm = [[ParallelsMachineInfo alloc] init];
     

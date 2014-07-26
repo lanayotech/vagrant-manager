@@ -91,9 +91,7 @@
     return nil;
 }
 
-/**
- Queries vagrant status of all machines
- */
+//queries to state of all machines in this instance
 - (void)queryMachines {
     NSMutableArray *machines = [[NSMutableArray alloc] init];
     

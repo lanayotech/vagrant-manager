@@ -9,6 +9,7 @@
 
 @implementation NFSScanner
 
+//find vagrant instances in the NFS exports file
 - (NSArray*)getNFSInstancePaths {
     NSMutableArray *paths = [[NSMutableArray alloc] init];
     

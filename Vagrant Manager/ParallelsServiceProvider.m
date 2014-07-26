@@ -14,6 +14,7 @@
     return @"parallels";
 }
 
+//get all Vagrant instances Parallels knows about
 - (NSArray*)getVagrantInstancePaths {
     NSMutableArray *paths = [[NSMutableArray alloc] init];
     
@@ -38,6 +39,7 @@
     return paths;
 }
 
+//get virtual machine info for all Parallels VMs
 - (NSArray*)getAllVirtualMachineInfos {
     NSMutableArray *infos = [[NSMutableArray alloc] init];
     

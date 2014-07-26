@@ -29,7 +29,7 @@
 + (VagrantManager*)sharedManager;
 
 - (NSArray*)getMachinesWithState:(VagrantMachineState)state;
-- (void)addServiceProvider:(id<VirtualMachineServiceProvider>)provider;
+- (void)registerServiceProvider:(id<VirtualMachineServiceProvider>)provider;
 - (void)refreshInstances;
 - (VagrantInstance*)getInstanceForPath:(NSString*)path;
 - (int)getRunningVmCount;

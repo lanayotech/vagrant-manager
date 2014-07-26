@@ -30,6 +30,7 @@
     return self;
 }
 
+//load bookmarks from shared preferences
 - (void)loadBookmarks {
     @synchronized(_bookmarks) {
         [_bookmarks removeAllObjects];
@@ -43,6 +44,7 @@
     }
 }
 
+//save bookmarks to shared preferences
 - (void)saveBookmarks {
     @synchronized(_bookmarks) {
         NSMutableArray *bookmarks = [self getBookmarks];

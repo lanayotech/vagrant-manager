@@ -48,8 +48,8 @@
     //create vagrant manager
     _manager = [VagrantManager sharedManager];
     _manager.delegate = self;
-    [_manager addServiceProvider:[[VirtualBoxServiceProvider alloc] init]];
-    [_manager addServiceProvider:[[ParallelsServiceProvider alloc] init]];
+    [_manager registerServiceProvider:[[VirtualBoxServiceProvider alloc] init]];
+    [_manager registerServiceProvider:[[ParallelsServiceProvider alloc] init]];
     
     [[BookmarkManager sharedManager] loadBookmarks];
     
@@ -61,6 +61,8 @@
     //start initial vagrant machine detection
     [self refreshVagrantMachines];
 }
+
+#pragma mark - Notification handlers
 
 - (void)taskCompleted:(NSNotification*)notification {
     [self refreshVagrantMachines];
@@ -83,6 +85,8 @@
         [_popupContentViewController setUpdatesAvailable:NO];
     }
 }
+
+#pragma mark - Vagrant manager control
 
 - (void)refreshVagrantMachines {
     //only run if not already refreshing

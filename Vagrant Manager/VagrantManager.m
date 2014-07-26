@@ -28,7 +28,6 @@
     return manager;
 }
 
-
 - (id)init {
     self = [super init];
     
@@ -40,10 +39,12 @@
     return self;
 }
 
+//get all instances
 - (NSArray*)getInstances {
     return [NSArray arrayWithArray:_instances];
 }
 
+//get count of machines in running state
 - (int)getRunningVmCount {
     int count = 0;
     
@@ -60,6 +61,7 @@
     return count;
 }
 
+//get count of machines in a particular state
 - (NSArray*)getMachinesWithState:(VagrantMachineState)state {
     NSMutableArray *machines = [[NSMutableArray alloc] init];
     for(VagrantInstance *instance in _instances) {
@@ -73,10 +75,12 @@
     return machines;
 }
 
-- (void)addServiceProvider:(id<VirtualMachineServiceProvider>)provider {
+//register a new service provider
+- (void)registerServiceProvider:(id<VirtualMachineServiceProvider>)provider {
     [_providers setObject:provider forKey:[provider getProviderIdentifier]];
 }
 
+//get instance at a particular path
 - (VagrantInstance*)getInstanceForPath:(NSString*)path {
     path = [Util trimTrailingSlash:path];
     
@@ -89,6 +93,7 @@
     return nil;
 }
 
+//refresh list of instances by querying bookmarks, service providers, and NFS
 - (void)refreshInstances {
     NSMutableArray *instances = [[NSMutableArray alloc] init];
     
@@ -114,6 +119,7 @@
         }
     }
     
+    //scan for NFS exports
     NFSScanner *nfsScanner = [[NFSScanner alloc] init];
     NSArray *paths = [nfsScanner getNFSInstancePaths];
     for(NSString *path in paths) {
@@ -128,7 +134,7 @@
     
     NSMutableArray *validPaths = [[NSMutableArray alloc] init];
     
-    //handle all known instances, process in parallel
+    //query all known instances for machines, process in parallel
     dispatch_group_t queryMachinesGroup = dispatch_group_create();
     dispatch_queue_t queryMachinesQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     for(VagrantInstance *instance in instances) {
@@ -168,7 +174,7 @@
         });
     }
     
-    // you can do this to synchronously wait on the current thread:
+    //wait for the machine queries to finish
     dispatch_group_wait(queryMachinesGroup, DISPATCH_TIME_FOREVER);
     
     for(int i=(int)_instances.count-1; i>=0; --i) {
@@ -182,9 +188,7 @@
     }
 }
 
-/*
- Query providers for all Vagrant instance paths
- */
+//query all service providers for instances
 - (NSDictionary*)detectInstancePaths {
     NSMutableArray *allPaths = [[NSMutableArray alloc] init];
     NSMutableDictionary *keyedPaths = [[NSMutableDictionary alloc] init];
@@ -207,6 +211,7 @@
     return [NSDictionary dictionaryWithDictionary:keyedPaths];
 }
 
+//try to determine the vagrant provider for an instance
 - (NSString*)detectVagrantProvider:(NSString*)path {
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSError *error = nil;

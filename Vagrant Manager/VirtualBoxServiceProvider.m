@@ -13,6 +13,7 @@
     return @"virtualbox";
 }
 
+//find all vagrant instances that VirtualBox knows about
 - (NSArray*)getVagrantInstancePaths {
     NSMutableArray *paths = [[NSMutableArray alloc] init];
     
@@ -40,6 +41,7 @@
     return paths;
 }
 
+//get machine ids of all VirtualBox VMs
 - (NSArray*)getAllVirtualMachineUUIDs {
     NSMutableArray *uuids = [[NSMutableArray alloc] init];
     
@@ -72,6 +74,7 @@
     return [[NSArray alloc] initWithArray:uuids];
 }
 
+//get machine info for a VirtualBox VM
 - (VirtualBoxMachineInfo*)getVirtualMachineInfoFromUUID:(NSString*)uuid {
     NSTask *task = [[NSTask alloc] init];
     [task setLaunchPath:@"/bin/bash"];
