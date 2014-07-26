@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5056" systemVersion="13C1021" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5056" systemVersion="13E28" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
+        <deployment defaultVersion="1080" identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="5056"/>
         <plugIn identifier="com.apple.WebKitIBPlugin" version="5056"/>
     </dependencies>
@@ -15,10 +16,10 @@
         <customObject id="-3" userLabel="Application"/>
         <window title="About Vagrant Manager" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" animationBehavior="default" id="1">
             <windowStyleMask key="styleMask" titled="YES" closable="YES"/>
-            <rect key="contentRect" x="196" y="240" width="480" height="271"/>
+            <rect key="contentRect" x="196" y="240" width="480" height="240"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1058"/>
             <view key="contentView" id="2">
-                <rect key="frame" x="0.0" y="0.0" width="480" height="271"/>
+                <rect key="frame" x="0.0" y="0.0" width="480" height="240"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <webView id="tYe-WP-fMN">
@@ -28,11 +29,6 @@
                             <nil key="identifier"/>
                         </webPreferences>
                     </webView>
-                    <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" id="6YM-yB-rMc">
-                        <rect key="frame" x="20" y="217" width="440" height="54"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="logo" id="yDg-ru-ER0"/>
-                    </imageView>
                 </subviews>
             </view>
             <connections>
@@ -40,7 +36,4 @@
             </connections>
         </window>
     </objects>
-    <resources>
-        <image name="logo" width="120" height="24"/>
-    </resources>
 </document>
