@@ -510,12 +510,10 @@
     if([menuItemObject.target isKindOfClass:[VagrantInstance class]] && !menuItemObject.isChildMenuItem) {
         VagrantInstance *instance = menuItemObject.target;
         
-        [self.tableView beginUpdates];
         if(menuItemObject.isExpanded) {
             long nextRow = row + 1;
             while(nextRow < _menuItems.count && ((MenuItemObject*)[_menuItems objectAtIndex:nextRow]).isChildMenuItem) {
                 [_menuItems removeObjectAtIndex:nextRow];
-                [self.tableView removeRowsAtIndexes:[NSIndexSet indexSetWithIndex:nextRow] withAnimation:NSTableViewAnimationSlideUp|NSTableViewAnimationEffectFade];
             }
         } else {
             int i = 1;
@@ -523,7 +521,6 @@
                 MenuItemObject *obj = [[MenuItemObject alloc] initWithTarget:machine];
                 obj.isChildMenuItem = YES;
                 [_menuItems insertObject:obj atIndex:row+i];
-                [self.tableView insertRowsAtIndexes:[NSIndexSet indexSetWithIndex:row+i] withAnimation:NSTableViewAnimationSlideDown|NSTableViewAnimationEffectFade];
                 ++i;
             }
         }
@@ -533,7 +530,6 @@
         _menuItems = [self sortMenuItems];
         
         [self.tableView reloadData];
-        [self.tableView endUpdates];
         [self performSelector:@selector(resizeTableView) withObject:nil afterDelay:.25f];
     }
 }
@@ -541,17 +537,12 @@
 - (void)addInstance:(VagrantInstance*)instance {
     [_menuItems addObject:[[MenuItemObject alloc] initWithTarget:instance]];
 
-    [self.tableView beginUpdates];
-    [self.tableView insertRowsAtIndexes:[NSIndexSet indexSetWithIndex:_menuItems.count - 1] withAnimation:NSTableViewAnimationSlideDown|NSTableViewAnimationEffectFade];
-    [self.tableView endUpdates];
-    
     _menuItems = [self sortMenuItems];
     [self.tableView reloadData];
     [self resizeTableView];
 }
 
 - (void)updateInstance:(VagrantInstance*)oldInstance withInstance:(VagrantInstance *)newInstance {
-    [self.tableView beginUpdates];
     BOOL shouldExpand = NO;
     for(long i = _menuItems.count - 1; i >= 0; --i) {
         MenuItemObject *menuItem = [_menuItems objectAtIndex:i];
@@ -562,11 +553,9 @@
                 shouldExpand = menuItem.isExpanded;
                 
                 [_menuItems removeObjectAtIndex:i];
-                [self.tableView removeRowsAtIndexes:[NSIndexSet indexSetWithIndex:i] withAnimation:NSTableViewAnimationSlideUp|NSTableViewAnimationEffectFade];
                 
                 while(i < _menuItems.count && ((MenuItemObject*)[_menuItems objectAtIndex:i]).isChildMenuItem) {
                     [_menuItems removeObjectAtIndex:i];
-                    [self.tableView removeRowsAtIndexes:[NSIndexSet indexSetWithIndex:i] withAnimation:NSTableViewAnimationSlideUp|NSTableViewAnimationEffectFade];
                 }
             }
         }
@@ -577,15 +566,12 @@
     [_menuItems addObject:menuItem];
     menuItem.isExpanded = shouldExpand;
     
-    [self.tableView insertRowsAtIndexes:[NSIndexSet indexSetWithIndex:newIdx] withAnimation:NSTableViewAnimationSlideDown|NSTableViewAnimationEffectFade];
-
     if(shouldExpand) {
         int i = 1;
         for(VagrantMachine *machine in newInstance.machines) {
             MenuItemObject *obj = [[MenuItemObject alloc] initWithTarget:machine];
             obj.isChildMenuItem = YES;
             [_menuItems insertObject:obj atIndex:newIdx+i];
-            [self.tableView insertRowsAtIndexes:[NSIndexSet indexSetWithIndex:newIdx+i] withAnimation:NSTableViewAnimationSlideDown|NSTableViewAnimationEffectFade];
             ++i;
         }
     }
@@ -594,13 +580,9 @@
     
     [self.tableView reloadData];
     [self resizeTableView];
-    [self.tableView endUpdates];
-    
-    [self performSelector:@selector(resizeTableView) withObject:nil afterDelay:.25f];
 }
 
 - (void)removeInstance:(VagrantInstance*)instance {
-    [self.tableView beginUpdates];
     for(long i = _menuItems.count - 1; i >= 0; --i) {
         MenuItemObject *menuItem = [_menuItems objectAtIndex:i];
         if([menuItem.target isKindOfClass:[VagrantInstance class]] && !menuItem.isChildMenuItem) {
@@ -608,11 +590,9 @@
             
             if(instance == itemInstance) {
                 [_menuItems removeObjectAtIndex:i];
-                [self.tableView removeRowsAtIndexes:[NSIndexSet indexSetWithIndex:i] withAnimation:NSTableViewAnimationSlideUp|NSTableViewAnimationEffectFade];
                 
                 while(i < _menuItems.count && ((MenuItemObject*)[_menuItems objectAtIndex:i]).isChildMenuItem) {
                     [_menuItems removeObjectAtIndex:i];
-                    [self.tableView removeRowsAtIndexes:[NSIndexSet indexSetWithIndex:i] withAnimation:NSTableViewAnimationSlideUp|NSTableViewAnimationEffectFade];
                 }
             }
         }
@@ -621,18 +601,14 @@
     _menuItems = [self sortMenuItems];
     
     [self.tableView reloadData];
-    
-    [self.tableView endUpdates];
-    [self performSelector:@selector(resizeTableView) withObject:nil afterDelay:.25f];
+    [self resizeTableView];
 }
 
 - (void)collapseAllChildMenuItems {
-    [self.tableView beginUpdates];
     for(long i = _menuItems.count - 1; i >= 0; --i) {
         MenuItemObject *menuItem = [_menuItems objectAtIndex:i];
         if(menuItem.isChildMenuItem) {
             [_menuItems removeObjectAtIndex:i];
-            [self.tableView removeRowsAtIndexes:[NSIndexSet indexSetWithIndex:i] withAnimation:NSTableViewAnimationSlideUp|NSTableViewAnimationEffectFade];
         } else {
             if([menuItem.target isKindOfClass:[VagrantInstance class]]) {
                 InstanceRowView *rowView = [_tableView rowViewAtRow:i makeIfNecessary:NO];
@@ -645,8 +621,7 @@
         }
     }
     [self.tableView reloadData];
-    [self.tableView endUpdates];
-    [self performSelector:@selector(resizeTableView) withObject:nil afterDelay:.25f];
+    [self resizeTableView];
 }
 
 #pragma mark - Action Menu Item Handlers
