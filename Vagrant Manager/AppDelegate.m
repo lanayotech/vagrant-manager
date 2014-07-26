@@ -326,9 +326,11 @@
             [statusItemPopup setTitle:@""];
         }
         [statusItemPopup setImage:[self getThemedImage:@"vagrant_logo_on"]];
+        [statusItemPopup setAlternateImage:[self getThemedImage:@"vagrant_logo_highlighted"]];
     } else {
         [statusItemPopup setTitle:@""];
         [statusItemPopup setImage:[self getThemedImage:@"vagrant_logo_off"]];
+        [statusItemPopup setAlternateImage:[self getThemedImage:@"vagrant_logo_highlighted"]];
     }
 }
 
