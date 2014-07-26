@@ -169,11 +169,15 @@
 }
 
 - (void)addBookmarkWithInstance:(VagrantInstance *)instance {
-    
+    [[BookmarkManager sharedManager] addBookmarkWithPath:instance.path displayName:instance.displayName providerIdentifier:instance.providerIdentifier];
+    [[BookmarkManager sharedManager] saveBookmarks];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"vagrant-manager.bookmarks-updated" object:nil];
 }
 
 - (void)removeBookmarkWithInstance:(VagrantInstance *)instance {
-    
+    [[BookmarkManager sharedManager] removeBookmarkWithPath:instance.path];
+    [[BookmarkManager sharedManager] saveBookmarks];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"vagrant-manager.bookmarks-updated" object:nil];
 }
 
 #pragma mark - Vagrant Machine control

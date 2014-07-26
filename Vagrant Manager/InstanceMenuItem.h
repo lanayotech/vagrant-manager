@@ -23,6 +23,7 @@
 @property (weak) IBOutlet NSImageView *stateImageView;
 @property (weak) IBOutlet NSTextField *nameTextField;
 @property (weak) IBOutlet NSButton *toggleOpenButton;
+@property (weak) IBOutlet NSImageView *bookmarkIconImageView;
 
 @property (strong, nonatomic) VagrantInstance *instance;
 

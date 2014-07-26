@@ -57,7 +57,7 @@
                         </connections>
                     </buttonCell>
                 </button>
-                <button toolTip="About Vagrant Manager" id="DJp-Mb-RDX" userLabel="About Button">
+                <button toolTip="Manage Bookmarks" id="DJp-Mb-RDX" userLabel="Bookmarks Button">
                     <rect key="frame" x="109" y="130" width="16" height="16"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="bookmark" imagePosition="only" alignment="left" imageScaling="proportionallyDown" inset="2" id="dQR-h7-hOH">
@@ -130,7 +130,7 @@
                                                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="NSStatusAvailable" id="gkh-Ev-RHX"/>
                                                     </imageView>
                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="OjF-CH-UzX">
-                                                        <rect key="frame" x="33" y="3" width="148" height="14"/>
+                                                        <rect key="frame" x="33" y="3" width="141" height="14"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Instance Name" id="cQp-uo-Rfr">
                                                             <font key="font" metaFont="smallSystem"/>
@@ -138,8 +138,14 @@
                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                     </textField>
+                                                    <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" id="cOD-3z-CcK" userLabel="Bookmark Icon">
+                                                        <rect key="frame" x="175" y="5" width="10" height="10"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="bookmark" id="R4h-r0-Jq9"/>
+                                                    </imageView>
                                                 </subviews>
                                                 <connections>
+                                                    <outlet property="bookmarkIconImageView" destination="cOD-3z-CcK" id="n56-1c-lOn"/>
                                                     <outlet property="nameTextField" destination="OjF-CH-UzX" id="kzB-fA-S2W"/>
                                                     <outlet property="stateImageView" destination="BDN-im-xql" id="kpD-Cn-MeS"/>
                                                     <outlet property="toggleOpenButton" destination="Dfr-Af-KFE" id="R21-3I-Btp"/>

@@ -6,6 +6,7 @@
 //
 
 #import "PopupContentViewController.h"
+#import "BookmarkManager.h"
 
 @interface PopupContentViewController ()
 
@@ -22,8 +23,13 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         _menuItems = [[NSMutableArray alloc] init];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(bookmarksUpdated:) name:@"vagrant-manager.bookmarks-updated" object:nil];
     }
     return self;
+}
+
+- (void)bookmarksUpdated:(NSNotification*)notification {
+    [self.tableView reloadData];
 }
 
 - (void)loadView {
@@ -131,10 +137,17 @@
         menuItem.representedObject = instance;
         [menu addItem:menuItem];
         
-        menuItem = [[NSMenuItem alloc] initWithTitle:@"Add to bookmarks" action:@selector(addBookmarkMenuItemClicked:) keyEquivalent:@""];
-        menuItem.target = self;
-        menuItem.representedObject = instance;
-        [menu addItem:menuItem];
+        if([[BookmarkManager sharedManager] getBookmarkWithPath:instance.path]) {
+            menuItem = [[NSMenuItem alloc] initWithTitle:@"Remove from bookmarks" action:@selector(removeBookmarkMenuItemClicked:) keyEquivalent:@""];
+            menuItem.target = self;
+            menuItem.representedObject = instance;
+            [menu addItem:menuItem];
+        } else {
+            menuItem = [[NSMenuItem alloc] initWithTitle:@"Add to bookmarks" action:@selector(addBookmarkMenuItemClicked:) keyEquivalent:@""];
+            menuItem.target = self;
+            menuItem.representedObject = instance;
+            [menu addItem:menuItem];
+        }
         
         [NSMenu popUpContextMenu:menu withEvent:[[NSApplication sharedApplication] currentEvent] forView:rowView];
     } else if([menuItem.target isKindOfClass:[VagrantMachine class]]){
@@ -188,6 +201,18 @@
             [menu addItem:menuItem];
         }
         
+        [menu addItem:[NSMenuItem separatorItem]];
+        
+        NSMenuItem *menuItem = [[NSMenuItem alloc] initWithTitle:@"Open in Finder" action:@selector(finderMenuItemClicked:) keyEquivalent:@""];
+        menuItem.target = self;
+        menuItem.representedObject = machine;
+        [menu addItem:menuItem];
+        
+        menuItem = [[NSMenuItem alloc] initWithTitle:@"Open in Terminal" action:@selector(terminalMenuItemClicked:) keyEquivalent:@""];
+        menuItem.target = self;
+        menuItem.representedObject = machine;
+        [menu addItem:menuItem];
+        
         [NSMenu popUpContextMenu:menu withEvent:[[NSApplication sharedApplication] currentEvent] forView:rowView];
     }
 }
@@ -219,6 +244,12 @@
         }
         
         [((NSButton*)item.toggleOpenButton) setImage:[NSImage imageNamed:itemObj.isExpanded ? @"arrow_down" : @"arrow_right"]];
+        
+        if([[BookmarkManager sharedManager] getBookmarkWithPath:instance.path]) {
+            [item.bookmarkIconImageView setHidden:NO];
+        } else {
+            [item.bookmarkIconImageView setHidden:YES];
+        }
         
         [self updateScrollIndicators];
         [self resizeTableView];
@@ -445,7 +476,6 @@
     [self performSelector:@selector(resizeTableView) withObject:nil afterDelay:.25f];
 }
 
-
 - (void)collapseAllChildMenuItems {
     [self.tableView beginUpdates];
     for(long i = _menuItems.count - 1; i >= 0; --i) {
@@ -474,12 +504,18 @@
     if([sender.representedObject isKindOfClass:[VagrantInstance class]]) {
         [self.delegate openInstanceInFinder:sender.representedObject];
         [self.statusItemPopup hidePopover];
+    } else if([sender.representedObject isKindOfClass:[VagrantMachine class]]) {
+        [self.delegate openInstanceInFinder:((VagrantMachine*)sender.representedObject).instance];
+        [self.statusItemPopup hidePopover];
     }
 }
 
 - (IBAction)terminalMenuItemClicked:(NSMenuItem*)sender {
     if([sender.representedObject isKindOfClass:[VagrantInstance class]]) {
         [self.delegate openInstanceInTerminal:sender.representedObject];
+        [self.statusItemPopup hidePopover];
+    } else if([sender.representedObject isKindOfClass:[VagrantMachine class]]) {
+        [self.delegate openInstanceInTerminal:((VagrantMachine*)sender.representedObject).instance];
         [self.statusItemPopup hidePopover];
     }
 }
