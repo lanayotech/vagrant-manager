@@ -218,6 +218,8 @@
             [item.toggleOpenButton setHidden:NO];
         }
         
+        [((NSButton*)item.toggleOpenButton) setImage:[NSImage imageNamed:itemObj.isExpanded ? @"arrow_down" : @"arrow_right"]];
+        
         [self updateScrollIndicators];
         [self resizeTableView];
         
@@ -382,7 +384,7 @@
         if([menuItem.target isKindOfClass:[VagrantInstance class]] && !menuItem.isChildMenuItem) {
             VagrantInstance *itemInstance = (VagrantInstance*)menuItem.target;
             
-            if(oldInstance == itemInstance) {
+            if([oldInstance.path isEqualToString:itemInstance.path]) {
                 shouldExpand = menuItem.isExpanded;
                 
                 [_menuItems removeObjectAtIndex:i];
@@ -399,16 +401,12 @@
     MenuItemObject *menuItem = [[MenuItemObject alloc] initWithTarget:newInstance];
     long newIdx = _menuItems.count;
     [_menuItems addObject:menuItem];
+    menuItem.isExpanded = shouldExpand;
     
     [self.tableView insertRowsAtIndexes:[NSIndexSet indexSetWithIndex:newIdx] withAnimation:NSTableViewAnimationSlideDown|NSTableViewAnimationEffectFade];
 
     if(shouldExpand) {
         int i = 1;
-        MenuItemObject *obj = [[MenuItemObject alloc] initWithTarget:newInstance];
-        obj.isChildMenuItem = YES;
-        [_menuItems insertObject:obj atIndex:newIdx+i];
-        [self.tableView insertRowsAtIndexes:[NSIndexSet indexSetWithIndex:newIdx+i] withAnimation:NSTableViewAnimationSlideDown|NSTableViewAnimationEffectFade];
-        ++i;
         for(VagrantMachine *machine in newInstance.machines) {
             MenuItemObject *obj = [[MenuItemObject alloc] initWithTarget:machine];
             obj.isChildMenuItem = YES;
