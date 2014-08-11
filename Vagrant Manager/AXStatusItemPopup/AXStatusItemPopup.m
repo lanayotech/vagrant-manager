@@ -57,6 +57,7 @@
         [self addSubview:_imageView];
         
         _titleView = [[AXTextView alloc] initWithFrame:NSMakeRect(kMinViewWidth, 0, 20, height)];
+        [_titleView setEditable:NO];
         [self addSubview:_titleView];
         [_titleView setString:@""];
         _titleView.font = [NSFont boldSystemFontOfSize:12];
