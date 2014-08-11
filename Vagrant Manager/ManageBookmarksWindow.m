@@ -23,7 +23,7 @@
 - (void)windowDidLoad {
     [super windowDidLoad];
     
-    bookmarks = [[BookmarkManager sharedManager] getBookmarks];
+    bookmarks = [[NSMutableArray alloc] initWithArray:[[BookmarkManager sharedManager] getBookmarks] copyItems:YES];
     
     self.bookmarkTableView.delegate = self;
     self.bookmarkTableView.dataSource = self;
