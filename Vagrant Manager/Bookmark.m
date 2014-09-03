@@ -9,17 +9,16 @@
 
 @implementation Bookmark
 
-- (void)loadId {
-    NSString *idFilePath = [self.path stringByAppendingPathComponent:@"/.vagrant/machines/default/virtualbox/id"];
+- (id)copyWithZone:(NSZone*)zone {
+    Bookmark *bookmark = [[[self class] allocWithZone:zone] init];
     
-    if([[NSFileManager defaultManager] isReadableFileAtPath:idFilePath]) {
-        NSError *err;
-        NSString *machineId = [NSString stringWithContentsOfFile:idFilePath encoding:NSUTF8StringEncoding error:&err];
-        
-        if(!err) {
-            self.uuid = machineId;
-        }
+    if(bookmark) {
+        bookmark.displayName = self.displayName;
+        bookmark.path = self.path;
+        bookmark.providerIdentifier = self.providerIdentifier;
     }
+    
+    return bookmark;
 }
 
 @end

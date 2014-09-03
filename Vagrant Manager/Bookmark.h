@@ -12,10 +12,6 @@
 
 @property (strong, nonatomic) NSString *displayName;
 @property (strong, nonatomic) NSString *path;
-@property (strong, nonatomic) NSString *uuid;
-
-@property (strong, nonatomic) VirtualMachineInfo *machine;
-
-- (void)loadId;
+@property (strong, nonatomic) NSString *providerIdentifier;
 
 @end

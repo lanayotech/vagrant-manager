@@ -21,6 +21,14 @@
     return result;
 }
 
++ (NSString*)trimTrailingSlash:(NSString*)path {
+    if(path.length > 1 && [[path substringFromIndex:path.length-1] isEqualToString:@"/"]) {
+        return [path substringToIndex:path.length-1];
+    } else {
+        return path;
+    }
+}
+
 + (NSComparisonResult)compareVersion:(NSString*)version1 toVersion:(NSString*)version2 {
     return [self compareVersion:version1 toVersion:version2 skipExpansion:NO];
 }

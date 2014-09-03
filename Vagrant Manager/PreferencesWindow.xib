@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5056" systemVersion="13C64" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5056" systemVersion="13E28" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="5056"/>
     </dependencies>
@@ -9,6 +9,7 @@
                 <outlet property="autoCloseCheckBox" destination="e4G-MV-FOy" id="zHy-VY-UGs"/>
                 <outlet property="dontShowRunningVmCountCheckBox" destination="FSj-0x-omi" id="6oK-kh-ZOD"/>
                 <outlet property="dontShowUpdateCheckBox" destination="8v8-Ay-Er0" id="0XX-po-XOl"/>
+                <outlet property="launchAtLoginCheckBox" destination="GqM-Uy-APw" id="iJt-ux-s6a"/>
                 <outlet property="sendProfileDataCheckBox" destination="oFT-5y-y4A" id="aSY-ti-ZFE"/>
                 <outlet property="statusBarIconThemePopUpButton" destination="swb-Aa-PIS" id="On2-hu-OeB"/>
                 <outlet property="terminalPreferencePopUpButton" destination="5JC-yq-pDl" id="d4O-WE-EdO"/>
@@ -20,21 +21,21 @@
         <customObject id="-3" userLabel="Application"/>
         <window title="Preferences" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" animationBehavior="default" id="1">
             <windowStyleMask key="styleMask" titled="YES" closable="YES"/>
-            <rect key="contentRect" x="196" y="240" width="480" height="400"/>
+            <rect key="contentRect" x="196" y="240" width="480" height="425"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1178"/>
             <view key="contentView" id="2">
-                <rect key="frame" x="0.0" y="0.0" width="480" height="400"/>
+                <rect key="frame" x="0.0" y="0.0" width="480" height="425"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <box autoresizesSubviews="NO" borderType="line" titlePosition="noTitle" id="Y9d-dx-Ze1">
-                        <rect key="frame" x="17" y="57" width="446" height="325"/>
+                        <rect key="frame" x="17" y="57" width="446" height="350"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView">
-                            <rect key="frame" x="1" y="1" width="444" height="323"/>
+                            <rect key="frame" x="1" y="1" width="444" height="348"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="21L-o8-sFd">
-                                    <rect key="frame" x="25" y="288" width="155" height="17"/>
+                                    <rect key="frame" x="25" y="313" width="155" height="17"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Terminal Preference:" id="d09-Xe-nQf">
                                         <font key="font" metaFont="system"/>
@@ -43,7 +44,7 @@
                                     </textFieldCell>
                                 </textField>
                                 <popUpButton verticalHuggingPriority="750" id="5JC-yq-pDl">
-                                    <rect key="frame" x="191" y="281" width="211" height="26"/>
+                                    <rect key="frame" x="191" y="306" width="211" height="26"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <popUpButtonCell key="cell" type="push" title="iTerm/iTerm2" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="101" imageScaling="proportionallyDown" inset="2" selectedItem="nvj-E8-vFA" id="m4I-I4-1Um">
                                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -60,7 +61,7 @@
                                     </connections>
                                 </popUpButton>
                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="CmT-gf-Twe">
-                                    <rect key="frame" x="25" y="258" width="155" height="17"/>
+                                    <rect key="frame" x="25" y="283" width="155" height="17"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Status Bar Icon Theme:" id="zgd-Fw-BuU">
                                         <font key="font" metaFont="system"/>
@@ -69,7 +70,7 @@
                                     </textFieldCell>
                                 </textField>
                                 <popUpButton verticalHuggingPriority="750" id="swb-Aa-PIS">
-                                    <rect key="frame" x="191" y="251" width="211" height="26"/>
+                                    <rect key="frame" x="191" y="276" width="211" height="26"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="eYO-RJ-9Jl">
                                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -134,6 +135,17 @@
                                     </buttonCell>
                                     <connections>
                                         <action selector="dontShowRunningVmCountCheckBoxClicked:" target="-2" id="41p-lu-3za"/>
+                                    </connections>
+                                </button>
+                                <button id="GqM-Uy-APw">
+                                    <rect key="frame" x="191" y="249" width="119" height="18"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                    <buttonCell key="cell" type="check" title="Launch at login" bezelStyle="regularSquare" imagePosition="left" inset="2" id="kmb-zb-ryM">
+                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                        <font key="font" metaFont="system"/>
+                                    </buttonCell>
+                                    <connections>
+                                        <action selector="launchAtLoginCheckBoxClicked:" target="-2" id="cwh-uy-4ym"/>
                                     </connections>
                                 </button>
                                 <button id="e4G-MV-FOy">

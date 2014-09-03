@@ -18,6 +18,7 @@
 @property (weak) IBOutlet NSPopUpButton *statusBarIconThemePopUpButton;
 @property (weak) IBOutlet NSPopUpButton *updateStabilityPopUpButton;
 @property (weak) IBOutlet NSButton *sendProfileDataCheckBox;
+@property (weak) IBOutlet NSButton *launchAtLoginCheckBox;
 
 - (IBAction)autoCloseCheckBoxClicked:(id)sender;
 - (IBAction)dontShowUpdateCheckBoxClicked:(id)sender;
@@ -26,5 +27,6 @@
 - (IBAction)statusBarIconThemePopUpButtonClicked:(id)sender;
 - (IBAction)updateStabilityPopUpButtonClicked:(id)sender;
 - (IBAction)sendProfileDataCheckBoxClicked:(id)sender;
+- (IBAction)launchAtLoginCheckBoxClicked:(id)sender;
 
 @end

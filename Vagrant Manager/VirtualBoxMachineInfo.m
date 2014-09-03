@@ -9,7 +9,18 @@
 
 @implementation VirtualBoxMachineInfo
 
-+ (VirtualBoxMachineInfo*)initWithInfo:(NSString*)infoString :(id<VirtualMachineServiceProvider>)provider {
+//get a shared folder based on its name
+- (NSString*)getSharedFolderPathWithName:(NSString*)name {
+    NSString *folder = [self.sharedFolders objectForKey:name];
+    if(!folder && [[name substringToIndex:1] isEqualToString:@"/"]) {
+        folder = [self.sharedFolders objectForKey:[name substringFromIndex:1]];
+    }
+    
+    return folder;
+}
+
+//parse VirtualBox machine info
++ (VirtualBoxMachineInfo*)initWithInfo:(NSString*)infoString {
     VirtualBoxMachineInfo *vm = [[VirtualBoxMachineInfo alloc] init];
     
     NSArray *infoArray = [infoString componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
@@ -46,14 +57,6 @@
             vm.uuid = value;
         } else if([name isEqualToString:@"VMState"]) {
             vm.stateString = value;
-            
-            if ([value isEqualToString:@"running"]) {
-                vm.state = running;
-            } else if ([value isEqualToString:@"saved"]) {
-                vm.state = suspended;
-            } else {
-                vm.state = off;
-            }
         } else if([name hasPrefix:@"SharedFolderNameMachineMapping"] || [name hasPrefix:@"SharedFolderPathMachineMapping"]) {
             NSString *mappingId = [name substringFromIndex:30];
             if(![sharedFolders objectForKey:mappingId]) {
@@ -77,7 +80,6 @@
     
     vm.properties = [NSDictionary dictionaryWithDictionary:infoPairs];
     vm.sharedFolders = [NSDictionary dictionaryWithDictionary:validSharedFolders];
-    vm.provider = provider;
     
     return vm;
 }
