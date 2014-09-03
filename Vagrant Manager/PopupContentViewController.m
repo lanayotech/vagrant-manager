@@ -711,6 +711,7 @@
         [NSMenu popUpContextMenu:menu withEvent:[[NSApplication sharedApplication] currentEvent] forView:textMenuItem];
     } else if([itemId isEqualToString:@"check_for_updates"]) {
         [[SUUpdater sharedUpdater] checkForUpdates:self];
+        [self.statusItemPopup hidePopover];
     }
 }
 
