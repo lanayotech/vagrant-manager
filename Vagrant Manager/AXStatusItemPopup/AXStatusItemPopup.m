@@ -87,7 +87,6 @@
     NSAttributedString *string = [[NSAttributedString alloc] initWithString:title attributes:@{NSFontAttributeName: _titleView.font}];
     CGRect rect = [string boundingRectWithSize:(CGSize){CGFLOAT_MAX, self.frame.size.height} options:NSStringDrawingUsesLineFragmentOrigin];
     
-    
     CGRect frame = _titleView.frame;
     frame.size.width = rect.size.width;
     frame.size.height = rect.size.height;
@@ -111,16 +110,6 @@
         [[NSColor clearColor] setFill];
     }
     NSRectFill(dirtyRect);
-    
-    // set image
-    NSImage *image = (_active ? _alternateImage : _image);
-    _imageView.image = image;
-    
-    if(_active) {
-        _titleView.textColor = [NSColor whiteColor];
-    } else {
-        _titleView.textColor = [NSColor blackColor];
-    }
 }
 
 ////////////////////////////////////
@@ -152,12 +141,19 @@
 - (void)setActive:(BOOL)active
 {
     _active = active;
+    
+    _imageView.image = (_active ? _alternateImage : _image);
+    _titleView.textColor = (_active ? [NSColor whiteColor] : [NSColor blackColor]);
+
     [self setNeedsDisplay:YES];
 }
 
 - (void)setImage:(NSImage *)image
 {
     _image = image;
+    
+    _imageView.image = (_active && _alternateImage ? _alternateImage : _image);
+    
     [self updateViewFrame];
 }
 
@@ -167,6 +163,9 @@
     if (!image && _image) {
         _alternateImage = _image;
     }
+    
+    _imageView.image = (_active && _alternateImage ? _alternateImage : _image);
+    
     [self updateViewFrame];
 }
 
