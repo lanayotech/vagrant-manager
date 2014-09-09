@@ -30,9 +30,11 @@
 
 @property (assign) IBOutlet NSWindow *window;
 @property (weak) IBOutlet NSMenu *windowMenu;
+@property (strong, nonatomic) NSTimer *refreshTimer;
 
 - (void)refreshVagrantMachines;
 - (void)removeTaskOutputWindow:(TaskOutputWindow*)taskOutputWindow;
 - (void)updateRunningVmCount;
+- (void)refreshTimerState;
 
 @end
