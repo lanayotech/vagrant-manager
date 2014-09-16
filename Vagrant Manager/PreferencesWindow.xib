@@ -218,7 +218,7 @@
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="EY5-7O-zzY">
                                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                        <font key="font" metaFont="system"/>
+                                        <font key="font" metaFont="menu"/>
                                         <menu key="menu" title="Update Interval" id="q3L-s2-WBU">
                                             <items>
                                                 <menuItem title="5 seconds" tag="5" id="bpW-za-4x8"/>
@@ -226,6 +226,7 @@
                                                 <menuItem title="30 seconds" tag="30" id="UcP-2m-KlA"/>
                                                 <menuItem title="1 minute" tag="60" id="x95-QL-pmR"/>
                                                 <menuItem title="15 minutes" tag="900" id="NOA-7t-kAq"/>
+                                                <menuItem title="30 minutes" tag="1800" id="mUQ-4n-7wB"/>
                                                 <menuItem title="1 hour" tag="3600" id="gjh-T7-juB"/>
                                             </items>
                                         </menu>
