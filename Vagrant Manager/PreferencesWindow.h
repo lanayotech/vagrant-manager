@@ -19,6 +19,8 @@
 @property (weak) IBOutlet NSPopUpButton *updateStabilityPopUpButton;
 @property (weak) IBOutlet NSButton *sendProfileDataCheckBox;
 @property (weak) IBOutlet NSButton *launchAtLoginCheckBox;
+@property (weak) IBOutlet NSButton *refreshEveryCheckBox;
+@property (weak) IBOutlet NSPopUpButton *intervalMenu;
 
 - (IBAction)autoCloseCheckBoxClicked:(id)sender;
 - (IBAction)dontShowUpdateCheckBoxClicked:(id)sender;
@@ -28,5 +30,7 @@
 - (IBAction)updateStabilityPopUpButtonClicked:(id)sender;
 - (IBAction)sendProfileDataCheckBoxClicked:(id)sender;
 - (IBAction)launchAtLoginCheckBoxClicked:(id)sender;
+- (IBAction)refreshEveryCheckBoxClicked:(id)sender;
+- (IBAction)intervalMenuChanged:(id)sender;
 
 @end
