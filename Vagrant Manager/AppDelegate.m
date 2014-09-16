@@ -60,6 +60,9 @@
     
     //start initial vagrant machine detection
     [self refreshVagrantMachines];
+    
+    //start refresh timer if activated in preferences
+    [self refreshTimerState];
 }
 
 #pragma mark - Notification handlers
@@ -87,6 +90,17 @@
 }
 
 #pragma mark - Vagrant manager control
+
+- (void)refreshTimerState {
+    if (self.refreshTimer) {
+        [self.refreshTimer invalidate];
+        self.refreshTimer = nil;
+    }
+    
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"refreshEvery"]) {
+        self.refreshTimer = [NSTimer scheduledTimerWithTimeInterval:[[NSUserDefaults standardUserDefaults] integerForKey:@"refreshEveryInterval"] target:self selector:@selector(refreshVagrantMachines) userInfo:nil repeats:YES];
+    }
+}
 
 - (void)refreshVagrantMachines {
     //only run if not already refreshing

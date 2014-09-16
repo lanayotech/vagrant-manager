@@ -26,6 +26,8 @@
     BOOL autoCloseTaskWindows = [[NSUserDefaults standardUserDefaults] boolForKey:@"autoCloseTaskWindows"];
     BOOL dontShowUpdateNotification = [[NSUserDefaults standardUserDefaults] boolForKey:@"dontShowUpdateNotification"];
     BOOL dontShowRunningVmCount = [[NSUserDefaults standardUserDefaults] boolForKey:@"dontShowRunningVmCount"];
+    BOOL refreshEvery = [[NSUserDefaults standardUserDefaults] boolForKey:@"refreshEvery"];
+    NSInteger refreshEveryInterval = [[NSUserDefaults standardUserDefaults] integerForKey:@"refreshEveryInterval"];
     NSString *statusBarIconTheme = [[NSUserDefaults standardUserDefaults] stringForKey:@"statusBarIconTheme"];
     NSString *updateStability = [Util getUpdateStability];
     
@@ -58,6 +60,9 @@
     [self.autoCloseCheckBox setState:autoCloseTaskWindows ? NSOnState : NSOffState];
     [self.dontShowUpdateCheckBox setState:dontShowUpdateNotification ? NSOnState : NSOffState];
     [self.dontShowRunningVmCountCheckBox setState:dontShowRunningVmCount ? NSOnState : NSOffState];
+    [self.refreshEveryCheckBox setState:refreshEvery ? NSOnState : NSOffState];
+    [self.intervalMenu selectItemWithTag:refreshEveryInterval];
+    
     [self.sendProfileDataCheckBox setState:[Util shouldSendProfileData] ? NSOnState : NSOffState];
     [self.launchAtLoginCheckBox setState:[self willStartAtLogin] ? NSOnState : NSOffState];
 }
@@ -140,6 +145,21 @@
 
 - (IBAction)launchAtLoginCheckBoxClicked:(id)sender {
     [self setLaunchOnLogin:(self.launchAtLoginCheckBox.state == NSOnState)];
+}
+
+- (IBAction)refreshEveryCheckBoxClicked:(id)sender {
+    [[NSUserDefaults standardUserDefaults] setBool:(self.refreshEveryCheckBox.state == NSOnState) forKey:@"refreshEvery"];
+    [[NSUserDefaults standardUserDefaults] setInteger:self.intervalMenu.selectedItem.tag forKey:@"refreshEveryInterval"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    [[Util getApp] refreshTimerState];
+}
+
+- (IBAction)intervalMenuChanged:(id)sender {
+    [[NSUserDefaults standardUserDefaults] setInteger:self.intervalMenu.selectedItem.tag forKey:@"refreshEveryInterval"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    [[Util getApp] refreshTimerState];
 }
 
 - (void)setLaunchOnLogin:(BOOL)launchOnLogin {
