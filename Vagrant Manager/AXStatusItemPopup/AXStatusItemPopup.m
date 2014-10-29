@@ -178,8 +178,10 @@
     CGFloat width = MAX(MAX(kMinViewWidth, self.alternateImage.size.width), self.image.size.width);
     
     if([_titleView string].length > 0) {
-        width += _titleView.frame.size.width;
+        width += _titleView.frame.size.width + 1;
     }
+    
+    width += 2;
     
     CGFloat height = [NSStatusBar systemStatusBar].thickness;
     

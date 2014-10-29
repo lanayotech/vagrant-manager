@@ -27,50 +27,30 @@
     [self checkHover];
 }
 
+- (void)drawSelectionInRect:(NSRect)dirtyRect {
+    
+}
+
 - (void)drawBackgroundInRect:(NSRect)dirtyRect {
     [self.backgroundColor set];
     NSRectFillUsingOperation(self.bounds, NSCompositeSourceOver);
     
     if(_mouseInside) {
-        NSGradient *gradient = [[NSGradient alloc] initWithStartingColor:[NSColor colorWithRed:0 green:0 blue:1 alpha:.5] endingColor:[NSColor colorWithRed:0 green:0 blue:1 alpha:.2]];
-        [gradient drawInRect:self.bounds angle:0];
+        NSGradient *gradient = [[NSGradient alloc] initWithStartingColor:[NSColor colorWithRed:.38f green:.53f blue:.97f alpha:1] endingColor:[NSColor colorWithRed:.13f green:.38f blue:.96f alpha:1]];
+        [gradient drawInRect:self.bounds angle:90];
     }
-}
-
-- (void)drawSelectionInRect:(NSRect)dirtyRect {
-    NSRect selectionRect = self.bounds;
-    [[NSColor colorWithRed:0 green:0 blue:1 alpha:1.0] setStroke];
-    [[NSColor colorWithRed:.7 green:.7 blue:1 alpha:1.0] setFill];
-    NSBezierPath *selectionPath = [NSBezierPath bezierPathWithRoundedRect:selectionRect xRadius:4 yRadius:4];
-    /*
-    NSBezierPath *selectionPath = [NSBezierPath bezierPath];
-    
-    // Draw top border and a top-right rounded corner
-    NSPoint topRightCorner = NSMakePoint(NSMaxX(self.bounds), NSMinY(self.bounds));
-    [path lineToPoint:NSMakePoint(NSMaxX(self.bounds) - cornerRadius, NSMinY(self.bounds))];
-    [path curveToPoint:NSMakePoint(NSMaxX(self.bounds), NSMinY(self.bounds) + cornerRadius)
-         controlPoint1:topRightCorner
-         controlPoint2:topRightCorner];
-    
-    // Draw right border, bottom border and left border
-    [path lineToPoint:NSMakePoint(NSMaxX(self.bounds), NSMaxY(self.bounds))];
-    [path lineToPoint:NSMakePoint(NSMinX(self.bounds), NSMaxY(self.bounds))];
-    [path lineToPoint:NSMakePoint(NSMinX(self.bounds), NSMinY(self.bounds))];
-    
-    [selectionPath moveToPoint:NSMinX(self.bounds), NSMinY(self.bounds)];
-     */
-    [selectionPath fill];
-    [selectionPath stroke];
 }
 
 - (void)mouseEntered:(NSEvent *)theEvent {
     _mouseInside = YES;
     [self setNeedsDisplay:YES];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"vagrant-manager.menu-row-mouse-entered" object:nil userInfo:@{@"row":[NSNumber numberWithInteger:self.rowIdx]}];
 }
 
 - (void)mouseExited:(NSEvent *)theEvent {
     _mouseInside = NO;
     [self setNeedsDisplay:YES];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"vagrant-manager.menu-row-mouse-exited" object:nil userInfo:@{@"row":[NSNumber numberWithInteger:self.rowIdx]}];
 }
 
 - (void)checkHover {

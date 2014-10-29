@@ -35,7 +35,6 @@
 
 @property (weak) AXStatusItemPopup *statusItemPopup;
 
-@property (weak) IBOutlet NSButton *closeButton;
 @property (weak) IBOutlet NSButton *refreshButton;
 @property (weak) IBOutlet NSButton *bookmarkButton;
 @property (weak) IBOutlet NSImageView *moreUpIndicator;
@@ -53,7 +52,6 @@
 - (void)resizeTableView;
 - (void)collapseAllChildMenuItems;
 
-- (IBAction)closeButtonClicked:(id)sender;
 - (IBAction)bookmarkButtonClicked:(id)sender;
 - (IBAction)refreshButtonClicked:(id)sender;
 

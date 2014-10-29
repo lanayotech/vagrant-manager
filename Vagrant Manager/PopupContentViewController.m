@@ -34,8 +34,41 @@
         [_footerMenuItems addObject:[NSMutableDictionary dictionaryWithObjectsAndKeys:@"About", @"text", @"about", @"id", @"", @"image", nil]];
         [_footerMenuItems addObject:[NSMutableDictionary dictionaryWithObjectsAndKeys:@"Check For Updates", @"text", @"check_for_updates", @"id", @"", @"image", nil]];
         [_footerMenuItems addObject:[NSMutableDictionary dictionaryWithObjectsAndKeys:@"Quit", @"text", @"quit", @"id", @"", @"image", nil]];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(rowMouseEntered:) name:@"vagrant-manager.menu-row-mouse-entered" object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(rowMouseExited:) name:@"vagrant-manager.menu-row-mouse-exited" object:nil];
     }
     return self;
+}
+
+- (void)rowMouseEntered:(NSNotification*)notification {
+    NSNumber *num = [notification.userInfo objectForKey:@"row"];
+    if(num) {
+        NSTableRowView *rowView = [self.tableView rowViewAtRow:[num intValue] makeIfNecessary:NO];
+        NSView *view = [rowView viewAtColumn:0];
+        if ([view isKindOfClass:[InstanceMenuItem class]]) {
+            ((InstanceMenuItem*)view).nameTextField.textColor = [NSColor whiteColor];
+        } else if ([view isKindOfClass:[MachineMenuItem class]]) {
+            ((MachineMenuItem*)view).nameTextField.textColor = [NSColor whiteColor];
+        } else if ([view isKindOfClass:[TextMenuItem class]]) {
+            ((TextMenuItem*)view).textField.textColor = [NSColor whiteColor];
+        }
+    }
+}
+
+- (void)rowMouseExited:(NSNotification*)notification {
+    NSNumber *num = [notification.userInfo objectForKey:@"row"];
+    if(num) {
+        NSTableRowView *rowView = [self.tableView rowViewAtRow:[num intValue] makeIfNecessary:NO];
+        NSView *view = [rowView viewAtColumn:0];
+        if ([view isKindOfClass:[InstanceMenuItem class]]) {
+            ((InstanceMenuItem*)view).nameTextField.textColor = [NSColor blackColor];
+        } else if ([view isKindOfClass:[MachineMenuItem class]]) {
+            ((MachineMenuItem*)view).nameTextField.textColor = [NSColor blackColor];
+        } else if ([view isKindOfClass:[TextMenuItem class]]) {
+            ((TextMenuItem*)view).textField.textColor = [NSColor blackColor];
+        }
+    }
 }
 
 - (void)bookmarksUpdated:(NSNotification*)notification {
@@ -76,7 +109,9 @@
 }
 
 - (NSTableRowView *)tableView:(NSTableView *)tableView rowViewForRow:(NSInteger)row {
-    return [[InstanceRowView alloc] initWithFrame:NSMakeRect(0, 0, 100, 100)];
+    InstanceRowView *rowView = [[InstanceRowView alloc] initWithFrame:NSMakeRect(0, 0, 100, 100)];
+    rowView.rowIdx = row;
+    return rowView;
 }
 
 - (void)tableViewSelectionDidChange:(NSNotification *)notification {
@@ -337,11 +372,11 @@
 }
 
 - (CGFloat)tableView:(NSTableView *)tableView heightOfRow:(NSInteger)row {
-    return 20;
+    return 22;
 }
 
 - (float)getTableHeight {
-    float height = 20 * (_menuItems.count + _footerMenuItems.count);
+    float height = 22 * (_menuItems.count + _footerMenuItems.count);
     
     return height;
 }
@@ -363,7 +398,7 @@
 }
 
 - (void)resizeTableView {
-    float width = 200;
+    float width = 250;
     for(MenuItemObject *menuItem in _menuItems) {
         NSString *name = [menuItem.target isKindOfClass:[VagrantInstance class]] ? ((VagrantInstance*)menuItem.target).displayName : ((VagrantMachine*)menuItem.target).name;
         float padLeft = [menuItem.target isKindOfClass:[VagrantInstance class]] ? 18 : 28;
@@ -891,10 +926,6 @@
 }
 
 #pragma mark - Button handlers
-
-- (IBAction)closeButtonClicked:(id)sender {
-    [self.statusItemPopup hidePopover];
-}
 
 - (IBAction)bookmarkButtonClicked:(id)sender {
     manageBookmarksWindow = [[ManageBookmarksWindow alloc] initWithWindowNibName:@"ManageBookmarksWindow"];

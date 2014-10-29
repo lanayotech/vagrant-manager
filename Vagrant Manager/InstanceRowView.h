@@ -9,6 +9,8 @@
 
 @interface InstanceRowView : NSTableRowView
 
+@property NSInteger rowIdx;
+
 - (void)checkHover;
 
 @end

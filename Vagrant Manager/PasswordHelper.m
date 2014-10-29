@@ -18,16 +18,21 @@
 	
 	NSMutableArray *returnArray = [NSMutableArray arrayWithObjects:@"PasswordString", [NSNumber numberWithInt:0], [NSNumber numberWithInt:1], nil];
 	
-	NSString *passwordMessageString = @"Enter Your Password";
-	
-	NSDictionary *panelDict = [NSDictionary dictionaryWithObjectsAndKeys:
-                               @"Vagrant Manager Requested Administrator Privileges", kCFUserNotificationAlertHeaderKey,
-                               passwordMessageString, kCFUserNotificationAlertMessageKey,
+    NSURL * iconUrl =
+    [NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/%@",
+                            [[[NSBundle mainBundle] executablePath] stringByDeletingLastPathComponent],
+                            @"appicon_128.png"
+                            ]];
+
+    NSDictionary *panelDict = [NSDictionary dictionaryWithObjectsAndKeys:
+                               @"Enter Your Password", kCFUserNotificationAlertHeaderKey,
+                               @"Vagrant Requested Administrator Privileges", kCFUserNotificationAlertMessageKey,
 							   @"", kCFUserNotificationTextFieldTitlesKey,
 							   @"Cancel", kCFUserNotificationAlternateButtonTitleKey,
+                               (__bridge CFURLRef)iconUrl, kCFUserNotificationIconURLKey,
 							   nil];
-	
-	passwordDialog = CFUserNotificationCreate(kCFAllocatorDefault,
+
+    passwordDialog = CFUserNotificationCreate(kCFAllocatorDefault,
 											  0,
 											  kCFUserNotificationPlainAlertLevel
 											  |

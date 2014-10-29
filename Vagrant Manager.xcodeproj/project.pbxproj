@@ -49,6 +49,10 @@
 		83C7C83A1945825B007AC491 /* DDDispatchQueueLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 83C7C82E1945825B007AC491 /* DDDispatchQueueLogFormatter.m */; };
 		83C7C83B1945825B007AC491 /* DDMultiFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 83C7C8301945825B007AC491 /* DDMultiFormatter.m */; };
 		83C7C83C1945825B007AC491 /* README.txt in Resources */ = {isa = PBXBuildFile; fileRef = 83C7C8311945825B007AC491 /* README.txt */; };
+		83D5D6E219DEAC230098B8F6 /* PopupView.m in Sources */ = {isa = PBXBuildFile; fileRef = 83D5D6E119DEAC230098B8F6 /* PopupView.m */; };
+		83D5D6E619DEBBE10098B8F6 /* appicon_128.png in Resources */ = {isa = PBXBuildFile; fileRef = 83D5D6E519DEBBE10098B8F6 /* appicon_128.png */; };
+		83D5D6ED19DEBE580098B8F6 /* refresh.png in Resources */ = {isa = PBXBuildFile; fileRef = 83D5D6EB19DEBE580098B8F6 /* refresh.png */; };
+		83D5D6EE19DEBE580098B8F6 /* refresh@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 83D5D6EC19DEBE580098B8F6 /* refresh@2x.png */; };
 		83DB6731192885090008CB57 /* AXTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 83DB6730192885090008CB57 /* AXTextView.m */; };
 		83DB673719288DD90008CB57 /* VagrantInstance.m in Sources */ = {isa = PBXBuildFile; fileRef = 83DB673619288DD90008CB57 /* VagrantInstance.m */; };
 		83DB673A1928AC0C0008CB57 /* VagrantMachine.m in Sources */ = {isa = PBXBuildFile; fileRef = 83DB67391928AC0C0008CB57 /* VagrantMachine.m */; };
@@ -65,7 +69,6 @@
 		83F1696F1923789900C54F13 /* VersionComparison.m in Sources */ = {isa = PBXBuildFile; fileRef = 83F1696E1923789900C54F13 /* VersionComparison.m */; };
 		83F5BBB21983A39100ACE853 /* TextMenuItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 83F5BBB11983A39100ACE853 /* TextMenuItem.m */; };
 		83F5BBC01983D85C00ACE853 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 83F5BBBE1983D85C00ACE853 /* MainMenu.xib */; };
-		83F5BBC21983D93700ACE853 /* refresh.png in Resources */ = {isa = PBXBuildFile; fileRef = 83F5BBC11983D93700ACE853 /* refresh.png */; };
 		83FD3539198263D4002EEA2D /* MachineRowView.m in Sources */ = {isa = PBXBuildFile; fileRef = 83FD3538198263D4002EEA2D /* MachineRowView.m */; };
 		83FD353D19826945002EEA2D /* ManageBookmarksWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 83FD353B19826945002EEA2D /* ManageBookmarksWindow.m */; };
 		83FD353E19826945002EEA2D /* ManageBookmarksWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 83FD353C19826945002EEA2D /* ManageBookmarksWindow.xib */; };
@@ -205,6 +208,11 @@
 		83C7C82F1945825B007AC491 /* DDMultiFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDMultiFormatter.h; sourceTree = "<group>"; };
 		83C7C8301945825B007AC491 /* DDMultiFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDMultiFormatter.m; sourceTree = "<group>"; };
 		83C7C8311945825B007AC491 /* README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.txt; sourceTree = "<group>"; };
+		83D5D6E019DEAC230098B8F6 /* PopupView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopupView.h; sourceTree = "<group>"; };
+		83D5D6E119DEAC230098B8F6 /* PopupView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PopupView.m; sourceTree = "<group>"; };
+		83D5D6E519DEBBE10098B8F6 /* appicon_128.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = appicon_128.png; path = Images.xcassets/AppIcon.appiconset/appicon_128.png; sourceTree = "<group>"; };
+		83D5D6EB19DEBE580098B8F6 /* refresh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = refresh.png; sourceTree = "<group>"; };
+		83D5D6EC19DEBE580098B8F6 /* refresh@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "refresh@2x.png"; sourceTree = "<group>"; };
 		83DB672F192885090008CB57 /* AXTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AXTextView.h; sourceTree = "<group>"; };
 		83DB6730192885090008CB57 /* AXTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AXTextView.m; sourceTree = "<group>"; };
 		83DB673519288DD90008CB57 /* VagrantInstance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VagrantInstance.h; sourceTree = "<group>"; };
@@ -229,7 +237,6 @@
 		83F5BBB01983A39100ACE853 /* TextMenuItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextMenuItem.h; sourceTree = "<group>"; };
 		83F5BBB11983A39100ACE853 /* TextMenuItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextMenuItem.m; sourceTree = "<group>"; };
 		83F5BBBF1983D85C00ACE853 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
-		83F5BBC11983D93700ACE853 /* refresh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = refresh.png; sourceTree = "<group>"; };
 		83FD3537198263D4002EEA2D /* MachineRowView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MachineRowView.h; sourceTree = "<group>"; };
 		83FD3538198263D4002EEA2D /* MachineRowView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MachineRowView.m; sourceTree = "<group>"; };
 		83FD353A19826945002EEA2D /* ManageBookmarksWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ManageBookmarksWindow.h; sourceTree = "<group>"; };
@@ -325,7 +332,8 @@
 		83721396192757EA0052206D /* Icons */ = {
 			isa = PBXGroup;
 			children = (
-				83F5BBC11983D93700ACE853 /* refresh.png */,
+				83D5D6EB19DEBE580098B8F6 /* refresh.png */,
+				83D5D6EC19DEBE580098B8F6 /* refresh@2x.png */,
 				83E7CAC41929F135001C86F6 /* arrow-up@2x.png */,
 				83E7CAC51929F135001C86F6 /* arrow-up.png */,
 				83E7CAC019290A89001C86F6 /* arrow-down.png */,
@@ -558,6 +566,8 @@
 				830D063C192F69190043CE3C /* MenuItemObject.m */,
 				83F5BBB01983A39100ACE853 /* TextMenuItem.h */,
 				83F5BBB11983A39100ACE853 /* TextMenuItem.m */,
+				83D5D6E019DEAC230098B8F6 /* PopupView.h */,
+				83D5D6E119DEAC230098B8F6 /* PopupView.m */,
 			);
 			name = Menu;
 			sourceTree = "<group>";
@@ -627,6 +637,7 @@
 				B1357A78187CEB3B00811CBC /* Vagrant Manager-Info.plist */,
 				B1357A79187CEB3B00811CBC /* InfoPlist.strings */,
 				B1357A7C187CEB3B00811CBC /* main.m */,
+				83D5D6E519DEBBE10098B8F6 /* appicon_128.png */,
 				B1357A7E187CEB3B00811CBC /* Vagrant Manager-Prefix.pch */,
 				B17AA1891887A75300B4C274 /* Util.h */,
 				B17AA18A1887A75300B4C274 /* Util.m */,
@@ -721,6 +732,7 @@
 				B150013419249FFD000A76E7 /* status_icon_on@2x.png in Resources */,
 				B150012619249896000A76E7 /* vagrant_logo_off-default@2x.png in Resources */,
 				8339DCA2187E756B0036E162 /* TaskOutputWindow.xib in Resources */,
+				83D5D6ED19DEBE580098B8F6 /* refresh.png in Resources */,
 				B1357ABD187DF58C00811CBC /* vagrant_logo_highlighted-default.png in Resources */,
 				83C7C83C1945825B007AC491 /* README.txt in Resources */,
 				B17AA1901887CA4600B4C274 /* PreferencesWindow.xib in Resources */,
@@ -730,6 +742,7 @@
 				837213A1192758020052206D /* close.png in Resources */,
 				B1500122192496E9000A76E7 /* vagrant_logo_highlighted-clean@2x.png in Resources */,
 				83F5BBC01983D85C00ACE853 /* MainMenu.xib in Resources */,
+				83D5D6EE19DEBE580098B8F6 /* refresh@2x.png in Resources */,
 				B1357A89187CEB3B00811CBC /* Images.xcassets in Resources */,
 				8372138B19272CB00052206D /* PopupContentViewController.xib in Resources */,
 				B15001361924A02C000A76E7 /* status_icon_suspended@2x.png in Resources */,
@@ -752,9 +765,9 @@
 				83EAC43A18D067C900FF26A1 /* vagrant_logo_highlighted-clean.png in Resources */,
 				B1357ABE187DF58C00811CBC /* vagrant_logo_on-default.png in Resources */,
 				B1500128192498DD000A76E7 /* vagrant_logo_highlighted-default@2x.png in Resources */,
-				83F5BBC21983D93700ACE853 /* refresh.png in Resources */,
 				B1FAFC791920B62D009F0F86 /* status_icon_suspended.png in Resources */,
 				838B394018CC85BC00A04C15 /* vagrant_logo_on-flat.png in Resources */,
+				83D5D6E619DEBBE10098B8F6 /* appicon_128.png in Resources */,
 				83FD353E19826945002EEA2D /* ManageBookmarksWindow.xib in Resources */,
 				83E7CAC61929F135001C86F6 /* arrow-up@2x.png in Resources */,
 				B150013319249FFD000A76E7 /* status_icon_off@2x.png in Resources */,
@@ -809,6 +822,7 @@
 				83C7C8371945825B007AC491 /* DDLog.m in Sources */,
 				83DB6731192885090008CB57 /* AXTextView.m in Sources */,
 				83C7C8361945825B007AC491 /* DDFileLogger.m in Sources */,
+				83D5D6E219DEAC230098B8F6 /* PopupView.m in Sources */,
 				B13DC35B19232782002E5A50 /* VirtualBoxServiceProvider.m in Sources */,
 				837213BC192769020052206D /* MachineMenuItem.m in Sources */,
 				B13DC36019233051002E5A50 /* VirtualBoxMachineInfo.m in Sources */,
