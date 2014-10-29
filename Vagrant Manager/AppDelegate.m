@@ -84,9 +84,7 @@
 }
 
 - (void)showUpdateNotificationPreferenceChanged:(NSNotification*)notification {
-    if([[NSUserDefaults standardUserDefaults] boolForKey:@"dontShowUpdateNotification"]) {
-        [_popupContentViewController setUpdatesAvailable:NO];
-    }
+     [[NSNotificationCenter defaultCenter] postNotificationName:@"vagrant-manager.notification-preference-changed" object:nil];
 }
 
 #pragma mark - Vagrant manager control
@@ -107,7 +105,7 @@
     if(!isRefreshingVagrantMachines) {
         isRefreshingVagrantMachines = YES;
         //tell popup controller refreshing has started
-        [_popupContentViewController setIsRefreshing:YES];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"vagrant-manager.refreshing-started" object:nil];
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             //tell manager to refresh all instances
             [_manager refreshInstances];
@@ -115,7 +113,7 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 //tell popup controller refreshing has ended
                 isRefreshingVagrantMachines = NO;
-                [_popupContentViewController setIsRefreshing:NO];
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"vagrant-manager.refreshing-ended" object:nil];
                 [self updateRunningVmCount];
                 
                 if(queuedRefreshes > 0) {
@@ -133,19 +131,19 @@
 
 - (void)vagrantManager:(VagrantManager *)vagrantManger instanceAdded:(VagrantInstance *)instance {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [_popupContentViewController addInstance:instance];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"vagrant-manager.instance-added" object:nil userInfo:@{@"instance": instance}];
     });
 }
 
 - (void)vagrantManager:(VagrantManager *)vagrantManger instanceRemoved:(VagrantInstance *)instance {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [_popupContentViewController removeInstance:instance];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"vagrant-manager.instance-removed" object:nil userInfo:@{@"instance": instance}];
     });
 }
 
 - (void)vagrantManager:(VagrantManager *)vagrantManger instanceUpdated:(VagrantInstance *)oldInstance withInstance:(VagrantInstance *)newInstance {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [_popupContentViewController updateInstance:oldInstance withInstance:newInstance];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"vagrant-manager.instance-updated" object:nil userInfo:@{@"old_instance":oldInstance, @"new_instance":newInstance}];
     });
 }
 
@@ -368,13 +366,13 @@
 }
 
 - (void)updater:(SUUpdater *)updater didFindValidUpdate:(SUAppcastItem *)update {
-    if(![[NSUserDefaults standardUserDefaults] boolForKey:@"dontShowUpdateNotification"]) {
-        [_popupContentViewController setUpdatesAvailable:YES];
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"dontShowUpdateNotification"]) {
+         [[NSNotificationCenter defaultCenter] postNotificationName:@"vagrant-manager.update-available" object:nil userInfo:@{@"is_update_available": [NSNumber numberWithBool:YES]}];
     }
 }
 
 - (void)updaterDidNotFindUpdate:(SUUpdater *)update {
-    [_popupContentViewController setUpdatesAvailable:NO];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"vagrant-manager.update-available" object:nil userInfo:@{@"is_update_available": [NSNumber numberWithBool:NO]}];
 }
 
 - (id<SUVersionComparison>)versionComparatorForUpdater:(SUUpdater *)updater {

@@ -37,6 +37,14 @@
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(rowMouseEntered:) name:@"vagrant-manager.menu-row-mouse-entered" object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(rowMouseExited:) name:@"vagrant-manager.menu-row-mouse-exited" object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notificationPreferenceChanged:) name:@"vagrant-manager.notification-preference-changed" object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(instanceAdded:) name:@"vagrant-manager.instance-added" object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(instanceRemoved:) name:@"vagrant-manager.instance-removed" object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(instanceUpdated:) name:@"vagrant-manager.instance-updated" object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setUpdateAvailable:) name:@"vagrant-manager.update-available" object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshingStarted:) name:@"vagrant-manager.refreshing-started" object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshingEnded:) name:@"vagrant-manager.refreshing-ended" object:nil];
+        
     }
     return self;
 }
@@ -74,6 +82,36 @@
 - (void)bookmarksUpdated:(NSNotification*)notification {
     _menuItems = [self sortMenuItems];
     [self.tableView reloadData];
+}
+
+- (void)notificationPreferenceChanged: (NSNotification*)notification {
+    if([[NSUserDefaults standardUserDefaults] boolForKey:@"dontShowUpdateNotification"]) {
+        [self setUpdatesAvailable:NO];
+    }
+}
+
+- (void)instanceAdded: (NSNotification*)notification {
+    [self addInstance:[notification.userInfo objectForKey:@"instance"]];
+}
+
+- (void)instanceRemoved: (NSNotification*)notification {
+    [self removeInstance:[notification.userInfo objectForKey:@"instance"]];
+}
+
+- (void)instanceUpdated: (NSNotification*)notification {
+    [self updateInstance:[notification.userInfo objectForKey:@"old_instance"] withInstance:[notification.userInfo objectForKey:@"new_instance"]];
+}
+
+- (void)setUpdateAvailable: (NSNotification*)notification {
+    [self setUpdatesAvailable:[[notification.userInfo objectForKey:@"is_update_available"] boolValue]];
+}
+
+- (void)refreshingStarted: (NSNotification*)notification {
+    [self setIsRefreshing:YES];
+}
+
+- (void)refreshingEnded: (NSNotification*)notification {
+    [self setIsRefreshing:NO];
 }
 
 - (void)loadView {
