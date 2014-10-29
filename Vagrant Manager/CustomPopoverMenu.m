@@ -1,19 +1,19 @@
 //
-//  PopupContentViewController.m
+//  CustomPopoverMenu.m
 //  Vagrant Manager
 //
 //  Copyright (c) 2014 Lanayo. All rights reserved.
 //
 
-#import "PopupContentViewController.h"
+#import "CustomPopoverMenu.h"
 #import "BookmarkManager.h"
 #import "TextMenuItem.h"
 
-@interface PopupContentViewController ()
+@interface CustomPopoverMenu ()
 
 @end
 
-@implementation PopupContentViewController {
+@implementation CustomPopoverMenu {
     BOOL _isRefreshing;
     NSMutableArray *_menuItems;
     NSMutableArray *_footerMenuItems;
@@ -26,8 +26,6 @@
     if (self) {
         _menuItems = [[NSMutableArray alloc] init];
         
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(bookmarksUpdated:) name:@"vagrant-manager.bookmarks-updated" object:nil];
-        
         _footerMenuItems = [[NSMutableArray alloc] init];
         [_footerMenuItems addObject:[NSMutableDictionary dictionaryWithObjectsAndKeys:@"All Machines", @"text", @"all_machines", @"id", @"", @"image", nil]];
         [_footerMenuItems addObject:[NSMutableDictionary dictionaryWithObjectsAndKeys:@"Preferences", @"text", @"preferences", @"id", @"", @"image", nil]];
@@ -35,6 +33,7 @@
         [_footerMenuItems addObject:[NSMutableDictionary dictionaryWithObjectsAndKeys:@"Check For Updates", @"text", @"check_for_updates", @"id", @"", @"image", nil]];
         [_footerMenuItems addObject:[NSMutableDictionary dictionaryWithObjectsAndKeys:@"Quit", @"text", @"quit", @"id", @"", @"image", nil]];
         
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(bookmarksUpdated:) name:@"vagrant-manager.bookmarks-updated" object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(rowMouseEntered:) name:@"vagrant-manager.menu-row-mouse-entered" object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(rowMouseExited:) name:@"vagrant-manager.menu-row-mouse-exited" object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notificationPreferenceChanged:) name:@"vagrant-manager.notification-preference-changed" object:nil];
@@ -44,6 +43,7 @@
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setUpdateAvailable:) name:@"vagrant-manager.update-available" object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshingStarted:) name:@"vagrant-manager.refreshing-started" object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshingEnded:) name:@"vagrant-manager.refreshing-ended" object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateRunningVmCount:) name:@"vagrant-manager.update-running-vm-count" object:nil];
         
     }
     return self;
@@ -112,6 +112,23 @@
 
 - (void)refreshingEnded: (NSNotification*)notification {
     [self setIsRefreshing:NO];
+}
+
+- (void)updateRunningVmCount: (NSNotification*)notification {
+    int count = [[notification.userInfo objectForKey:@"count"] intValue];
+    if(count) {
+        if(![[NSUserDefaults standardUserDefaults] boolForKey:@"dontShowRunningVmCount"]) {
+            [self.statusItemPopup setTitle:[NSString stringWithFormat:@"%d", count]];
+        } else {
+            [self.statusItemPopup setTitle:@""];
+        }
+        [self.statusItemPopup setImage:[[Util getApp] getThemedImage:@"vagrant_logo_on"]];
+        [self.statusItemPopup setAlternateImage:[[Util getApp] getThemedImage:@"vagrant_logo_highlighted"]];
+    } else {
+        [self.statusItemPopup setTitle:@""];
+        [self.statusItemPopup setImage:[[Util getApp] getThemedImage:@"vagrant_logo_off"]];
+        [self.statusItemPopup setAlternateImage:[[Util getApp] getThemedImage:@"vagrant_logo_highlighted"]];
+    }
 }
 
 - (void)loadView {

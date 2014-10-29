@@ -29,6 +29,7 @@
     BOOL refreshEvery = [[NSUserDefaults standardUserDefaults] boolForKey:@"refreshEvery"];
     NSInteger refreshEveryInterval = [[NSUserDefaults standardUserDefaults] integerForKey:@"refreshEveryInterval"];
     NSString *statusBarIconTheme = [[NSUserDefaults standardUserDefaults] stringForKey:@"statusBarIconTheme"];
+    NSString *menuType = [[NSUserDefaults standardUserDefaults] stringForKey:@"menuType"];
     NSString *updateStability = [Util getUpdateStability];
     
     if([statusBarIconTheme isEqualToString:@"flat"]) {
@@ -55,6 +56,12 @@
         [self.updateStabilityPopUpButton selectItemWithTag:104];
     } else {
         [self.updateStabilityPopUpButton selectItemWithTag:100];
+    }
+    
+    if ([menuType isEqualToString:@"custom"]) {
+        [self.menuTypePopUpButton selectItemWithTag:101];
+    } else {
+        [self.menuTypePopUpButton selectItemWithTag:102];
     }
 
     [self.autoCloseCheckBox setState:autoCloseTaskWindows ? NSOnState : NSOffState];
@@ -114,6 +121,21 @@
     [[NSUserDefaults standardUserDefaults] synchronize];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:@"vagrant-manager.theme-changed" object:nil];
+}
+
+- (IBAction)menuTypePopUpButtonClicked:(id)sender {
+    NSString *menuType;
+    
+    if (self.menuTypePopUpButton.selectedItem.tag == 101) {
+        menuType = @"custom";
+    } else {
+        menuType = @"native";
+    }
+    
+    [[NSUserDefaults standardUserDefaults] setValue:menuType forKey:@"menuType"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"vagrant-manager.menu-type-changed" object:nil];
 }
 
 - (IBAction)updateStabilityPopUpButtonClicked:(id)sender {

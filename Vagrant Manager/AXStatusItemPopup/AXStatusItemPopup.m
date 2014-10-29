@@ -15,7 +15,7 @@
 // Private variables
 //
 @interface AXStatusItemPopup () {
-    PopupContentViewController *_viewController;
+    CustomPopoverMenu *_viewController;
     BOOL _active;
     NSImageView *_imageView;
     NSTextView *_titleView;
@@ -32,17 +32,17 @@
 //
 @implementation AXStatusItemPopup
 
-- (id)initWithViewController:(PopupContentViewController *)controller
+- (id)initWithViewController:(CustomPopoverMenu *)controller
 {
     return [self initWithViewController:controller image:nil];
 }
 
-- (id)initWithViewController:(PopupContentViewController *)controller image:(NSImage *)image
+- (id)initWithViewController:(CustomPopoverMenu *)controller image:(NSImage *)image
 {
     return [self initWithViewController:controller image:image alternateImage:nil];
 }
 
-- (id)initWithViewController:(PopupContentViewController *)controller image:(NSImage *)image alternateImage:(NSImage *)alternateImage
+- (id)initWithViewController:(CustomPopoverMenu *)controller image:(NSImage *)image alternateImage:(NSImage *)alternateImage
 {
     CGFloat height = [NSStatusBar systemStatusBar].thickness;
     
@@ -142,9 +142,15 @@
 {
     _active = active;
     
-    _imageView.image = (_active ? _alternateImage : _image);
-    _titleView.textColor = (_active ? [NSColor whiteColor] : [NSColor blackColor]);
-
+    //TODO: if keeping this, make sure to subscribe to user defaults changed notification and move this out to a separate function
+    if([[[NSUserDefaults standardUserDefaults] stringForKey:@"AppleInterfaceStyle"] isEqualToString:@"Dark"]) {
+        _imageView.image = (_active ? _image : _alternateImage);
+        _titleView.textColor = (_active ? [NSColor blackColor] : [NSColor whiteColor]);
+    } else {
+        _imageView.image = (_active ? _alternateImage : _image);
+        _titleView.textColor = (_active ? [NSColor whiteColor] : [NSColor blackColor]);
+    }
+    
     [self setNeedsDisplay:YES];
 }
 

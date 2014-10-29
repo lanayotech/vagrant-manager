@@ -1,5 +1,5 @@
 //
-//  PopupContentViewController.h
+//  CustomPopoverMenu.h
 //  Vagrant Manager
 //
 //  Copyright (c) 2014 Lanayo. All rights reserved.
@@ -13,21 +13,11 @@
 #import "InstanceMenuItem.h"
 #import "MachineMenuItem.h"
 #import "ManageBookmarksWindow.h"
+#import "MenuDelegate.h"
 
-@class PopupContentViewController;
+@class CustomPopoverMenu;
 
-@protocol MenuDelegate <NSObject>
-
-- (void)performVagrantAction:(NSString*)action withInstance:(VagrantInstance*)instance;
-- (void)performVagrantAction:(NSString*)action withMachine:(VagrantMachine*)machine;
-- (void)openInstanceInFinder:(VagrantInstance*)instance;
-- (void)openInstanceInTerminal:(VagrantInstance*)instance;
-- (void)addBookmarkWithInstance:(VagrantInstance*)instance;
-- (void)removeBookmarkWithInstance:(VagrantInstance*)instance;
-
-@end
-
-@interface PopupContentViewController : NSViewController <NSTableViewDelegate, NSTableViewDataSource, InstanceMenuItemDelegate> {
+@interface CustomPopoverMenu : NSViewController <NSTableViewDelegate, NSTableViewDataSource, InstanceMenuItemDelegate> {
     PreferencesWindow *preferencesWindow;
     AboutWindow *aboutWindow;
     ManageBookmarksWindow *manageBookmarksWindow;

@@ -15,7 +15,8 @@
     BOOL isRefreshingVagrantMachines;
     
     VagrantManager *_manager;
-    PopupContentViewController *_popupContentViewController;
+    CustomPopoverMenu *_customPopoverMenu;
+    NativeMenu *_nativeMenu;
     NSMutableArray *taskOutputWindows;
     
     int queuedRefreshes;
@@ -39,11 +40,16 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(bookmarksUpdated:) name:@"vagrant-manager.bookmarks-updated" object:nil];
     
     //create popup and status menu item
-    _popupContentViewController = [[PopupContentViewController alloc] initWithNibName:@"PopupContentViewController" bundle:nil];
-    statusItemPopup = [[AXStatusItemPopup alloc] initWithViewController:_popupContentViewController image:[self getThemedImage:@"vagrant_logo_off"] alternateImage:[self getThemedImage:@"vagrant_logo_highlighted"]];
-    statusItemPopup.animated = NO;
-    _popupContentViewController.statusItemPopup = statusItemPopup;
-    _popupContentViewController.delegate = self;
+    if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"menuType"] isEqualToString:@"native"]) {
+        _nativeMenu = [[NativeMenu alloc] init];
+        _nativeMenu.delegate = self;
+    } else {
+        _customPopoverMenu = [[CustomPopoverMenu alloc] initWithNibName:@"CustomPopoverMenu" bundle:nil];
+        statusItemPopup = [[AXStatusItemPopup alloc] initWithViewController:_customPopoverMenu image:[self getThemedImage:@"vagrant_logo_off"] alternateImage:[self getThemedImage:@"vagrant_logo_highlighted"]];
+        statusItemPopup.animated = NO;
+        _customPopoverMenu.statusItemPopup = statusItemPopup;
+        _customPopoverMenu.delegate = self;
+    }
     
     //create vagrant manager
     _manager = [VagrantManager sharedManager];
@@ -313,7 +319,9 @@
 }
 
 - (NSImage*)getThemedImage:(NSString*)imageName {
-    return [NSImage imageNamed:[NSString stringWithFormat:@"%@-%@", imageName, [self getCurrentTheme]]];
+    NSImage *image = [NSImage imageNamed:[NSString stringWithFormat:@"%@-%@", imageName, [self getCurrentTheme]]];
+    [image setTemplate:YES];
+    return image;
 }
 
 - (NSString*)getCurrentTheme {
@@ -335,21 +343,7 @@
 }
 
 - (void)updateRunningVmCount {
-    int runningCount = [_manager getRunningVmCount];
-    
-    if(runningCount) {
-        if(![[NSUserDefaults standardUserDefaults] boolForKey:@"dontShowRunningVmCount"]) {
-            [statusItemPopup setTitle:[NSString stringWithFormat:@"%d", runningCount]];
-        } else {
-            [statusItemPopup setTitle:@""];
-        }
-        [statusItemPopup setImage:[self getThemedImage:@"vagrant_logo_on"]];
-        [statusItemPopup setAlternateImage:[self getThemedImage:@"vagrant_logo_highlighted"]];
-    } else {
-        [statusItemPopup setTitle:@""];
-        [statusItemPopup setImage:[self getThemedImage:@"vagrant_logo_off"]];
-        [statusItemPopup setAlternateImage:[self getThemedImage:@"vagrant_logo_highlighted"]];
-    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"vagrant-manager.update-running-vm-count" object:nil userInfo:@{@"count": [NSNumber numberWithInt:[_manager getRunningVmCount]]}];
 }
 
 #pragma mark - Sparkle updater delegates

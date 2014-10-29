@@ -14,7 +14,9 @@
 #import "ParallelsServiceProvider.h"
 #import "AXStatusItemPopup/AXStatusItemPopup.h"
 #include <Sparkle/Sparkle.h>
-#import "PopupContentViewController.h"
+#import "MenuDelegate.h"
+#import "CustomPopoverMenu.h"
+#import "NativeMenu.h"
 #import "VagrantManager.h"
 #import "DDASLLogger.h"
 #import "DDTTYLogger.h"
@@ -23,7 +25,7 @@
 #define MENU_ITEM_BOOKMARKED_VM 1
 #define MENU_ITEM_DETECTED_VM   2
 
-@interface AppDelegate : NSObject <NSApplicationDelegate, VagrantManagerDelegate, MenuDelegate> {
+@interface AppDelegate : NSObject <NSApplicationDelegate, VagrantManagerDelegate, MenuDelegate, NSMenuDelegate> {
     AXStatusItemPopup *statusItemPopup;
     NSMutableArray *bookmarks;
 }
@@ -36,5 +38,6 @@
 - (void)removeTaskOutputWindow:(TaskOutputWindow*)taskOutputWindow;
 - (void)updateRunningVmCount;
 - (void)refreshTimerState;
+- (NSImage*)getThemedImage:(NSString*)imageName;
 
 @end
