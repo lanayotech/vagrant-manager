@@ -105,7 +105,7 @@
     NSIndexSet *rowIndexes = [NSKeyedUnarchiver unarchiveObjectWithData:[[info draggingPasteboard] dataForType:NSPasteboardTypeString]];
  
     if ([info draggingSource] == self.bookmarkTableView && operation == NSTableViewDropAbove && ![rowIndexes containsIndex:row] && row < bookmarks.count) {
-        return operation;
+        return (NSDragOperation)operation;
     }
     
     return NSDragOperationNone;

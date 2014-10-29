@@ -36,7 +36,7 @@
 		838B393F18CC85BC00A04C15 /* vagrant_logo_off-flat.png in Resources */ = {isa = PBXBuildFile; fileRef = 838B393C18CC85BC00A04C15 /* vagrant_logo_off-flat.png */; };
 		838B394018CC85BC00A04C15 /* vagrant_logo_on-flat.png in Resources */ = {isa = PBXBuildFile; fileRef = 838B393D18CC85BC00A04C15 /* vagrant_logo_on-flat.png */; };
 		83BCB0441921B02600206967 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83BCB0431921B02600206967 /* Sparkle.framework */; };
-		83BCB0471921B1D600206967 /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 83BCB0431921B02600206967 /* Sparkle.framework */; };
+		83BCB0471921B1D600206967 /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 83BCB0431921B02600206967 /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		83BCB0491921B6BF00206967 /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 83BCB0481921B6BF00206967 /* dsa_pub.pem */; };
 		83C7C8321945825B007AC491 /* CLIColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 83C7C81C1945825B007AC491 /* CLIColor.m */; };
 		83C7C8331945825B007AC491 /* DDAbstractDatabaseLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 83C7C81E1945825B007AC491 /* DDAbstractDatabaseLogger.m */; };
@@ -64,7 +64,6 @@
 		83E7CAC61929F135001C86F6 /* arrow-up@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 83E7CAC41929F135001C86F6 /* arrow-up@2x.png */; };
 		83E7CAC71929F135001C86F6 /* arrow-up.png in Resources */ = {isa = PBXBuildFile; fileRef = 83E7CAC51929F135001C86F6 /* arrow-up.png */; };
 		83EAC43A18D067C900FF26A1 /* vagrant_logo_highlighted-clean.png in Resources */ = {isa = PBXBuildFile; fileRef = 83EAC43718D067C900FF26A1 /* vagrant_logo_highlighted-clean.png */; };
-		83EAC43B18D067C900FF26A1 /* vagrant_logo_off-clean@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 83EAC43818D067C900FF26A1 /* vagrant_logo_off-clean@2x.png */; };
 		83EAC43C18D067C900FF26A1 /* vagrant_logo_on-clean.png in Resources */ = {isa = PBXBuildFile; fileRef = 83EAC43918D067C900FF26A1 /* vagrant_logo_on-clean.png */; };
 		83F1696F1923789900C54F13 /* VersionComparison.m in Sources */ = {isa = PBXBuildFile; fileRef = 83F1696E1923789900C54F13 /* VersionComparison.m */; };
 		83F5BBB21983A39100ACE853 /* TextMenuItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 83F5BBB11983A39100ACE853 /* TextMenuItem.m */; };
@@ -80,6 +79,7 @@
 		83FD355619828164002EEA2D /* arrow_down@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 83FD355219828164002EEA2D /* arrow_down@2x.png */; };
 		83FD355719828164002EEA2D /* arrow_right.png in Resources */ = {isa = PBXBuildFile; fileRef = 83FD355319828164002EEA2D /* arrow_right.png */; };
 		83FD355819828164002EEA2D /* arrow_right@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 83FD355419828164002EEA2D /* arrow_right@2x.png */; };
+		B12661151A00A112009B1635 /* vagrant_logo_off-clean@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 83EAC43818D067C900FF26A1 /* vagrant_logo_off-clean@2x.png */; };
 		B1357A71187CEB3B00811CBC /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B1357A70187CEB3B00811CBC /* Cocoa.framework */; };
 		B1357A7B187CEB3B00811CBC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = B1357A79187CEB3B00811CBC /* InfoPlist.strings */; };
 		B1357A7D187CEB3B00811CBC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B1357A7C187CEB3B00811CBC /* main.m */; };
@@ -693,7 +693,7 @@
 		B1357A65187CEB3B00811CBC /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0500;
+				LastUpgradeCheck = 0610;
 				ORGANIZATIONNAME = Lanayo;
 			};
 			buildConfigurationList = B1357A68187CEB3B00811CBC /* Build configuration list for PBXProject "Vagrant Manager" */;
@@ -746,11 +746,10 @@
 				B1357A89187CEB3B00811CBC /* Images.xcassets in Resources */,
 				8372138B19272CB00052206D /* PopupContentViewController.xib in Resources */,
 				B15001361924A02C000A76E7 /* status_icon_suspended@2x.png in Resources */,
-				83EAC43B18D067C900FF26A1 /* vagrant_logo_off-clean@2x.png in Resources */,
+				B12661151A00A112009B1635 /* vagrant_logo_off-clean@2x.png in Resources */,
 				83FD355519828164002EEA2D /* arrow_down.png in Resources */,
 				83E7CAC71929F135001C86F6 /* arrow-up.png in Resources */,
 				837213A8192758CE0052206D /* close@2x.png in Resources */,
-				83EAC43B18D067C900FF26A1 /* vagrant_logo_off-clean@2x.png in Resources */,
 				83BCB0491921B6BF00206967 /* dsa_pub.pem in Resources */,
 				838B393E18CC85BC00A04C15 /* vagrant_logo_highlighted-flat.png in Resources */,
 				B150012419249833000A76E7 /* vagrant_logo_on-default@2x.png in Resources */,
