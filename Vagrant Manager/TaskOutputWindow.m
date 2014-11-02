@@ -63,6 +63,7 @@
     [closeButton setEnabled:YES];
     
     [self.closeWindowButton setEnabled:YES];
+    [self.cancelButton setHidden:YES];
 
     if(task.terminationStatus != 0) {
         self.taskStatusLabel.stringValue = @"Completed with errors";
@@ -105,6 +106,10 @@
 
 - (IBAction)closeButtonClicked:(id)sender {
     [self close];
+}
+
+- (IBAction)cancelButtonClicked:(id)sender {
+    [self.task interrupt];
 }
 
 @end

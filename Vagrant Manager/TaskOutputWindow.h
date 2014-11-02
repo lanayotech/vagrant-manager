@@ -21,7 +21,9 @@
 @property (weak) IBOutlet NSTextField *taskCommandLabel;
 @property (weak) IBOutlet NSTextField *taskStatusLabel;
 @property (weak) IBOutlet NSButton *closeWindowButton;
+@property (weak) IBOutlet NSButton *cancelButton;
 
 - (IBAction)closeButtonClicked:(id)sender;
+- (IBAction)cancelButtonClicked:(id)sender;
 
 @end
