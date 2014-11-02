@@ -13,6 +13,7 @@
 
 - (void)nativeMenuItemUpAllMachines:(NativeMenuItem*)menuItem;
 - (void)nativeMenuItemSSHInstance:(NativeMenuItem*)menuItem;
+- (void)nativeMenuItemSuspendAllMachines:(NativeMenuItem*)menuItem;
 - (void)nativeMenuItemReloadAllMachines:(NativeMenuItem*)menuItem;
 - (void)nativeMenuItemHaltAllMachines:(NativeMenuItem*)menuItem;
 - (void)nativeMenuItemDestroyAllMachines:(NativeMenuItem*)menuItem;

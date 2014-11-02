@@ -12,6 +12,7 @@
     NSMenuItem *_instanceUpMenuItem;
     NSMenuItem *_sshMenuItem;
     NSMenuItem *_instanceReloadMenuItem;
+    NSMenuItem *_instanceSuspendMenuItem;
     NSMenuItem *_instanceHaltMenuItem;
     NSMenuItem *_instanceDestroyMenuItem;
     NSMenuItem *_instanceProvisionMenuItem;
@@ -52,6 +53,12 @@
             _instanceReloadMenuItem = [[NSMenuItem alloc] initWithTitle:self.instance.machines.count > 1 ? @"reload all" : @"reload" action:@selector(reloadAllMachines:) keyEquivalent:@""];
             _instanceReloadMenuItem.target = self;
             [self.menuItem.submenu addItem:_instanceReloadMenuItem];
+        }
+        
+        if(!_instanceSuspendMenuItem) {
+            _instanceSuspendMenuItem = [[NSMenuItem alloc] initWithTitle:self.instance.machines.count > 1 ? @"suspend all" : @"suspend" action:@selector(suspendAllMachines:) keyEquivalent:@""];
+            _instanceSuspendMenuItem.target = self;
+            [self.menuItem.submenu addItem:_instanceSuspendMenuItem];
         }
         
         if(!_instanceHaltMenuItem) {
@@ -129,8 +136,8 @@
                 [_instanceUpMenuItem setHidden:NO];
                 [_sshMenuItem setHidden:YES];
                 [_instanceReloadMenuItem setHidden:YES];
+                [_instanceSuspendMenuItem setHidden:YES];
                 [_instanceHaltMenuItem setHidden:YES];
-                [_instanceDestroyMenuItem setHidden:YES];
                 [_instanceProvisionMenuItem setHidden:YES];
             }
             
@@ -138,8 +145,8 @@
                 [_instanceUpMenuItem setHidden:YES];
                 [_sshMenuItem setHidden:NO];
                 [_instanceReloadMenuItem setHidden:NO];
+                [_instanceSuspendMenuItem setHidden:NO];
                 [_instanceHaltMenuItem setHidden:NO];
-                [_instanceDestroyMenuItem setHidden:NO];
                 [_instanceProvisionMenuItem setHidden:NO];
             }
             
@@ -178,6 +185,10 @@
 
 - (void)reloadAllMachines:(NSMenuItem*)sender {
     [self.delegate nativeMenuItemReloadAllMachines:self];
+}
+
+- (void)suspendAllMachines:(NSMenuItem*)sender {
+    [self.delegate nativeMenuItemSuspendAllMachines:self];
 }
 
 - (void)haltAllMachines:(NSMenuItem*)sender {

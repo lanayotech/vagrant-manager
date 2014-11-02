@@ -58,6 +58,37 @@
     _bottomMachineSeparator = [NSMenuItem separatorItem];
     [_menu addItem:_bottomMachineSeparator];
     
+    NSMenu *allMachinesMenu = [[NSMenu alloc] init];
+    
+    NSMenuItem *menuItem = [[NSMenuItem alloc] initWithTitle:@"up" action:@selector(allUpMenuItemClicked:) keyEquivalent:@""];
+    menuItem.target = self;
+    [allMachinesMenu addItem:menuItem];
+    
+    menuItem = [[NSMenuItem alloc] initWithTitle:@"reload" action:@selector(allReloadMenuItemClicked:) keyEquivalent:@""];
+    menuItem.target = self;
+    [allMachinesMenu addItem:menuItem];
+    
+    menuItem = [[NSMenuItem alloc] initWithTitle:@"suspend" action:@selector(allSuspendMenuItemClicked:) keyEquivalent:@""];
+    menuItem.target = self;
+    [allMachinesMenu addItem:menuItem];
+    
+    menuItem = [[NSMenuItem alloc] initWithTitle:@"halt" action:@selector(allHaltMenuItemClicked:) keyEquivalent:@""];
+    menuItem.target = self;
+    [allMachinesMenu addItem:menuItem];
+    
+    menuItem = [[NSMenuItem alloc] initWithTitle:@"provision" action:@selector(allProvisionMenuItemClicked:) keyEquivalent:@""];
+    menuItem.target = self;
+    [allMachinesMenu addItem:menuItem];
+    
+    menuItem = [[NSMenuItem alloc] initWithTitle:@"destroy" action:@selector(allDestroyMenuItemClicked:) keyEquivalent:@""];
+    menuItem.target = self;
+    [allMachinesMenu addItem:menuItem];
+    
+    NSMenuItem *allMachinesMenuItem = [[NSMenuItem alloc] initWithTitle:@"All Machines" action:nil keyEquivalent:@""];
+    [allMachinesMenuItem setSubmenu:allMachinesMenu];
+    
+    [_menu addItem:allMachinesMenuItem];
+    
     NSMenuItem *preferencesMenuItem = [[NSMenuItem alloc] initWithTitle:@"Preferences" action:@selector(preferencesMenuItemClicked:) keyEquivalent:@""];
     preferencesMenuItem.target = self;
     [_menu addItem:preferencesMenuItem];
@@ -213,6 +244,10 @@
     [self performAction:@"reload" withInstance:menuItem.instance];
 }
 
+- (void)nativeMenuItemSuspendAllMachines:(NativeMenuItem*)menuItem {
+    [self performAction:@"suspend" withInstance:menuItem.instance];
+}
+
 - (void)nativeMenuItemDestroyAllMachines:(NativeMenuItem *)menuItem {
     NSAlert *confirmAlert = [NSAlert alertWithMessageText:[NSString stringWithFormat:@"Are you sure you want to destroy %@?", menuItem.instance.machines.count > 1 ? @" all machines in the group" : @"this machine"] defaultButton:@"Confirm" alternateButton:@"Cancel" otherButton:nil informativeTextWithFormat:@""];
     NSInteger button = [confirmAlert runModal];
@@ -281,6 +316,81 @@
 - (void)checkForUpdatesMenuItemClicked:(id)sender {
     [[SUUpdater sharedUpdater] checkForUpdates:self];
 }
+
+#pragma mark - All machines actions
+
+- (IBAction)allUpMenuItemClicked:(NSMenuItem*)sender {
+    NSArray *instances = [[VagrantManager sharedManager] instances];
+    
+    for(VagrantInstance *instance in instances) {
+        for(VagrantMachine *machine in instance.machines) {
+            if(machine.state != RunningState) {
+                [self performAction:@"up" withMachine:machine];
+            }
+        }
+    }
+}
+
+- (IBAction)allReloadMenuItemClicked:(NSMenuItem*)sender {
+    NSArray *instances = [[VagrantManager sharedManager] instances];
+    
+    for(VagrantInstance *instance in instances) {
+        for(VagrantMachine *machine in instance.machines) {
+            if(machine.state == RunningState) {
+                [self performAction:@"reload" withMachine:machine];
+            }
+        }
+    }
+}
+
+- (IBAction)allSuspendMenuItemClicked:(NSMenuItem*)sender {
+    NSArray *instances = [[VagrantManager sharedManager] instances];
+    
+    for(VagrantInstance *instance in instances) {
+        for(VagrantMachine *machine in instance.machines) {
+            if(machine.state == RunningState) {
+                [self performAction:@"suspend" withMachine:machine];
+            }
+        }
+    }
+}
+
+- (IBAction)allHaltMenuItemClicked:(NSMenuItem*)sender {
+    NSArray *instances = [[VagrantManager sharedManager] instances];
+    
+    for(VagrantInstance *instance in instances) {
+        for(VagrantMachine *machine in instance.machines) {
+            if(machine.state == RunningState) {
+                [self performAction:@"halt" withMachine:machine];
+            }
+        }
+    }
+}
+
+- (IBAction)allProvisionMenuItemClicked:(NSMenuItem*)sender {
+    NSArray *instances = [[VagrantManager sharedManager] instances];
+    
+    for(VagrantInstance *instance in instances) {
+        for(VagrantMachine *machine in instance.machines) {
+            [self performAction:@"provision" withMachine:machine];
+        }
+    }
+}
+
+- (IBAction)allDestroyMenuItemClicked:(NSMenuItem*)sender {
+    NSAlert *confirmAlert = [NSAlert alertWithMessageText:@"Are you sure you want to destroy all machines?" defaultButton:@"Confirm" alternateButton:@"Cancel" otherButton:nil informativeTextWithFormat:@""];
+    NSInteger button = [confirmAlert runModal];
+    
+    if(button == NSAlertDefaultReturn) {
+        NSArray *instances = [[VagrantManager sharedManager] instances];
+        for(VagrantInstance *instance in instances) {
+            for(VagrantMachine *machine in instance.machines) {
+                [self performAction:@"destroy" withMachine:machine];
+            }
+        }
+    }
+}
+
 
 #pragma mark - Misc
 
