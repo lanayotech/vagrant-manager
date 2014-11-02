@@ -16,7 +16,6 @@
 @property (weak) IBOutlet NSButton *dontShowRunningVmCountCheckBox;
 @property (weak) IBOutlet NSPopUpButton *terminalPreferencePopUpButton;
 @property (weak) IBOutlet NSPopUpButton *statusBarIconThemePopUpButton;
-@property (weak) IBOutlet NSPopUpButton *menuTypePopUpButton;
 @property (weak) IBOutlet NSPopUpButton *updateStabilityPopUpButton;
 @property (weak) IBOutlet NSButton *sendProfileDataCheckBox;
 @property (weak) IBOutlet NSButton *launchAtLoginCheckBox;
@@ -28,7 +27,6 @@
 - (IBAction)dontShowRunningVmCountCheckBoxClicked:(id)sender;
 - (IBAction)terminalPreferencePopUpButtonClicked:(id)sender;
 - (IBAction)statusBarIconThemePopUpButtonClicked:(id)sender;
-- (IBAction)menuTypePopUpButtonClicked:(id)sender;
 - (IBAction)updateStabilityPopUpButtonClicked:(id)sender;
 - (IBAction)sendProfileDataCheckBoxClicked:(id)sender;
 - (IBAction)launchAtLoginCheckBoxClicked:(id)sender;

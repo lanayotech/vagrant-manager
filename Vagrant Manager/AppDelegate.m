@@ -40,16 +40,8 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(bookmarksUpdated:) name:@"vagrant-manager.bookmarks-updated" object:nil];
     
     //create popup and status menu item
-    if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"menuType"] isEqualToString:@"native"]) {
-        _nativeMenu = [[NativeMenu alloc] init];
-        _nativeMenu.delegate = self;
-    } else {
-        _customPopoverMenu = [[CustomPopoverMenu alloc] initWithNibName:@"CustomPopoverMenu" bundle:nil];
-        statusItemPopup = [[AXStatusItemPopup alloc] initWithViewController:_customPopoverMenu image:[self getThemedImage:@"vagrant_logo_off"] alternateImage:[self getThemedImage:@"vagrant_logo_highlighted"]];
-        statusItemPopup.animated = NO;
-        _customPopoverMenu.statusItemPopup = statusItemPopup;
-        _customPopoverMenu.delegate = self;
-    }
+    _nativeMenu = [[NativeMenu alloc] init];
+    _nativeMenu.delegate = self;
     
     //create vagrant manager
     _manager = [VagrantManager sharedManager];
