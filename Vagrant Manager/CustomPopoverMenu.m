@@ -581,7 +581,7 @@
                 } else if(secondIdx < firstIdx) {
                     return NSOrderedDescending;
                 } else {
-                    return NSOrderedSame;
+                    return [firstInstance.displayName compare:secondInstance.displayName];
                 }
             }
         }

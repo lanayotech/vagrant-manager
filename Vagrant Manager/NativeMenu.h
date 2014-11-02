@@ -10,8 +10,9 @@
 #import "PreferencesWindow.h"
 #import "AboutWindow.h"
 #import "ManageBookmarksWindow.h"
+#import "NativeMenuItem.h"
 
-@interface NativeMenu : NSObject <NSMenuDelegate> {
+@interface NativeMenu : NSObject <NSMenuDelegate, NativeMenuItemDelegate> {
     PreferencesWindow *preferencesWindow;
     AboutWindow *aboutWindow;
     ManageBookmarksWindow *manageBookmarksWindow;

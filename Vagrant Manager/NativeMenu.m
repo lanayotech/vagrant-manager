@@ -6,13 +6,23 @@
 //
 
 #import "NativeMenu.h"
-#import "NativeMenuItem.h"
+#import "BookmarkManager.h"
 
 @implementation NativeMenu {
     NSStatusItem *_statusItem;
     NSMenu *_menu;
+    NSMenuItem *_refreshMenuItem;
+    
     NSMutableArray *_menuItems;
-    NSMenuItem *_machineSeparator;
+    
+    NSMenuItem *_topMachineSeparator;
+    NSMenuItem *_bottomMachineSeparator;
+
+    NSMenuItem *_checkForUpdatesMenuItem;
+}
+
+- (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
+    return [menuItem isEnabled];
 }
 
 - (id)init {
@@ -30,20 +40,23 @@
     
     _statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength];
     _menu = [[NSMenu alloc] init];
+    
     _menuItems = [[NSMutableArray alloc] init];
     
     _statusItem.image = [[Util getApp] getThemedImage:@"vagrant_logo_off"];
     _statusItem.highlightMode = YES;
     _statusItem.menu = _menu;
+
+    _refreshMenuItem = [[NSMenuItem alloc] initWithTitle:@"Refresh" action:@selector(refreshMenuItemClicked:) keyEquivalent:@""];
+    _refreshMenuItem.target = self;
+    [_menu addItem:_refreshMenuItem];
     
-    [_menu addItem:[[NSMenuItem alloc] initWithTitle:@"Refresh" action:nil keyEquivalent:@""]];
+    _topMachineSeparator = [NSMenuItem separatorItem];
     
-    _machineSeparator = [NSMenuItem separatorItem];
-    [_menu addItem:_machineSeparator];
+    // instances here
     
-    // machines go here
-    
-    [_menu addItem:[NSMenuItem separatorItem]];
+    _bottomMachineSeparator = [NSMenuItem separatorItem];
+    [_menu addItem:_bottomMachineSeparator];
     
     NSMenuItem *preferencesMenuItem = [[NSMenuItem alloc] initWithTitle:@"Preferences" action:@selector(preferencesMenuItemClicked:) keyEquivalent:@""];
     preferencesMenuItem.target = self;
@@ -53,9 +66,9 @@
     aboutMenuItem.target = self;
     [_menu addItem:aboutMenuItem];
     
-    NSMenuItem *checkForUpdatesMenuItem = [[NSMenuItem alloc] initWithTitle:@"Check For Updates" action:@selector(checkForUpdatesMenuItemClicked:) keyEquivalent:@""];
-    checkForUpdatesMenuItem.target = self;
-    [_menu addItem:checkForUpdatesMenuItem];
+    _checkForUpdatesMenuItem = [[NSMenuItem alloc] initWithTitle:@"Check For Updates" action:@selector(checkForUpdatesMenuItemClicked:) keyEquivalent:@""];
+    _checkForUpdatesMenuItem.target = self;
+    [_menu addItem:_checkForUpdatesMenuItem];
     
     NSMenuItem *quitMenuItem = [[NSMenuItem alloc] initWithTitle:@"Quit" action:@selector(quitMenuItemClicked:) keyEquivalent:@""];
     quitMenuItem.target = self;
@@ -67,45 +80,187 @@
 #pragma mark - Notification Handlers
 
 - (void)bookmarksUpdated:(NSNotification*)notification {
-//    _menuItems = [self sortMenuItems];
-//    [self.tableView reloadData];
+    [self rebuildMenu];
 }
 
 - (void)notificationPreferenceChanged: (NSNotification*)notification {
-//    if([[NSUserDefaults standardUserDefaults] boolForKey:@"dontShowUpdateNotification"]) {
-//        [self setUpdatesAvailable:NO];
-//    }
+    
 }
 
 - (void)instanceAdded: (NSNotification*)notification {
     NativeMenuItem *item = [[NativeMenuItem alloc] init];
+    [_menuItems addObject:item];
+    item.delegate = self;
     item.instance = [notification.userInfo objectForKey:@"instance"];
     item.menuItem = [[NSMenuItem alloc] initWithTitle:item.instance.displayName action:nil keyEquivalent:@""];
-    [_menu insertItem:item.menuItem atIndex:[_menu indexOfItem:_machineSeparator]+1];
+    [item refresh];
+    [self rebuildMenu];
 }
 
 - (void)instanceRemoved: (NSNotification*)notification {
-//    [self removeInstance:[notification.userInfo objectForKey:@"instance"]];
+    NativeMenuItem *item = [self menuItemForInstance:[notification.userInfo objectForKey:@"instance"]];
+    [_menuItems removeObject:item];
+    [_menu removeItem:item.menuItem];
+    [self rebuildMenu];
 }
 
 - (void)instanceUpdated: (NSNotification*)notification {
-//    [self updateInstance:[notification.userInfo objectForKey:@"old_instance"] withInstance:[notification.userInfo objectForKey:@"new_instance"]];
+    NativeMenuItem *item = [self menuItemForInstance:[notification.userInfo objectForKey:@"old_instance"]];
+    item.instance = [notification.userInfo objectForKey:@"new_instance"];
+    [item refresh];
+    [self rebuildMenu];
 }
 
 - (void)setUpdateAvailable: (NSNotification*)notification {
-//    [self setUpdatesAvailable:[[notification.userInfo objectForKey:@"is_update_available"] boolValue]];
+    [self setUpdatesAvailable:[[notification.userInfo objectForKey:@"is_update_available"] boolValue]];
 }
 
 - (void)refreshingStarted: (NSNotification*)notification {
-//    [self setIsRefreshing:YES];
+    [self setIsRefreshing:YES];
 }
 
 - (void)refreshingEnded: (NSNotification*)notification {
-//    [self setIsRefreshing:NO];
+    [self setIsRefreshing:NO];
 }
 
+#pragma mark - Control
+
+- (void)rebuildMenu {
+    for (NativeMenuItem *item in _menuItems) {
+        [item refresh];
+    }
+    
+    BookmarkManager *bookmarkManager = [BookmarkManager sharedManager];
+    NSArray *sortedArray;
+    sortedArray = [_menuItems sortedArrayUsingComparator:^NSComparisonResult(NativeMenuItem *a, NativeMenuItem *b) {;
+        
+        VagrantInstance *firstInstance = a.instance;
+        VagrantInstance *secondInstance = b.instance;
+        
+        BOOL firstIsBookmarked = [bookmarkManager getBookmarkWithPath:firstInstance.path] != nil;
+        BOOL secondIsBookmarked = [bookmarkManager getBookmarkWithPath:secondInstance.path] != nil;
+        
+        int firstRunningCount = [firstInstance getRunningMachineCount];
+        int secondRunningCount = [secondInstance getRunningMachineCount];
+        
+        if(firstIsBookmarked && !secondIsBookmarked) {
+            return NSOrderedAscending;
+        } else if(secondIsBookmarked && !firstIsBookmarked) {
+            return NSOrderedDescending;
+        } else {
+            if(firstRunningCount > 0 && secondRunningCount == 0) {
+                return NSOrderedAscending;
+            } else if(secondRunningCount > 0 && firstRunningCount == 0) {
+                return NSOrderedDescending;
+            } else {
+                int firstIdx = [bookmarkManager getIndexOfBookmarkWithPath:firstInstance.path];
+                int secondIdx = [bookmarkManager getIndexOfBookmarkWithPath:secondInstance.path];
+                
+                if(firstIdx < secondIdx) {
+                    return NSOrderedAscending;
+                } else if(secondIdx < firstIdx) {
+                    return NSOrderedDescending;
+                } else {
+                    return [firstInstance.displayName compare:secondInstance.displayName];
+                }
+            }
+        }
+    }];
+    
+    for (NativeMenuItem *item in sortedArray) {
+        if ([_menu.itemArray containsObject:item.menuItem]) {
+             [_menu removeItem:item.menuItem];
+        }
+        
+        [_menu insertItem:item.menuItem atIndex:[_menu indexOfItem:_bottomMachineSeparator]];
+    }
+    
+    _menuItems = [sortedArray mutableCopy];
+    
+    if ([_menu.itemArray containsObject:_topMachineSeparator]) {
+        [_menu removeItem:_topMachineSeparator];
+    }
+    
+    if (_menuItems.count > 0) {
+        [_menu insertItem:_topMachineSeparator atIndex:[_menu indexOfItem:_refreshMenuItem]+1];
+    }
+}
+
+- (void)setUpdatesAvailable:(BOOL)updatesAvailable {
+    _checkForUpdatesMenuItem.image = updatesAvailable ? [NSImage imageNamed:@"status_icon_problem"] : nil;
+}
+
+- (void)setIsRefreshing:(BOOL)isRefreshing {
+    [_refreshMenuItem setEnabled:!isRefreshing];
+    _refreshMenuItem.title = isRefreshing ? @"Refreshing..." : @"Refresh";
+}
+
+#pragma mark - Native menu item delegate
+
+- (void)nativeMenuItemUpAllMachines:(NativeMenuItem *)menuItem {
+    [self performAction:@"up" withInstance:menuItem.instance];
+}
+
+- (void)nativeMenuItemHaltAllMachines:(NativeMenuItem *)menuItem {
+    [self performAction:@"halt" withInstance:menuItem.instance];
+}
+
+- (void)nativeMenuItemSSHInstance:(NativeMenuItem*)menuItem {
+    [self performAction:@"ssh" withInstance:menuItem.instance];
+}
+
+- (void)nativeMenuItemReloadAllMachines:(NativeMenuItem*)menuItem {
+    [self performAction:@"reload" withInstance:menuItem.instance];
+}
+
+- (void)nativeMenuItemDestroyAllMachines:(NativeMenuItem *)menuItem {
+    NSAlert *confirmAlert = [NSAlert alertWithMessageText:[NSString stringWithFormat:@"Are you sure you want to destroy %@?", menuItem.instance.machines.count > 1 ? @" all machines in the group" : @"this machine"] defaultButton:@"Confirm" alternateButton:@"Cancel" otherButton:nil informativeTextWithFormat:@""];
+    NSInteger button = [confirmAlert runModal];
+    
+    if(button == NSAlertDefaultReturn) {
+        [self performAction:@"destroy" withInstance:menuItem.instance];
+    }
+}
+
+- (void)nativeMenuItemProvisionAllMachines:(NativeMenuItem*)menuItem {
+    [self performAction:@"provision" withInstance:menuItem.instance];
+}
+
+- (void)nativeMenuItemOpenFinder:(NativeMenuItem*)menuItem {
+    [self.delegate openInstanceInFinder:menuItem.instance];
+}
+
+- (void)nativeMenuItemOpenTerminal:(NativeMenuItem*)menuItem {
+    [self.delegate openInstanceInTerminal:menuItem.instance];
+}
+
+- (void)nativeMenuItemUpdateProviderIdentifier:(NativeMenuItem*)menuItem withProviderIdentifier:(NSString*)providerIdentifier {
+    VagrantInstance *instance = menuItem.instance;
+    
+    Bookmark *bookmark = [[BookmarkManager sharedManager] getBookmarkWithPath:instance.path];
+    
+    if(bookmark) {
+        bookmark.providerIdentifier = providerIdentifier;
+        [[BookmarkManager sharedManager] saveBookmarks];
+    }
+    
+    instance.providerIdentifier = providerIdentifier;
+    [menuItem refresh];
+}
+
+- (void)nativeMenuItemRemoveBookmark:(NativeMenuItem*)menuItem {
+    [self.delegate removeBookmarkWithInstance:menuItem.instance];
+}
+
+- (void)nativeMenuItemAddBookmark:(NativeMenuItem*)menuItem {
+    [self.delegate addBookmarkWithInstance:menuItem.instance];
+}
 
 #pragma mark - Menu Item Click Handlers
+
+- (void)refreshMenuItemClicked:(id)sender {
+    [[Util getApp] refreshVagrantMachines];
+}
 
 - (void)preferencesMenuItemClicked:(id)sender {
     preferencesWindow = [[PreferencesWindow alloc] initWithWindowNibName:@"PreferencesWindow"];
@@ -129,6 +284,14 @@
 
 #pragma mark - Misc
 
+- (void)performAction:(NSString*)action withInstance:(VagrantInstance*)instance {
+    [self.delegate performVagrantAction:action withInstance:instance];
+}
+
+- (void)performAction:(NSString*)action withMachine:(VagrantMachine *)machine {
+    [self.delegate performVagrantAction:action withMachine:machine];
+}
+
 - (void)updateRunningVmCount:(NSNotification*)notification {
     int count = [[notification.userInfo objectForKey:@"count"] intValue];
     
@@ -145,6 +308,15 @@
     }
 }
 
+- (NativeMenuItem*)menuItemForInstance:(VagrantInstance*)instance {
+    for (NativeMenuItem *nativeMenuItem in _menuItems) {
+        if (nativeMenuItem.instance == instance) {
+            return nativeMenuItem;
+        }
+    }
+    
+    return nil;
+}
 
 
 @end
