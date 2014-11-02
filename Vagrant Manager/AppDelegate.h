@@ -12,21 +12,15 @@
 #import "VirtualBoxMachineInfo.h"
 #import "VirtualBoxServiceProvider.h"
 #import "ParallelsServiceProvider.h"
-#import "AXStatusItemPopup/AXStatusItemPopup.h"
 #include <Sparkle/Sparkle.h>
 #import "MenuDelegate.h"
-#import "CustomPopoverMenu.h"
 #import "NativeMenu.h"
 #import "VagrantManager.h"
-#import "DDASLLogger.h"
-#import "DDTTYLogger.h"
-#import "DDFileLogger.h"
 
 #define MENU_ITEM_BOOKMARKED_VM 1
 #define MENU_ITEM_DETECTED_VM   2
 
 @interface AppDelegate : NSObject <NSApplicationDelegate, VagrantManagerDelegate, MenuDelegate, NSMenuDelegate> {
-    AXStatusItemPopup *statusItemPopup;
     NSMutableArray *bookmarks;
 }
 

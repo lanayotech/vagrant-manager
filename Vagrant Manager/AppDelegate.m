@@ -15,7 +15,6 @@
     BOOL isRefreshingVagrantMachines;
     
     VagrantManager *_manager;
-    CustomPopoverMenu *_customPopoverMenu;
     NativeMenu *_nativeMenu;
     NSMutableArray *taskOutputWindows;
     
@@ -25,10 +24,6 @@
 #pragma mark - Application events
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
-    //configure logging
-    [DDLog addLogger:[DDASLLogger sharedInstance]];
-    [DDLog addLogger:[DDTTYLogger sharedInstance]];
-    
     //initialize data
     taskOutputWindows = [[NSMutableArray alloc] init];
     
