@@ -149,6 +149,8 @@
 }
 
 - (IBAction)saveButtonClicked:(id)sender {
+    [self.window makeFirstResponder:nil];
+    
     [[BookmarkManager sharedManager] clearBookmarks];
     for(Bookmark *bookmark in bookmarks) {
         [[BookmarkManager sharedManager] addBookmark:bookmark];

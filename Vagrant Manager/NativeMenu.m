@@ -89,6 +89,10 @@
     
     [_menu addItem:allMachinesMenuItem];
     
+    NSMenuItem *manageBookmarksMenuItem = [[NSMenuItem alloc] initWithTitle:@"Manage Bookmarks" action:@selector(manageBookmarksMenuItemClicked:) keyEquivalent:@""];
+    manageBookmarksMenuItem.target = self;
+    [_menu addItem:manageBookmarksMenuItem];
+    
     NSMenuItem *preferencesMenuItem = [[NSMenuItem alloc] initWithTitle:@"Preferences" action:@selector(preferencesMenuItemClicked:) keyEquivalent:@""];
     preferencesMenuItem.target = self;
     [_menu addItem:preferencesMenuItem];
@@ -297,6 +301,12 @@
     [[Util getApp] refreshVagrantMachines];
 }
 
+- (void)manageBookmarksMenuItemClicked:(id)sender {
+    manageBookmarksWindow = [[ManageBookmarksWindow alloc] initWithWindowNibName:@"ManageBookmarksWindow"];
+    [NSApp activateIgnoringOtherApps:YES];
+    [manageBookmarksWindow showWindow:self];
+}
+
 - (void)preferencesMenuItemClicked:(id)sender {
     preferencesWindow = [[PreferencesWindow alloc] initWithWindowNibName:@"PreferencesWindow"];
     [NSApp activateIgnoringOtherApps:YES];
@@ -390,7 +400,6 @@
         }
     }
 }
-
 
 #pragma mark - Misc
 
