@@ -12,6 +12,8 @@
     NSStatusItem *_statusItem;
     NSMenu *_menu;
     NSMenuItem *_refreshMenuItem;
+    NSTimer *_refreshTimer;
+    int _refreshIconFrame;
     
     NSMutableArray *_menuItems;
     
@@ -234,6 +236,22 @@
 - (void)setIsRefreshing:(BOOL)isRefreshing {
     [_refreshMenuItem setEnabled:!isRefreshing];
     _refreshMenuItem.title = isRefreshing ? @"Refreshing..." : @"Refresh";
+    
+    if(isRefreshing) {
+        _refreshIconFrame = 1;
+        _refreshTimer = [NSTimer scheduledTimerWithTimeInterval:0.2f target:self selector:@selector(updateRefreshIcon:) userInfo:nil repeats:YES];
+        [[NSRunLoop currentRunLoop] addTimer:_refreshTimer forMode:NSEventTrackingRunLoopMode];
+    } else {
+        [_refreshTimer invalidate];
+        _refreshTimer = nil;
+    }
+}
+
+- (void)updateRefreshIcon:(id)sender {
+    _statusItem.image = [[Util getApp] getThemedImage:[NSString stringWithFormat:@"vagrant_logo_refresh_%d", _refreshIconFrame]];
+    if(++_refreshIconFrame > 5) {
+        _refreshIconFrame = 1;
+    }
 }
 
 #pragma mark - Native menu item delegate
