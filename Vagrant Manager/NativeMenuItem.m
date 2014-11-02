@@ -177,6 +177,10 @@
                 [_instanceProvisionMenuItem setHidden:NO];
             }
             
+            if (self.instance.machines.count > 1) {
+                [_sshMenuItem setHidden:YES];
+            }
+            
             if([[BookmarkManager sharedManager] getBookmarkWithPath:self.instance.path]) {
                 [_removeBookmarkMenuItem setHidden:NO];
                 [_addBookmarkMenuItem setHidden:YES];
