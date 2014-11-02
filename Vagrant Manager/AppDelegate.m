@@ -319,8 +319,7 @@
 - (NSString*)getCurrentTheme {
     NSString *theme = [[NSUserDefaults standardUserDefaults] objectForKey:@"statusBarIconTheme"];
     
-    NSArray *validThemes = @[@"default",
-                           @"clean",
+    NSArray *validThemes = @[@"clean",
                            @"flat"];
 
     if(!theme) {

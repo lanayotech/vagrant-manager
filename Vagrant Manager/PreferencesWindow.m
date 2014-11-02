@@ -33,8 +33,6 @@
     
     if([statusBarIconTheme isEqualToString:@"flat"]) {
         [self.statusBarIconThemePopUpButton selectItemWithTag:102];
-    } else if([statusBarIconTheme isEqualToString:@"default"]) {
-        [self.statusBarIconThemePopUpButton selectItemWithTag:100];
     } else {
         [self.statusBarIconThemePopUpButton selectItemWithTag:103];
     }
@@ -106,8 +104,6 @@
         statusBarIconTheme = @"flat";
     } else if (self.statusBarIconThemePopUpButton.selectedItem.tag == 103) {
         statusBarIconTheme = @"clean";
-    } else {
-        statusBarIconTheme = @"default";
     }
     
     [[NSUserDefaults standardUserDefaults] setValue:statusBarIconTheme forKey:@"statusBarIconTheme"];
