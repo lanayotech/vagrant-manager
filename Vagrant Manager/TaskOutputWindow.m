@@ -109,7 +109,12 @@
 }
 
 - (IBAction)cancelButtonClicked:(id)sender {
-    [self.task interrupt];
+    NSAlert *confirmAlert = [NSAlert alertWithMessageText:@"Are you sure you want to cancel the running task?" defaultButton:@"Confirm" alternateButton:@"Cancel" otherButton:nil informativeTextWithFormat:@""];
+    NSInteger button = [confirmAlert runModal];
+    
+    if(button == NSAlertDefaultReturn) {
+        [self.task interrupt];
+    }
 }
 
 @end
