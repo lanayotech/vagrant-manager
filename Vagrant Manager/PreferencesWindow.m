@@ -25,6 +25,7 @@
     NSString *terminalPreference = [[NSUserDefaults standardUserDefaults] stringForKey:@"terminalPreference"];
     BOOL autoCloseTaskWindows = [[NSUserDefaults standardUserDefaults] boolForKey:@"autoCloseTaskWindows"];
     BOOL dontShowUpdateNotification = [[NSUserDefaults standardUserDefaults] boolForKey:@"dontShowUpdateNotification"];
+    BOOL includeMachineNames = [[NSUserDefaults standardUserDefaults] boolForKey:@"includeMachineNamesInMenu"];
     BOOL dontShowRunningVmCount = [[NSUserDefaults standardUserDefaults] boolForKey:@"dontShowRunningVmCount"];
     BOOL refreshEvery = [[NSUserDefaults standardUserDefaults] boolForKey:@"refreshEvery"];
     NSInteger refreshEveryInterval = [[NSUserDefaults standardUserDefaults] integerForKey:@"refreshEveryInterval"];
@@ -57,6 +58,7 @@
 
     [self.autoCloseCheckBox setState:autoCloseTaskWindows ? NSOnState : NSOffState];
     [self.dontShowUpdateCheckBox setState:dontShowUpdateNotification ? NSOnState : NSOffState];
+    [self.includeMachineNamesCheckBox setState:includeMachineNames ? NSOnState : NSOffState];
     [self.dontShowRunningVmCountCheckBox setState:dontShowRunningVmCount ? NSOnState : NSOffState];
     [self.refreshEveryCheckBox setState:refreshEvery ? NSOnState : NSOffState];
     [self.intervalMenu selectItemWithTag:refreshEveryInterval];
@@ -75,6 +77,13 @@
     [[NSUserDefaults standardUserDefaults] synchronize];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:@"vagrant-manager.show-update-notification-preference-changed" object:nil];
+}
+
+- (IBAction)includeMachineNamesCheckBoxClicked:(id)sender {
+    [[NSUserDefaults standardUserDefaults] setBool:(self.includeMachineNamesCheckBox.state == NSOnState) forKey:@"includeMachineNamesInMenu"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"vagrant-manager.include-machine-names-in-menu-preference-changed" object:nil];
 }
 
 - (IBAction)dontShowRunningVmCountCheckBoxClicked:(id)sender {

@@ -194,7 +194,17 @@
         if(bookmark) {
             self.menuItem.title = [NSString stringWithFormat:@"[B] %@", bookmark.displayName];
         } else {
-            self.menuItem.title = self.instance.displayName;
+            NSString *title = self.instance.displayName;
+            
+            if(self.instance.machines.count > 0 && [[NSUserDefaults standardUserDefaults] boolForKey:@"includeMachineNamesInMenu"]) {
+                NSMutableArray *machineNames = [[NSMutableArray alloc] init];
+                for(VagrantMachine *machine in self.instance.machines) {
+                    [machineNames addObject:machine.name];
+                }
+                title = [title stringByAppendingString:[NSString stringWithFormat:@" (%@)", [machineNames componentsJoinedByString:@", "]]];
+            }
+            
+            self.menuItem.title = title;
         }
         
         if(!_machineSeparator) {

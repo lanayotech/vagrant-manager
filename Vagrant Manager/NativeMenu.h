@@ -20,4 +20,6 @@
 
 @property (weak) id<MenuDelegate> delegate;
 
+- (void)rebuildMenu;
+
 @end
