@@ -6,6 +6,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "VagrantMachine.h"
 
 @class NativeMenuItem;
 
@@ -23,6 +24,14 @@
 - (void)nativeMenuItemUpdateProviderIdentifier:(NativeMenuItem*)menuItem withProviderIdentifier:(NSString*)providerIdentifier;
 - (void)nativeMenuItemRemoveBookmark:(NativeMenuItem*)menuItem;
 - (void)nativeMenuItemAddBookmark:(NativeMenuItem*)menuItem;
+
+- (void)nativeMenuItemUpMachine:(VagrantMachine*)machine;
+- (void)nativeMenuItemSSHMachine:(VagrantMachine*)machine;
+- (void)nativeMenuItemSuspendMachine:(VagrantMachine*)machine;
+- (void)nativeMenuItemReloadMachine:(VagrantMachine*)machine;
+- (void)nativeMenuItemHaltMachine:(VagrantMachine*)machine;
+- (void)nativeMenuItemDestroyMachine:(VagrantMachine*)machine;
+- (void)nativeMenuItemProvisionMachine:(VagrantMachine*)machine;
 
 @end
 

@@ -22,6 +22,19 @@
     NSMenuItem *_addBookmarkMenuItem;
     NSMenuItem *_removeBookmarkMenuItem;
     NSMenuItem *_chooseProviderMenuItem;
+    
+    NSMenuItem *_machineSeparator;
+    
+    NSMutableArray *_machineMenuItems;
+}
+
+- (id)init {
+    self = [super init];
+    if(self) {
+        _machineMenuItems = [[NSMutableArray alloc] init];
+    }
+    
+    return self;
 }
 
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
@@ -38,43 +51,43 @@
         }
         
         if(!_instanceUpMenuItem) {
-            _instanceUpMenuItem = [[NSMenuItem alloc] initWithTitle:self.instance.machines.count > 1 ? @"up all" : @"up" action:@selector(upAllMachines:) keyEquivalent:@""];
+            _instanceUpMenuItem = [[NSMenuItem alloc] initWithTitle:self.instance.machines.count > 1 ? @"Up All" : @"Up" action:@selector(upAllMachines:) keyEquivalent:@""];
             _instanceUpMenuItem.target = self;
             [self.menuItem.submenu addItem:_instanceUpMenuItem];
         }
         
         if(!_sshMenuItem) {
-            _sshMenuItem = [[NSMenuItem alloc] initWithTitle:@"ssh" action:@selector(sshInstance:) keyEquivalent:@""];
+            _sshMenuItem = [[NSMenuItem alloc] initWithTitle:@"SSH" action:@selector(sshInstance:) keyEquivalent:@""];
             _sshMenuItem.target = self;
             [self.menuItem.submenu addItem:_sshMenuItem];
         }
         
         if(!_instanceReloadMenuItem) {
-            _instanceReloadMenuItem = [[NSMenuItem alloc] initWithTitle:self.instance.machines.count > 1 ? @"reload all" : @"reload" action:@selector(reloadAllMachines:) keyEquivalent:@""];
+            _instanceReloadMenuItem = [[NSMenuItem alloc] initWithTitle:self.instance.machines.count > 1 ? @"Reload All" : @"Reload" action:@selector(reloadAllMachines:) keyEquivalent:@""];
             _instanceReloadMenuItem.target = self;
             [self.menuItem.submenu addItem:_instanceReloadMenuItem];
         }
         
         if(!_instanceSuspendMenuItem) {
-            _instanceSuspendMenuItem = [[NSMenuItem alloc] initWithTitle:self.instance.machines.count > 1 ? @"suspend all" : @"suspend" action:@selector(suspendAllMachines:) keyEquivalent:@""];
+            _instanceSuspendMenuItem = [[NSMenuItem alloc] initWithTitle:self.instance.machines.count > 1 ? @"Suspend All" : @"Suspend" action:@selector(suspendAllMachines:) keyEquivalent:@""];
             _instanceSuspendMenuItem.target = self;
             [self.menuItem.submenu addItem:_instanceSuspendMenuItem];
         }
         
         if(!_instanceHaltMenuItem) {
-            _instanceHaltMenuItem = [[NSMenuItem alloc] initWithTitle:self.instance.machines.count > 1 ? @"halt all" : @"halt" action:@selector(haltAllMachines:) keyEquivalent:@""];
+            _instanceHaltMenuItem = [[NSMenuItem alloc] initWithTitle:self.instance.machines.count > 1 ? @"Halt All" : @"Halt" action:@selector(haltAllMachines:) keyEquivalent:@""];
             _instanceHaltMenuItem.target = self;
             [self.menuItem.submenu addItem:_instanceHaltMenuItem];
         }
         
         if(!_instanceDestroyMenuItem) {
-            _instanceDestroyMenuItem = [[NSMenuItem alloc] initWithTitle:self.instance.machines.count > 1 ? @"destroy all" : @"destroy" action:@selector(destroyAllMachines:) keyEquivalent:@""];
+            _instanceDestroyMenuItem = [[NSMenuItem alloc] initWithTitle:self.instance.machines.count > 1 ? @"Destroy All" : @"Destroy" action:@selector(destroyAllMachines:) keyEquivalent:@""];
             _instanceDestroyMenuItem.target = self;
             [self.menuItem.submenu addItem:_instanceDestroyMenuItem];
         }
         
         if(!_instanceProvisionMenuItem) {
-            _instanceProvisionMenuItem = [[NSMenuItem alloc] initWithTitle:self.instance.machines.count > 1 ? @"provision all" : @"provision" action:@selector(provisionAllMachines:) keyEquivalent:@""];
+            _instanceProvisionMenuItem = [[NSMenuItem alloc] initWithTitle:self.instance.machines.count > 1 ? @"Provision All" : @"Provision" action:@selector(provisionAllMachines:) keyEquivalent:@""];
             _instanceProvisionMenuItem.target = self;
             [self.menuItem.submenu addItem:_instanceProvisionMenuItem];
         }
@@ -170,6 +183,89 @@
             self.menuItem.title = self.instance.displayName;
         }
         
+        if(!_machineSeparator) {
+            _machineSeparator = [NSMenuItem separatorItem];
+            [self.menuItem.submenu addItem:_machineSeparator];
+        }
+        
+        //destroy machine menu items
+        for(NSMenuItem *machineItem in _machineMenuItems) {
+            [self.menuItem.submenu removeItem:machineItem];
+        }
+        
+        [_machineMenuItems removeAllObjects];
+        
+        //build machine submenus
+        if(self.instance.machines.count > 1) {
+            [_machineSeparator setHidden:NO];
+            
+            for(VagrantMachine *machine in self.instance.machines) {
+                NSMenuItem *machineItem = [[NSMenuItem alloc] initWithTitle:machine.name action:nil keyEquivalent:@""];
+                NSMenu *machineSubmenu = [[NSMenu alloc] init];
+                machineSubmenu.delegate = self;
+                
+                NSMenuItem *machineUpMenuItem = [[NSMenuItem alloc] initWithTitle:@"Up" action:@selector(upMachine:) keyEquivalent:@""];
+                machineUpMenuItem.target = self;
+                machineUpMenuItem.representedObject = machine;
+                [machineSubmenu addItem:machineUpMenuItem];
+                
+                NSMenuItem *machineSSHMenuItem = [[NSMenuItem alloc] initWithTitle:@"SSH" action:@selector(sshMachine:) keyEquivalent:@""];
+                machineSSHMenuItem.target = self;
+                machineSSHMenuItem.representedObject = machine;
+                [machineSubmenu addItem:machineSSHMenuItem];
+
+                NSMenuItem *machineReloadMenuItem = [[NSMenuItem alloc] initWithTitle:@"Reload" action:@selector(reloadMachine:) keyEquivalent:@""];
+                machineReloadMenuItem.target = self;
+                machineReloadMenuItem.representedObject = machine;
+                [machineSubmenu addItem:machineReloadMenuItem];
+
+                NSMenuItem *machineSuspendMenuItem = [[NSMenuItem alloc] initWithTitle:@"Suspend" action:@selector(suspendMachine:) keyEquivalent:@""];
+                machineSuspendMenuItem.target = self;
+                machineSuspendMenuItem.representedObject = machine;
+                [machineSubmenu addItem:machineSuspendMenuItem];
+
+                NSMenuItem *machineHaltMenuItem = [[NSMenuItem alloc] initWithTitle:@"Halt" action:@selector(haltMachine:) keyEquivalent:@""];
+                machineHaltMenuItem.target = self;
+                machineHaltMenuItem.representedObject = machine;
+                [machineSubmenu addItem:machineHaltMenuItem];
+                
+                NSMenuItem *machineDestroyMenuItem = [[NSMenuItem alloc] initWithTitle:@"Destroy" action:@selector(destroyMachine:) keyEquivalent:@""];
+                machineDestroyMenuItem.target = self;
+                machineDestroyMenuItem.representedObject = machine;
+                [machineSubmenu addItem:machineDestroyMenuItem];
+                
+                NSMenuItem *machineProvisionMenuItem = [[NSMenuItem alloc] initWithTitle:@"Provision" action:@selector(provisionMachine:) keyEquivalent:@""];
+                machineProvisionMenuItem.target = self;
+                machineProvisionMenuItem.representedObject = machine;
+                [machineSubmenu addItem:machineProvisionMenuItem];
+                
+                machineItem.submenu = machineSubmenu;
+                
+                [_machineMenuItems addObject:machineItem];
+                [self.menuItem.submenu insertItem:machineItem atIndex:[self.menuItem.submenu indexOfItem:_machineSeparator] + _machineMenuItems.count];
+                
+                machineItem.image = machine.state == RunningState ? [NSImage imageNamed:@"status_icon_on"] : machine.state == SavedState ? [NSImage imageNamed:@"status_icon_suspended"] : [NSImage imageNamed:@"status_icon_off"];
+                
+                if(machine.state == RunningState) {
+                    [machineUpMenuItem setHidden:YES];
+                    [machineSSHMenuItem setHidden:NO];
+                    [machineReloadMenuItem setHidden:NO];
+                    [machineSuspendMenuItem setHidden:NO];
+                    [machineHaltMenuItem setHidden:NO];
+                    [machineProvisionMenuItem setHidden:NO];
+                } else {
+                    [machineUpMenuItem setHidden:NO];
+                    [machineSSHMenuItem setHidden:YES];
+                    [machineReloadMenuItem setHidden:YES];
+                    [machineSuspendMenuItem setHidden:YES];
+                    [machineHaltMenuItem setHidden:YES];
+                    [machineProvisionMenuItem setHidden:YES];
+                }
+            }
+        } else {
+            [_machineSeparator setHidden:YES];
+        }
+        
     } else {
         self.menuItem.submenu = nil;
     }
@@ -221,6 +317,34 @@
 
 - (void)addBookmarkMenuItemClicked:(NSMenuItem*)sender {
     [self.delegate nativeMenuItemAddBookmark:self];
+}
+
+- (void)upMachine:(NSMenuItem*)sender {
+    [self.delegate nativeMenuItemUpMachine:sender.representedObject];
+}
+
+- (void)sshMachine:(NSMenuItem*)sender {
+    [self.delegate nativeMenuItemSSHMachine:sender.representedObject];
+}
+
+- (void)reloadMachine:(NSMenuItem*)sender {
+    [self.delegate nativeMenuItemReloadMachine:sender.representedObject];
+}
+
+- (void)suspendMachine:(NSMenuItem*)sender {
+    [self.delegate nativeMenuItemSuspendMachine:sender.representedObject];
+}
+
+- (void)haltMachine:(NSMenuItem*)sender {
+    [self.delegate nativeMenuItemHaltMachine:sender.representedObject];
+}
+
+- (void)destroyMachine:(NSMenuItem*)sender {
+    [self.delegate nativeMenuItemDestroyMachine:sender.representedObject];
+}
+
+- (void)provisionMachine:(NSMenuItem*)sender {
+    [self.delegate nativeMenuItemProvisionMachine:sender.representedObject];
 }
 
 @end

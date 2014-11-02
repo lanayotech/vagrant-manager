@@ -295,6 +295,39 @@
     [self.delegate addBookmarkWithInstance:menuItem.instance];
 }
 
+- (void)nativeMenuItemUpMachine:(VagrantMachine *)machine {
+    [self performAction:@"up" withMachine:machine];
+}
+
+- (void)nativeMenuItemHaltMachine:(VagrantMachine *)machine {
+    [self performAction:@"halt" withMachine:machine];
+}
+
+- (void)nativeMenuItemSSHMachine:(VagrantMachine*)machine {
+    [self performAction:@"ssh" withMachine:machine];
+}
+
+- (void)nativeMenuItemReloadMachine:(VagrantMachine *)machine {
+    [self performAction:@"reload" withMachine:machine];
+}
+
+- (void)nativeMenuItemSuspendMachine:(VagrantMachine *)machine {
+    [self performAction:@"suspend" withMachine:machine];
+}
+
+- (void)nativeMenuItemDestroyMachine:(VagrantMachine *)machine {
+    NSAlert *confirmAlert = [NSAlert alertWithMessageText:@"Are you sure you want to destroy this machine?" defaultButton:@"Confirm" alternateButton:@"Cancel" otherButton:nil informativeTextWithFormat:@""];
+    NSInteger button = [confirmAlert runModal];
+    
+    if(button == NSAlertDefaultReturn) {
+        [self performAction:@"destroy" withMachine:machine];
+    }
+}
+
+- (void)nativeMenuItemProvisionMachine:(VagrantMachine *)machine {
+    [self performAction:@"provision" withMachine:machine];
+}
+
 #pragma mark - Menu Item Click Handlers
 
 - (void)refreshMenuItemClicked:(id)sender {
