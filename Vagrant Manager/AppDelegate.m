@@ -15,7 +15,7 @@
     BOOL isRefreshingVagrantMachines;
     
     VagrantManager *_manager;
-    PopupContentViewController *_popupContentViewController;
+    NativeMenu *_nativeMenu;
     NSMutableArray *taskOutputWindows;
     
     int queuedRefreshes;
@@ -24,10 +24,6 @@
 #pragma mark - Application events
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
-    //configure logging
-    [DDLog addLogger:[DDASLLogger sharedInstance]];
-    [DDLog addLogger:[DDTTYLogger sharedInstance]];
-    
     //initialize data
     taskOutputWindows = [[NSMutableArray alloc] init];
     
@@ -35,15 +31,13 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(taskCompleted:) name:@"vagrant-manager.task-completed" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(themeChanged:) name:@"vagrant-manager.theme-changed" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showRunningVmCountPreferenceChanged:) name:@"vagrant-manager.show-running-vm-count-preference-changed" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(includeMachineNamesInMenuPreferenceChanged:) name:@"vagrant-manager.include-machine-names-in-menu-preference-changed" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showUpdateNotificationPreferenceChanged:) name:@"vagrant-manager.show-update-notification-preference-changed" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(bookmarksUpdated:) name:@"vagrant-manager.bookmarks-updated" object:nil];
     
     //create popup and status menu item
-    _popupContentViewController = [[PopupContentViewController alloc] initWithNibName:@"PopupContentViewController" bundle:nil];
-    statusItemPopup = [[AXStatusItemPopup alloc] initWithViewController:_popupContentViewController image:[self getThemedImage:@"vagrant_logo_off"] alternateImage:[self getThemedImage:@"vagrant_logo_highlighted"]];
-    statusItemPopup.animated = NO;
-    _popupContentViewController.statusItemPopup = statusItemPopup;
-    _popupContentViewController.delegate = self;
+    _nativeMenu = [[NativeMenu alloc] init];
+    _nativeMenu.delegate = self;
     
     //create vagrant manager
     _manager = [VagrantManager sharedManager];
@@ -83,10 +77,12 @@
     [self updateRunningVmCount];
 }
 
+- (void)includeMachineNamesInMenuPreferenceChanged:(NSNotification*)notification {
+    [_nativeMenu rebuildMenu];
+}
+
 - (void)showUpdateNotificationPreferenceChanged:(NSNotification*)notification {
-    if([[NSUserDefaults standardUserDefaults] boolForKey:@"dontShowUpdateNotification"]) {
-        [_popupContentViewController setUpdatesAvailable:NO];
-    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"vagrant-manager.notification-preference-changed" object:nil];
 }
 
 #pragma mark - Vagrant manager control
@@ -107,7 +103,7 @@
     if(!isRefreshingVagrantMachines) {
         isRefreshingVagrantMachines = YES;
         //tell popup controller refreshing has started
-        [_popupContentViewController setIsRefreshing:YES];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"vagrant-manager.refreshing-started" object:nil];
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             //tell manager to refresh all instances
             [_manager refreshInstances];
@@ -115,7 +111,7 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 //tell popup controller refreshing has ended
                 isRefreshingVagrantMachines = NO;
-                [_popupContentViewController setIsRefreshing:NO];
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"vagrant-manager.refreshing-ended" object:nil];
                 [self updateRunningVmCount];
                 
                 if(queuedRefreshes > 0) {
@@ -133,19 +129,19 @@
 
 - (void)vagrantManager:(VagrantManager *)vagrantManger instanceAdded:(VagrantInstance *)instance {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [_popupContentViewController addInstance:instance];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"vagrant-manager.instance-added" object:nil userInfo:@{@"instance": instance}];
     });
 }
 
 - (void)vagrantManager:(VagrantManager *)vagrantManger instanceRemoved:(VagrantInstance *)instance {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [_popupContentViewController removeInstance:instance];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"vagrant-manager.instance-removed" object:nil userInfo:@{@"instance": instance}];
     });
 }
 
 - (void)vagrantManager:(VagrantManager *)vagrantManger instanceUpdated:(VagrantInstance *)oldInstance withInstance:(VagrantInstance *)newInstance {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [_popupContentViewController updateInstance:oldInstance withInstance:newInstance];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"vagrant-manager.instance-updated" object:nil userInfo:@{@"old_instance":oldInstance, @"new_instance":newInstance}];
     });
 }
 
@@ -315,14 +311,15 @@
 }
 
 - (NSImage*)getThemedImage:(NSString*)imageName {
-    return [NSImage imageNamed:[NSString stringWithFormat:@"%@-%@", imageName, [self getCurrentTheme]]];
+    NSImage *image = [NSImage imageNamed:[NSString stringWithFormat:@"%@-%@", imageName, [self getCurrentTheme]]];
+    [image setTemplate:YES];
+    return image;
 }
 
 - (NSString*)getCurrentTheme {
     NSString *theme = [[NSUserDefaults standardUserDefaults] objectForKey:@"statusBarIconTheme"];
     
-    NSArray *validThemes = @[@"default",
-                           @"clean",
+    NSArray *validThemes = @[@"clean",
                            @"flat"];
 
     if(!theme) {
@@ -337,21 +334,7 @@
 }
 
 - (void)updateRunningVmCount {
-    int runningCount = [_manager getRunningVmCount];
-    
-    if(runningCount) {
-        if(![[NSUserDefaults standardUserDefaults] boolForKey:@"dontShowRunningVmCount"]) {
-            [statusItemPopup setTitle:[NSString stringWithFormat:@"%d", runningCount]];
-        } else {
-            [statusItemPopup setTitle:@""];
-        }
-        [statusItemPopup setImage:[self getThemedImage:@"vagrant_logo_on"]];
-        [statusItemPopup setAlternateImage:[self getThemedImage:@"vagrant_logo_highlighted"]];
-    } else {
-        [statusItemPopup setTitle:@""];
-        [statusItemPopup setImage:[self getThemedImage:@"vagrant_logo_off"]];
-        [statusItemPopup setAlternateImage:[self getThemedImage:@"vagrant_logo_highlighted"]];
-    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"vagrant-manager.update-running-vm-count" object:nil userInfo:@{@"count": [NSNumber numberWithInt:[_manager getRunningVmCount]]}];
 }
 
 #pragma mark - Sparkle updater delegates
@@ -368,13 +351,13 @@
 }
 
 - (void)updater:(SUUpdater *)updater didFindValidUpdate:(SUAppcastItem *)update {
-    if(![[NSUserDefaults standardUserDefaults] boolForKey:@"dontShowUpdateNotification"]) {
-        [_popupContentViewController setUpdatesAvailable:YES];
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"dontShowUpdateNotification"]) {
+         [[NSNotificationCenter defaultCenter] postNotificationName:@"vagrant-manager.update-available" object:nil userInfo:@{@"is_update_available": [NSNumber numberWithBool:YES]}];
     }
 }
 
 - (void)updaterDidNotFindUpdate:(SUUpdater *)update {
-    [_popupContentViewController setUpdatesAvailable:NO];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"vagrant-manager.update-available" object:nil userInfo:@{@"is_update_available": [NSNumber numberWithBool:NO]}];
 }
 
 - (id<SUVersionComparison>)versionComparatorForUpdater:(SUUpdater *)updater {

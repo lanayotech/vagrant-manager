@@ -63,6 +63,7 @@
     [closeButton setEnabled:YES];
     
     [self.closeWindowButton setEnabled:YES];
+    [self.cancelButton setHidden:YES];
 
     if(task.terminationStatus != 0) {
         self.taskStatusLabel.stringValue = @"Completed with errors";
@@ -105,6 +106,15 @@
 
 - (IBAction)closeButtonClicked:(id)sender {
     [self close];
+}
+
+- (IBAction)cancelButtonClicked:(id)sender {
+    NSAlert *confirmAlert = [NSAlert alertWithMessageText:@"Are you sure you want to cancel the running task?" defaultButton:@"Confirm" alternateButton:@"Cancel" otherButton:nil informativeTextWithFormat:@""];
+    NSInteger button = [confirmAlert runModal];
+    
+    if(button == NSAlertDefaultReturn) {
+        [self.task interrupt];
+    }
 }
 
 @end

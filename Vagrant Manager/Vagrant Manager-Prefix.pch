@@ -7,13 +7,4 @@
 #ifdef __OBJC__
     #import <Cocoa/Cocoa.h>
     #import "Util.h"
-    #import "DDLog.h"
-#endif
-
-#ifndef DEBUG
-    static const int ddLogLevel = LOG_LEVEL_ERROR;
-#elif DEBUG == 0
-    static const int ddLogLevel = LOG_LEVEL_ERROR;
-#else
-    static const int ddLogLevel = LOG_LEVEL_VERBOSE;
 #endif
