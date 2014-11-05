@@ -233,7 +233,7 @@
         }
     }
     
-    return nil;
+    return @"virtualbox";
 }
 
 - (NSArray*)getProviderIdentifiers {
