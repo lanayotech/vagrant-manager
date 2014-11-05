@@ -56,7 +56,7 @@
     
     [openDlg beginSheetModalForWindow:self.window completionHandler:^(NSInteger result) {
         if(result == NSFileHandlingPanelOKButton) {
-            NSMutableArray *bookmarksSnapshot = [bookmarks copy];
+            NSMutableArray *bookmarksSnapshot = [bookmarks mutableCopy];
             
             [self.cancelScanButton setHidden:NO];
             [self.saveButton setEnabled:NO];
