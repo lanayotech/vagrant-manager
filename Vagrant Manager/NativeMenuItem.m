@@ -24,6 +24,7 @@
     NSMenuItem *_chooseProviderMenuItem;
     
     NSMenuItem *_machineSeparator;
+    NSMenuItem *_actionSeparator;
     
     NSMutableArray *_machineMenuItems;
 }
@@ -106,7 +107,10 @@
             [self.menuItem.submenu addItem:_instanceProvisionMenuItem];
         }
         
-        [self.menuItem.submenu addItem:[NSMenuItem separatorItem]];
+        if (!_actionSeparator) {
+            _actionSeparator = [NSMenuItem separatorItem];
+           [self.menuItem.submenu addItem:[NSMenuItem separatorItem]];
+        }
         
         if (!_openInFinderMenuItem) {
             _openInFinderMenuItem = [[NSMenuItem alloc] initWithTitle:@"Open in Finder" action:@selector(finderMenuItemClicked:) keyEquivalent:@""];
