@@ -266,4 +266,8 @@
     return bookmarks.count;
 }
 
+-(void)windowWillClose:(NSNotification *)notification {
+    _scanCancelled = YES;
+}
+
 @end
