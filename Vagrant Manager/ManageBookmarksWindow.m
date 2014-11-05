@@ -12,7 +12,9 @@
 
 @end
 
-@implementation ManageBookmarksWindow
+@implementation ManageBookmarksWindow {
+    __block BOOL _scanCancelled;
+}
 
 - (id)initWithWindow:(NSWindow *)window {
     self = [super initWithWindow:window];
@@ -24,6 +26,8 @@
     [super windowDidLoad];
     
     bookmarks = [[NSMutableArray alloc] initWithArray:[[BookmarkManager sharedManager] getBookmarks] copyItems:YES];
+    
+    _scanCancelled = NO;
     
     self.bookmarkTableView.delegate = self;
     self.bookmarkTableView.dataSource = self;
@@ -52,33 +56,67 @@
     
     [openDlg beginSheetModalForWindow:self.window completionHandler:^(NSInteger result) {
         if(result == NSFileHandlingPanelOKButton) {
-            NSArray *urls = [openDlg URLs];
+            NSMutableArray *bookmarksSnapshot = [bookmarks mutableCopy];
             
-            NSFileManager *fileManager = [[NSFileManager alloc] init];
+            [self.cancelScanButton setHidden:NO];
+            [self.saveButton setEnabled:NO];
+            [self.cancelButton setEnabled:NO];
+            [self.addBookmarksButton setEnabled:NO];
+            [self.removeBookmarksButton setEnabled:NO];
+            [self.bookmarkTableView setEnabled:NO];
             
-            NSMutableArray *bookmarkPaths = [[NSMutableArray alloc] init];
-            for(Bookmark *b in bookmarks) {
-                [bookmarkPaths addObject:b.path];
-            }
-            
-            for(NSURL *directoryURL in urls) {
-                if ([[NSUserDefaults standardUserDefaults] integerForKey:@"recursiveBookmarkScan"] == NSOnState) {
-                    NSDirectoryEnumerator *enumerator = [fileManager enumeratorAtURL:directoryURL includingPropertiesForKeys:nil options:NSDirectoryEnumerationSkipsHiddenFiles errorHandler:nil];
-                    
-                    for (NSURL *url in enumerator) {
-                        NSString *path = [url.path stringByDeletingLastPathComponent];
-                        if ([[url.path lastPathComponent] isEqualToString:@"Vagrantfile"] && ![bookmarkPaths containsObject:path]) {
-                            [self addBookmarkWithPath:path displayName:[path lastPathComponent]];
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                
+                NSArray *urls = [openDlg URLs];
+                
+                NSFileManager *fileManager = [[NSFileManager alloc] init];
+                
+                NSMutableArray *bookmarkPaths = [[NSMutableArray alloc] init];
+                for(Bookmark *b in bookmarks) {
+                    [bookmarkPaths addObject:b.path];
+                }
+                
+                for(NSURL *directoryURL in urls) {
+                    if ([[NSUserDefaults standardUserDefaults] integerForKey:@"recursiveBookmarkScan"] == NSOnState) {
+                        NSDirectoryEnumerator *enumerator = [fileManager enumeratorAtURL:directoryURL includingPropertiesForKeys:nil options:NSDirectoryEnumerationSkipsHiddenFiles errorHandler:nil];
+                        
+                        for (NSURL *url in enumerator) {
+                            NSString *path = [url.path stringByDeletingLastPathComponent];
+                            
+                            if (_scanCancelled) {
+                                _scanCancelled = NO;
+                                bookmarks = bookmarksSnapshot;
+                                return;
+                            }
+                            
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                self.directoryLabelTextField.stringValue = path;
+                            });
+                            
+                            if ([[url.path lastPathComponent] isEqualToString:@"Vagrantfile"] && ![bookmarkPaths containsObject:path]) {
+                                [self addBookmarkWithPath:path displayName:[path lastPathComponent]];
+                            }
+                        }
+                    } else {
+                        if ([fileManager fileExistsAtPath:[NSString stringWithFormat:@"%@/Vagrantfile", directoryURL.path]] && ![bookmarkPaths containsObject:directoryURL.path]) {
+                            [self addBookmarkWithPath:directoryURL.path displayName:[directoryURL.path lastPathComponent]];
                         }
                     }
-                } else {
-                    if ([fileManager fileExistsAtPath:[NSString stringWithFormat:@"%@/Vagrantfile", directoryURL.path]] && ![bookmarkPaths containsObject:directoryURL.path]) {
-                        [self addBookmarkWithPath:directoryURL.path displayName:[directoryURL.path lastPathComponent]];
-                    }
                 }
-            }
-            
-            [self.bookmarkTableView reloadData];
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    _scanCancelled = NO;
+                    [self.cancelScanButton setHidden:YES];
+                    [self.saveButton setEnabled:YES];
+                    [self.cancelButton setEnabled:YES];
+                    [self.addBookmarksButton setEnabled:YES];
+                    [self.removeBookmarksButton setEnabled:YES];
+                    [self.bookmarkTableView setEnabled:YES];
+                    self.directoryLabelTextField.stringValue = @"";
+                    [self.bookmarkTableView reloadData];
+                });
+                
+            });
         }
     }];
 }
@@ -142,6 +180,19 @@
 
 - (IBAction)recursiveScanCheckboxClicked:(id)sender {
     [[NSUserDefaults standardUserDefaults] setBool:self.recursiveScanCheckbox.state forKey:@"recursiveBookmarkScan"];
+}
+
+- (IBAction)cancelScanButtonClicked:(id)sender {
+    _scanCancelled = YES;
+    [self.cancelScanButton setHidden:YES];
+    [self.saveButton setEnabled:YES];
+    [self.cancelButton setEnabled:YES];
+    [self.addBookmarksButton setEnabled:YES];
+    [self.removeBookmarksButton setEnabled:YES];
+    [self.bookmarkTableView setEnabled:YES];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.directoryLabelTextField.stringValue = @"";
+    });
 }
 
 - (IBAction)cancelButtonClicked:(id)sender {
@@ -213,6 +264,10 @@
 
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView {
     return bookmarks.count;
+}
+
+-(void)windowWillClose:(NSNotification *)notification {
+    _scanCancelled = YES;
 }
 
 @end

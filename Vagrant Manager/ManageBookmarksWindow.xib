@@ -7,8 +7,14 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="ManageBookmarksWindow">
             <connections>
+                <outlet property="addBookmarksButton" destination="BT0-kM-woq" id="oVy-FD-szY"/>
                 <outlet property="bookmarkTableView" destination="XQ1-Lr-8sU" id="t4F-3l-txJ"/>
+                <outlet property="cancelButton" destination="ceu-tl-LPa" id="yiZ-1D-yI9"/>
+                <outlet property="cancelScanButton" destination="51k-mX-Ohz" id="2F7-6D-XHl"/>
+                <outlet property="directoryLabelTextField" destination="PHk-MX-0b0" id="0zX-cd-cCQ"/>
                 <outlet property="recursiveScanCheckbox" destination="4Ln-CR-ton" id="T4t-3d-oEp"/>
+                <outlet property="removeBookmarksButton" destination="nkR-zr-I0g" id="2D6-Jz-Xzc"/>
+                <outlet property="saveButton" destination="oLm-Ad-pZc" id="JMz-fh-8aZ"/>
                 <outlet property="window" destination="F0z-JX-Cv5" id="gIp-Ho-8D9"/>
             </connections>
         </customObject>
@@ -16,15 +22,15 @@
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <window title="Manage Bookmarks" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" animationBehavior="default" id="F0z-JX-Cv5">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" resizable="YES"/>
-            <rect key="contentRect" x="196" y="240" width="564" height="338"/>
+            <rect key="contentRect" x="196" y="240" width="564" height="370"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1178"/>
             <value key="minSize" type="size" width="480" height="338"/>
             <view key="contentView" id="se5-gp-TjO">
-                <rect key="frame" x="0.0" y="0.0" width="564" height="338"/>
+                <rect key="frame" x="0.0" y="-1" width="564" height="370"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <button id="BT0-kM-woq">
-                        <rect key="frame" x="20" y="44" width="31" height="22"/>
+                        <rect key="frame" x="20" y="45" width="31" height="22"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSAddTemplate" imagePosition="overlaps" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Tj5-Ah-rws">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -35,7 +41,7 @@
                         </connections>
                     </button>
                     <button id="nkR-zr-I0g">
-                        <rect key="frame" x="50" y="44" width="31" height="22"/>
+                        <rect key="frame" x="50" y="45" width="31" height="22"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSRemoveTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="pxZ-2y-PG5">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -46,7 +52,7 @@
                         </connections>
                     </button>
                     <scrollView autohidesScrollers="YES" horizontalLineScroll="26" horizontalPageScroll="10" verticalLineScroll="26" verticalPageScroll="10" usesPredominantAxisScrolling="NO" id="fgO-WB-Wlg">
-                        <rect key="frame" x="20" y="74" width="524" height="219"/>
+                        <rect key="frame" x="20" y="75" width="524" height="219"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <clipView key="contentView" id="85Q-sq-jj3">
                             <rect key="frame" x="1" y="17" width="522" height="201"/>
@@ -116,7 +122,7 @@
                         </tableHeaderView>
                     </scrollView>
                     <button id="4Ln-CR-ton">
-                        <rect key="frame" x="18" y="299" width="444" height="18"/>
+                        <rect key="frame" x="18" y="331" width="444" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="check" title="Recursively scan directories when added" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="PTv-21-ckW">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -127,7 +133,7 @@
                         </connections>
                     </button>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="ocC-O6-zr5">
-                        <rect key="frame" x="18" y="19" width="196" height="17"/>
+                        <rect key="frame" x="18" y="20" width="196" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Note: Display Name is editable" id="OuX-nZ-Ow3">
                             <font key="font" metaFont="system" size="10"/>
@@ -136,7 +142,7 @@
                         </textFieldCell>
                     </textField>
                     <button verticalHuggingPriority="750" id="oLm-Ad-pZc">
-                        <rect key="frame" x="481" y="12" width="69" height="32"/>
+                        <rect key="frame" x="481" y="13" width="69" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="push" title="Save" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="m9W-z8-OPc">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -147,7 +153,7 @@
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" id="ceu-tl-LPa">
-                        <rect key="frame" x="399" y="12" width="82" height="32"/>
+                        <rect key="frame" x="399" y="13" width="82" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ffp-vX-rwb">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -160,12 +166,32 @@ Gw
                             <action selector="cancelButtonClicked:" target="-2" id="KlF-5W-fOb"/>
                         </connections>
                     </button>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="PHk-MX-0b0">
+                        <rect key="frame" x="20" y="302" width="524" height="20"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="left" drawsBackground="YES" usesSingleLineMode="YES" id="u8J-xL-PHd">
+                            <font key="font" size="14" name="CourierNewPSMT"/>
+                            <color key="textColor" red="0.24771750300000001" green="1" blue="0.28522159499999999" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        </textFieldCell>
+                    </textField>
+                    <button hidden="YES" verticalHuggingPriority="750" id="51k-mX-Ohz">
+                        <rect key="frame" x="281" y="13" width="118" height="32"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                        <buttonCell key="cell" type="push" title="Cancel Scan" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="CYH-S4-Whx">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="cancelScanButtonClicked:" target="-2" id="G93-XO-hws"/>
+                        </connections>
+                    </button>
                 </subviews>
             </view>
             <connections>
                 <outlet property="delegate" destination="-2" id="0bl-1N-AYu"/>
             </connections>
-            <point key="canvasLocation" x="338" y="301"/>
+            <point key="canvasLocation" x="338" y="317"/>
         </window>
     </objects>
     <resources>

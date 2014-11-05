@@ -24,6 +24,7 @@
     NSMenuItem *_chooseProviderMenuItem;
     
     NSMenuItem *_machineSeparator;
+    NSMenuItem *_actionSeparator;
     
     NSMutableArray *_machineMenuItems;
 }
@@ -106,7 +107,10 @@
             [self.menuItem.submenu addItem:_instanceProvisionMenuItem];
         }
         
-        [self.menuItem.submenu addItem:[NSMenuItem separatorItem]];
+        if (!_actionSeparator) {
+            _actionSeparator = [NSMenuItem separatorItem];
+           [self.menuItem.submenu addItem:[NSMenuItem separatorItem]];
+        }
         
         if (!_openInFinderMenuItem) {
             _openInFinderMenuItem = [[NSMenuItem alloc] initWithTitle:@"Open in Finder" action:@selector(finderMenuItemClicked:) keyEquivalent:@""];
@@ -236,42 +240,49 @@
                 machineUpMenuItem.target = self;
                 machineUpMenuItem.representedObject = machine;
                 machineUpMenuItem.image = [NSImage imageNamed:@"up"];
+                [machineUpMenuItem.image setTemplate:YES];
                 [machineSubmenu addItem:machineUpMenuItem];
                 
                 NSMenuItem *machineSSHMenuItem = [[NSMenuItem alloc] initWithTitle:@"SSH" action:@selector(sshMachine:) keyEquivalent:@""];
                 machineSSHMenuItem.target = self;
                 machineSSHMenuItem.representedObject = machine;
                 machineSSHMenuItem.image = [NSImage imageNamed:@"ssh"];
+                [machineUpMenuItem.image setTemplate:YES];
                 [machineSubmenu addItem:machineSSHMenuItem];
 
                 NSMenuItem *machineReloadMenuItem = [[NSMenuItem alloc] initWithTitle:@"Reload" action:@selector(reloadMachine:) keyEquivalent:@""];
                 machineReloadMenuItem.target = self;
                 machineReloadMenuItem.representedObject = machine;
                 machineReloadMenuItem.image = [NSImage imageNamed:@"reload"];
+                [machineUpMenuItem.image setTemplate:YES];
                 [machineSubmenu addItem:machineReloadMenuItem];
 
                 NSMenuItem *machineSuspendMenuItem = [[NSMenuItem alloc] initWithTitle:@"Suspend" action:@selector(suspendMachine:) keyEquivalent:@""];
                 machineSuspendMenuItem.target = self;
                 machineSuspendMenuItem.representedObject = machine;
                 machineSuspendMenuItem.image = [NSImage imageNamed:@"suspend"];
+                [machineUpMenuItem.image setTemplate:YES];
                 [machineSubmenu addItem:machineSuspendMenuItem];
 
                 NSMenuItem *machineHaltMenuItem = [[NSMenuItem alloc] initWithTitle:@"Halt" action:@selector(haltMachine:) keyEquivalent:@""];
                 machineHaltMenuItem.target = self;
                 machineHaltMenuItem.representedObject = machine;
                 machineHaltMenuItem.image = [NSImage imageNamed:@"halt"];
+                [machineUpMenuItem.image setTemplate:YES];
                 [machineSubmenu addItem:machineHaltMenuItem];
                 
                 NSMenuItem *machineDestroyMenuItem = [[NSMenuItem alloc] initWithTitle:@"Destroy" action:@selector(destroyMachine:) keyEquivalent:@""];
                 machineDestroyMenuItem.target = self;
                 machineDestroyMenuItem.representedObject = machine;
                 machineDestroyMenuItem.image = [NSImage imageNamed:@"destroy"];
+                [machineUpMenuItem.image setTemplate:YES];
                 [machineSubmenu addItem:machineDestroyMenuItem];
                 
                 NSMenuItem *machineProvisionMenuItem = [[NSMenuItem alloc] initWithTitle:@"Provision" action:@selector(provisionMachine:) keyEquivalent:@""];
                 machineProvisionMenuItem.target = self;
                 machineProvisionMenuItem.representedObject = machine;
                 machineProvisionMenuItem.image = [NSImage imageNamed:@"provision"];
+                [machineUpMenuItem.image setTemplate:YES];
                 [machineSubmenu addItem:machineProvisionMenuItem];
                 
                 machineItem.submenu = machineSubmenu;

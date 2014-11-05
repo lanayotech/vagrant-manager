@@ -65,31 +65,37 @@
     NSMenuItem *menuItem = [[NSMenuItem alloc] initWithTitle:@"Up" action:@selector(allUpMenuItemClicked:) keyEquivalent:@""];
     menuItem.target = self;
     menuItem.image = [NSImage imageNamed:@"up"];
+    [menuItem.image setTemplate:YES];
     [allMachinesMenu addItem:menuItem];
     
     menuItem = [[NSMenuItem alloc] initWithTitle:@"Reload" action:@selector(allReloadMenuItemClicked:) keyEquivalent:@""];
     menuItem.target = self;
     menuItem.image = [NSImage imageNamed:@"reload"];
+    [menuItem.image setTemplate:YES];
     [allMachinesMenu addItem:menuItem];
     
     menuItem = [[NSMenuItem alloc] initWithTitle:@"Suspend" action:@selector(allSuspendMenuItemClicked:) keyEquivalent:@""];
     menuItem.target = self;
     menuItem.image = [NSImage imageNamed:@"suspend"];
+    [menuItem.image setTemplate:YES];
     [allMachinesMenu addItem:menuItem];
     
     menuItem = [[NSMenuItem alloc] initWithTitle:@"Halt" action:@selector(allHaltMenuItemClicked:) keyEquivalent:@""];
     menuItem.target = self;
     menuItem.image = [NSImage imageNamed:@"halt"];
+    [menuItem.image setTemplate:YES];
     [allMachinesMenu addItem:menuItem];
     
     menuItem = [[NSMenuItem alloc] initWithTitle:@"Provision" action:@selector(allProvisionMenuItemClicked:) keyEquivalent:@""];
     menuItem.target = self;
     menuItem.image = [NSImage imageNamed:@"provision"];
+    [menuItem.image setTemplate:YES];
     [allMachinesMenu addItem:menuItem];
     
     menuItem = [[NSMenuItem alloc] initWithTitle:@"Destroy" action:@selector(allDestroyMenuItemClicked:) keyEquivalent:@""];
     menuItem.target = self;
     menuItem.image = [NSImage imageNamed:@"destroy"];
+    [menuItem.image setTemplate:YES];
     [allMachinesMenu addItem:menuItem];
     
     NSMenuItem *allMachinesMenuItem = [[NSMenuItem alloc] initWithTitle:@"All Machines" action:nil keyEquivalent:@""];
