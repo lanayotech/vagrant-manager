@@ -230,16 +230,10 @@
     
     if(!error && machinePaths) {
         for(NSString *machinePath in machinePaths) {
-            if([fileManager fileExistsAtPath:[NSString stringWithFormat:@"%@/.vagrant/machines/%@/virtualbox", path, machinePath]]) {
-                return @"virtualbox";
-            } else if([fileManager fileExistsAtPath:[NSString stringWithFormat:@"%@/.vagrant/machines/%@/parallels", path, machinePath]]) {
-                return @"parallels";
-            } else if([fileManager fileExistsAtPath:[NSString stringWithFormat:@"%@/.vagrant/machines/%@/vmware_workstation", path, machinePath]]) {
-                return @"vmware_workstation";
-            } else if([fileManager fileExistsAtPath:[NSString stringWithFormat:@"%@/.vagrant/machines/%@/vmware_fusion", path, machinePath]]) {
-                return @"vmware_fusion";
-            } else if([fileManager fileExistsAtPath:[NSString stringWithFormat:@"%@/.vagrant/machines/%@/docker", path, machinePath]]) {
-                return @"docker";
+            for(NSString *providerIdentifier in [self getProviderIdentifiers]) {
+                if([fileManager fileExistsAtPath:[NSString stringWithFormat:@"%@/.vagrant/machines/%@/%@", path, machinePath, providerIdentifier]]) {
+                    return providerIdentifier;
+                }
             }
         }
     }
