@@ -11,6 +11,7 @@
 		8308E133188662BD001E0B45 /* AboutWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8308E131188662BD001E0B45 /* AboutWindow.xib */; };
 		8308E135188668A1001E0B45 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8308E134188668A1001E0B45 /* WebKit.framework */; };
 		8308E14018869FAC001E0B45 /* Bookmark.m in Sources */ = {isa = PBXBuildFile; fileRef = 8308E13F18869FAC001E0B45 /* Bookmark.m */; };
+		830BAC351A0F278D00AE5F9C /* VagrantGlobalStatusScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 830BAC341A0F278D00AE5F9C /* VagrantGlobalStatusScanner.m */; };
 		83103A571982180C00B340BB /* ParallelsServiceProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 83103A561982180C00B340BB /* ParallelsServiceProvider.m */; };
 		83103A5A19821A9E00B340BB /* ParallelsMachineInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 83103A5919821A9E00B340BB /* ParallelsMachineInfo.m */; };
 		8339DCA1187E756B0036E162 /* TaskOutputWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 8339DC9F187E756B0036E162 /* TaskOutputWindow.m */; };
@@ -142,6 +143,8 @@
 		8308E134188668A1001E0B45 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		8308E13E18869FAC001E0B45 /* Bookmark.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bookmark.h; sourceTree = "<group>"; };
 		8308E13F18869FAC001E0B45 /* Bookmark.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Bookmark.m; sourceTree = "<group>"; };
+		830BAC331A0F278D00AE5F9C /* VagrantGlobalStatusScanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VagrantGlobalStatusScanner.h; sourceTree = "<group>"; };
+		830BAC341A0F278D00AE5F9C /* VagrantGlobalStatusScanner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VagrantGlobalStatusScanner.m; sourceTree = "<group>"; };
 		83103A551982180C00B340BB /* ParallelsServiceProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParallelsServiceProvider.h; sourceTree = "<group>"; };
 		83103A561982180C00B340BB /* ParallelsServiceProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ParallelsServiceProvider.m; sourceTree = "<group>"; };
 		83103A5819821A9E00B340BB /* ParallelsMachineInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParallelsMachineInfo.h; sourceTree = "<group>"; };
@@ -401,6 +404,8 @@
 				83E7CAB31928C2E9001C86F6 /* VirtualMachineInfo.m */,
 				83FD354319826DDC002EEA2D /* NFSScanner.h */,
 				83FD354419826DDC002EEA2D /* NFSScanner.m */,
+				830BAC331A0F278D00AE5F9C /* VagrantGlobalStatusScanner.h */,
+				830BAC341A0F278D00AE5F9C /* VagrantGlobalStatusScanner.m */,
 			);
 			name = "Vagrant Manager";
 			sourceTree = "<group>";
@@ -732,6 +737,7 @@
 				8308E132188662BD001E0B45 /* AboutWindow.m in Sources */,
 				B1761B3D1A00C0140056582F /* NativeMenuItem.m in Sources */,
 				B12661181A00A650009B1635 /* NativeMenu.m in Sources */,
+				830BAC351A0F278D00AE5F9C /* VagrantGlobalStatusScanner.m in Sources */,
 				B13DC35B19232782002E5A50 /* VirtualBoxServiceProvider.m in Sources */,
 				B13DC36019233051002E5A50 /* VirtualBoxMachineInfo.m in Sources */,
 				8339DCA1187E756B0036E162 /* TaskOutputWindow.m in Sources */,

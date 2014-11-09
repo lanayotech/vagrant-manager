@@ -7,6 +7,7 @@
 
 #import "VagrantManager.h"
 #import "NFSScanner.h"
+#import "VagrantGlobalStatusScanner.h"
 #import "BookmarkManager.h"
 
 @implementation VagrantManager {
@@ -105,9 +106,30 @@
         [instances addObject:[[VagrantInstance alloc] initWithPath:bookmark.path displayName:bookmark.displayName providerIdentifier:bookmark.providerIdentifier]];
     }
     
+    NSMutableArray *allPaths = [[NSMutableArray alloc] init];
+    
+    //scan for NFS exports
+    NFSScanner *nfsScanner = [[NFSScanner alloc] init];
+    for(NSString *path in [nfsScanner getNFSInstancePaths]) {
+        //make sure it is not a bookmark and has not already been detected
+        if(![bookmarkManager getBookmarkWithPath:path] && ![allPaths containsObject:path]) {
+            [allPaths addObject:path];
+            [instances addObject:[[VagrantInstance alloc] initWithPath:path providerIdentifier:nil]];
+        }
+    }
+    
+    //scan vagrant global-status output
+    VagrantGlobalStatusScanner *globalStatusScanner = [[VagrantGlobalStatusScanner alloc] init];
+    for(NSString *path in [globalStatusScanner getInstancePaths]) {
+        //make sure it is not a bookmark and has not already been detected
+        if(![bookmarkManager getBookmarkWithPath:path] && ![allPaths containsObject:path]) {
+            [allPaths addObject:path];
+            [instances addObject:[[VagrantInstance alloc] initWithPath:path providerIdentifier:nil]];
+        }
+    }
+    
     //create instance for each detected path
     NSDictionary *detectedPaths = [self detectInstancePaths];
-    NSMutableArray *allPaths = [[NSMutableArray alloc] init];
     for(NSString *providerIdentifier in [detectedPaths allKeys]) {
         NSArray *paths = [detectedPaths objectForKey:providerIdentifier];
         for(NSString *path in paths) {
@@ -118,18 +140,7 @@
             }
         }
     }
-    
-    //scan for NFS exports
-    NFSScanner *nfsScanner = [[NFSScanner alloc] init];
-    NSArray *paths = [nfsScanner getNFSInstancePaths];
-    for(NSString *path in paths) {
-        //make sure it is not a bookmark and has not already been detected
-        if(![bookmarkManager getBookmarkWithPath:path] && ![allPaths containsObject:path]) {
-            [allPaths addObject:path];
-            [instances addObject:[[VagrantInstance alloc] initWithPath:path providerIdentifier:nil]];
-        }
-    }
-    
+
     //TODO: implement "last seen" functionality. Store paths of previously seen Vagrantfiles and check if they still exist
     
     NSMutableArray *validPaths = [[NSMutableArray alloc] init];
@@ -219,16 +230,10 @@
     
     if(!error && machinePaths) {
         for(NSString *machinePath in machinePaths) {
-            if([fileManager fileExistsAtPath:[NSString stringWithFormat:@"%@/.vagrant/machines/%@/virtualbox", path, machinePath]]) {
-                return @"virtualbox";
-            } else if([fileManager fileExistsAtPath:[NSString stringWithFormat:@"%@/.vagrant/machines/%@/parallels", path, machinePath]]) {
-                return @"parallels";
-            } else if([fileManager fileExistsAtPath:[NSString stringWithFormat:@"%@/.vagrant/machines/%@/vmware_workstation", path, machinePath]]) {
-                return @"vmware_workstation";
-            } else if([fileManager fileExistsAtPath:[NSString stringWithFormat:@"%@/.vagrant/machines/%@/vmware_fusion", path, machinePath]]) {
-                return @"vmware_fusion";
-            } else if([fileManager fileExistsAtPath:[NSString stringWithFormat:@"%@/.vagrant/machines/%@/docker", path, machinePath]]) {
-                return @"docker";
+            for(NSString *providerIdentifier in [self getProviderIdentifiers]) {
+                if([fileManager fileExistsAtPath:[NSString stringWithFormat:@"%@/.vagrant/machines/%@/%@", path, machinePath, providerIdentifier]]) {
+                    return providerIdentifier;
+                }
             }
         }
     }

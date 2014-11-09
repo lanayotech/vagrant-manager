@@ -202,7 +202,12 @@
         if(bookmark) {
             self.menuItem.title = [NSString stringWithFormat:@"[B] %@", bookmark.displayName];
         } else {
-            NSString *title = self.instance.displayName;
+            NSString *title;
+            if([[NSUserDefaults standardUserDefaults] boolForKey:@"usePathAsInstanceDisplayName"]) {
+                title = self.instance.path;
+            } else {
+                title = self.instance.displayName;                
+            }
             
             if(self.instance.machines.count > 0 && [[NSUserDefaults standardUserDefaults] boolForKey:@"includeMachineNamesInMenu"]) {
                 NSMutableArray *machineNames = [[NSMutableArray alloc] init];
@@ -247,42 +252,42 @@
                 machineSSHMenuItem.target = self;
                 machineSSHMenuItem.representedObject = machine;
                 machineSSHMenuItem.image = [NSImage imageNamed:@"ssh"];
-                [machineUpMenuItem.image setTemplate:YES];
+                [machineSSHMenuItem.image setTemplate:YES];
                 [machineSubmenu addItem:machineSSHMenuItem];
 
                 NSMenuItem *machineReloadMenuItem = [[NSMenuItem alloc] initWithTitle:@"Reload" action:@selector(reloadMachine:) keyEquivalent:@""];
                 machineReloadMenuItem.target = self;
                 machineReloadMenuItem.representedObject = machine;
                 machineReloadMenuItem.image = [NSImage imageNamed:@"reload"];
-                [machineUpMenuItem.image setTemplate:YES];
+                [machineReloadMenuItem.image setTemplate:YES];
                 [machineSubmenu addItem:machineReloadMenuItem];
 
                 NSMenuItem *machineSuspendMenuItem = [[NSMenuItem alloc] initWithTitle:@"Suspend" action:@selector(suspendMachine:) keyEquivalent:@""];
                 machineSuspendMenuItem.target = self;
                 machineSuspendMenuItem.representedObject = machine;
                 machineSuspendMenuItem.image = [NSImage imageNamed:@"suspend"];
-                [machineUpMenuItem.image setTemplate:YES];
+                [machineSuspendMenuItem.image setTemplate:YES];
                 [machineSubmenu addItem:machineSuspendMenuItem];
 
                 NSMenuItem *machineHaltMenuItem = [[NSMenuItem alloc] initWithTitle:@"Halt" action:@selector(haltMachine:) keyEquivalent:@""];
                 machineHaltMenuItem.target = self;
                 machineHaltMenuItem.representedObject = machine;
                 machineHaltMenuItem.image = [NSImage imageNamed:@"halt"];
-                [machineUpMenuItem.image setTemplate:YES];
+                [machineHaltMenuItem.image setTemplate:YES];
                 [machineSubmenu addItem:machineHaltMenuItem];
                 
                 NSMenuItem *machineDestroyMenuItem = [[NSMenuItem alloc] initWithTitle:@"Destroy" action:@selector(destroyMachine:) keyEquivalent:@""];
                 machineDestroyMenuItem.target = self;
                 machineDestroyMenuItem.representedObject = machine;
                 machineDestroyMenuItem.image = [NSImage imageNamed:@"destroy"];
-                [machineUpMenuItem.image setTemplate:YES];
+                [machineDestroyMenuItem.image setTemplate:YES];
                 [machineSubmenu addItem:machineDestroyMenuItem];
                 
                 NSMenuItem *machineProvisionMenuItem = [[NSMenuItem alloc] initWithTitle:@"Provision" action:@selector(provisionMachine:) keyEquivalent:@""];
                 machineProvisionMenuItem.target = self;
                 machineProvisionMenuItem.representedObject = machine;
                 machineProvisionMenuItem.image = [NSImage imageNamed:@"provision"];
-                [machineUpMenuItem.image setTemplate:YES];
+                [machineProvisionMenuItem.image setTemplate:YES];
                 [machineSubmenu addItem:machineProvisionMenuItem];
                 
                 machineItem.submenu = machineSubmenu;
