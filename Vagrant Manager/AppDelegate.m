@@ -35,6 +35,9 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showUpdateNotificationPreferenceChanged:) name:@"vagrant-manager.show-update-notification-preference-changed" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(bookmarksUpdated:) name:@"vagrant-manager.bookmarks-updated" object:nil];
     
+    //register for wake from sleep notification
+    [[[NSWorkspace sharedWorkspace] notificationCenter] addObserver:self selector:@selector(receivedWakeNotification:) name:NSWorkspaceDidWakeNotification object:NULL];
+    
     //create popup and status menu item
     _nativeMenu = [[NativeMenu alloc] init];
     _nativeMenu.delegate = self;
@@ -60,6 +63,10 @@
 }
 
 #pragma mark - Notification handlers
+
+- (void)receivedWakeNotification:(NSNotification*)notification {
+    [self refreshVagrantMachines];
+}
 
 - (void)taskCompleted:(NSNotification*)notification {
     [self refreshVagrantMachines];
