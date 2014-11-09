@@ -31,6 +31,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(taskCompleted:) name:@"vagrant-manager.task-completed" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(themeChanged:) name:@"vagrant-manager.theme-changed" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showRunningVmCountPreferenceChanged:) name:@"vagrant-manager.show-running-vm-count-preference-changed" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(usePathAsInstanceDisplayNamePreferenceChanged:) name:@"vagrant-manager.use-path-as-instance-display-name-preference-changed" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(includeMachineNamesInMenuPreferenceChanged:) name:@"vagrant-manager.include-machine-names-in-menu-preference-changed" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showUpdateNotificationPreferenceChanged:) name:@"vagrant-manager.show-update-notification-preference-changed" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(bookmarksUpdated:) name:@"vagrant-manager.bookmarks-updated" object:nil];
@@ -82,6 +83,10 @@
 
 - (void)showRunningVmCountPreferenceChanged:(NSNotification*)notification {
     [self updateRunningVmCount];
+}
+
+- (void)usePathAsInstanceDisplayNamePreferenceChanged:(NSNotification*)notification {
+    [_nativeMenu rebuildMenu];
 }
 
 - (void)includeMachineNamesInMenuPreferenceChanged:(NSNotification*)notification {

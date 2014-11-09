@@ -25,6 +25,7 @@
     NSString *terminalPreference = [[NSUserDefaults standardUserDefaults] stringForKey:@"terminalPreference"];
     BOOL autoCloseTaskWindows = [[NSUserDefaults standardUserDefaults] boolForKey:@"autoCloseTaskWindows"];
     BOOL dontShowUpdateNotification = [[NSUserDefaults standardUserDefaults] boolForKey:@"dontShowUpdateNotification"];
+    BOOL usePathAsInstanceDisplayName = [[NSUserDefaults standardUserDefaults] boolForKey:@"usePathAsInstanceDisplayName"];
     BOOL includeMachineNames = [[NSUserDefaults standardUserDefaults] boolForKey:@"includeMachineNamesInMenu"];
     BOOL dontShowRunningVmCount = [[NSUserDefaults standardUserDefaults] boolForKey:@"dontShowRunningVmCount"];
     BOOL refreshEvery = [[NSUserDefaults standardUserDefaults] boolForKey:@"refreshEvery"];
@@ -58,6 +59,7 @@
 
     [self.autoCloseCheckBox setState:autoCloseTaskWindows ? NSOnState : NSOffState];
     [self.dontShowUpdateCheckBox setState:dontShowUpdateNotification ? NSOnState : NSOffState];
+    [self.usePathAsInstanceDisplayNameCheckBox setState:usePathAsInstanceDisplayName ? NSOnState : NSOffState];
     [self.includeMachineNamesCheckBox setState:includeMachineNames ? NSOnState : NSOffState];
     [self.dontShowRunningVmCountCheckBox setState:dontShowRunningVmCount ? NSOnState : NSOffState];
     [self.refreshEveryCheckBox setState:refreshEvery ? NSOnState : NSOffState];
@@ -77,6 +79,13 @@
     [[NSUserDefaults standardUserDefaults] synchronize];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:@"vagrant-manager.show-update-notification-preference-changed" object:nil];
+}
+
+- (IBAction)usePathAsInstanceDisplayNameCheckBoxClicked:(id)sender {
+    [[NSUserDefaults standardUserDefaults] setBool:(self.usePathAsInstanceDisplayNameCheckBox.state == NSOnState) forKey:@"usePathAsInstanceDisplayName"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"vagrant-manager.use-path-as-instance-display-name-preference-changed" object:nil];
 }
 
 - (IBAction)includeMachineNamesCheckBoxClicked:(id)sender {
