@@ -12,6 +12,8 @@
 
 - (void)performVagrantAction:(NSString*)action withInstance:(VagrantInstance*)instance;
 - (void)performVagrantAction:(NSString*)action withMachine:(VagrantMachine*)machine;
+- (void)performCustomCommand:(NSString*)action withInstance:(VagrantInstance*)instance;
+- (void)performCustomCommand:(NSString*)action withMachine:(VagrantMachine*)machine;
 - (void)openInstanceInFinder:(VagrantInstance*)instance;
 - (void)openInstanceInTerminal:(VagrantInstance*)instance;
 - (void)addBookmarkWithInstance:(VagrantInstance*)instance;
