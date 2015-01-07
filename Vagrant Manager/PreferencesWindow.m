@@ -29,6 +29,7 @@
     BOOL includeMachineNames = [[NSUserDefaults standardUserDefaults] boolForKey:@"includeMachineNamesInMenu"];
     BOOL dontShowRunningVmCount = [[NSUserDefaults standardUserDefaults] boolForKey:@"dontShowRunningVmCount"];
     BOOL refreshEvery = [[NSUserDefaults standardUserDefaults] boolForKey:@"refreshEvery"];
+    BOOL dontAnimateStatusIcon = [[NSUserDefaults standardUserDefaults] boolForKey:@"dontAnimateStatusIcon"];
     NSInteger refreshEveryInterval = [[NSUserDefaults standardUserDefaults] integerForKey:@"refreshEveryInterval"];
     NSString *statusBarIconTheme = [[NSUserDefaults standardUserDefaults] stringForKey:@"statusBarIconTheme"];
     NSString *updateStability = [Util getUpdateStability];
@@ -62,6 +63,7 @@
     [self.usePathAsInstanceDisplayNameCheckBox setState:usePathAsInstanceDisplayName ? NSOnState : NSOffState];
     [self.includeMachineNamesCheckBox setState:includeMachineNames ? NSOnState : NSOffState];
     [self.dontShowRunningVmCountCheckBox setState:dontShowRunningVmCount ? NSOnState : NSOffState];
+    [self.dontAnimateStatusIconCheckBox setState:dontAnimateStatusIcon ? NSOnState : NSOffState];
     [self.refreshEveryCheckBox setState:refreshEvery ? NSOnState : NSOffState];
     [self.intervalMenu selectItemWithTag:refreshEveryInterval];
     
@@ -159,6 +161,11 @@
 
 - (IBAction)launchAtLoginCheckBoxClicked:(id)sender {
     [self setLaunchOnLogin:(self.launchAtLoginCheckBox.state == NSOnState)];
+}
+
+- (IBAction)dontAnimateStatusIconCheckBoxClicked:(id)sender {
+    [[NSUserDefaults standardUserDefaults] setBool:(self.dontAnimateStatusIconCheckBox.state == NSOnState) forKey:@"dontAnimateStatusIcon"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 - (IBAction)refreshEveryCheckBoxClicked:(id)sender {

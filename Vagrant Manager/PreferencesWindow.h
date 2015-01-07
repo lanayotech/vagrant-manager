@@ -23,6 +23,7 @@
 @property (weak) IBOutlet NSButton *launchAtLoginCheckBox;
 @property (weak) IBOutlet NSButton *refreshEveryCheckBox;
 @property (weak) IBOutlet NSPopUpButton *intervalMenu;
+@property (weak) IBOutlet NSButton *dontAnimateStatusIconCheckBox;
 
 - (IBAction)autoCloseCheckBoxClicked:(id)sender;
 - (IBAction)dontShowUpdateCheckBoxClicked:(id)sender;
@@ -36,5 +37,6 @@
 - (IBAction)launchAtLoginCheckBoxClicked:(id)sender;
 - (IBAction)refreshEveryCheckBoxClicked:(id)sender;
 - (IBAction)intervalMenuChanged:(id)sender;
+- (IBAction)dontAnimateStatusIconCheckBoxClicked:(id)sender;
 
 @end

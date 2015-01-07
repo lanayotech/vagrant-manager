@@ -243,7 +243,7 @@
     [_refreshMenuItem setEnabled:!isRefreshing];
     _refreshMenuItem.title = isRefreshing ? @"Refreshing..." : @"Refresh";
     
-    if(isRefreshing) {
+    if(isRefreshing && ![[NSUserDefaults standardUserDefaults] boolForKey:@"dontAnimateStatusIcon"]) {
         _refreshIconFrame = 1;
         _refreshTimer = [NSTimer scheduledTimerWithTimeInterval:0.2f target:self selector:@selector(updateRefreshIcon:) userInfo:nil repeats:YES];
         [[NSRunLoop currentRunLoop] addTimer:_refreshTimer forMode:NSEventTrackingRunLoopMode];
