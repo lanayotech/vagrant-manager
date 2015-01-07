@@ -276,7 +276,7 @@
     
     NSString *taskCommand = [NSString stringWithFormat:@"cd %@; %@", [Util escapeShellArg:instance.path], command];
     
-    [task setArguments:@[@"-c", taskCommand]];
+    [task setArguments:@[@"-c", @"-l", taskCommand]];
     
     TaskOutputWindow *outputWindow = [[TaskOutputWindow alloc] initWithWindowNibName:@"TaskOutputWindow"];
     outputWindow.task = task;
