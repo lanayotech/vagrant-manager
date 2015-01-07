@@ -161,7 +161,7 @@
 
 - (void)performVagrantAction:(NSString *)action withInstance:(VagrantInstance *)instance {
     if([action isEqualToString:@"ssh"]) {
-        NSString *action = [NSString stringWithFormat:@"cd %@; vagrant ssh", [Util escapeShellArg:instance.path]];
+        NSString *action = [NSString stringWithFormat:@"\\cd %@; vagrant ssh", [Util escapeShellArg:instance.path]];
         [self runTerminalCommand:action];
     } else {
         [self runVagrantAction:action withInstance:instance];
@@ -170,7 +170,7 @@
 
 - (void)performVagrantAction:(NSString *)action withMachine:(VagrantMachine *)machine {
     if([action isEqualToString:@"ssh"]) {
-        NSString *action = [NSString stringWithFormat:@"cd %@; vagrant ssh %@", [Util escapeShellArg:machine.instance.path], machine.name];
+        NSString *action = [NSString stringWithFormat:@"\\cd %@; vagrant ssh %@", [Util escapeShellArg:machine.instance.path], machine.name];
         [self runTerminalCommand:action];
     } else {
         [self runVagrantAction:action withMachine:machine];
@@ -194,7 +194,7 @@
     
     BOOL isDir = NO;
     if([[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isDir] && isDir) {
-        [self runTerminalCommand:[NSString stringWithFormat:@"cd %@", [Util escapeShellArg:path]]];
+        [self runTerminalCommand:[NSString stringWithFormat:@"\\cd %@", [Util escapeShellArg:path]]];
     } else {
         [[NSAlert alertWithMessageText:[NSString stringWithFormat:@"Path not found: %@", path] defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@""] runModal];
     }
@@ -236,7 +236,7 @@
     NSTask *task = [[NSTask alloc] init];
     [task setLaunchPath:@"/bin/bash"];
     
-    NSString *taskCommand = [NSString stringWithFormat:@"cd %@; %@ %@", [Util escapeShellArg:machine.instance.path], command, [Util escapeShellArg:machine.name]];
+    NSString *taskCommand = [NSString stringWithFormat:@"\\cd %@; %@ %@", [Util escapeShellArg:machine.instance.path], command, [Util escapeShellArg:machine.name]];
     
     [task setArguments:@[@"-c", taskCommand]];
     
@@ -274,7 +274,7 @@
     NSTask *task = [[NSTask alloc] init];
     [task setLaunchPath:@"/bin/bash"];
     
-    NSString *taskCommand = [NSString stringWithFormat:@"cd %@; %@", [Util escapeShellArg:instance.path], command];
+    NSString *taskCommand = [NSString stringWithFormat:@"\\cd %@; %@", [Util escapeShellArg:instance.path], command];
     
     [task setArguments:@[@"-c", @"-l", taskCommand]];
     
@@ -292,6 +292,8 @@
 
 - (void)runTerminalCommand:(NSString*)command {
     NSString *terminalName = [[NSUserDefaults standardUserDefaults] valueForKey:@"terminalPreference"];
+    
+    command = [command stringByReplacingOccurrencesOfString:@"\\" withString:@"\\\\"];
     
     NSString *s;
     if ([terminalName isEqualToString:@"iTerm"]) {
