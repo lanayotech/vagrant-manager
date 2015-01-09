@@ -7,9 +7,9 @@
 
 #import <Cocoa/Cocoa.h>
 #import <WebKit/WebKit.h>
+#import "BaseWindowController.h"
 
-@interface AboutWindow : NSWindowController <WebPolicyDecisionListener>
-
+@interface AboutWindow : BaseWindowController <WebPolicyDecisionListener>
 
 @property (weak) IBOutlet WebView *webView;
 

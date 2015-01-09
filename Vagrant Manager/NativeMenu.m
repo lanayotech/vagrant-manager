@@ -382,21 +382,36 @@
 }
 
 - (void)manageBookmarksMenuItemClicked:(id)sender {
-    manageBookmarksWindow = [[ManageBookmarksWindow alloc] initWithWindowNibName:@"ManageBookmarksWindow"];
-    [NSApp activateIgnoringOtherApps:YES];
-    [manageBookmarksWindow showWindow:self];
+    if(manageBookmarksWindow && !manageBookmarksWindow.isClosed) {
+        [NSApp activateIgnoringOtherApps:YES];
+        [manageBookmarksWindow showWindow:self];
+    } else {
+        manageBookmarksWindow = [[ManageBookmarksWindow alloc] initWithWindowNibName:@"ManageBookmarksWindow"];
+        [NSApp activateIgnoringOtherApps:YES];
+        [manageBookmarksWindow showWindow:self];
+    }
 }
 
 - (void)manageCustomCommandsMenuItemClicked:(id)sender {
-    manageCustomCommandsWindow = [[ManageCustomCommandsWindow alloc] initWithWindowNibName:@"ManageCustomCommandsWindow"];
-    [NSApp activateIgnoringOtherApps:YES];
-    [manageCustomCommandsWindow showWindow:self];
+    if(manageCustomCommandsWindow && !manageCustomCommandsWindow.isClosed) {
+        [NSApp activateIgnoringOtherApps:YES];
+        [manageCustomCommandsWindow showWindow:self];
+    } else {
+        manageCustomCommandsWindow = [[ManageCustomCommandsWindow alloc] initWithWindowNibName:@"ManageCustomCommandsWindow"];
+        [NSApp activateIgnoringOtherApps:YES];
+        [manageCustomCommandsWindow showWindow:self];
+    }
 }
 
 - (void)preferencesMenuItemClicked:(id)sender {
-    preferencesWindow = [[PreferencesWindow alloc] initWithWindowNibName:@"PreferencesWindow"];
-    [NSApp activateIgnoringOtherApps:YES];
-    [preferencesWindow showWindow:self];
+    if(preferencesWindow && !preferencesWindow.isClosed) {
+        [NSApp activateIgnoringOtherApps:YES];
+        [preferencesWindow showWindow:self];
+    } else {
+        preferencesWindow = [[PreferencesWindow alloc] initWithWindowNibName:@"PreferencesWindow"];
+        [NSApp activateIgnoringOtherApps:YES];
+        [preferencesWindow showWindow:self];
+    }
 }
 
 - (void)quitMenuItemClicked:(id)sender {
@@ -404,9 +419,14 @@
 }
 
 - (void)aboutMenuItemClicked:(id)sender {
-    aboutWindow = [[AboutWindow alloc] initWithWindowNibName:@"AboutWindow"];
-    [NSApp activateIgnoringOtherApps:YES];
-    [aboutWindow showWindow:self];
+    if(aboutWindow && !aboutWindow.isClosed) {
+        [NSApp activateIgnoringOtherApps:YES];
+        [aboutWindow showWindow:self];
+    } else {
+        aboutWindow = [[AboutWindow alloc] initWithWindowNibName:@"AboutWindow"];
+        [NSApp activateIgnoringOtherApps:YES];
+        [aboutWindow showWindow:self];
+    }
 }
 
 - (void)checkForUpdatesMenuItemClicked:(id)sender {

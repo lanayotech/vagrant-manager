@@ -94,7 +94,10 @@
     
     //smart scrolling logic for command output
     BOOL scroll = (NSMaxY(self.outputTextView.visibleRect) == NSMaxY(self.outputTextView.bounds));
-    [self.outputTextView.textStorage appendAttributedString:[[NSAttributedString alloc]initWithString:str]];
+    [self.outputTextView.textStorage appendAttributedString:[[NSAttributedString alloc] initWithString:str]];
+    if([NSFont fontWithName:@"Menlo" size:11]) {
+        [self.outputTextView.textStorage setFont:[NSFont fontWithName:@"Menlo" size:11]];
+    }
     if (scroll) {
         [self.outputTextView scrollRangeToVisible: NSMakeRange(self.outputTextView.string.length, 0)];
     }
