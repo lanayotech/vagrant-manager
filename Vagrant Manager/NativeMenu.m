@@ -492,12 +492,12 @@
     [self.delegate performVagrantAction:action withMachine:machine];
 }
 
-- (void)performCustomCommand:(NSString*)action withInstance:(VagrantInstance*)instance {
-    [self.delegate performCustomCommand:action withInstance:instance];
+- (void)performCustomCommand:(CustomCommand*)customCommand withInstance:(VagrantInstance*)instance {
+    [self.delegate performCustomCommand:customCommand withInstance:instance];
 }
 
-- (void)performCustomCommand:(NSString*)action withMachine:(VagrantMachine *)machine {
-    [self.delegate performCustomCommand:action withMachine:machine];
+- (void)performCustomCommand:(CustomCommand*)customCommand withMachine:(VagrantMachine *)machine {
+    [self.delegate performCustomCommand:customCommand withMachine:machine];
 }
 
 - (void)updateRunningVmCount:(NSNotification*)notification {

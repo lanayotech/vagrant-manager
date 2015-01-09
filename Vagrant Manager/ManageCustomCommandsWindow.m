@@ -23,6 +23,7 @@
     CustomCommand *customCommand = [[CustomCommand alloc] init];
     customCommand.displayName = @"New Command";
     
+    [_commands addObject:customCommand];
     [self saveCustomCommands];
     
     [self.commandsTableView reloadData];
