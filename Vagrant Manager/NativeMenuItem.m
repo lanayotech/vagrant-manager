@@ -114,8 +114,6 @@
         if(!_instanceCustomCommandMenuItem) {
             _instanceCustomCommandMenuItem = [[NSMenuItem alloc] initWithTitle:self.instance.machines.count > 1 ? @"Custom Command All" : @"Custom Command" action:nil keyEquivalent:@""];
             _instanceCustomCommandMenuItem.target = self;
-            //_instanceCustomCommandMenuItem.image = [NSImage imageNamed:@"provision"];
-            [_instanceCustomCommandMenuItem.image setTemplate:YES];
             
             [self.menuItem.submenu addItem:_instanceCustomCommandMenuItem];
             _instanceCustomCommandMenuItem.submenu = [[NSMenu alloc] init];
@@ -210,7 +208,12 @@
                 [_instanceSuspendMenuItem setHidden:NO];
                 [_instanceHaltMenuItem setHidden:NO];
                 [_instanceProvisionMenuItem setHidden:NO];
-                [_instanceCustomCommandMenuItem setHidden:NO];
+                
+                if(customCommands.count == 0) {
+                    [_instanceCustomCommandMenuItem setHidden:YES];
+                } else {
+                    [_instanceCustomCommandMenuItem setHidden:NO];
+                }
             }
             
             if (self.instance.machines.count > 1) {
