@@ -10,6 +10,7 @@
 #import "VersionComparison.h"
 #import "VagrantInstance.h"
 #import "BookmarkManager.h"
+#import "CustomCommandManager.h"
 
 @implementation AppDelegate {
     BOOL isRefreshingVagrantMachines;
@@ -35,6 +36,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(includeMachineNamesInMenuPreferenceChanged:) name:@"vagrant-manager.include-machine-names-in-menu-preference-changed" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showUpdateNotificationPreferenceChanged:) name:@"vagrant-manager.show-update-notification-preference-changed" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(bookmarksUpdated:) name:@"vagrant-manager.bookmarks-updated" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(customCommandsUpdated:) name:@"vagrant-manager.custom-commands-updated" object:nil];
     
     //register for wake from sleep notification
     [[[NSWorkspace sharedWorkspace] notificationCenter] addObserver:self selector:@selector(receivedWakeNotification:) name:NSWorkspaceDidWakeNotification object:NULL];
@@ -50,6 +52,7 @@
     [_manager registerServiceProvider:[[ParallelsServiceProvider alloc] init]];
     
     [[BookmarkManager sharedManager] loadBookmarks];
+    [[CustomCommandManager sharedManager] loadCustomCommands];
     
     //initialize updates
     [[SUUpdater sharedUpdater] setDelegate:self];
@@ -75,6 +78,10 @@
 
 - (void)bookmarksUpdated:(NSNotification*)notification {
     [self refreshVagrantMachines];
+}
+
+- (void)customCommandsUpdated:(NSNotification*)notification {
+    [_nativeMenu rebuildMenu];
 }
 
 - (void)themeChanged:(NSNotification*)notification {
@@ -177,6 +184,28 @@
     }
 }
 
+- (void)performCustomCommand:(CustomCommand *)customCommand withInstance:(VagrantInstance *)instance {
+    for(VagrantMachine *machine in instance.machines) {
+        if(machine.state == RunningState) {
+            if(customCommand.runInTerminal) {
+                NSString *action = [NSString stringWithFormat:@"\\cd %@; vagrant ssh %@ -c %@", [Util escapeShellArg:instance.path], [Util escapeShellArg:machine.name], [Util escapeShellArg:customCommand.command]];
+                [self runTerminalCommand:action];
+            } else {
+                [self runVagrantCustomCommand:customCommand.command withMachine:machine];
+            }
+        }
+    }
+}
+
+- (void)performCustomCommand:(CustomCommand *)customCommand withMachine:(VagrantMachine *)machine {
+    if(customCommand.runInTerminal) {
+        NSString *action = [NSString stringWithFormat:@"\\cd %@; vagrant ssh %@ -c %@", [Util escapeShellArg:machine.instance.path], [Util escapeShellArg:machine.name], [Util escapeShellArg:customCommand.command]];
+        [self runTerminalCommand:action];
+    } else {
+        [self runVagrantCustomCommand:customCommand.command withMachine:machine];
+    }
+}
+
 - (void)openInstanceInFinder:(VagrantInstance *)instance {
     NSString *path = instance.path;
     
@@ -213,6 +242,26 @@
 }
 
 #pragma mark - Vagrant Machine control
+
+- (void)runVagrantCustomCommand:(NSString*)command withMachine:(VagrantMachine*)machine {
+    NSTask *task = [[NSTask alloc] init];
+    [task setLaunchPath:@"/bin/bash"];
+    
+    NSString *taskCommand = [NSString stringWithFormat:@"\\cd %@; vagrant ssh %@ -c %@", [Util escapeShellArg:machine.instance.path], [Util escapeShellArg:machine.name], [Util escapeShellArg:command]];
+    
+    [task setArguments:@[@"-c", taskCommand]];
+    
+    TaskOutputWindow *outputWindow = [[TaskOutputWindow alloc] initWithWindowNibName:@"TaskOutputWindow"];
+    outputWindow.task = task;
+    outputWindow.taskCommand = taskCommand;
+    outputWindow.target = machine;
+    outputWindow.taskAction = command;
+    
+    [NSApp activateIgnoringOtherApps:YES];
+    [outputWindow showWindow:self];
+    
+    [taskOutputWindows addObject:outputWindow];
+}
 
 - (void)runVagrantAction:(NSString*)action withMachine:(VagrantMachine*)machine {
     NSString *command;

@@ -107,6 +107,10 @@
     manageBookmarksMenuItem.target = self;
     [_menu addItem:manageBookmarksMenuItem];
     
+    NSMenuItem *manageCustomCommandsMenuItem = [[NSMenuItem alloc] initWithTitle:@"Manage Custom Commands" action:@selector(manageCustomCommandsMenuItemClicked:) keyEquivalent:@""];
+    manageCustomCommandsMenuItem.target = self;
+    [_menu addItem:manageCustomCommandsMenuItem];
+
     NSMenuItem *preferencesMenuItem = [[NSMenuItem alloc] initWithTitle:@"Preferences" action:@selector(preferencesMenuItemClicked:) keyEquivalent:@""];
     preferencesMenuItem.target = self;
     [_menu addItem:preferencesMenuItem];
@@ -295,6 +299,10 @@
     [self performAction:@"provision" withInstance:menuItem.instance];
 }
 
+- (void)nativeMenuItemCustomCommandAllMachines:(NativeMenuItem*)menuItem withCommand:(CustomCommand*)customCommand {
+    [self performCustomCommand:customCommand withInstance:menuItem.instance];
+}
+
 - (void)nativeMenuItemOpenFinder:(NativeMenuItem*)menuItem {
     [self.delegate openInstanceInFinder:menuItem.instance];
 }
@@ -358,6 +366,10 @@
     [self performAction:@"provision" withMachine:machine];
 }
 
+- (void)nativeMenuItemCustomCommandMachine:(VagrantMachine*)machine withCommand:(CustomCommand*)customCommand {
+    [self performCustomCommand:customCommand withMachine:machine];
+}
+
 #pragma mark - Menu Item Click Handlers
 
 - (void)refreshMenuItemClicked:(id)sender {
@@ -368,6 +380,12 @@
     manageBookmarksWindow = [[ManageBookmarksWindow alloc] initWithWindowNibName:@"ManageBookmarksWindow"];
     [NSApp activateIgnoringOtherApps:YES];
     [manageBookmarksWindow showWindow:self];
+}
+
+- (void)manageCustomCommandsMenuItemClicked:(id)sender {
+    manageCustomCommandsWindow = [[ManageCustomCommandsWindow alloc] initWithWindowNibName:@"ManageCustomCommandsWindow"];
+    [NSApp activateIgnoringOtherApps:YES];
+    [manageCustomCommandsWindow showWindow:self];
 }
 
 - (void)preferencesMenuItemClicked:(id)sender {
@@ -472,6 +490,14 @@
 
 - (void)performAction:(NSString*)action withMachine:(VagrantMachine *)machine {
     [self.delegate performVagrantAction:action withMachine:machine];
+}
+
+- (void)performCustomCommand:(NSString*)action withInstance:(VagrantInstance*)instance {
+    [self.delegate performCustomCommand:action withInstance:instance];
+}
+
+- (void)performCustomCommand:(NSString*)action withMachine:(VagrantMachine *)machine {
+    [self.delegate performCustomCommand:action withMachine:machine];
 }
 
 - (void)updateRunningVmCount:(NSNotification*)notification {
