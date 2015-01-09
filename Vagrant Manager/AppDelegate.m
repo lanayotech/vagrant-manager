@@ -343,6 +343,7 @@
     NSString *terminalName = [[NSUserDefaults standardUserDefaults] valueForKey:@"terminalPreference"];
     
     command = [command stringByReplacingOccurrencesOfString:@"\\" withString:@"\\\\"];
+    command = [command stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
     
     NSString *s;
     if ([terminalName isEqualToString:@"iTerm"]) {
