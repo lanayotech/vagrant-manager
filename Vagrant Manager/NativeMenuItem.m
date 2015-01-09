@@ -7,6 +7,7 @@
 
 #import "NativeMenuItem.h"
 #import "BookmarkManager.h"
+#import "CustomCommandManager.h"
 
 @implementation NativeMenuItem {
     NSMenuItem *_instanceUpMenuItem;
@@ -16,6 +17,7 @@
     NSMenuItem *_instanceHaltMenuItem;
     NSMenuItem *_instanceDestroyMenuItem;
     NSMenuItem *_instanceProvisionMenuItem;
+    NSMenuItem *_instanceCustomCommandMenuItem;
     
     NSMenuItem *_openInFinderMenuItem;
     NSMenuItem *_openInTerminalMenuItem;
@@ -45,6 +47,8 @@
 - (void)refresh {
     
     if(self.instance) {
+        
+        NSArray *customCommands = [[CustomCommandManager sharedManager] getCustomCommands];
         
         if(!self.menuItem.hasSubmenu) {
             [self.menuItem setSubmenu:[[NSMenu alloc] init]];
@@ -106,6 +110,30 @@
             [_instanceProvisionMenuItem.image setTemplate:YES];
             [self.menuItem.submenu addItem:_instanceProvisionMenuItem];
         }
+        
+        if(!_instanceCustomCommandMenuItem) {
+            _instanceCustomCommandMenuItem = [[NSMenuItem alloc] initWithTitle:self.instance.machines.count > 1 ? @"Custom Command All" : @"Custom Command" action:nil keyEquivalent:@""];
+            _instanceCustomCommandMenuItem.target = self;
+            
+            [self.menuItem.submenu addItem:_instanceCustomCommandMenuItem];
+            _instanceCustomCommandMenuItem.submenu = [[NSMenu alloc] init];
+        }
+
+        [_instanceCustomCommandMenuItem.submenu removeAllItems];
+        if(customCommands.count > 0) {
+            _instanceCustomCommandMenuItem.hidden = NO;
+            
+            for(CustomCommand *customCommand in customCommands) {
+                NSMenuItem *customCommandMenuItem = [[NSMenuItem alloc] initWithTitle:customCommand.displayName action:@selector(customCommandAllMachines:) keyEquivalent:@""];
+                customCommandMenuItem.target = self;
+                customCommandMenuItem.representedObject = customCommand;
+                
+                [_instanceCustomCommandMenuItem.submenu addItem:customCommandMenuItem];
+            }
+        } else {
+            _instanceCustomCommandMenuItem.hidden = YES;
+        }
+        
         
         if (!_actionSeparator) {
             _actionSeparator = [NSMenuItem separatorItem];
@@ -170,6 +198,7 @@
                 [_instanceSuspendMenuItem setHidden:YES];
                 [_instanceHaltMenuItem setHidden:YES];
                 [_instanceProvisionMenuItem setHidden:YES];
+                [_instanceCustomCommandMenuItem setHidden:YES];
             }
             
             if([self.instance getRunningMachineCount] > 0) {
@@ -179,6 +208,12 @@
                 [_instanceSuspendMenuItem setHidden:NO];
                 [_instanceHaltMenuItem setHidden:NO];
                 [_instanceProvisionMenuItem setHidden:NO];
+                
+                if(customCommands.count == 0) {
+                    [_instanceCustomCommandMenuItem setHidden:YES];
+                } else {
+                    [_instanceCustomCommandMenuItem setHidden:NO];
+                }
             }
             
             if (self.instance.machines.count > 1) {
@@ -290,6 +325,27 @@
                 [machineProvisionMenuItem.image setTemplate:YES];
                 [machineSubmenu addItem:machineProvisionMenuItem];
                 
+                NSMenuItem *machineCustomCommandMenuItem = [[NSMenuItem alloc] initWithTitle:@"Custom Command" action:nil keyEquivalent:@""];
+                //machineCustomCommandMenuItem.image = [NSImage imageNamed:@"provision"];
+                [machineCustomCommandMenuItem.image setTemplate:YES];
+                [machineSubmenu addItem:machineCustomCommandMenuItem];
+                machineCustomCommandMenuItem.submenu = [[NSMenu alloc] init];
+                
+                [machineCustomCommandMenuItem.submenu removeAllItems];
+                if(customCommands.count > 0) {
+                    machineCustomCommandMenuItem.hidden = NO;
+                    
+                    for(CustomCommand *customCommand in customCommands) {
+                        NSMenuItem *customCommandMenuItem = [[NSMenuItem alloc] initWithTitle:customCommand.displayName action:@selector(customCommandMachine:) keyEquivalent:@""];
+                        customCommandMenuItem.target = self;
+                        customCommandMenuItem.representedObject = @{@"machine": machine, @"command": customCommand};
+                        
+                        [machineCustomCommandMenuItem.submenu addItem:customCommandMenuItem];
+                    }
+                } else {
+                    machineCustomCommandMenuItem.hidden = YES;
+                }
+
                 machineItem.submenu = machineSubmenu;
                 
                 [_machineMenuItems addObject:machineItem];
@@ -304,6 +360,7 @@
                     [machineSuspendMenuItem setHidden:NO];
                     [machineHaltMenuItem setHidden:NO];
                     [machineProvisionMenuItem setHidden:NO];
+                    [machineCustomCommandMenuItem setHidden:NO];
                 } else {
                     [machineUpMenuItem setHidden:NO];
                     [machineSSHMenuItem setHidden:YES];
@@ -311,6 +368,7 @@
                     [machineSuspendMenuItem setHidden:YES];
                     [machineHaltMenuItem setHidden:YES];
                     [machineProvisionMenuItem setHidden:YES];
+                    [machineCustomCommandMenuItem setHidden:YES];
                 }
             }
         } else {
@@ -348,6 +406,10 @@
 
 - (void)provisionAllMachines:(NSMenuItem*)sender {
     [self.delegate nativeMenuItemProvisionAllMachines:self];
+}
+
+- (void)customCommandAllMachines:(NSMenuItem*)sender {
+    [self.delegate nativeMenuItemCustomCommandAllMachines:self withCommand:sender.representedObject];
 }
 
 - (void)finderMenuItemClicked:(NSMenuItem*)sender {
@@ -396,6 +458,10 @@
 
 - (void)provisionMachine:(NSMenuItem*)sender {
     [self.delegate nativeMenuItemProvisionMachine:sender.representedObject];
+}
+
+- (void)customCommandMachine:(NSMenuItem*)sender {
+    [self.delegate nativeMenuItemCustomCommandMachine:[sender.representedObject objectForKey:@"machine"] withCommand:[sender.representedObject objectForKey:@"command"]];
 }
 
 @end

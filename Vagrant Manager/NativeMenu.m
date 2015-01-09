@@ -103,10 +103,19 @@
     
     [_menu addItem:allMachinesMenuItem];
     
+    NSMenuItem *windowMenuItem = [[NSMenuItem alloc] initWithTitle:@"Window" action:nil keyEquivalent:@""];
+    [windowMenuItem setSubmenu:[[Util getApp] windowMenu]];
+    
+    [_menu addItem:windowMenuItem];
+
     NSMenuItem *manageBookmarksMenuItem = [[NSMenuItem alloc] initWithTitle:@"Manage Bookmarks" action:@selector(manageBookmarksMenuItemClicked:) keyEquivalent:@""];
     manageBookmarksMenuItem.target = self;
     [_menu addItem:manageBookmarksMenuItem];
     
+    NSMenuItem *manageCustomCommandsMenuItem = [[NSMenuItem alloc] initWithTitle:@"Manage Custom Commands" action:@selector(manageCustomCommandsMenuItemClicked:) keyEquivalent:@""];
+    manageCustomCommandsMenuItem.target = self;
+    [_menu addItem:manageCustomCommandsMenuItem];
+
     NSMenuItem *preferencesMenuItem = [[NSMenuItem alloc] initWithTitle:@"Preferences" action:@selector(preferencesMenuItemClicked:) keyEquivalent:@""];
     preferencesMenuItem.target = self;
     [_menu addItem:preferencesMenuItem];
@@ -243,7 +252,7 @@
     [_refreshMenuItem setEnabled:!isRefreshing];
     _refreshMenuItem.title = isRefreshing ? @"Refreshing..." : @"Refresh";
     
-    if(isRefreshing) {
+    if(isRefreshing && ![[NSUserDefaults standardUserDefaults] boolForKey:@"dontAnimateStatusIcon"]) {
         _refreshIconFrame = 1;
         _refreshTimer = [NSTimer scheduledTimerWithTimeInterval:0.2f target:self selector:@selector(updateRefreshIcon:) userInfo:nil repeats:YES];
         [[NSRunLoop currentRunLoop] addTimer:_refreshTimer forMode:NSEventTrackingRunLoopMode];
@@ -293,6 +302,10 @@
 
 - (void)nativeMenuItemProvisionAllMachines:(NativeMenuItem*)menuItem {
     [self performAction:@"provision" withInstance:menuItem.instance];
+}
+
+- (void)nativeMenuItemCustomCommandAllMachines:(NativeMenuItem*)menuItem withCommand:(CustomCommand*)customCommand {
+    [self performCustomCommand:customCommand withInstance:menuItem.instance];
 }
 
 - (void)nativeMenuItemOpenFinder:(NativeMenuItem*)menuItem {
@@ -358,6 +371,10 @@
     [self performAction:@"provision" withMachine:machine];
 }
 
+- (void)nativeMenuItemCustomCommandMachine:(VagrantMachine*)machine withCommand:(CustomCommand*)customCommand {
+    [self performCustomCommand:customCommand withMachine:machine];
+}
+
 #pragma mark - Menu Item Click Handlers
 
 - (void)refreshMenuItemClicked:(id)sender {
@@ -368,6 +385,12 @@
     manageBookmarksWindow = [[ManageBookmarksWindow alloc] initWithWindowNibName:@"ManageBookmarksWindow"];
     [NSApp activateIgnoringOtherApps:YES];
     [manageBookmarksWindow showWindow:self];
+}
+
+- (void)manageCustomCommandsMenuItemClicked:(id)sender {
+    manageCustomCommandsWindow = [[ManageCustomCommandsWindow alloc] initWithWindowNibName:@"ManageCustomCommandsWindow"];
+    [NSApp activateIgnoringOtherApps:YES];
+    [manageCustomCommandsWindow showWindow:self];
 }
 
 - (void)preferencesMenuItemClicked:(id)sender {
@@ -472,6 +495,14 @@
 
 - (void)performAction:(NSString*)action withMachine:(VagrantMachine *)machine {
     [self.delegate performVagrantAction:action withMachine:machine];
+}
+
+- (void)performCustomCommand:(CustomCommand*)customCommand withInstance:(VagrantInstance*)instance {
+    [self.delegate performCustomCommand:customCommand withInstance:instance];
+}
+
+- (void)performCustomCommand:(CustomCommand*)customCommand withMachine:(VagrantMachine *)machine {
+    [self.delegate performCustomCommand:customCommand withMachine:machine];
 }
 
 - (void)updateRunningVmCount:(NSNotification*)notification {

@@ -7,6 +7,7 @@
 
 #import <Foundation/Foundation.h>
 #import "VagrantMachine.h"
+#import "CustomCommand.h"
 
 @class NativeMenuItem;
 
@@ -19,6 +20,7 @@
 - (void)nativeMenuItemHaltAllMachines:(NativeMenuItem*)menuItem;
 - (void)nativeMenuItemDestroyAllMachines:(NativeMenuItem*)menuItem;
 - (void)nativeMenuItemProvisionAllMachines:(NativeMenuItem*)menuItem;
+- (void)nativeMenuItemCustomCommandAllMachines:(NativeMenuItem*)menuItem withCommand:(CustomCommand*)customCommand;
 - (void)nativeMenuItemOpenFinder:(NativeMenuItem*)menuItem;
 - (void)nativeMenuItemOpenTerminal:(NativeMenuItem*)menuItem;
 - (void)nativeMenuItemUpdateProviderIdentifier:(NativeMenuItem*)menuItem withProviderIdentifier:(NSString*)providerIdentifier;
@@ -32,6 +34,7 @@
 - (void)nativeMenuItemHaltMachine:(VagrantMachine*)machine;
 - (void)nativeMenuItemDestroyMachine:(VagrantMachine*)machine;
 - (void)nativeMenuItemProvisionMachine:(VagrantMachine*)machine;
+- (void)nativeMenuItemCustomCommandMachine:(VagrantMachine*)machine withCommand:(CustomCommand*)customCommand;
 
 @end
 

@@ -18,6 +18,10 @@
 		8339DCA2187E756B0036E162 /* TaskOutputWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8339DCA0187E756B0036E162 /* TaskOutputWindow.xib */; };
 		8360A05718C2B37F002EA89B /* Environments.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8360A05618C2B37F002EA89B /* Environments.plist */; };
 		8360A05A18C2B39B002EA89B /* Environment.m in Sources */ = {isa = PBXBuildFile; fileRef = 8360A05918C2B39B002EA89B /* Environment.m */; };
+		837A30891A5D0D5500E12A40 /* ManageCustomCommandsWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 837A30871A5D0D5500E12A40 /* ManageCustomCommandsWindow.m */; };
+		837A308A1A5D0D5500E12A40 /* ManageCustomCommandsWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 837A30881A5D0D5500E12A40 /* ManageCustomCommandsWindow.xib */; };
+		837A308E1A5D172D00E12A40 /* CustomCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = 837A308D1A5D172D00E12A40 /* CustomCommand.m */; };
+		837A30911A5D177A00E12A40 /* CustomCommandManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 837A30901A5D177A00E12A40 /* CustomCommandManager.m */; };
 		838A36FB191F56E4006244FA /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 832784C918A7483900222C71 /* Security.framework */; };
 		838A3726191F59FE006244FA /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 838A3701191F5798006244FA /* Foundation.framework */; };
 		838A3731191F5A0F006244FA /* Askpass.m in Sources */ = {isa = PBXBuildFile; fileRef = 838A36F6191F53D8006244FA /* Askpass.m */; };
@@ -156,6 +160,13 @@
 		8360A05618C2B37F002EA89B /* Environments.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Environments.plist; sourceTree = "<group>"; };
 		8360A05818C2B39B002EA89B /* Environment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Environment.h; sourceTree = "<group>"; };
 		8360A05918C2B39B002EA89B /* Environment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Environment.m; sourceTree = "<group>"; };
+		837A30861A5D0D5500E12A40 /* ManageCustomCommandsWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ManageCustomCommandsWindow.h; sourceTree = "<group>"; };
+		837A30871A5D0D5500E12A40 /* ManageCustomCommandsWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ManageCustomCommandsWindow.m; sourceTree = "<group>"; };
+		837A30881A5D0D5500E12A40 /* ManageCustomCommandsWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ManageCustomCommandsWindow.xib; sourceTree = "<group>"; };
+		837A308C1A5D172D00E12A40 /* CustomCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomCommand.h; sourceTree = "<group>"; };
+		837A308D1A5D172D00E12A40 /* CustomCommand.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomCommand.m; sourceTree = "<group>"; };
+		837A308F1A5D177A00E12A40 /* CustomCommandManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomCommandManager.h; sourceTree = "<group>"; };
+		837A30901A5D177A00E12A40 /* CustomCommandManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomCommandManager.m; sourceTree = "<group>"; };
 		838A36F6191F53D8006244FA /* Askpass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Askpass.m; path = "../Vagrant Manager/Askpass.m"; sourceTree = "<group>"; };
 		838A36F7191F53D8006244FA /* PasswordHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PasswordHelper.h; path = "../Vagrant Manager/PasswordHelper.h"; sourceTree = "<group>"; };
 		838A36F8191F53D8006244FA /* PasswordHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PasswordHelper.m; path = "../Vagrant Manager/PasswordHelper.m"; sourceTree = "<group>"; };
@@ -287,6 +298,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		837A308B1A5D170D00E12A40 /* Custom Commands */ = {
+			isa = PBXGroup;
+			children = (
+				837A308C1A5D172D00E12A40 /* CustomCommand.h */,
+				837A308D1A5D172D00E12A40 /* CustomCommand.m */,
+				837A308F1A5D177A00E12A40 /* CustomCommandManager.h */,
+				837A30901A5D177A00E12A40 /* CustomCommandManager.m */,
+			);
+			name = "Custom Commands";
+			sourceTree = "<group>";
+		};
 		838A111718839D6900A5E6DB /* Images */ = {
 			isa = PBXGroup;
 			children = (
@@ -323,6 +345,9 @@
 				B17AA18C1887CA4600B4C274 /* PreferencesWindow.h */,
 				B17AA18D1887CA4600B4C274 /* PreferencesWindow.m */,
 				B17AA18E1887CA4600B4C274 /* PreferencesWindow.xib */,
+				837A30861A5D0D5500E12A40 /* ManageCustomCommandsWindow.h */,
+				837A30871A5D0D5500E12A40 /* ManageCustomCommandsWindow.m */,
+				837A30881A5D0D5500E12A40 /* ManageCustomCommandsWindow.xib */,
 			);
 			name = Windows;
 			sourceTree = "<group>";
@@ -383,6 +408,7 @@
 		83F5BBB31983B8F200ACE853 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				837A308B1A5D170D00E12A40 /* Custom Commands */,
 				83F5BBB41983B8FB00ACE853 /* Vagrant Manager */,
 				83F5BBB51983B90800ACE853 /* Providers */,
 				838A111A18839E1100A5E6DB /* Bookmarks */,
@@ -702,6 +728,7 @@
 				83C4CDA71A05FA0400611DCC /* vagrant_logo_off-clean@2x.png in Resources */,
 				83C4CDE81A060B3600611DCC /* halt.png in Resources */,
 				83C4CDE71A060B3600611DCC /* halt@2x.png in Resources */,
+				837A308A1A5D0D5500E12A40 /* ManageCustomCommandsWindow.xib in Resources */,
 				83C4CE151A062BCF00611DCC /* vagrant_logo_refresh_1-clean.png in Resources */,
 				B17AA1961887DA5800B4C274 /* status_icon_problem.png in Resources */,
 			);
@@ -729,6 +756,7 @@
 				83FD354819827545002EEA2D /* BookmarkManager.m in Sources */,
 				83DB673A1928AC0C0008CB57 /* VagrantMachine.m in Sources */,
 				83FD354519826DDC002EEA2D /* NFSScanner.m in Sources */,
+				837A30911A5D177A00E12A40 /* CustomCommandManager.m in Sources */,
 				B1357A84187CEB3B00811CBC /* AppDelegate.m in Sources */,
 				83103A5A19821A9E00B340BB /* ParallelsMachineInfo.m in Sources */,
 				8360A05A18C2B39B002EA89B /* Environment.m in Sources */,
@@ -738,12 +766,14 @@
 				B1761B3D1A00C0140056582F /* NativeMenuItem.m in Sources */,
 				B12661181A00A650009B1635 /* NativeMenu.m in Sources */,
 				830BAC351A0F278D00AE5F9C /* VagrantGlobalStatusScanner.m in Sources */,
+				837A308E1A5D172D00E12A40 /* CustomCommand.m in Sources */,
 				B13DC35B19232782002E5A50 /* VirtualBoxServiceProvider.m in Sources */,
 				B13DC36019233051002E5A50 /* VirtualBoxMachineInfo.m in Sources */,
 				8339DCA1187E756B0036E162 /* TaskOutputWindow.m in Sources */,
 				B1357A7D187CEB3B00811CBC /* main.m in Sources */,
 				B17AA18B1887A75300B4C274 /* Util.m in Sources */,
 				B17AA18F1887CA4600B4C274 /* PreferencesWindow.m in Sources */,
+				837A30891A5D0D5500E12A40 /* ManageCustomCommandsWindow.m in Sources */,
 				83FD353D19826945002EEA2D /* ManageBookmarksWindow.m in Sources */,
 				83F1696F1923789900C54F13 /* VersionComparison.m in Sources */,
 			);
