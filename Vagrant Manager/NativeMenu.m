@@ -103,6 +103,11 @@
     
     [_menu addItem:allMachinesMenuItem];
     
+    NSMenuItem *windowMenuItem = [[NSMenuItem alloc] initWithTitle:@"Window" action:nil keyEquivalent:@""];
+    [windowMenuItem setSubmenu:[[Util getApp] windowMenu]];
+    
+    [_menu addItem:windowMenuItem];
+
     NSMenuItem *manageBookmarksMenuItem = [[NSMenuItem alloc] initWithTitle:@"Manage Bookmarks" action:@selector(manageBookmarksMenuItemClicked:) keyEquivalent:@""];
     manageBookmarksMenuItem.target = self;
     [_menu addItem:manageBookmarksMenuItem];
