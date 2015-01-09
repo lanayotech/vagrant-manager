@@ -6,8 +6,9 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "BaseWindowController.h"
 
-@interface ManageCustomCommandsWindow : NSWindowController <NSTableViewDataSource, NSTableViewDelegate, NSWindowDelegate, NSTextFieldDelegate> {
+@interface ManageCustomCommandsWindow : BaseWindowController <NSTableViewDataSource, NSTableViewDelegate, NSWindowDelegate, NSTextFieldDelegate> {
     NSMutableArray *_commands;
 }
 

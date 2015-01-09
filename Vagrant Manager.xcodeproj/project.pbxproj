@@ -14,6 +14,7 @@
 		830BAC351A0F278D00AE5F9C /* VagrantGlobalStatusScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 830BAC341A0F278D00AE5F9C /* VagrantGlobalStatusScanner.m */; };
 		83103A571982180C00B340BB /* ParallelsServiceProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 83103A561982180C00B340BB /* ParallelsServiceProvider.m */; };
 		83103A5A19821A9E00B340BB /* ParallelsMachineInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 83103A5919821A9E00B340BB /* ParallelsMachineInfo.m */; };
+		832B4C3C1A5FA24B0027A3BA /* BaseWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 832B4C3B1A5FA24B0027A3BA /* BaseWindowController.m */; };
 		8339DCA1187E756B0036E162 /* TaskOutputWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 8339DC9F187E756B0036E162 /* TaskOutputWindow.m */; };
 		8339DCA2187E756B0036E162 /* TaskOutputWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8339DCA0187E756B0036E162 /* TaskOutputWindow.xib */; };
 		8360A05718C2B37F002EA89B /* Environments.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8360A05618C2B37F002EA89B /* Environments.plist */; };
@@ -154,6 +155,8 @@
 		83103A5819821A9E00B340BB /* ParallelsMachineInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParallelsMachineInfo.h; sourceTree = "<group>"; };
 		83103A5919821A9E00B340BB /* ParallelsMachineInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ParallelsMachineInfo.m; sourceTree = "<group>"; };
 		832784C918A7483900222C71 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		832B4C3A1A5FA24B0027A3BA /* BaseWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseWindowController.h; sourceTree = "<group>"; };
+		832B4C3B1A5FA24B0027A3BA /* BaseWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseWindowController.m; sourceTree = "<group>"; };
 		8339DC9E187E756B0036E162 /* TaskOutputWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskOutputWindow.h; sourceTree = "<group>"; };
 		8339DC9F187E756B0036E162 /* TaskOutputWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TaskOutputWindow.m; sourceTree = "<group>"; };
 		8339DCA0187E756B0036E162 /* TaskOutputWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TaskOutputWindow.xib; sourceTree = "<group>"; };
@@ -348,6 +351,8 @@
 				837A30861A5D0D5500E12A40 /* ManageCustomCommandsWindow.h */,
 				837A30871A5D0D5500E12A40 /* ManageCustomCommandsWindow.m */,
 				837A30881A5D0D5500E12A40 /* ManageCustomCommandsWindow.xib */,
+				832B4C3A1A5FA24B0027A3BA /* BaseWindowController.h */,
+				832B4C3B1A5FA24B0027A3BA /* BaseWindowController.m */,
 			);
 			name = Windows;
 			sourceTree = "<group>";
@@ -767,6 +772,7 @@
 				B12661181A00A650009B1635 /* NativeMenu.m in Sources */,
 				830BAC351A0F278D00AE5F9C /* VagrantGlobalStatusScanner.m in Sources */,
 				837A308E1A5D172D00E12A40 /* CustomCommand.m in Sources */,
+				832B4C3C1A5FA24B0027A3BA /* BaseWindowController.m in Sources */,
 				B13DC35B19232782002E5A50 /* VirtualBoxServiceProvider.m in Sources */,
 				B13DC36019233051002E5A50 /* VirtualBoxMachineInfo.m in Sources */,
 				8339DCA1187E756B0036E162 /* TaskOutputWindow.m in Sources */,
