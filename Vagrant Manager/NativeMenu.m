@@ -382,7 +382,7 @@
 }
 
 - (void)manageBookmarksMenuItemClicked:(id)sender {
-    if(manageCustomCommandsWindow && !manageBookmarksWindow.isClosed) {
+    if(manageBookmarksWindow && !manageBookmarksWindow.isClosed) {
         [NSApp activateIgnoringOtherApps:YES];
         [manageBookmarksWindow showWindow:self];
     } else {
