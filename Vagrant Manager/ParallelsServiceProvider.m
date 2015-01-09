@@ -51,6 +51,7 @@
     NSPipe *pipe = [NSPipe pipe];
     [task setStandardInput:[NSPipe pipe]];
     [task setStandardOutput:pipe];
+    [task setStandardError:[NSPipe pipe]];
     
     [task launch];
     [task waitUntilExit];
