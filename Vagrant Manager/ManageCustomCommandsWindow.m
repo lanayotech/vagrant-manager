@@ -111,8 +111,4 @@
     [self.commandsTableView reloadData];
 }
 
--(void)windowWillClose:(NSNotification *)notification {
-    //TODO: remove window reference
-}
-
 @end

@@ -52,11 +52,9 @@
 }
 
 - (void)download {
-    
 }
 
 - (void)ignore {
-    
 }
 
 @end

@@ -6,8 +6,9 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "BaseWindowController.h"
 
-@interface PreferencesWindow : NSWindowController {
+@interface PreferencesWindow : BaseWindowController {
     
 }
 
