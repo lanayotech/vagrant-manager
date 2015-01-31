@@ -86,7 +86,9 @@
 - (void)windowWillClose:(NSNotification *)notification {
     AppDelegate *app = [Util getApp];
     
-    _isClosed = YES;
+    @synchronized(self) {
+        _isClosed = YES;
+    }
     
     [app removeTaskOutputWindow:self];
 }
@@ -96,19 +98,21 @@
     NSData *data = [fh availableData];
     NSString *str = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
     
-    if (!_isClosed) {
-        //smart scrolling logic for command output
-        BOOL scroll = (NSMaxY(self.outputTextView.visibleRect) == NSMaxY(self.outputTextView.bounds));
-        [self.outputTextView.textStorage appendAttributedString:[[NSAttributedString alloc] initWithString:str]];
-        if([NSFont fontWithName:@"Menlo" size:11]) {
-            [self.outputTextView.textStorage setFont:[NSFont fontWithName:@"Menlo" size:11]];
-        }
-        if (scroll) {
-            [self.outputTextView scrollRangeToVisible: NSMakeRange(self.outputTextView.string.length, 0)];
-        }
-        
-        if(self.task.isRunning) {
-            [fh waitForDataInBackgroundAndNotify];
+    @synchronized(self) {
+        if (!_isClosed) {
+            //smart scrolling logic for command output
+            BOOL scroll = (NSMaxY(self.outputTextView.visibleRect) == NSMaxY(self.outputTextView.bounds));
+            [self.outputTextView.textStorage appendAttributedString:[[NSAttributedString alloc] initWithString:str]];
+            if([NSFont fontWithName:@"Menlo" size:11]) {
+                [self.outputTextView.textStorage setFont:[NSFont fontWithName:@"Menlo" size:11]];
+            }
+            if (scroll) {
+                [self.outputTextView scrollRangeToVisible: NSMakeRange(self.outputTextView.string.length, 0)];
+            }
+            
+            if(self.task.isRunning) {
+                [fh waitForDataInBackgroundAndNotify];
+            }
         }
     }
 }
