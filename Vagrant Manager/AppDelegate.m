@@ -412,6 +412,10 @@
 #pragma mark - Notification center
 
 - (void)showUserNotificationWithTitle:(NSString*)title informativeText:(NSString*)informativeText taskWindowUUID:(NSString*)taskWindowUUID {
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"showTaskNotification"]) {
+        return;
+    }
+    
     //show user notification
     NSUserNotification *notification = [[NSUserNotification alloc] init];
     notification.title = title;

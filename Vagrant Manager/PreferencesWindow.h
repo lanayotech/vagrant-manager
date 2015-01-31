@@ -25,6 +25,8 @@
 @property (weak) IBOutlet NSButton *refreshEveryCheckBox;
 @property (weak) IBOutlet NSPopUpButton *intervalMenu;
 @property (weak) IBOutlet NSButton *dontAnimateStatusIconCheckBox;
+@property (weak) IBOutlet NSButton *showTaskNotificationCheckBox;
+
 
 - (IBAction)autoCloseCheckBoxClicked:(id)sender;
 - (IBAction)dontShowUpdateCheckBoxClicked:(id)sender;
@@ -39,5 +41,7 @@
 - (IBAction)refreshEveryCheckBoxClicked:(id)sender;
 - (IBAction)intervalMenuChanged:(id)sender;
 - (IBAction)dontAnimateStatusIconCheckBoxClicked:(id)sender;
+- (IBAction)showTaskNotificationCheckBoxClicked:(id)sender;
+
 
 @end
