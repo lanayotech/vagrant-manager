@@ -30,6 +30,7 @@
     BOOL dontShowRunningVmCount = [[NSUserDefaults standardUserDefaults] boolForKey:@"dontShowRunningVmCount"];
     BOOL refreshEvery = [[NSUserDefaults standardUserDefaults] boolForKey:@"refreshEvery"];
     BOOL dontAnimateStatusIcon = [[NSUserDefaults standardUserDefaults] boolForKey:@"dontAnimateStatusIcon"];
+    BOOL showTaskNotification = [[NSUserDefaults standardUserDefaults] boolForKey:@"showTaskNotification"];
     NSInteger refreshEveryInterval = [[NSUserDefaults standardUserDefaults] integerForKey:@"refreshEveryInterval"];
     NSString *statusBarIconTheme = [[NSUserDefaults standardUserDefaults] stringForKey:@"statusBarIconTheme"];
     NSString *updateStability = [Util getUpdateStability];
@@ -65,6 +66,7 @@
     [self.dontShowRunningVmCountCheckBox setState:dontShowRunningVmCount ? NSOnState : NSOffState];
     [self.dontAnimateStatusIconCheckBox setState:dontAnimateStatusIcon ? NSOnState : NSOffState];
     [self.refreshEveryCheckBox setState:refreshEvery ? NSOnState : NSOffState];
+    [self.showTaskNotificationCheckBox setState:showTaskNotification ? NSOnState : NSOffState];
     [self.intervalMenu selectItemWithTag:refreshEveryInterval];
     
     [self.sendProfileDataCheckBox setState:[Util shouldSendProfileData] ? NSOnState : NSOffState];
@@ -165,6 +167,11 @@
 
 - (IBAction)dontAnimateStatusIconCheckBoxClicked:(id)sender {
     [[NSUserDefaults standardUserDefaults] setBool:(self.dontAnimateStatusIconCheckBox.state == NSOnState) forKey:@"dontAnimateStatusIcon"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+- (IBAction)showTaskNotificationCheckBoxClicked:(id)sender {
+    [[NSUserDefaults standardUserDefaults] setBool:(self.showTaskNotificationCheckBox.state == NSOnState) forKey:@"showTaskNotification"];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
