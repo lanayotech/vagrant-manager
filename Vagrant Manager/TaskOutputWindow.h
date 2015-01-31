@@ -15,6 +15,7 @@
 @property (strong, nonatomic) NSString *taskCommand;
 @property (strong, nonatomic) NSString *taskAction;
 @property (strong, nonatomic) NSTask *task;
+@property (strong, nonatomic) NSString *windowUUID;
 
 @property (unsafe_unretained) IBOutlet NSTextView *outputTextView;
 @property (weak) IBOutlet NSProgressIndicator *progressBar;

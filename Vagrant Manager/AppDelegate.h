@@ -20,7 +20,7 @@
 #define MENU_ITEM_BOOKMARKED_VM 1
 #define MENU_ITEM_DETECTED_VM   2
 
-@interface AppDelegate : NSObject <NSApplicationDelegate, VagrantManagerDelegate, MenuDelegate, NSMenuDelegate> {
+@interface AppDelegate : NSObject <NSApplicationDelegate, VagrantManagerDelegate, MenuDelegate, NSMenuDelegate, NSUserNotificationCenterDelegate> {
     NSMutableArray *bookmarks;
 }
 
@@ -33,5 +33,6 @@
 - (void)updateRunningVmCount;
 - (void)refreshTimerState;
 - (NSImage*)getThemedImage:(NSString*)imageName;
+- (void)showUserNotificationWithTitle:(NSString*)title informativeText:(NSString*)informativeText taskWindowUUID:(NSString*)taskWindowUUID;
 
 @end
