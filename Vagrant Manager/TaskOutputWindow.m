@@ -25,6 +25,10 @@
 - (void)windowDidLoad {
     [super windowDidLoad];
     
+    CFUUIDRef uuid = CFUUIDCreate(NULL);
+    self.windowUUID = (__bridge_transfer NSString *)CFUUIDCreateString(NULL, uuid);
+    CFRelease(uuid);
+    
     NSPipe *taskOutputPipe = [NSPipe pipe];
 	[self.task setStandardInput:[NSFileHandle fileHandleWithNullDevice]];
     [self.task setStandardOutput:taskOutputPipe];
@@ -66,13 +70,22 @@
     
     [self.closeWindowButton setEnabled:YES];
     [self.cancelButton setHidden:YES];
+    
+    NSString *notificationText;
 
     if(task.terminationStatus != 0) {
         self.taskStatusLabel.stringValue = @"Completed with errors";
+        notificationText = @"Task completed with errors";
+        
     } else {
         self.taskStatusLabel.stringValue = @"Completed successfully";
+        notificationText = @"Task completed successfully";
     }
-
+    
+    NSString *name = [self.target isKindOfClass:[VagrantMachine class]] ? [NSString stringWithFormat:@"%@ - %@",((VagrantMachine*)self.target).instance.displayName, ((VagrantMachine*)self.target).name] : ((VagrantInstance*)self.target).displayName;
+    
+    [[Util getApp] showUserNotificationWithTitle:notificationText informativeText:[NSString stringWithFormat:@"%@ %@", name, self.taskAction] taskWindowUUID:self.windowUUID];
+    
     //notify app task is complete
     [[NSNotificationCenter defaultCenter] postNotificationName:@"vagrant-manager.task-completed" object:nil userInfo:@{@"target": self.target}];
     

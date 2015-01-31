@@ -259,8 +259,8 @@
     
     [NSApp activateIgnoringOtherApps:YES];
     [outputWindow showWindow:self];
-    
-    [taskOutputWindows addObject:outputWindow];
+
+    [self addTaskOutputWindow:outputWindow];
 }
 
 - (void)runVagrantAction:(NSString*)action withMachine:(VagrantMachine*)machine {
@@ -298,7 +298,7 @@
     [NSApp activateIgnoringOtherApps:YES];
     [outputWindow showWindow:self];
     
-    [taskOutputWindows addObject:outputWindow];
+    [self addTaskOutputWindow:outputWindow];
 }
 
 - (void)runVagrantAction:(NSString*)action withInstance:(VagrantInstance*)instance {
@@ -336,7 +336,7 @@
     [NSApp activateIgnoringOtherApps:YES];
     [outputWindow showWindow:self];
     
-    [taskOutputWindows addObject:outputWindow];
+    [self addTaskOutputWindow:outputWindow];
 }
 
 - (void)runTerminalCommand:(NSString*)command {
@@ -370,8 +370,16 @@
 
 #pragma mark - Window management
 
+- (void)addTaskOutputWindow:(TaskOutputWindow*)taskOutputWindow {
+    @synchronized(taskOutputWindows) {
+        [taskOutputWindows addObject:taskOutputWindow];
+    }
+}
+
 - (void)removeTaskOutputWindow:(TaskOutputWindow*)taskOutputWindow {
-    [taskOutputWindows removeObject:taskOutputWindow];
+    @synchronized(taskOutputWindows) {
+        [taskOutputWindows removeObject:taskOutputWindow];
+    }
 }
 
 - (NSImage*)getThemedImage:(NSString*)imageName {
@@ -399,6 +407,42 @@
 
 - (void)updateRunningVmCount {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"vagrant-manager.update-running-vm-count" object:nil userInfo:@{@"count": [NSNumber numberWithInt:[_manager getRunningVmCount]]}];
+}
+
+#pragma mark - Notification center
+
+- (void)showUserNotificationWithTitle:(NSString*)title informativeText:(NSString*)informativeText taskWindowUUID:(NSString*)taskWindowUUID {
+    //show user notification
+    NSUserNotification *notification = [[NSUserNotification alloc] init];
+    notification.title = title;
+    notification.informativeText = informativeText;
+    if (taskWindowUUID) {
+        notification.userInfo = @{@"taskWindowUUID": taskWindowUUID};
+    }
+    [[NSUserNotificationCenter defaultUserNotificationCenter] deliverNotification:notification];
+}
+
+- (void)userNotificationCenter:(NSUserNotificationCenter *)center didActivateNotification:(NSUserNotification *)notification {
+    if(notification.userInfo && [notification.userInfo objectForKey:@"taskWindowUUID"]) {
+        NSString *taskWindowUUID = [notification.userInfo objectForKey:@"taskWindowUUID"];
+        NSArray *windows;
+        
+        @synchronized(taskOutputWindows) {
+            windows = [NSArray arrayWithArray:taskOutputWindows];
+        }
+        
+        //find task output window that posted this notification
+        for(TaskOutputWindow *taskOutputWindow in windows) {
+            if([taskOutputWindow.windowUUID isEqualToString:taskWindowUUID]) {
+                if([taskOutputWindow.window isVisible]) {
+                    //show task output window
+                    [NSApp activateIgnoringOtherApps:YES];
+                    [taskOutputWindow.window makeKeyAndOrderFront:self];
+                    [taskOutputWindow.window setOrderedIndex:0];
+                }
+            }
+        }
+    }
 }
 
 #pragma mark - Sparkle updater delegates
