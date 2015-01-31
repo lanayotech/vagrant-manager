@@ -422,6 +422,10 @@
     [[NSUserNotificationCenter defaultUserNotificationCenter] deliverNotification:notification];
 }
 
+- (BOOL)userNotificationCenter:(NSUserNotificationCenter *)center shouldPresentNotification:(NSUserNotification *)notification {
+    return YES;
+}
+
 - (void)userNotificationCenter:(NSUserNotificationCenter *)center didActivateNotification:(NSUserNotification *)notification {
     if(notification.userInfo && [notification.userInfo objectForKey:@"taskWindowUUID"]) {
         NSString *taskWindowUUID = [notification.userInfo objectForKey:@"taskWindowUUID"];
