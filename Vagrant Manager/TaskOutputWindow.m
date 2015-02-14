@@ -103,7 +103,7 @@
         _isClosed = YES;
     }
     
-    [app removeTaskOutputWindow:self];
+    [app removeOpenWindow:self];
 }
 
 - (void)receivedOutput:(NSNotification*)notif {

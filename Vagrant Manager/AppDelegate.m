@@ -17,7 +17,7 @@
     
     VagrantManager *_manager;
     NativeMenu *_nativeMenu;
-    NSMutableArray *taskOutputWindows;
+    NSMutableArray *openWindows;
     
     int queuedRefreshes;
 }
@@ -26,7 +26,7 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     //initialize data
-    taskOutputWindows = [[NSMutableArray alloc] init];
+    openWindows = [[NSMutableArray alloc] init];
     
     //register notification listeners
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(taskCompleted:) name:@"vagrant-manager.task-completed" object:nil];
@@ -260,7 +260,7 @@
     [NSApp activateIgnoringOtherApps:YES];
     [outputWindow showWindow:self];
 
-    [self addTaskOutputWindow:outputWindow];
+    [self addOpenWindow:outputWindow];
 }
 
 - (void)runVagrantAction:(NSString*)action withMachine:(VagrantMachine*)machine {
@@ -298,7 +298,7 @@
     [NSApp activateIgnoringOtherApps:YES];
     [outputWindow showWindow:self];
     
-    [self addTaskOutputWindow:outputWindow];
+    [self addOpenWindow:outputWindow];
 }
 
 - (void)runVagrantAction:(NSString*)action withInstance:(VagrantInstance*)instance {
@@ -336,7 +336,7 @@
     [NSApp activateIgnoringOtherApps:YES];
     [outputWindow showWindow:self];
     
-    [self addTaskOutputWindow:outputWindow];
+    [self addOpenWindow:outputWindow];
 }
 
 - (void)runTerminalCommand:(NSString*)command {
@@ -370,15 +370,28 @@
 
 #pragma mark - Window management
 
-- (void)addTaskOutputWindow:(TaskOutputWindow*)taskOutputWindow {
-    @synchronized(taskOutputWindows) {
-        [taskOutputWindows addObject:taskOutputWindow];
+- (void)addOpenWindow:(id)window {
+    @synchronized(openWindows) {
+        [openWindows addObject:window];
+        [self updateProcessType];
     }
 }
 
-- (void)removeTaskOutputWindow:(TaskOutputWindow*)taskOutputWindow {
-    @synchronized(taskOutputWindows) {
-        [taskOutputWindows removeObject:taskOutputWindow];
+- (void)removeOpenWindow:(id)window {
+    @synchronized(openWindows) {
+        [openWindows removeObject:window];
+        [self updateProcessType];
+    }
+}
+
+- (void)updateProcessType {
+    if([openWindows count] == 0) {
+        ProcessSerialNumber psn = { 0, kCurrentProcess };
+        TransformProcessType(&psn, kProcessTransformToBackgroundApplication);
+    } else {
+        ProcessSerialNumber psn = { 0, kCurrentProcess };
+        TransformProcessType(&psn, kProcessTransformToForegroundApplication);
+        SetFrontProcess(&psn);
     }
 }
 
@@ -435,18 +448,22 @@
         NSString *taskWindowUUID = [notification.userInfo objectForKey:@"taskWindowUUID"];
         NSArray *windows;
         
-        @synchronized(taskOutputWindows) {
-            windows = [NSArray arrayWithArray:taskOutputWindows];
+        @synchronized(openWindows) {
+            windows = [NSArray arrayWithArray:openWindows];
         }
         
         //find task output window that posted this notification
-        for(TaskOutputWindow *taskOutputWindow in windows) {
-            if([taskOutputWindow.windowUUID isEqualToString:taskWindowUUID]) {
-                if([taskOutputWindow.window isVisible]) {
-                    //show task output window
-                    [NSApp activateIgnoringOtherApps:YES];
-                    [taskOutputWindow.window makeKeyAndOrderFront:self];
-                    [taskOutputWindow.window setOrderedIndex:0];
+        for(id window in windows) {
+            if([window isKindOfClass:[TaskOutputWindow class]]) {
+                TaskOutputWindow *taskOutputWindow = window;
+                
+                if([taskOutputWindow.windowUUID isEqualToString:taskWindowUUID]) {
+                    if([taskOutputWindow.window isVisible]) {
+                        //show task output window
+                        [NSApp activateIgnoringOtherApps:YES];
+                        [taskOutputWindow.window makeKeyAndOrderFront:self];
+                        [taskOutputWindow.window setOrderedIndex:0];
+                    }
                 }
             }
         }

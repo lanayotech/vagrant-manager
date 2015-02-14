@@ -10,6 +10,7 @@
 @implementation BaseWindowController
 
 - (void)windowWillClose:(NSNotification *)notification {
+    [[Util getApp] removeOpenWindow:self];
     self.isClosed = YES;
 }
 
