@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6249" systemVersion="14A389" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6249" systemVersion="14C109" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6249"/>
@@ -20,15 +20,15 @@
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" animationBehavior="default" id="1">
             <windowStyleMask key="styleMask" titled="YES" miniaturizable="YES" resizable="YES"/>
-            <rect key="contentRect" x="196" y="240" width="480" height="311"/>
+            <rect key="contentRect" x="196" y="240" width="805" height="453"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1178"/>
             <value key="minSize" type="size" width="480" height="270"/>
             <view key="contentView" id="2">
-                <rect key="frame" x="0.0" y="0.0" width="480" height="311"/>
+                <rect key="frame" x="0.0" y="0.0" width="805" height="453"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <scrollView autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="iN4-Se-IjL">
-                        <rect key="frame" x="20" y="61" width="440" height="171"/>
+                        <rect key="frame" x="20" y="49" width="765" height="325"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <clipView key="contentView" id="MZ0-Uz-MIM">
                             <rect key="frame" x="1" y="1" width="438" height="169"/>
@@ -38,11 +38,11 @@
                                     <rect key="frame" x="0.0" y="0.0" width="438" height="169"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                    <size key="minSize" width="438" height="169"/>
-                                    <size key="maxSize" width="465" height="10000000"/>
+                                    <size key="minSize" width="763" height="323"/>
+                                    <size key="maxSize" width="763" height="10000000"/>
                                     <color key="insertionPointColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                                    <size key="minSize" width="438" height="169"/>
-                                    <size key="maxSize" width="465" height="10000000"/>
+                                    <size key="minSize" width="763" height="323"/>
+                                    <size key="maxSize" width="763" height="10000000"/>
                                 </textView>
                             </subviews>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -57,11 +57,11 @@
                         </scroller>
                     </scrollView>
                     <progressIndicator maxValue="100" indeterminate="YES" style="bar" id="Hgf-UO-j1p">
-                        <rect key="frame" x="20" y="265" width="440" height="20"/>
+                        <rect key="frame" x="20" y="407" width="765" height="20"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                     </progressIndicator>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="YfK-N0-5lw">
-                        <rect key="frame" x="18" y="289" width="444" height="17"/>
+                        <rect key="frame" x="18" y="431" width="444" height="17"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Task Status" id="9sl-2N-8HX">
                             <font key="font" metaFont="system"/>
@@ -70,7 +70,7 @@
                         </textFieldCell>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="GMU-0g-Bph">
-                        <rect key="frame" x="20" y="237" width="440" height="20"/>
+                        <rect key="frame" x="20" y="379" width="765" height="20"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="left" title="Task Command" drawsBackground="YES" usesSingleLineMode="YES" id="c1d-fd-4lg">
                             <font key="font" size="14" name="CourierNewPSMT"/>
@@ -79,7 +79,7 @@
                         </textFieldCell>
                     </textField>
                     <button verticalHuggingPriority="750" id="L35-tt-XDn">
-                        <rect key="frame" x="338" y="13" width="128" height="32"/>
+                        <rect key="frame" x="663" y="13" width="128" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="push" title="Close Window" bezelStyle="rounded" alignment="center" enabled="NO" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="aRO-dI-Ufm">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -90,7 +90,7 @@
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" id="hbl-VT-EZm">
-                        <rect key="frame" x="256" y="13" width="83" height="32"/>
+                        <rect key="frame" x="581" y="13" width="83" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="bii-yL-w9F">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -108,6 +108,7 @@ Gw
             <connections>
                 <outlet property="delegate" destination="-2" id="4"/>
             </connections>
+            <point key="canvasLocation" x="640.5" y="572.5"/>
         </window>
     </objects>
 </document>
