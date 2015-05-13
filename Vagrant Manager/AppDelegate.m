@@ -249,7 +249,7 @@
     
     NSString *taskCommand = [NSString stringWithFormat:@"\\cd %@; vagrant ssh %@ -c %@", [Util escapeShellArg:machine.instance.path], [Util escapeShellArg:machine.name], [Util escapeShellArg:command]];
     
-    [task setArguments:@[@"-c", taskCommand]];
+    [task setArguments:@[@"-l", @"-c", taskCommand]];
     
     TaskOutputWindow *outputWindow = [[TaskOutputWindow alloc] initWithWindowNibName:@"TaskOutputWindow"];
     outputWindow.task = task;
@@ -287,7 +287,7 @@
     
     NSString *taskCommand = [NSString stringWithFormat:@"\\cd %@; %@ %@", [Util escapeShellArg:machine.instance.path], command, [Util escapeShellArg:machine.name]];
     
-    [task setArguments:@[@"-c", taskCommand]];
+    [task setArguments:@[@"-l", @"-c", taskCommand]];
     
     TaskOutputWindow *outputWindow = [[TaskOutputWindow alloc] initWithWindowNibName:@"TaskOutputWindow"];
     outputWindow.task = task;
