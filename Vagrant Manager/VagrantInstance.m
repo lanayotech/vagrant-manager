@@ -98,7 +98,7 @@
         //get output of vagrant status
         NSTask *task = [[NSTask alloc] init];
         [task setLaunchPath:@"/bin/bash"];
-        [task setArguments:@[@"-c", [NSString stringWithFormat:@"\\cd %@; vagrant status", [Util escapeShellArg:_path]]]];
+        [task setArguments:@[@"-l", @"-c", [NSString stringWithFormat:@"\\cd %@; vagrant status", [Util escapeShellArg:_path]]]];
         
         NSPipe *pipe = [NSPipe pipe];
         [task setStandardInput:[NSPipe pipe]];
