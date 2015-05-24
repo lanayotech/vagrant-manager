@@ -105,11 +105,6 @@
     
     [_menu addItem:allMachinesMenuItem];
     
-    NSMenuItem *windowMenuItem = [[NSMenuItem alloc] initWithTitle:@"Window" action:nil keyEquivalent:@""];
-    [windowMenuItem setSubmenu:[[Util getApp] windowMenu]];
-    
-    [_menu addItem:windowMenuItem];
-
     NSMenuItem *manageBookmarksMenuItem = [[NSMenuItem alloc] initWithTitle:@"Manage Bookmarks" action:@selector(manageBookmarksMenuItemClicked:) keyEquivalent:@""];
     manageBookmarksMenuItem.target = self;
     [_menu addItem:manageBookmarksMenuItem];
@@ -405,6 +400,7 @@
         manageBookmarksWindow = [[ManageBookmarksWindow alloc] initWithWindowNibName:@"ManageBookmarksWindow"];
         [NSApp activateIgnoringOtherApps:YES];
         [manageBookmarksWindow showWindow:self];
+        [[Util getApp] addOpenWindow:manageBookmarksWindow];
     }
 }
 
@@ -416,6 +412,7 @@
         manageCustomCommandsWindow = [[ManageCustomCommandsWindow alloc] initWithWindowNibName:@"ManageCustomCommandsWindow"];
         [NSApp activateIgnoringOtherApps:YES];
         [manageCustomCommandsWindow showWindow:self];
+        [[Util getApp] addOpenWindow:manageCustomCommandsWindow];
     }
 }
 
@@ -427,6 +424,7 @@
         preferencesWindow = [[PreferencesWindow alloc] initWithWindowNibName:@"PreferencesWindow"];
         [NSApp activateIgnoringOtherApps:YES];
         [preferencesWindow showWindow:self];
+        [[Util getApp] addOpenWindow:preferencesWindow];
     }
 }
 
@@ -442,6 +440,7 @@
         aboutWindow = [[AboutWindow alloc] initWithWindowNibName:@"AboutWindow"];
         [NSApp activateIgnoringOtherApps:YES];
         [aboutWindow showWindow:self];
+        [[Util getApp] addOpenWindow:aboutWindow];
     }
 }
 
