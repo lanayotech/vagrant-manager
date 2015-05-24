@@ -333,23 +333,30 @@
 }
 
 - (void)runVagrantAction:(NSString*)action withMachine:(VagrantMachine*)machine {
-    NSString *command;
+    NSMutableArray *commandParts = [[NSMutableArray alloc] init];
     
     if([action isEqualToString:@"up"]) {
-        command = [NSString stringWithFormat:@"vagrant up%@", machine.instance.providerIdentifier ? [NSString stringWithFormat:@" --provider=%@", machine.instance.providerIdentifier] : @""];
+        [commandParts addObject:@"vagrant up"];
+        if(machine.instance.providerIdentifier) {
+            [commandParts addObject:[NSString stringWithFormat:@"--provider=%@", machine.instance.providerIdentifier]];
+        }
     } else if([action isEqualToString:@"reload"]) {
-        command = @"vagrant reload";
+        [commandParts addObject:@"vagrant reload"];
     } else if([action isEqualToString:@"suspend"]) {
-        command = @"vagrant suspend";
+        [commandParts addObject:@"vagrant suspend"];
     } else if([action isEqualToString:@"halt"]) {
-        command = @"vagrant halt";
+        [commandParts addObject:@"vagrant halt"];
     } else if([action isEqualToString:@"provision"]) {
-        command = @"vagrant provision";
+        [commandParts addObject:@"vagrant provision"];
     } else if([action isEqualToString:@"destroy"]) {
-        command = @"vagrant destroy -f";
+        [commandParts addObject:@"vagrant destroy -f"];
     } else {
         return;
     }
+    
+    [commandParts addObject:@"--no-color"];
+    
+    NSString *command = [commandParts componentsJoinedByString:@" "];
     
     NSTask *task = [[NSTask alloc] init];
     [task setLaunchPath:@"/bin/bash"];
@@ -371,23 +378,30 @@
 }
 
 - (void)runVagrantAction:(NSString*)action withInstance:(VagrantInstance*)instance {
-    NSString *command;
+    NSMutableArray *commandParts = [[NSMutableArray alloc] init];
     
     if([action isEqualToString:@"up"]) {
-        command = [NSString stringWithFormat:@"vagrant up%@", instance.providerIdentifier ? [NSString stringWithFormat:@" --provider=%@", instance.providerIdentifier] : @""];
+        [commandParts addObject:@"vagrant up"];
+        if(instance.providerIdentifier) {
+            [commandParts addObject:[NSString stringWithFormat:@"--provider=%@", instance.providerIdentifier]];
+        }
     } else if([action isEqualToString:@"reload"]) {
-        command = @"vagrant reload";
+        [commandParts addObject:@"vagrant reload"];
     } else if([action isEqualToString:@"suspend"]) {
-        command = @"vagrant suspend";
+        [commandParts addObject:@"vagrant suspend"];
     } else if([action isEqualToString:@"halt"]) {
-        command = @"vagrant halt";
+        [commandParts addObject:@"vagrant halt"];
     } else if([action isEqualToString:@"provision"]) {
-        command = @"vagrant provision";
+        [commandParts addObject:@"vagrant provision"];
     } else if([action isEqualToString:@"destroy"]) {
-        command = @"vagrant destroy -f";
+        [commandParts addObject:@"vagrant destroy -f"];
     } else {
         return;
     }
+    
+    [commandParts addObject:@"--no-color"];
+    
+    NSString *command = [commandParts componentsJoinedByString:@" "];
     
     NSTask *task = [[NSTask alloc] init];
     [task setLaunchPath:@"/bin/bash"];
