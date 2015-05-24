@@ -64,6 +64,9 @@
     
     //start refresh timer if activated in preferences
     [self refreshTimerState];
+    
+    //check for vagrant updates
+    [self checkForVagrantUpdates:NO];
 }
 
 #pragma mark - Notification handlers
@@ -239,6 +242,72 @@
     [[BookmarkManager sharedManager] removeBookmarkWithPath:instance.path];
     [[BookmarkManager sharedManager] saveBookmarks];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"vagrant-manager.bookmarks-updated" object:nil];
+}
+
+- (void)checkForVagrantUpdates:(BOOL)showAlert {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        //run vagrant command to check version
+        NSTask *task = [[NSTask alloc] init];
+        [task setLaunchPath:@"/bin/bash"];
+        [task setArguments:@[@"-l", @"-c", @"vagrant version --machine-readable"]];
+        
+        NSPipe *pipe = [NSPipe pipe];
+        [task setStandardInput:[NSPipe pipe]];
+        [task setStandardOutput:pipe];
+        
+        [task launch];
+        [task waitUntilExit];
+        
+        //parse version info from output
+        NSData *outputData = [[pipe fileHandleForReading] readDataToEndOfFile];
+        NSString *outputString = [[NSString alloc] initWithData:outputData encoding:NSUTF8StringEncoding];
+        
+        NSArray *lines = [outputString componentsSeparatedByString:@"\n"];
+        
+        BOOL newVersionAvailable = NO;
+        BOOL invalidOutput = YES;
+        NSString *currentVersion;
+        NSString *latestVersion;
+        
+        
+        if([lines count] >= 2) {
+            NSArray *installedVersionParts = [[lines objectAtIndex:0] componentsSeparatedByString:@","];
+            NSArray *latestVersionParts = [[lines objectAtIndex:1] componentsSeparatedByString:@","];
+            
+            if([installedVersionParts count] >= 4 && [latestVersionParts count] >= 4) {
+                currentVersion = [installedVersionParts objectAtIndex:3];
+                latestVersion = [latestVersionParts objectAtIndex:3];
+                
+                if([Util compareVersion:currentVersion toVersion:latestVersion] == NSOrderedAscending) {
+                    newVersionAvailable = YES;
+                }
+                
+                invalidOutput = NO;
+            }
+        }
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"vagrant-manager.vagrant-update-available" object:nil userInfo:@{@"is_update_available": [NSNumber numberWithBool:newVersionAvailable]}];
+
+            if(showAlert) {
+                if(invalidOutput) {
+                    [[NSAlert alertWithMessageText:@"There was a problem checking your Vagrant version" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@""] runModal];
+                } else if(newVersionAvailable) {
+                    NSAlert *alert = [NSAlert alertWithMessageText:[NSString stringWithFormat:@"There is a newer version of Vagrant available.\n\nCurrent version: %@\nLatest version: %@", currentVersion, latestVersion] defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@""];
+                    [alert addButtonWithTitle:@"Visit Vagrant Website"];
+                    
+                    long response = [alert runModal];
+                    
+                    if(response == NSAlertSecondButtonReturn) {
+                        [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"https://www.vagrantup.com/"]];
+                    }
+                } else {
+                    [[NSAlert alertWithMessageText:@"You are running the latest version of Vagrant" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@""] runModal];
+                }
+            }
+        });
+    });
+    
 }
 
 #pragma mark - Vagrant Machine control

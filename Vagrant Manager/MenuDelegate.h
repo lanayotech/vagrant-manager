@@ -19,5 +19,6 @@
 - (void)openInstanceInTerminal:(VagrantInstance*)instance;
 - (void)addBookmarkWithInstance:(VagrantInstance*)instance;
 - (void)removeBookmarkWithInstance:(VagrantInstance*)instance;
+- (void)checkForVagrantUpdates:(BOOL)showAlert;
 
 @end
