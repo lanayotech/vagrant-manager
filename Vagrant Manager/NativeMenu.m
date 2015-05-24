@@ -21,6 +21,7 @@
     NSMenuItem *_bottomMachineSeparator;
 
     NSMenuItem *_checkForUpdatesMenuItem;
+    NSMenuItem *_checkForVagrantUpdatesMenuItem;
 }
 
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
@@ -36,6 +37,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(instanceRemoved:) name:@"vagrant-manager.instance-removed" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(instanceUpdated:) name:@"vagrant-manager.instance-updated" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setUpdateAvailable:) name:@"vagrant-manager.update-available" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setVagrantUpdateAvailable:) name:@"vagrant-manager.vagrant-update-available" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshingStarted:) name:@"vagrant-manager.refreshing-started" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshingEnded:) name:@"vagrant-manager.refreshing-ended" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateRunningVmCount:) name:@"vagrant-manager.update-running-vm-count" object:nil];
@@ -115,6 +117,8 @@
     NSMenuItem *manageCustomCommandsMenuItem = [[NSMenuItem alloc] initWithTitle:@"Manage Custom Commands" action:@selector(manageCustomCommandsMenuItemClicked:) keyEquivalent:@""];
     manageCustomCommandsMenuItem.target = self;
     [_menu addItem:manageCustomCommandsMenuItem];
+    
+    [_menu addItem:[NSMenuItem separatorItem]];
 
     NSMenuItem *preferencesMenuItem = [[NSMenuItem alloc] initWithTitle:@"Preferences" action:@selector(preferencesMenuItemClicked:) keyEquivalent:@""];
     preferencesMenuItem.target = self;
@@ -128,6 +132,10 @@
     _checkForUpdatesMenuItem.target = self;
     [_menu addItem:_checkForUpdatesMenuItem];
     
+    _checkForVagrantUpdatesMenuItem = [[NSMenuItem alloc] initWithTitle:@"Check For Vagrant Updates" action:@selector(checkForVagrantUpdatesMenuItemClicked:) keyEquivalent:@""];
+    _checkForVagrantUpdatesMenuItem.target = self;
+    [_menu addItem:_checkForVagrantUpdatesMenuItem];
+
     NSMenuItem *quitMenuItem = [[NSMenuItem alloc] initWithTitle:@"Quit" action:@selector(quitMenuItemClicked:) keyEquivalent:@""];
     quitMenuItem.target = self;
     [_menu addItem:quitMenuItem];
@@ -171,6 +179,10 @@
 
 - (void)setUpdateAvailable: (NSNotification*)notification {
     [self setUpdatesAvailable:[[notification.userInfo objectForKey:@"is_update_available"] boolValue]];
+}
+
+- (void)setVagrantUpdateAvailable: (NSNotification*)notification {
+    [self setVagrantUpdatesAvailable:[[notification.userInfo objectForKey:@"is_update_available"] boolValue]];
 }
 
 - (void)refreshingStarted: (NSNotification*)notification {
@@ -246,6 +258,10 @@
 
 - (void)setUpdatesAvailable:(BOOL)updatesAvailable {
     _checkForUpdatesMenuItem.image = updatesAvailable ? [NSImage imageNamed:@"status_icon_problem"] : nil;
+}
+
+- (void)setVagrantUpdatesAvailable:(BOOL)updatesAvailable {
+    _checkForVagrantUpdatesMenuItem.image = updatesAvailable ? [NSImage imageNamed:@"status_icon_problem"] : nil;
 }
 
 - (void)setIsRefreshing:(BOOL)isRefreshing {
@@ -431,6 +447,10 @@
 
 - (void)checkForUpdatesMenuItemClicked:(id)sender {
     [[SUUpdater sharedUpdater] checkForUpdates:self];
+}
+
+- (void)checkForVagrantUpdatesMenuItemClicked:(id)sender {
+    [self.delegate checkForVagrantUpdates:YES];
 }
 
 #pragma mark - All machines actions
