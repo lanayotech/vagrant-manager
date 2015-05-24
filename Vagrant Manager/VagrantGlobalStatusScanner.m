@@ -16,7 +16,7 @@
     //get output of vagrant global-status
     NSTask *task = [[NSTask alloc] init];
     [task setLaunchPath:@"/bin/bash"];
-    [task setArguments:@[@"-c", @"vagrant global-status"]];
+    [task setArguments:@[@"-l", @"-c", @"vagrant global-status"]];
     
     NSPipe *pipe = [NSPipe pipe];
     [task setStandardInput:[NSPipe pipe]];

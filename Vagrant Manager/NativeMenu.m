@@ -21,6 +21,7 @@
     NSMenuItem *_bottomMachineSeparator;
 
     NSMenuItem *_checkForUpdatesMenuItem;
+    NSMenuItem *_checkForVagrantUpdatesMenuItem;
 }
 
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
@@ -36,6 +37,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(instanceRemoved:) name:@"vagrant-manager.instance-removed" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(instanceUpdated:) name:@"vagrant-manager.instance-updated" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setUpdateAvailable:) name:@"vagrant-manager.update-available" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setVagrantUpdateAvailable:) name:@"vagrant-manager.vagrant-update-available" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshingStarted:) name:@"vagrant-manager.refreshing-started" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshingEnded:) name:@"vagrant-manager.refreshing-ended" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateRunningVmCount:) name:@"vagrant-manager.update-running-vm-count" object:nil];
@@ -103,11 +105,6 @@
     
     [_menu addItem:allMachinesMenuItem];
     
-    NSMenuItem *windowMenuItem = [[NSMenuItem alloc] initWithTitle:@"Window" action:nil keyEquivalent:@""];
-    [windowMenuItem setSubmenu:[[Util getApp] windowMenu]];
-    
-    [_menu addItem:windowMenuItem];
-
     NSMenuItem *manageBookmarksMenuItem = [[NSMenuItem alloc] initWithTitle:@"Manage Bookmarks" action:@selector(manageBookmarksMenuItemClicked:) keyEquivalent:@""];
     manageBookmarksMenuItem.target = self;
     [_menu addItem:manageBookmarksMenuItem];
@@ -115,6 +112,8 @@
     NSMenuItem *manageCustomCommandsMenuItem = [[NSMenuItem alloc] initWithTitle:@"Manage Custom Commands" action:@selector(manageCustomCommandsMenuItemClicked:) keyEquivalent:@""];
     manageCustomCommandsMenuItem.target = self;
     [_menu addItem:manageCustomCommandsMenuItem];
+    
+    [_menu addItem:[NSMenuItem separatorItem]];
 
     NSMenuItem *preferencesMenuItem = [[NSMenuItem alloc] initWithTitle:@"Preferences" action:@selector(preferencesMenuItemClicked:) keyEquivalent:@""];
     preferencesMenuItem.target = self;
@@ -128,6 +127,10 @@
     _checkForUpdatesMenuItem.target = self;
     [_menu addItem:_checkForUpdatesMenuItem];
     
+    _checkForVagrantUpdatesMenuItem = [[NSMenuItem alloc] initWithTitle:@"Check For Vagrant Updates" action:@selector(checkForVagrantUpdatesMenuItemClicked:) keyEquivalent:@""];
+    _checkForVagrantUpdatesMenuItem.target = self;
+    [_menu addItem:_checkForVagrantUpdatesMenuItem];
+
     NSMenuItem *quitMenuItem = [[NSMenuItem alloc] initWithTitle:@"Quit" action:@selector(quitMenuItemClicked:) keyEquivalent:@""];
     quitMenuItem.target = self;
     [_menu addItem:quitMenuItem];
@@ -171,6 +174,10 @@
 
 - (void)setUpdateAvailable: (NSNotification*)notification {
     [self setUpdatesAvailable:[[notification.userInfo objectForKey:@"is_update_available"] boolValue]];
+}
+
+- (void)setVagrantUpdateAvailable: (NSNotification*)notification {
+    [self setVagrantUpdatesAvailable:[[notification.userInfo objectForKey:@"is_update_available"] boolValue]];
 }
 
 - (void)refreshingStarted: (NSNotification*)notification {
@@ -246,6 +253,10 @@
 
 - (void)setUpdatesAvailable:(BOOL)updatesAvailable {
     _checkForUpdatesMenuItem.image = updatesAvailable ? [NSImage imageNamed:@"status_icon_problem"] : nil;
+}
+
+- (void)setVagrantUpdatesAvailable:(BOOL)updatesAvailable {
+    _checkForVagrantUpdatesMenuItem.image = updatesAvailable ? [NSImage imageNamed:@"status_icon_problem"] : nil;
 }
 
 - (void)setIsRefreshing:(BOOL)isRefreshing {
@@ -389,6 +400,7 @@
         manageBookmarksWindow = [[ManageBookmarksWindow alloc] initWithWindowNibName:@"ManageBookmarksWindow"];
         [NSApp activateIgnoringOtherApps:YES];
         [manageBookmarksWindow showWindow:self];
+        [[Util getApp] addOpenWindow:manageBookmarksWindow];
     }
 }
 
@@ -400,6 +412,7 @@
         manageCustomCommandsWindow = [[ManageCustomCommandsWindow alloc] initWithWindowNibName:@"ManageCustomCommandsWindow"];
         [NSApp activateIgnoringOtherApps:YES];
         [manageCustomCommandsWindow showWindow:self];
+        [[Util getApp] addOpenWindow:manageCustomCommandsWindow];
     }
 }
 
@@ -411,6 +424,7 @@
         preferencesWindow = [[PreferencesWindow alloc] initWithWindowNibName:@"PreferencesWindow"];
         [NSApp activateIgnoringOtherApps:YES];
         [preferencesWindow showWindow:self];
+        [[Util getApp] addOpenWindow:preferencesWindow];
     }
 }
 
@@ -426,11 +440,16 @@
         aboutWindow = [[AboutWindow alloc] initWithWindowNibName:@"AboutWindow"];
         [NSApp activateIgnoringOtherApps:YES];
         [aboutWindow showWindow:self];
+        [[Util getApp] addOpenWindow:aboutWindow];
     }
 }
 
 - (void)checkForUpdatesMenuItemClicked:(id)sender {
     [[SUUpdater sharedUpdater] checkForUpdates:self];
+}
+
+- (void)checkForVagrantUpdatesMenuItemClicked:(id)sender {
+    [self.delegate checkForVagrantUpdates:YES];
 }
 
 #pragma mark - All machines actions

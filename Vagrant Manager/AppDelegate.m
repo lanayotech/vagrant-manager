@@ -17,7 +17,7 @@
     
     VagrantManager *_manager;
     NativeMenu *_nativeMenu;
-    NSMutableArray *taskOutputWindows;
+    NSMutableArray *openWindows;
     
     int queuedRefreshes;
 }
@@ -26,7 +26,7 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     //initialize data
-    taskOutputWindows = [[NSMutableArray alloc] init];
+    openWindows = [[NSMutableArray alloc] init];
     
     //register notification listeners
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(taskCompleted:) name:@"vagrant-manager.task-completed" object:nil];
@@ -64,6 +64,9 @@
     
     //start refresh timer if activated in preferences
     [self refreshTimerState];
+    
+    //check for vagrant updates
+    [self checkForVagrantUpdates:NO];
 }
 
 #pragma mark - Notification handlers
@@ -168,7 +171,7 @@
 
 - (void)performVagrantAction:(NSString *)action withInstance:(VagrantInstance *)instance {
     if([action isEqualToString:@"ssh"]) {
-        NSString *action = [NSString stringWithFormat:@"\\cd %@; vagrant ssh", [Util escapeShellArg:instance.path]];
+        NSString *action = [NSString stringWithFormat:@"cd %@; vagrant ssh", [Util escapeShellArg:instance.path]];
         [self runTerminalCommand:action];
     } else {
         [self runVagrantAction:action withInstance:instance];
@@ -177,7 +180,7 @@
 
 - (void)performVagrantAction:(NSString *)action withMachine:(VagrantMachine *)machine {
     if([action isEqualToString:@"ssh"]) {
-        NSString *action = [NSString stringWithFormat:@"\\cd %@; vagrant ssh %@", [Util escapeShellArg:machine.instance.path], machine.name];
+        NSString *action = [NSString stringWithFormat:@"cd %@; vagrant ssh %@", [Util escapeShellArg:machine.instance.path], machine.name];
         [self runTerminalCommand:action];
     } else {
         [self runVagrantAction:action withMachine:machine];
@@ -188,7 +191,7 @@
     for(VagrantMachine *machine in instance.machines) {
         if(machine.state == RunningState) {
             if(customCommand.runInTerminal) {
-                NSString *action = [NSString stringWithFormat:@"\\cd %@; vagrant ssh %@ -c %@", [Util escapeShellArg:instance.path], [Util escapeShellArg:machine.name], [Util escapeShellArg:customCommand.command]];
+                NSString *action = [NSString stringWithFormat:@"cd %@; vagrant ssh %@ -c %@", [Util escapeShellArg:instance.path], [Util escapeShellArg:machine.name], [Util escapeShellArg:customCommand.command]];
                 [self runTerminalCommand:action];
             } else {
                 [self runVagrantCustomCommand:customCommand.command withMachine:machine];
@@ -199,7 +202,7 @@
 
 - (void)performCustomCommand:(CustomCommand *)customCommand withMachine:(VagrantMachine *)machine {
     if(customCommand.runInTerminal) {
-        NSString *action = [NSString stringWithFormat:@"\\cd %@; vagrant ssh %@ -c %@", [Util escapeShellArg:machine.instance.path], [Util escapeShellArg:machine.name], [Util escapeShellArg:customCommand.command]];
+        NSString *action = [NSString stringWithFormat:@"cd %@; vagrant ssh %@ -c %@", [Util escapeShellArg:machine.instance.path], [Util escapeShellArg:machine.name], [Util escapeShellArg:customCommand.command]];
         [self runTerminalCommand:action];
     } else {
         [self runVagrantCustomCommand:customCommand.command withMachine:machine];
@@ -223,7 +226,7 @@
     
     BOOL isDir = NO;
     if([[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isDir] && isDir) {
-        [self runTerminalCommand:[NSString stringWithFormat:@"\\cd %@", [Util escapeShellArg:path]]];
+        [self runTerminalCommand:[NSString stringWithFormat:@"cd %@", [Util escapeShellArg:path]]];
     } else {
         [[NSAlert alertWithMessageText:[NSString stringWithFormat:@"Path not found: %@", path] defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@""] runModal];
     }
@@ -241,15 +244,81 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:@"vagrant-manager.bookmarks-updated" object:nil];
 }
 
+- (void)checkForVagrantUpdates:(BOOL)showAlert {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        //run vagrant command to check version
+        NSTask *task = [[NSTask alloc] init];
+        [task setLaunchPath:@"/bin/bash"];
+        [task setArguments:@[@"-l", @"-c", @"vagrant version --machine-readable"]];
+        
+        NSPipe *pipe = [NSPipe pipe];
+        [task setStandardInput:[NSPipe pipe]];
+        [task setStandardOutput:pipe];
+        
+        [task launch];
+        [task waitUntilExit];
+        
+        //parse version info from output
+        NSData *outputData = [[pipe fileHandleForReading] readDataToEndOfFile];
+        NSString *outputString = [[NSString alloc] initWithData:outputData encoding:NSUTF8StringEncoding];
+        
+        NSArray *lines = [outputString componentsSeparatedByString:@"\n"];
+        
+        BOOL newVersionAvailable = NO;
+        BOOL invalidOutput = YES;
+        NSString *currentVersion;
+        NSString *latestVersion;
+        
+        
+        if([lines count] >= 2) {
+            NSArray *installedVersionParts = [[lines objectAtIndex:0] componentsSeparatedByString:@","];
+            NSArray *latestVersionParts = [[lines objectAtIndex:1] componentsSeparatedByString:@","];
+            
+            if([installedVersionParts count] >= 4 && [latestVersionParts count] >= 4) {
+                currentVersion = [installedVersionParts objectAtIndex:3];
+                latestVersion = [latestVersionParts objectAtIndex:3];
+                
+                if([Util compareVersion:currentVersion toVersion:latestVersion] == NSOrderedAscending) {
+                    newVersionAvailable = YES;
+                }
+                
+                invalidOutput = NO;
+            }
+        }
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"vagrant-manager.vagrant-update-available" object:nil userInfo:@{@"is_update_available": [NSNumber numberWithBool:newVersionAvailable]}];
+
+            if(showAlert) {
+                if(invalidOutput) {
+                    [[NSAlert alertWithMessageText:@"There was a problem checking your Vagrant version" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@""] runModal];
+                } else if(newVersionAvailable) {
+                    NSAlert *alert = [NSAlert alertWithMessageText:[NSString stringWithFormat:@"There is a newer version of Vagrant available.\n\nCurrent version: %@\nLatest version: %@", currentVersion, latestVersion] defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@""];
+                    [alert addButtonWithTitle:@"Visit Vagrant Website"];
+                    
+                    long response = [alert runModal];
+                    
+                    if(response == NSAlertSecondButtonReturn) {
+                        [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"https://www.vagrantup.com/"]];
+                    }
+                } else {
+                    [[NSAlert alertWithMessageText:@"You are running the latest version of Vagrant" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@""] runModal];
+                }
+            }
+        });
+    });
+    
+}
+
 #pragma mark - Vagrant Machine control
 
 - (void)runVagrantCustomCommand:(NSString*)command withMachine:(VagrantMachine*)machine {
     NSTask *task = [[NSTask alloc] init];
     [task setLaunchPath:@"/bin/bash"];
     
-    NSString *taskCommand = [NSString stringWithFormat:@"\\cd %@; vagrant ssh %@ -c %@", [Util escapeShellArg:machine.instance.path], [Util escapeShellArg:machine.name], [Util escapeShellArg:command]];
+    NSString *taskCommand = [NSString stringWithFormat:@"cd %@; vagrant ssh %@ -c %@", [Util escapeShellArg:machine.instance.path], [Util escapeShellArg:machine.name], [Util escapeShellArg:command]];
     
-    [task setArguments:@[@"-c", taskCommand]];
+    [task setArguments:@[@"-l", @"-c", taskCommand]];
     
     TaskOutputWindow *outputWindow = [[TaskOutputWindow alloc] initWithWindowNibName:@"TaskOutputWindow"];
     outputWindow.task = task;
@@ -260,34 +329,41 @@
     [NSApp activateIgnoringOtherApps:YES];
     [outputWindow showWindow:self];
 
-    [self addTaskOutputWindow:outputWindow];
+    [self addOpenWindow:outputWindow];
 }
 
 - (void)runVagrantAction:(NSString*)action withMachine:(VagrantMachine*)machine {
-    NSString *command;
+    NSMutableArray *commandParts = [[NSMutableArray alloc] init];
     
     if([action isEqualToString:@"up"]) {
-        command = [NSString stringWithFormat:@"vagrant up%@", machine.instance.providerIdentifier ? [NSString stringWithFormat:@" --provider=%@", machine.instance.providerIdentifier] : @""];
+        [commandParts addObject:@"vagrant up"];
+        if(machine.instance.providerIdentifier) {
+            [commandParts addObject:[NSString stringWithFormat:@"--provider=%@", machine.instance.providerIdentifier]];
+        }
     } else if([action isEqualToString:@"reload"]) {
-        command = @"vagrant reload";
+        [commandParts addObject:@"vagrant reload"];
     } else if([action isEqualToString:@"suspend"]) {
-        command = @"vagrant suspend";
+        [commandParts addObject:@"vagrant suspend"];
     } else if([action isEqualToString:@"halt"]) {
-        command = @"vagrant halt";
+        [commandParts addObject:@"vagrant halt"];
     } else if([action isEqualToString:@"provision"]) {
-        command = @"vagrant provision";
+        [commandParts addObject:@"vagrant provision"];
     } else if([action isEqualToString:@"destroy"]) {
-        command = @"vagrant destroy -f";
+        [commandParts addObject:@"vagrant destroy -f"];
     } else {
         return;
     }
     
+    [commandParts addObject:@"--no-color"];
+    
+    NSString *command = [commandParts componentsJoinedByString:@" "];
+    
     NSTask *task = [[NSTask alloc] init];
     [task setLaunchPath:@"/bin/bash"];
     
-    NSString *taskCommand = [NSString stringWithFormat:@"\\cd %@; %@ %@", [Util escapeShellArg:machine.instance.path], command, [Util escapeShellArg:machine.name]];
+    NSString *taskCommand = [NSString stringWithFormat:@"cd %@; %@ %@", [Util escapeShellArg:machine.instance.path], command, [Util escapeShellArg:machine.name]];
     
-    [task setArguments:@[@"-c", taskCommand]];
+    [task setArguments:@[@"-l", @"-c", taskCommand]];
     
     TaskOutputWindow *outputWindow = [[TaskOutputWindow alloc] initWithWindowNibName:@"TaskOutputWindow"];
     outputWindow.task = task;
@@ -298,32 +374,39 @@
     [NSApp activateIgnoringOtherApps:YES];
     [outputWindow showWindow:self];
     
-    [self addTaskOutputWindow:outputWindow];
+    [self addOpenWindow:outputWindow];
 }
 
 - (void)runVagrantAction:(NSString*)action withInstance:(VagrantInstance*)instance {
-    NSString *command;
+    NSMutableArray *commandParts = [[NSMutableArray alloc] init];
     
     if([action isEqualToString:@"up"]) {
-        command = [NSString stringWithFormat:@"vagrant up%@", instance.providerIdentifier ? [NSString stringWithFormat:@" --provider=%@", instance.providerIdentifier] : @""];
+        [commandParts addObject:@"vagrant up"];
+        if(instance.providerIdentifier) {
+            [commandParts addObject:[NSString stringWithFormat:@"--provider=%@", instance.providerIdentifier]];
+        }
     } else if([action isEqualToString:@"reload"]) {
-        command = @"vagrant reload";
+        [commandParts addObject:@"vagrant reload"];
     } else if([action isEqualToString:@"suspend"]) {
-        command = @"vagrant suspend";
+        [commandParts addObject:@"vagrant suspend"];
     } else if([action isEqualToString:@"halt"]) {
-        command = @"vagrant halt";
+        [commandParts addObject:@"vagrant halt"];
     } else if([action isEqualToString:@"provision"]) {
-        command = @"vagrant provision";
+        [commandParts addObject:@"vagrant provision"];
     } else if([action isEqualToString:@"destroy"]) {
-        command = @"vagrant destroy -f";
+        [commandParts addObject:@"vagrant destroy -f"];
     } else {
         return;
     }
     
+    [commandParts addObject:@"--no-color"];
+    
+    NSString *command = [commandParts componentsJoinedByString:@" "];
+    
     NSTask *task = [[NSTask alloc] init];
     [task setLaunchPath:@"/bin/bash"];
     
-    NSString *taskCommand = [NSString stringWithFormat:@"\\cd %@; %@", [Util escapeShellArg:instance.path], command];
+    NSString *taskCommand = [NSString stringWithFormat:@"cd %@; %@", [Util escapeShellArg:instance.path], command];
     
     [task setArguments:@[@"-c", @"-l", taskCommand]];
     
@@ -336,7 +419,7 @@
     [NSApp activateIgnoringOtherApps:YES];
     [outputWindow showWindow:self];
     
-    [self addTaskOutputWindow:outputWindow];
+    [self addOpenWindow:outputWindow];
 }
 
 - (void)runTerminalCommand:(NSString*)command {
@@ -370,15 +453,28 @@
 
 #pragma mark - Window management
 
-- (void)addTaskOutputWindow:(TaskOutputWindow*)taskOutputWindow {
-    @synchronized(taskOutputWindows) {
-        [taskOutputWindows addObject:taskOutputWindow];
+- (void)addOpenWindow:(id)window {
+    @synchronized(openWindows) {
+        [openWindows addObject:window];
+        [self updateProcessType];
     }
 }
 
-- (void)removeTaskOutputWindow:(TaskOutputWindow*)taskOutputWindow {
-    @synchronized(taskOutputWindows) {
-        [taskOutputWindows removeObject:taskOutputWindow];
+- (void)removeOpenWindow:(id)window {
+    @synchronized(openWindows) {
+        [openWindows removeObject:window];
+        [self updateProcessType];
+    }
+}
+
+- (void)updateProcessType {
+    if([openWindows count] == 0) {
+        ProcessSerialNumber psn = { 0, kCurrentProcess };
+        TransformProcessType(&psn, kProcessTransformToBackgroundApplication);
+    } else {
+        ProcessSerialNumber psn = { 0, kCurrentProcess };
+        TransformProcessType(&psn, kProcessTransformToForegroundApplication);
+        SetFrontProcess(&psn);
     }
 }
 
@@ -435,18 +531,22 @@
         NSString *taskWindowUUID = [notification.userInfo objectForKey:@"taskWindowUUID"];
         NSArray *windows;
         
-        @synchronized(taskOutputWindows) {
-            windows = [NSArray arrayWithArray:taskOutputWindows];
+        @synchronized(openWindows) {
+            windows = [NSArray arrayWithArray:openWindows];
         }
         
         //find task output window that posted this notification
-        for(TaskOutputWindow *taskOutputWindow in windows) {
-            if([taskOutputWindow.windowUUID isEqualToString:taskWindowUUID]) {
-                if([taskOutputWindow.window isVisible]) {
-                    //show task output window
-                    [NSApp activateIgnoringOtherApps:YES];
-                    [taskOutputWindow.window makeKeyAndOrderFront:self];
-                    [taskOutputWindow.window setOrderedIndex:0];
+        for(id window in windows) {
+            if([window isKindOfClass:[TaskOutputWindow class]]) {
+                TaskOutputWindow *taskOutputWindow = window;
+                
+                if([taskOutputWindow.windowUUID isEqualToString:taskWindowUUID]) {
+                    if([taskOutputWindow.window isVisible]) {
+                        //show task output window
+                        [NSApp activateIgnoringOtherApps:YES];
+                        [taskOutputWindow.window makeKeyAndOrderFront:self];
+                        [taskOutputWindow.window setOrderedIndex:0];
+                    }
                 }
             }
         }

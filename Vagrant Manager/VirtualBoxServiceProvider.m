@@ -48,7 +48,7 @@
     NSTask *task = [[NSTask alloc] init];
     [task setLaunchPath:@"/bin/bash"];
     
-    [task setArguments:@[@"-c", @"VBoxManage list vms"]];
+    [task setArguments:@[@"-l", @"-c", @"VBoxManage list vms"]];
     
     NSPipe *pipe = [NSPipe pipe];
     [task setStandardInput:[NSPipe pipe]];
@@ -78,7 +78,7 @@
 - (VirtualBoxMachineInfo*)getVirtualMachineInfoFromUUID:(NSString*)uuid {
     NSTask *task = [[NSTask alloc] init];
     [task setLaunchPath:@"/bin/bash"];
-    [task setArguments:@[@"-c", [NSString stringWithFormat:@"VBoxManage showvminfo %@ --machinereadable", uuid]]];
+    [task setArguments:@[@"-l", @"-c", [NSString stringWithFormat:@"VBoxManage showvminfo %@ --machinereadable", uuid]]];
     
     NSPipe *pipe = [NSPipe pipe];
     [task setStandardInput:[NSPipe pipe]];

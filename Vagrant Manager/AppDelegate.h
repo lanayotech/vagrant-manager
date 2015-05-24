@@ -25,11 +25,11 @@
 }
 
 @property (assign) IBOutlet NSWindow *window;
-@property (weak) IBOutlet NSMenu *windowMenu;
 @property (strong, nonatomic) NSTimer *refreshTimer;
 
 - (void)refreshVagrantMachines;
-- (void)removeTaskOutputWindow:(TaskOutputWindow*)taskOutputWindow;
+- (void)addOpenWindow:(id)window;
+- (void)removeOpenWindow:(id)window;
 - (void)updateRunningVmCount;
 - (void)refreshTimerState;
 - (NSImage*)getThemedImage:(NSString*)imageName;

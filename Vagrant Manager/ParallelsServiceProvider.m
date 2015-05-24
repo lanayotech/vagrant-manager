@@ -46,7 +46,7 @@
     NSTask *task = [[NSTask alloc] init];
     [task setLaunchPath:@"/bin/bash"];
     
-    [task setArguments:@[@"-c", @"prlctl list --info --all --json"]];
+    [task setArguments:@[@"-l", @"-c", @"prlctl list --info --all --json"]];
     
     NSPipe *pipe = [NSPipe pipe];
     [task setStandardInput:[NSPipe pipe]];
