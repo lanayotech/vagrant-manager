@@ -180,15 +180,17 @@
             [self.menuItem.submenu addItem:_addBookmarkMenuItem];
         }
         
+        Bookmark *bookmark = [[BookmarkManager sharedManager] getBookmarkWithPath:self.instance.path];
+        
         if([self.instance hasVagrantfile]) {
             int runningCount = [self.instance getRunningMachineCount];
             int suspendedCount = [self.instance getMachineCountWithState:SavedState];
             if(runningCount == 0 && suspendedCount == 0) {
-                self.menuItem.image = [NSImage imageNamed:@"status_icon_off"];
+                self.menuItem.image = [NSImage imageNamed:bookmark ? @"bm_status_icon_off" : @"status_icon_off"];
             } else if(runningCount == self.instance.machines.count) {
-                self.menuItem.image = [NSImage imageNamed:@"status_icon_on"];
+                self.menuItem.image = [NSImage imageNamed:bookmark ? @"bm_status_icon_on" : @"status_icon_on"];
             } else {
-                self.menuItem.image = [NSImage imageNamed:@"status_icon_suspended"];
+                self.menuItem.image = [NSImage imageNamed:bookmark ? @"bm_status_icon_suspended" : @"status_icon_suspended"];
             }
             
             if([self.instance getRunningMachineCount] < self.instance.machines.count) {
@@ -233,27 +235,22 @@
             self.menuItem.submenu = nil;
         }
         
-        Bookmark *bookmark = [[BookmarkManager sharedManager] getBookmarkWithPath:self.instance.path];
-        if(bookmark) {
-            self.menuItem.title = [NSString stringWithFormat:@"[B] %@", bookmark.displayName];
+        NSString *title;
+        if([[NSUserDefaults standardUserDefaults] boolForKey:@"usePathAsInstanceDisplayName"]) {
+            title = self.instance.path;
         } else {
-            NSString *title;
-            if([[NSUserDefaults standardUserDefaults] boolForKey:@"usePathAsInstanceDisplayName"]) {
-                title = self.instance.path;
-            } else {
-                title = self.instance.displayName;                
-            }
-            
-            if(self.instance.machines.count > 0 && [[NSUserDefaults standardUserDefaults] boolForKey:@"includeMachineNamesInMenu"]) {
-                NSMutableArray *machineNames = [[NSMutableArray alloc] init];
-                for(VagrantMachine *machine in self.instance.machines) {
-                    [machineNames addObject:machine.name];
-                }
-                title = [title stringByAppendingString:[NSString stringWithFormat:@" (%@)", [machineNames componentsJoinedByString:@", "]]];
-            }
-            
-            self.menuItem.title = title;
+            title = self.instance.displayName;                
         }
+        
+        if(self.instance.machines.count > 0 && [[NSUserDefaults standardUserDefaults] boolForKey:@"includeMachineNamesInMenu"]) {
+            NSMutableArray *machineNames = [[NSMutableArray alloc] init];
+            for(VagrantMachine *machine in self.instance.machines) {
+                [machineNames addObject:machine.name];
+            }
+            title = [title stringByAppendingString:[NSString stringWithFormat:@" (%@)", [machineNames componentsJoinedByString:@", "]]];
+        }
+        
+        self.menuItem.title = title;
         
         if(!_machineSeparator) {
             _machineSeparator = [NSMenuItem separatorItem];
