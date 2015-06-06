@@ -14,6 +14,7 @@ Download Vagrant Manager from the [GitHub Releases Page](https://github.com/lana
 * Vagrant Manager can automatically detect most machines, undetected machines will require manual configuration via bookmarks.
 * Make sure that you have VirtualBox and Vagrant installed, and the `VBoxManage` and `vagrant` commands are in your path so that Vagrant Manager can execute them. If you use Parallels, ensure the `prlctl` command is also in your path.
 * Currently, vagrant machines must already be initialized in order for Vagrant Manager to detect them. Make sure you have run vagrant init on any machine you want to appear in Vagrant Manager. Once Vagrant Manager has detected a machine, you can bookmark it so that it will not disappear when you destroy the machine. You can also manually add a bookmark and specify the path to your Vagrantfile.
+* Vagrant Manager requires OS X 10.8 Mountain Lion or higher
 
 ## Contributing to Vagrant Manager
 
