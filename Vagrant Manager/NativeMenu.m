@@ -60,6 +60,7 @@
     [_menu addItem:_bottomMachineSeparator];
     
     NSMenu *allMachinesMenu = [[NSMenu alloc] init];
+    [allMachinesMenu setAutoenablesItems:NO];
     
     NSMenuItem *menuItem = [[NSMenuItem alloc] initWithTitle:@"Up" action:@selector(allUpMenuItemClicked:) keyEquivalent:@""];
     menuItem.target = self;

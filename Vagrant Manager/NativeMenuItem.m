@@ -52,6 +52,7 @@
         
         if(!self.menuItem.hasSubmenu) {
             [self.menuItem setSubmenu:[[NSMenu alloc] init]];
+            [self.menuItem.submenu setAutoenablesItems:NO];
             self.menuItem.submenu.delegate = self;
         }
         
@@ -117,6 +118,7 @@
             
             [self.menuItem.submenu addItem:_instanceCustomCommandMenuItem];
             _instanceCustomCommandMenuItem.submenu = [[NSMenu alloc] init];
+            [_instanceCustomCommandMenuItem.submenu setAutoenablesItems:NO];
         }
 
         [_instanceCustomCommandMenuItem.submenu removeAllItems];
@@ -155,6 +157,7 @@
         if (!_chooseProviderMenuItem) {
             _chooseProviderMenuItem = [[NSMenuItem alloc] initWithTitle:[NSString stringWithFormat:@"Provider: %@", self.instance.providerIdentifier ?: @"Unknown"] action:nil keyEquivalent:@""];
             NSMenu *submenu = [[NSMenu alloc] init];
+            [submenu setAutoenablesItems:NO];
             NSArray *providerIdentifiers = [[VagrantManager sharedManager] getProviderIdentifiers];
             for(NSString *providerIdentifier in providerIdentifiers) {
                 NSMenuItem *submenuItem = [[NSMenuItem alloc] initWithTitle:providerIdentifier action:@selector(updateProviderIdentifier:) keyEquivalent:@""];
@@ -271,6 +274,7 @@
             for(VagrantMachine *machine in self.instance.machines) {
                 NSMenuItem *machineItem = [[NSMenuItem alloc] initWithTitle:machine.name action:nil keyEquivalent:@""];
                 NSMenu *machineSubmenu = [[NSMenu alloc] init];
+                [machineSubmenu setAutoenablesItems:NO];
                 machineSubmenu.delegate = self;
                 
                 NSMenuItem *machineUpMenuItem = [[NSMenuItem alloc] initWithTitle:@"Up" action:@selector(upMachine:) keyEquivalent:@""];
@@ -327,6 +331,7 @@
                 [machineCustomCommandMenuItem.image setTemplate:YES];
                 [machineSubmenu addItem:machineCustomCommandMenuItem];
                 machineCustomCommandMenuItem.submenu = [[NSMenu alloc] init];
+                [machineCustomCommandMenuItem.submenu setAutoenablesItems:NO];
                 
                 [machineCustomCommandMenuItem.submenu removeAllItems];
                 if(customCommands.count > 0) {
