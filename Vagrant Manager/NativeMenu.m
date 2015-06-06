@@ -24,10 +24,6 @@
     NSMenuItem *_checkForVagrantUpdatesMenuItem;
 }
 
-- (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
-    return [menuItem isEnabled];
-}
-
 - (id)init {
     self = [super init];
     
@@ -44,6 +40,7 @@
     
     _statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength];
     _menu = [[NSMenu alloc] init];
+    [_menu setAutoenablesItems:NO];
     
     _menuItems = [[NSMutableArray alloc] init];
     
@@ -63,6 +60,7 @@
     [_menu addItem:_bottomMachineSeparator];
     
     NSMenu *allMachinesMenu = [[NSMenu alloc] init];
+    [allMachinesMenu setAutoenablesItems:NO];
     
     NSMenuItem *menuItem = [[NSMenuItem alloc] initWithTitle:@"Up" action:@selector(allUpMenuItemClicked:) keyEquivalent:@""];
     menuItem.target = self;
