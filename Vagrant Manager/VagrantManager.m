@@ -6,7 +6,6 @@
 //
 
 #import "VagrantManager.h"
-#import "NFSScanner.h"
 #import "VagrantGlobalStatusScanner.h"
 #import "BookmarkManager.h"
 
@@ -106,38 +105,12 @@
         [instances addObject:[[VagrantInstance alloc] initWithPath:bookmark.path displayName:bookmark.displayName providerIdentifier:bookmark.providerIdentifier]];
     }
     
-    NSMutableArray *allPaths = [[NSMutableArray alloc] init];
-    
-    //scan for NFS exports
-    NFSScanner *nfsScanner = [[NFSScanner alloc] init];
-    for(NSString *path in [nfsScanner getNFSInstancePaths]) {
-        //make sure it is not a bookmark and has not already been detected
-        if(![bookmarkManager getBookmarkWithPath:path] && ![allPaths containsObject:path]) {
-            [allPaths addObject:path];
-            [instances addObject:[[VagrantInstance alloc] initWithPath:path providerIdentifier:nil]];
-        }
-    }
-    
     //scan vagrant global-status output
     VagrantGlobalStatusScanner *globalStatusScanner = [[VagrantGlobalStatusScanner alloc] init];
-    for(NSString *path in [globalStatusScanner getInstancePaths]) {
+    for(VagrantInstance *instance in [globalStatusScanner getInstances]) {
         //make sure it is not a bookmark and has not already been detected
-        if(![bookmarkManager getBookmarkWithPath:path] && ![allPaths containsObject:path]) {
-            [allPaths addObject:path];
-            [instances addObject:[[VagrantInstance alloc] initWithPath:path providerIdentifier:nil]];
-        }
-    }
-    
-    //create instance for each detected path
-    NSDictionary *detectedPaths = [self detectInstancePaths];
-    for(NSString *providerIdentifier in [detectedPaths allKeys]) {
-        NSArray *paths = [detectedPaths objectForKey:providerIdentifier];
-        for(NSString *path in paths) {
-            //make sure it is not a bookmark and has not already been detected
-            if(![bookmarkManager getBookmarkWithPath:path] && ![allPaths containsObject:path]) {
-                [allPaths addObject:path];
-                [instances addObject:[[VagrantInstance alloc] initWithPath:path providerIdentifier:providerIdentifier]];
-            }
+        if(![bookmarkManager getBookmarkWithPath:instance.path]) {
+            [instances addObject:instance];
         }
     }
 
@@ -150,9 +123,6 @@
     dispatch_queue_t queryMachinesQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     for(VagrantInstance *instance in instances) {
         dispatch_group_async(queryMachinesGroup, queryMachinesQueue, ^{
-            //query instance machines
-            [instance queryMachines];
-            
             @synchronized(_instances) {
                 VagrantInstance *existingInstance = [self getInstanceForPath:instance.path];
                 if(existingInstance) {

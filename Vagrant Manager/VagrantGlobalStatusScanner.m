@@ -10,13 +10,13 @@
 @implementation VagrantGlobalStatusScanner
 
 //find vagrant instances listed in the vagrant global-status command output
-- (NSArray*)getInstancePaths {
-    NSMutableArray *paths = [[NSMutableArray alloc] init];
+- (NSArray*)getInstances {
+    NSMutableDictionary *instancePathDict = [NSMutableDictionary dictionary];
     
     //get output of vagrant global-status
     NSTask *task = [[NSTask alloc] init];
     [task setLaunchPath:@"/bin/bash"];
-    [task setArguments:@[@"-l", @"-c", @"vagrant global-status"]];
+    [task setArguments:@[@"-l", @"-c", @"vagrant global-status --prune 2> /dev/null"]];
     
     NSPipe *pipe = [NSPipe pipe];
     [task setStandardInput:[NSPipe pipe]];
@@ -30,27 +30,57 @@
         NSData *outputData = [[pipe fileHandleForReading] readDataToEndOfFile];
         NSString *outputString = [[NSString alloc] initWithData:outputData encoding:NSUTF8StringEncoding];
         
+        NSArray *lines = [outputString componentsSeparatedByString:@"\n"];
+        NSString *header = [lines firstObject];
+        
+        NSRange range = [header rangeOfString:@"name"];
+        NSInteger nameIndex = (unsigned long)range.location;
+        
+        range = [header rangeOfString:@"provider"];
+        NSInteger providerIndex = (unsigned long)range.location;
+        
+        range = [header rangeOfString:@"state"];
+        NSInteger stateIndex = (unsigned long)range.location;
+        
+        range = [header rangeOfString:@"directory"];
+        NSInteger directoryIndex = (unsigned long)range.location;
+        
         //search for machine state in output string
-        NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"(\\S+)\\s+(\\S+)\\s+(\\S+)\\s+(\\S+)\\s+(\\/.*)(\\n|$)" options:0 error:NULL];
+        NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"^([a-z0-9]{7}\\s.*)" options:NSRegularExpressionAnchorsMatchLines error:NULL];
         NSArray *matches = [regex matchesInString:outputString options:0 range:NSMakeRange(0, [outputString length])];
         for(NSTextCheckingResult *match in matches) {
-            //NSRange idRange = [match rangeAtIndex:1];
-            //NSRange nameRange = [match rangeAtIndex:2];
-            //NSRange providerRange = [match rangeAtIndex:3];
-            //NSRange stateRange = [match rangeAtIndex:4];
-            NSRange pathRange = [match rangeAtIndex:5];
+            NSRange matchRange = [match rangeAtIndex:1];
+            NSString *line = [[outputString substringWithRange:matchRange] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
             
-            NSString *path = [[outputString substringWithRange:pathRange] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+            NSString *machineName = [[line substringWithRange: NSMakeRange(nameIndex, providerIndex-nameIndex)] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
             
-            BOOL vagrantFileExists = [[NSFileManager defaultManager] fileExistsAtPath:[NSString pathWithComponents:@[path, @"/Vagrantfile"]]];
+            NSString *machineProvider = [[line substringWithRange: NSMakeRange(providerIndex, stateIndex-providerIndex)] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+            
+            NSString *machineState = [[line substringWithRange: NSMakeRange(stateIndex, directoryIndex-stateIndex)] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+            
+            NSString *machineDirectory = [[line substringWithRange: NSMakeRange(directoryIndex, line.length-directoryIndex)] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+            
+            BOOL vagrantFileExists = [[NSFileManager defaultManager] fileExistsAtPath:[NSString pathWithComponents:@[machineDirectory, @"/Vagrantfile"]]];
             
             if(vagrantFileExists) {
-                [paths addObject:path];
+                VagrantInstance *instance = nil;
+                
+                if ([instancePathDict objectForKey:machineDirectory]) {
+                    instance = [instancePathDict valueForKey:machineDirectory];
+                } else {
+                    instance = [[VagrantInstance alloc] initWithPath:machineDirectory providerIdentifier:machineProvider];
+                }
+                
+                VagrantMachine *machine = [[VagrantMachine alloc] initWithInstance:instance name:machineName state:UnknownState];
+                machine.stateString = machineState;
+                
+                [instance.machines addObject:machine];
+                instancePathDict[machineDirectory] = instance;
             }
         }
     }
     
-    return [NSArray arrayWithArray:paths];
+    return [instancePathDict allValues];
 }
 
 @end

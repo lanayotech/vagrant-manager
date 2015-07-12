@@ -9,6 +9,6 @@
 
 @interface VagrantGlobalStatusScanner : NSObject
 
-- (NSArray*)getInstancePaths;
+- (NSArray*)getInstances;
 
 @end

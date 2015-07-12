@@ -89,7 +89,6 @@
 		83F5BBC01983D85C00ACE853 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 83F5BBBE1983D85C00ACE853 /* MainMenu.xib */; };
 		83FD353D19826945002EEA2D /* ManageBookmarksWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 83FD353B19826945002EEA2D /* ManageBookmarksWindow.m */; };
 		83FD353E19826945002EEA2D /* ManageBookmarksWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 83FD353C19826945002EEA2D /* ManageBookmarksWindow.xib */; };
-		83FD354519826DDC002EEA2D /* NFSScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 83FD354419826DDC002EEA2D /* NFSScanner.m */; };
 		83FD354819827545002EEA2D /* BookmarkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 83FD354719827545002EEA2D /* BookmarkManager.m */; };
 		B12661181A00A650009B1635 /* NativeMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = B12661171A00A650009B1635 /* NativeMenu.m */; };
 		B1357A71187CEB3B00811CBC /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B1357A70187CEB3B00811CBC /* Cocoa.framework */; };
@@ -247,8 +246,6 @@
 		83FD353A19826945002EEA2D /* ManageBookmarksWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ManageBookmarksWindow.h; sourceTree = "<group>"; };
 		83FD353B19826945002EEA2D /* ManageBookmarksWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ManageBookmarksWindow.m; sourceTree = "<group>"; };
 		83FD353C19826945002EEA2D /* ManageBookmarksWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ManageBookmarksWindow.xib; sourceTree = "<group>"; };
-		83FD354319826DDC002EEA2D /* NFSScanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NFSScanner.h; sourceTree = "<group>"; };
-		83FD354419826DDC002EEA2D /* NFSScanner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NFSScanner.m; sourceTree = "<group>"; };
 		83FD354619827545002EEA2D /* BookmarkManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BookmarkManager.h; sourceTree = "<group>"; };
 		83FD354719827545002EEA2D /* BookmarkManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BookmarkManager.m; sourceTree = "<group>"; };
 		B12661161A00A650009B1635 /* NativeMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NativeMenu.h; sourceTree = "<group>"; };
@@ -445,8 +442,6 @@
 				B1A5DE7D192354E900AF0CA5 /* VirtualMachineServiceProvider.h */,
 				83E7CAB21928C2E9001C86F6 /* VirtualMachineInfo.h */,
 				83E7CAB31928C2E9001C86F6 /* VirtualMachineInfo.m */,
-				83FD354319826DDC002EEA2D /* NFSScanner.h */,
-				83FD354419826DDC002EEA2D /* NFSScanner.m */,
 				830BAC331A0F278D00AE5F9C /* VagrantGlobalStatusScanner.h */,
 				830BAC341A0F278D00AE5F9C /* VagrantGlobalStatusScanner.m */,
 			);
@@ -784,7 +779,6 @@
 				83E7CAB41928C2E9001C86F6 /* VirtualMachineInfo.m in Sources */,
 				83FD354819827545002EEA2D /* BookmarkManager.m in Sources */,
 				83DB673A1928AC0C0008CB57 /* VagrantMachine.m in Sources */,
-				83FD354519826DDC002EEA2D /* NFSScanner.m in Sources */,
 				837A30911A5D177A00E12A40 /* CustomCommandManager.m in Sources */,
 				B1357A84187CEB3B00811CBC /* AppDelegate.m in Sources */,
 				83103A5A19821A9E00B340BB /* ParallelsMachineInfo.m in Sources */,
