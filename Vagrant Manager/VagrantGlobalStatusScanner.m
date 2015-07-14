@@ -10,7 +10,7 @@
 @implementation VagrantGlobalStatusScanner
 
 //find vagrant instances listed in the vagrant global-status command output
-- (NSArray*)getInstances {
+- (NSMutableDictionary*)getInstances {
     NSMutableDictionary *instancePathDict = [NSMutableDictionary dictionary];
     
     //get output of vagrant global-status
@@ -80,7 +80,7 @@
         }
     }
     
-    return [instancePathDict allValues];
+    return instancePathDict;
 }
 
 @end

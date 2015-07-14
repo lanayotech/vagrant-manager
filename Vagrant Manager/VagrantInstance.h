@@ -12,7 +12,7 @@
 @interface VagrantInstance : NSObject
 
 @property (readonly) NSString *path;
-@property (readonly) NSString *displayName;
+@property (strong, nonatomic) NSString *displayName;
 @property (strong, nonatomic) NSMutableArray *machines;
 @property (strong, nonatomic) NSString *providerIdentifier;
 
