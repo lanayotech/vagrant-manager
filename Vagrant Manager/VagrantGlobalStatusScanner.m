@@ -30,8 +30,17 @@
         NSData *outputData = [[pipe fileHandleForReading] readDataToEndOfFile];
         NSString *outputString = [[NSString alloc] initWithData:outputData encoding:NSUTF8StringEncoding];
         
-        NSArray *lines = [outputString componentsSeparatedByString:@"\n"];
-        NSString *header = [lines firstObject];
+        NSRange headerRange = [[NSRegularExpression regularExpressionWithPattern:@"^id\\s+name\\s+provider\\s+state\\s+directory" options:0 error:nil] rangeOfFirstMatchInString:outputString options:0 range:NSMakeRange(0, outputString.length)];
+        
+        if (headerRange.location == NSNotFound) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [[Util getApp] showUserNotificationWithTitle:@"Invalid Output" informativeText:@"`vagrant global-status --prune` contains invalid output, run command in terminal window to verify" taskWindowUUID:nil];
+            });
+            
+            return instancePathDict;
+        }
+        
+        NSString *header = [outputString substringWithRange:headerRange];
         
         NSRange range = [header rangeOfString:@"name"];
         NSInteger nameIndex = (unsigned long)range.location;
@@ -48,6 +57,7 @@
         //search for machine state in output string
         NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"^([a-z0-9]{7}\\s.*)" options:NSRegularExpressionAnchorsMatchLines error:NULL];
         NSArray *matches = [regex matchesInString:outputString options:0 range:NSMakeRange(0, [outputString length])];
+        
         for(NSTextCheckingResult *match in matches) {
             NSRange matchRange = [match rangeAtIndex:1];
             NSString *line = [[outputString substringWithRange:matchRange] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
@@ -78,6 +88,10 @@
                 instancePathDict[machineDirectory] = instance;
             }
         }
+    } else {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[Util getApp] showUserNotificationWithTitle:@"Refresh Error" informativeText:@"`vagrant global-status --prune` command encountered an error, re-run the command in a terminal window to debug any errors, then try refreshing again" taskWindowUUID:nil];
+        });
     }
     
     return instancePathDict;
