@@ -30,7 +30,7 @@
         NSData *outputData = [[pipe fileHandleForReading] readDataToEndOfFile];
         NSString *outputString = [[NSString alloc] initWithData:outputData encoding:NSUTF8StringEncoding];
         
-        NSRange headerRange = [[NSRegularExpression regularExpressionWithPattern:@"^id\\s+name\\s+provider\\s+state\\s+directory" options:0 error:nil] rangeOfFirstMatchInString:outputString options:0 range:NSMakeRange(0, outputString.length)];
+        NSRange headerRange = [[NSRegularExpression regularExpressionWithPattern:@"^id\\s+name\\s+provider\\s+state\\s+directory" options:NSRegularExpressionAnchorsMatchLines error:nil] rangeOfFirstMatchInString:outputString options:0 range:NSMakeRange(0, outputString.length)];
         
         if (headerRange.location == NSNotFound) {
             dispatch_async(dispatch_get_main_queue(), ^{
