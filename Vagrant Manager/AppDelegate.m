@@ -507,11 +507,7 @@
 
 #pragma mark - Notification center
 
-- (void)showUserNotificationWithTitle:(NSString*)title informativeText:(NSString*)informativeText taskWindowUUID:(NSString*)taskWindowUUID {
-    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"showTaskNotification"]) {
-        return;
-    }
-    
+- (void)showNotificationWithTitle:(NSString *)title informativeText:(NSString *)informativeText taskWindowUUID:(NSString *)taskWindowUUID {
     //show user notification
     NSUserNotification *notification = [[NSUserNotification alloc] init];
     notification.title = title;
@@ -520,6 +516,14 @@
         notification.userInfo = @{@"taskWindowUUID": taskWindowUUID};
     }
     [[NSUserNotificationCenter defaultUserNotificationCenter] deliverNotification:notification];
+}
+
+- (void)showUserNotificationWithTitle:(NSString*)title informativeText:(NSString*)informativeText taskWindowUUID:(NSString*)taskWindowUUID {
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"showTaskNotification"]) {
+        return;
+    }
+    
+    [self showNotificationWithTitle:title informativeText:informativeText taskWindowUUID:taskWindowUUID];
 }
 
 - (BOOL)userNotificationCenter:(NSUserNotificationCenter *)center shouldPresentNotification:(NSUserNotification *)notification {

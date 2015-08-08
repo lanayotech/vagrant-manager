@@ -33,6 +33,7 @@
 - (void)updateRunningVmCount;
 - (void)refreshTimerState;
 - (NSImage*)getThemedImage:(NSString*)imageName;
+- (void)showNotificationWithTitle:(NSString*)title informativeText:(NSString*)informativeText taskWindowUUID:(NSString*)taskWindowUUID;
 - (void)showUserNotificationWithTitle:(NSString*)title informativeText:(NSString*)informativeText taskWindowUUID:(NSString*)taskWindowUUID;
 
 @end
