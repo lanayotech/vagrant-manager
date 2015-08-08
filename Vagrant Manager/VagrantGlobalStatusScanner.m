@@ -34,7 +34,7 @@
         
         if (headerRange.location == NSNotFound) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                [[Util getApp] showNotificationWithTitle:@"Invalid Output" informativeText:@"`vagrant global-status --prune` contains invalid output, run command in terminal window to verify" taskWindowUUID:nil];
+                [[Util getApp] showNotificationWithTitle:@"Invalid Output" informativeText:@"`vagrant global-status --prune` output invalid, run command in terminal window to verify" taskWindowUUID:nil];
             });
             
             return instancePathDict;
@@ -90,7 +90,7 @@
         }
     } else {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [[Util getApp] showNotificationWithTitle:@"Refresh Error" informativeText:@"`vagrant global-status --prune` command encountered an error, re-run the command in a terminal window to debug any errors, then try refreshing again" taskWindowUUID:nil];
+            [[Util getApp] showNotificationWithTitle:@"Refresh Error" informativeText:@"`vagrant global-status --prune` command encountered an error, run command in a terminal window to debug" taskWindowUUID:nil];
         });
     }
     
