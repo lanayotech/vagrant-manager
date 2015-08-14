@@ -1,4 +1,4 @@
-* **NOTICE:** Due to some issues with the most recent versions, [2.4.1](https://github.com/lanayotech/vagrant-manager/releases/tag/2.4.1) is recommended until further notice*
+**NOTICE:** Due to some issues with the most recent versions, [2.4.1](https://github.com/lanayotech/vagrant-manager/releases/tag/2.4.1) is recommended until further notice
 
 ---
 
