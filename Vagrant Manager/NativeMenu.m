@@ -344,6 +344,10 @@
     [self.delegate openInstanceInTerminal:menuItem.instance];
 }
 
+- (void)nativeMenuItemEditVagrantfile:(NativeMenuItem *)menuItem {
+    [self.delegate editVagrantfile:menuItem.instance];
+}
+
 - (void)nativeMenuItemUpdateProviderIdentifier:(NativeMenuItem*)menuItem withProviderIdentifier:(NSString*)providerIdentifier {
     VagrantInstance *instance = menuItem.instance;
     

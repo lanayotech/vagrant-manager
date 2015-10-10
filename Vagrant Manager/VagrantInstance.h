@@ -24,6 +24,7 @@
 - (int)getRunningMachineCount;
 - (int)getMachineCountWithState:(VagrantMachineState)state;
 - (BOOL)hasVagrantfile;
+- (NSString*)getVagrantfilePath;
 
 - (NSString*)getPath;
 

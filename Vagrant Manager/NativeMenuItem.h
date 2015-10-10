@@ -24,6 +24,7 @@
 - (void)nativeMenuItemCustomCommandAllMachines:(NativeMenuItem*)menuItem withCommand:(CustomCommand*)customCommand;
 - (void)nativeMenuItemOpenFinder:(NativeMenuItem*)menuItem;
 - (void)nativeMenuItemOpenTerminal:(NativeMenuItem*)menuItem;
+- (void)nativeMenuItemEditVagrantfile:(NativeMenuItem*)menuItem;
 - (void)nativeMenuItemUpdateProviderIdentifier:(NativeMenuItem*)menuItem withProviderIdentifier:(NSString*)providerIdentifier;
 - (void)nativeMenuItemRemoveBookmark:(NativeMenuItem*)menuItem;
 - (void)nativeMenuItemAddBookmark:(NativeMenuItem*)menuItem;

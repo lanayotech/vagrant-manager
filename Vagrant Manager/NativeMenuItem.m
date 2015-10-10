@@ -21,6 +21,7 @@
     NSMenuItem *_instanceProvisionMenuItem;
     NSMenuItem *_instanceCustomCommandMenuItem;
     
+    NSMenuItem *_editVagrantfileMenuItem;
     NSMenuItem *_openInFinderMenuItem;
     NSMenuItem *_openInTerminalMenuItem;
     NSMenuItem *_addBookmarkMenuItem;
@@ -160,6 +161,12 @@
            [self.menuItem.submenu addItem:[NSMenuItem separatorItem]];
         }
         
+        if (!_editVagrantfileMenuItem) {
+            _editVagrantfileMenuItem = [[NSMenuItem alloc] initWithTitle:@"Edit Vagrantfile" action:@selector(editVagrantfileMenuItemClicked:) keyEquivalent:@""];
+            _editVagrantfileMenuItem.target = self;
+            [self.menuItem.submenu addItem:_editVagrantfileMenuItem];
+        }
+
         if (!_openInFinderMenuItem) {
             _openInFinderMenuItem = [[NSMenuItem alloc] initWithTitle:@"Open in Finder" action:@selector(finderMenuItemClicked:) keyEquivalent:@""];
             _openInFinderMenuItem.target = self;
@@ -465,6 +472,10 @@
 
 - (void)finderMenuItemClicked:(NSMenuItem*)sender {
     [self.delegate nativeMenuItemOpenFinder:self];
+}
+
+- (void)editVagrantfileMenuItemClicked:(NSMenuItem*)sender {
+    [self.delegate nativeMenuItemEditVagrantfile:self];
 }
 
 - (void)terminalMenuItemClicked:(NSMenuItem*)sender {

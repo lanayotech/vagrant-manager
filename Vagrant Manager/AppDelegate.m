@@ -232,6 +232,14 @@
     }
 }
 
+- (void)editVagrantfile:(VagrantInstance *)instance {
+    //open Vagrantfile in default text editor
+    NSTask *task = [[NSTask alloc] init];
+    [task setLaunchPath:@"/bin/bash"];
+    [task setArguments:@[@"-l", @"-c", [NSString stringWithFormat:@"open -t %@", [Util escapeShellArg:[instance getVagrantfilePath]]]]];
+    [task launch];
+}
+
 - (void)addBookmarkWithInstance:(VagrantInstance *)instance {
     [[BookmarkManager sharedManager] addBookmarkWithPath:instance.path displayName:instance.displayName providerIdentifier:instance.providerIdentifier];
     [[BookmarkManager sharedManager] saveBookmarks];
