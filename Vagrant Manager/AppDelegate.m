@@ -350,6 +350,8 @@
         [commandParts addObject:@"vagrant provision"];
     } else if([action isEqualToString:@"destroy"]) {
         [commandParts addObject:@"vagrant destroy -f"];
+    } else if([action isEqualToString:@"rdp"]) {
+        [commandParts addObject:@"vagrant rdp"];
     } else {
         return;
     }
@@ -395,6 +397,8 @@
         [commandParts addObject:@"vagrant provision"];
     } else if([action isEqualToString:@"destroy"]) {
         [commandParts addObject:@"vagrant destroy -f"];
+    } else if([action isEqualToString:@"rdp"]) {
+        [commandParts addObject:@"vagrant rdp"];
     } else {
         return;
     }

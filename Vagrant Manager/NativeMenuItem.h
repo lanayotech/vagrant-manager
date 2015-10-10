@@ -15,6 +15,7 @@
 
 - (void)nativeMenuItemUpAllMachines:(NativeMenuItem*)menuItem;
 - (void)nativeMenuItemSSHInstance:(NativeMenuItem*)menuItem;
+- (void)nativeMenuItemRDPInstance:(NativeMenuItem*)menuItem;
 - (void)nativeMenuItemSuspendAllMachines:(NativeMenuItem*)menuItem;
 - (void)nativeMenuItemReloadAllMachines:(NativeMenuItem*)menuItem;
 - (void)nativeMenuItemHaltAllMachines:(NativeMenuItem*)menuItem;
@@ -29,6 +30,7 @@
 
 - (void)nativeMenuItemUpMachine:(VagrantMachine*)machine;
 - (void)nativeMenuItemSSHMachine:(VagrantMachine*)machine;
+- (void)nativeMenuItemRDPMachine:(VagrantMachine*)machine;
 - (void)nativeMenuItemSuspendMachine:(VagrantMachine*)machine;
 - (void)nativeMenuItemReloadMachine:(VagrantMachine*)machine;
 - (void)nativeMenuItemHaltMachine:(VagrantMachine*)machine;

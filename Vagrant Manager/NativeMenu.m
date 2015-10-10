@@ -292,6 +292,10 @@
     [self performAction:@"ssh" withInstance:menuItem.instance];
 }
 
+- (void)nativeMenuItemRDPInstance:(NativeMenuItem*)menuItem {
+    [self performAction:@"rdp" withInstance:menuItem.instance];
+}
+
 - (void)nativeMenuItemReloadAllMachines:(NativeMenuItem*)menuItem {
     [self performAction:@"reload" withInstance:menuItem.instance];
 }
@@ -357,6 +361,10 @@
 
 - (void)nativeMenuItemSSHMachine:(VagrantMachine*)machine {
     [self performAction:@"ssh" withMachine:machine];
+}
+
+- (void)nativeMenuItemRDPMachine:(VagrantMachine*)machine {
+    [self performAction:@"rdp" withMachine:machine];
 }
 
 - (void)nativeMenuItemReloadMachine:(VagrantMachine *)machine {

@@ -12,6 +12,7 @@
 @implementation NativeMenuItem {
     NSMenuItem *_instanceUpMenuItem;
     NSMenuItem *_sshMenuItem;
+    NSMenuItem *_rdpMenuItem;
     NSMenuItem *_instanceReloadMenuItem;
     NSMenuItem *_instanceSuspendMenuItem;
     NSMenuItem *_instanceHaltMenuItem;
@@ -71,7 +72,15 @@
             [_sshMenuItem.image setTemplate:YES];
             [self.menuItem.submenu addItem:_sshMenuItem];
         }
-        
+
+        if(!_rdpMenuItem) {
+            _rdpMenuItem = [[NSMenuItem alloc] initWithTitle:@"RDP" action:@selector(rdpInstance:) keyEquivalent:@""];
+            _rdpMenuItem.target = self;
+            _rdpMenuItem.image = [NSImage imageNamed:@"rdp"];
+            [_rdpMenuItem.image setTemplate:YES];
+            [self.menuItem.submenu addItem:_rdpMenuItem];
+        }
+
         if(!_instanceReloadMenuItem) {
             _instanceReloadMenuItem = [[NSMenuItem alloc] initWithTitle:self.instance.machines.count > 1 ? @"Reload All" : @"Reload" action:@selector(reloadAllMachines:) keyEquivalent:@""];
             _instanceReloadMenuItem.target = self;
@@ -199,6 +208,7 @@
             if([self.instance getRunningMachineCount] < self.instance.machines.count) {
                 [_instanceUpMenuItem setHidden:NO];
                 [_sshMenuItem setHidden:YES];
+                [_rdpMenuItem setHidden:YES];
                 [_instanceReloadMenuItem setHidden:YES];
                 [_instanceSuspendMenuItem setHidden:YES];
                 [_instanceHaltMenuItem setHidden:YES];
@@ -209,6 +219,7 @@
             if([self.instance getRunningMachineCount] > 0) {
                 [_instanceUpMenuItem setHidden:YES];
                 [_sshMenuItem setHidden:NO];
+                [_rdpMenuItem setHidden:NO];
                 [_instanceReloadMenuItem setHidden:NO];
                 [_instanceSuspendMenuItem setHidden:NO];
                 [_instanceHaltMenuItem setHidden:NO];
@@ -223,6 +234,7 @@
             
             if (self.instance.machines.count > 1) {
                 [_sshMenuItem setHidden:YES];
+                [_rdpMenuItem setHidden:YES];
             }
             
             if([[BookmarkManager sharedManager] getBookmarkWithPath:self.instance.path]) {
@@ -291,6 +303,13 @@
                 [machineSSHMenuItem.image setTemplate:YES];
                 [machineSubmenu addItem:machineSSHMenuItem];
 
+                NSMenuItem *machineRDPMenuItem = [[NSMenuItem alloc] initWithTitle:@"RDP" action:@selector(rdpMachine:) keyEquivalent:@""];
+                machineRDPMenuItem.target = self;
+                machineRDPMenuItem.representedObject = machine;
+                machineRDPMenuItem.image = [NSImage imageNamed:@"rdp"];
+                [machineRDPMenuItem.image setTemplate:YES];
+                [machineSubmenu addItem:machineRDPMenuItem];
+
                 NSMenuItem *machineReloadMenuItem = [[NSMenuItem alloc] initWithTitle:@"Reload" action:@selector(reloadMachine:) keyEquivalent:@""];
                 machineReloadMenuItem.target = self;
                 machineReloadMenuItem.representedObject = machine;
@@ -358,6 +377,7 @@
                 if(machine.state == RunningState) {
                     [machineUpMenuItem setHidden:YES];
                     [machineSSHMenuItem setHidden:NO];
+                    [machineRDPMenuItem setHidden:NO];
                     [machineReloadMenuItem setHidden:NO];
                     [machineSuspendMenuItem setHidden:NO];
                     [machineHaltMenuItem setHidden:NO];
@@ -366,6 +386,7 @@
                 } else {
                     [machineUpMenuItem setHidden:NO];
                     [machineSSHMenuItem setHidden:YES];
+                    [machineRDPMenuItem setHidden:YES];
                     [machineReloadMenuItem setHidden:YES];
                     [machineSuspendMenuItem setHidden:YES];
                     [machineHaltMenuItem setHidden:YES];
@@ -388,6 +409,10 @@
 
 - (void)sshInstance:(NSMenuItem*)sender {
     [self.delegate nativeMenuItemSSHInstance:self];
+}
+
+- (void)rdpInstance:(NSMenuItem*)sender {
+    [self.delegate nativeMenuItemRDPInstance:self];
 }
 
 - (void)reloadAllMachines:(NSMenuItem*)sender {
@@ -440,6 +465,10 @@
 
 - (void)sshMachine:(NSMenuItem*)sender {
     [self.delegate nativeMenuItemSSHMachine:sender.representedObject];
+}
+
+- (void)rdpMachine:(NSMenuItem*)sender {
+    [self.delegate nativeMenuItemRDPMachine:sender.representedObject];
 }
 
 - (void)reloadMachine:(NSMenuItem*)sender {
