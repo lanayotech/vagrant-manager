@@ -18,6 +18,7 @@
 @property (weak) IBOutlet NSButton *includeMachineNamesCheckBox;
 @property (weak) IBOutlet NSButton *dontShowRunningVmCountCheckBox;
 @property (weak) IBOutlet NSPopUpButton *terminalPreferencePopUpButton;
+@property (weak) IBOutlet NSPopUpButton *terminalEditorPreferencePopUpButton;
 @property (weak) IBOutlet NSPopUpButton *statusBarIconThemePopUpButton;
 @property (weak) IBOutlet NSPopUpButton *updateStabilityPopUpButton;
 @property (weak) IBOutlet NSButton *sendProfileDataCheckBox;

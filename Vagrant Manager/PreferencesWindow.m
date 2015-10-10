@@ -23,6 +23,7 @@
     [super windowDidLoad];
     
     NSString *terminalPreference = [[NSUserDefaults standardUserDefaults] stringForKey:@"terminalPreference"];
+    NSString *terminalEditorPreference = [[NSUserDefaults standardUserDefaults] stringForKey:@"terminalEditorPreference"];
     BOOL autoCloseTaskWindows = [[NSUserDefaults standardUserDefaults] boolForKey:@"autoCloseTaskWindows"];
     BOOL dontShowUpdateNotification = [[NSUserDefaults standardUserDefaults] boolForKey:@"dontShowUpdateNotification"];
     BOOL usePathAsInstanceDisplayName = [[NSUserDefaults standardUserDefaults] boolForKey:@"usePathAsInstanceDisplayName"];
@@ -47,6 +48,12 @@
         [self.terminalPreferencePopUpButton selectItemWithTag:100];
     }
     
+    if ([terminalEditorPreference isEqualToString:@"vim"]) {
+        [self.terminalEditorPreferencePopUpButton selectItemWithTag:101];
+    } else {
+        [self.terminalEditorPreferencePopUpButton selectItemWithTag:100];
+    }
+
     if([updateStability isEqualToString:@"rc"]) {
         [self.updateStabilityPopUpButton selectItemWithTag:101];
     } else if([updateStability isEqualToString:@"beta"]) {
@@ -116,6 +123,19 @@
     }
     
     [[NSUserDefaults standardUserDefaults] setValue:terminalPreference forKey:@"terminalPreference"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+- (IBAction)terminalEditorPreferencePopUpButtonClicked:(id)sender {
+    NSString *terminalEditorPreference;
+    
+    if (self.terminalPreferencePopUpButton.selectedItem.tag == 101) {
+        terminalEditorPreference = @"vim";
+    } else {
+        terminalEditorPreference = @"nano";
+    }
+    
+    [[NSUserDefaults standardUserDefaults] setValue:terminalEditorPreference forKey:@"terminalEditorPreference"];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 

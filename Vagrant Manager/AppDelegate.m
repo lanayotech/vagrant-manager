@@ -307,7 +307,20 @@
             }
         });
     });
+}
+
+- (void)editHostsFile {
+    NSString *terminalEditorName = [[NSUserDefaults standardUserDefaults] valueForKey:@"terminalEditorPreference"];
     
+    NSString *terminalEditor;
+    if([terminalEditorName isEqualToString:@"vim"]) {
+        terminalEditor = @"vim";
+    } else {
+        terminalEditor = @"nano";
+    }
+    
+    NSString *taskCommand = [NSString stringWithFormat:@"sudo %@ /etc/hosts", [Util escapeShellArg:terminalEditor]];
+    [self runTerminalCommand:taskCommand];
 }
 
 #pragma mark - Vagrant Machine control

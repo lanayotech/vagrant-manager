@@ -113,6 +113,17 @@
     
     [_menu addItem:[NSMenuItem separatorItem]];
 
+    NSMenuItem *extrasMenuItem = [[NSMenuItem alloc] initWithTitle:@"Extras" action:nil keyEquivalent:@""];
+    [_menu addItem:extrasMenuItem];
+    
+    NSMenu *extrasMenu = [[NSMenu alloc] init];
+    
+    NSMenuItem *editHostsMenuItem = [[NSMenuItem alloc] initWithTitle:@"Edit hosts file" action:@selector(editHostsMenuItemClicked:) keyEquivalent:@""];
+    editHostsMenuItem.target = self;
+    [extrasMenu addItem:editHostsMenuItem];
+    
+    [extrasMenuItem setSubmenu:extrasMenu];
+
     NSMenuItem *preferencesMenuItem = [[NSMenuItem alloc] initWithTitle:@"Preferences" action:@selector(preferencesMenuItemClicked:) keyEquivalent:@""];
     preferencesMenuItem.target = self;
     [_menu addItem:preferencesMenuItem];
@@ -420,6 +431,10 @@
         [manageCustomCommandsWindow showWindow:self];
         [[Util getApp] addOpenWindow:manageCustomCommandsWindow];
     }
+}
+
+- (void)editHostsMenuItemClicked:(id)sender {
+    [self.delegate editHostsFile];
 }
 
 - (void)preferencesMenuItemClicked:(id)sender {
