@@ -17,6 +17,7 @@
     NSMenuItem *_instanceReloadMenuItem;
     NSMenuItem *_instanceSuspendMenuItem;
     NSMenuItem *_instanceHaltMenuItem;
+    NSMenuItem *_instanceDestroyMenuItemPlaceholder;
     NSMenuItem *_instanceDestroyMenuItem;
     NSMenuItem *_instanceProvisionMenuItem;
     NSMenuItem *_instanceCustomCommandMenuItem;
@@ -115,12 +116,33 @@
             [self.menuItem.submenu addItem:_instanceHaltMenuItem];
         }
         
+        BOOL optionKeyDestroy = [[NSUserDefaults standardUserDefaults] boolForKey:@"optionKeyDestroy"];
+        
+        if(!_instanceDestroyMenuItemPlaceholder) {
+            _instanceDestroyMenuItemPlaceholder = [[NSMenuItem alloc] initWithTitle:self.instance.machines.count > 1 ? @"Destroy All" : @"Destroy" action:nil keyEquivalent:@""];
+            _instanceDestroyMenuItemPlaceholder.image = [NSImage imageNamed:@"destroy"];
+            [_instanceDestroyMenuItemPlaceholder.image setTemplate:YES];
+            _instanceDestroyMenuItemPlaceholder.enabled = NO;
+            [self.menuItem.submenu addItem:_instanceDestroyMenuItemPlaceholder];
+        }
+
+        if(!optionKeyDestroy) {
+            _instanceDestroyMenuItemPlaceholder.hidden = YES;
+        }
+        
         if(!_instanceDestroyMenuItem) {
             _instanceDestroyMenuItem = [[NSMenuItem alloc] initWithTitle:self.instance.machines.count > 1 ? @"Destroy All" : @"Destroy" action:@selector(destroyAllMachines:) keyEquivalent:@""];
             _instanceDestroyMenuItem.target = self;
             _instanceDestroyMenuItem.image = [NSImage imageNamed:@"destroy"];
             [_instanceDestroyMenuItem.image setTemplate:YES];
             [self.menuItem.submenu addItem:_instanceDestroyMenuItem];
+        }
+        
+        if(optionKeyDestroy) {
+            _instanceDestroyMenuItem.alternate = YES;
+            _instanceDestroyMenuItem.keyEquivalentModifierMask = NSAlternateKeyMask;
+        } else {
+            _instanceDestroyMenuItem.alternate = NO;
         }
         
         if(!_instanceProvisionMenuItem) {
@@ -532,6 +554,19 @@
 
 - (void)customCommandMachine:(NSMenuItem*)sender {
     [self.delegate nativeMenuItemCustomCommandMachine:[sender.representedObject objectForKey:@"machine"] withCommand:[sender.representedObject objectForKey:@"command"]];
+}
+
+- (void)menuWillOpen:(NSMenu *)menu {
+    BOOL optionKeyDestroy = [[NSUserDefaults standardUserDefaults] boolForKey:@"optionKeyDestroy"];
+
+    if(optionKeyDestroy) {
+        _instanceDestroyMenuItemPlaceholder.hidden = NO;
+        _instanceDestroyMenuItem.alternate = YES;
+        _instanceDestroyMenuItem.keyEquivalentModifierMask = NSAlternateKeyMask;
+    } else {
+        _instanceDestroyMenuItem.alternate = NO;
+        _instanceDestroyMenuItemPlaceholder.hidden = YES;
+    }
 }
 
 @end

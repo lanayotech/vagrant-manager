@@ -14,6 +14,7 @@
 
 @property (weak) IBOutlet NSButton *autoCloseCheckBox;
 @property (weak) IBOutlet NSButton *dontShowUpdateCheckBox;
+@property (weak) IBOutlet NSButton *optionKeyDestroyCheckBox;
 @property (weak) IBOutlet NSButton *usePathAsInstanceDisplayNameCheckBox;
 @property (weak) IBOutlet NSButton *includeMachineNamesCheckBox;
 @property (weak) IBOutlet NSButton *dontShowRunningVmCountCheckBox;
@@ -31,6 +32,7 @@
 
 - (IBAction)autoCloseCheckBoxClicked:(id)sender;
 - (IBAction)dontShowUpdateCheckBoxClicked:(id)sender;
+- (IBAction)optionKeyDestroyCheckBoxClicked:(id)sender;
 - (IBAction)usePathAsInstanceDisplayNameCheckBoxClicked:(id)sender;
 - (IBAction)includeMachineNamesCheckBoxClicked:(id)sender;
 - (IBAction)dontShowRunningVmCountCheckBoxClicked:(id)sender;

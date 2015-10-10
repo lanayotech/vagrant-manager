@@ -26,6 +26,7 @@
     NSString *terminalEditorPreference = [[NSUserDefaults standardUserDefaults] stringForKey:@"terminalEditorPreference"];
     BOOL autoCloseTaskWindows = [[NSUserDefaults standardUserDefaults] boolForKey:@"autoCloseTaskWindows"];
     BOOL dontShowUpdateNotification = [[NSUserDefaults standardUserDefaults] boolForKey:@"dontShowUpdateNotification"];
+    BOOL optionKeyDestroy = [[NSUserDefaults standardUserDefaults] boolForKey:@"optionKeyDestroy"];
     BOOL usePathAsInstanceDisplayName = [[NSUserDefaults standardUserDefaults] boolForKey:@"usePathAsInstanceDisplayName"];
     BOOL includeMachineNames = [[NSUserDefaults standardUserDefaults] boolForKey:@"includeMachineNamesInMenu"];
     BOOL dontShowRunningVmCount = [[NSUserDefaults standardUserDefaults] boolForKey:@"dontShowRunningVmCount"];
@@ -68,6 +69,7 @@
 
     [self.autoCloseCheckBox setState:autoCloseTaskWindows ? NSOnState : NSOffState];
     [self.dontShowUpdateCheckBox setState:dontShowUpdateNotification ? NSOnState : NSOffState];
+    [self.optionKeyDestroyCheckBox setState:optionKeyDestroy ? NSOnState : NSOffState];
     [self.usePathAsInstanceDisplayNameCheckBox setState:usePathAsInstanceDisplayName ? NSOnState : NSOffState];
     [self.includeMachineNamesCheckBox setState:includeMachineNames ? NSOnState : NSOffState];
     [self.dontShowRunningVmCountCheckBox setState:dontShowRunningVmCount ? NSOnState : NSOffState];
@@ -90,6 +92,11 @@
     [[NSUserDefaults standardUserDefaults] synchronize];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:@"vagrant-manager.show-update-notification-preference-changed" object:nil];
+}
+
+- (IBAction)optionKeyDestroyCheckBoxClicked:(id)sender {
+    [[NSUserDefaults standardUserDefaults] setBool:(self.optionKeyDestroyCheckBox.state == NSOnState) forKey:@"optionKeyDestroy"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 - (IBAction)usePathAsInstanceDisplayNameCheckBoxClicked:(id)sender {
