@@ -12,14 +12,15 @@
 @interface VagrantInstance : NSObject
 
 @property (readonly) NSString *path;
-@property (strong, nonatomic) NSString *displayName;
-@property (strong, nonatomic) NSMutableArray *machines;
+@property (readonly) NSString *displayName;
+@property (readonly) NSArray *machines;
 @property (strong, nonatomic) NSString *providerIdentifier;
 
 - (id)initWithPath:(NSString*)path providerIdentifier:(NSString*)providerIdentifier;
 - (id)initWithPath:(NSString*)path displayName:(NSString*)displayName providerIdentifier:(NSString*)providerIdentifier;
 
 - (VagrantMachine*)getMachineWithName:(NSString*)name;
+- (void)queryMachines;
 - (int)getRunningMachineCount;
 - (int)getMachineCountWithState:(VagrantMachineState)state;
 - (BOOL)hasVagrantfile;

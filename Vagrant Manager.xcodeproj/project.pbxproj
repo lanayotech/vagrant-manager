@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2609ECF51BC89CEA00E4B44E /* NFSScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 2609ECF41BC89CEA00E4B44E /* NFSScanner.m */; settings = {ASSET_TAGS = (); }; };
 		26130E9A1B1D565200872C4F /* bm_status_icon_off.png in Resources */ = {isa = PBXBuildFile; fileRef = 26130E981B1D565200872C4F /* bm_status_icon_off.png */; };
 		26130E9B1B1D565200872C4F /* bm_status_icon_off@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 26130E991B1D565200872C4F /* bm_status_icon_off@2x.png */; };
 		26130E9E1B1D596400872C4F /* bm_status_icon_suspended@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 26130E9C1B1D596400872C4F /* bm_status_icon_suspended@2x.png */; };
@@ -147,6 +148,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		2609ECF31BC89CEA00E4B44E /* NFSScanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NFSScanner.h; sourceTree = "<group>"; };
+		2609ECF41BC89CEA00E4B44E /* NFSScanner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NFSScanner.m; sourceTree = "<group>"; };
 		26130E981B1D565200872C4F /* bm_status_icon_off.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bm_status_icon_off.png; sourceTree = "<group>"; };
 		26130E991B1D565200872C4F /* bm_status_icon_off@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bm_status_icon_off@2x.png"; sourceTree = "<group>"; };
 		26130E9C1B1D596400872C4F /* bm_status_icon_suspended@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bm_status_icon_suspended@2x.png"; sourceTree = "<group>"; };
@@ -422,6 +425,8 @@
 		83F5BBB31983B8F200ACE853 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				2609ECF31BC89CEA00E4B44E /* NFSScanner.h */,
+				2609ECF41BC89CEA00E4B44E /* NFSScanner.m */,
 				837A308B1A5D170D00E12A40 /* Custom Commands */,
 				83F5BBB41983B8FB00ACE853 /* Vagrant Manager */,
 				83F5BBB51983B90800ACE853 /* Providers */,
@@ -799,6 +804,7 @@
 				B17AA18F1887CA4600B4C274 /* PreferencesWindow.m in Sources */,
 				837A30891A5D0D5500E12A40 /* ManageCustomCommandsWindow.m in Sources */,
 				83FD353D19826945002EEA2D /* ManageBookmarksWindow.m in Sources */,
+				2609ECF51BC89CEA00E4B44E /* NFSScanner.m in Sources */,
 				83F1696F1923789900C54F13 /* VersionComparison.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
