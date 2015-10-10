@@ -291,8 +291,12 @@
 
 #pragma mark - Native menu item delegate
 
-- (void)nativeMenuItemUpAllMachines:(NativeMenuItem *)menuItem {
-    [self performAction:@"up" withInstance:menuItem.instance];
+- (void)nativeMenuItemUpAllMachines:(NativeMenuItem *)menuItem withProvision:(BOOL)provision {
+    if(provision) {
+        [self performAction:@"up-provision" withInstance:menuItem.instance];
+    } else {
+        [self performAction:@"up" withInstance:menuItem.instance];
+    }
 }
 
 - (void)nativeMenuItemHaltAllMachines:(NativeMenuItem *)menuItem {
@@ -362,8 +366,12 @@
     [self.delegate addBookmarkWithInstance:menuItem.instance];
 }
 
-- (void)nativeMenuItemUpMachine:(VagrantMachine *)machine {
-    [self performAction:@"up" withMachine:machine];
+- (void)nativeMenuItemUpMachine:(VagrantMachine *)machine withProvision:(BOOL)provision {
+    if(provision) {
+        [self performAction:@"up-provision" withMachine:machine];
+    } else {
+        [self performAction:@"up" withMachine:machine];
+    }
 }
 
 - (void)nativeMenuItemHaltMachine:(VagrantMachine *)machine {

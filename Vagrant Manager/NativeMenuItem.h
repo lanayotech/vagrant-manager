@@ -13,7 +13,7 @@
 
 @protocol NativeMenuItemDelegate
 
-- (void)nativeMenuItemUpAllMachines:(NativeMenuItem*)menuItem;
+- (void)nativeMenuItemUpAllMachines:(NativeMenuItem*)menuItem withProvision:(BOOL)provision;
 - (void)nativeMenuItemSSHInstance:(NativeMenuItem*)menuItem;
 - (void)nativeMenuItemRDPInstance:(NativeMenuItem*)menuItem;
 - (void)nativeMenuItemSuspendAllMachines:(NativeMenuItem*)menuItem;
@@ -28,7 +28,7 @@
 - (void)nativeMenuItemRemoveBookmark:(NativeMenuItem*)menuItem;
 - (void)nativeMenuItemAddBookmark:(NativeMenuItem*)menuItem;
 
-- (void)nativeMenuItemUpMachine:(VagrantMachine*)machine;
+- (void)nativeMenuItemUpMachine:(VagrantMachine*)machine withProvision:(BOOL)provision;
 - (void)nativeMenuItemSSHMachine:(VagrantMachine*)machine;
 - (void)nativeMenuItemRDPMachine:(VagrantMachine*)machine;
 - (void)nativeMenuItemSuspendMachine:(VagrantMachine*)machine;

@@ -353,6 +353,11 @@
         if(machine.instance.providerIdentifier) {
             [commandParts addObject:[NSString stringWithFormat:@"--provider=%@", machine.instance.providerIdentifier]];
         }
+    } else if([action isEqualToString:@"up-provision"]) {
+        [commandParts addObject:@"vagrant up --provision"];
+        if(machine.instance.providerIdentifier) {
+            [commandParts addObject:[NSString stringWithFormat:@"--provider=%@", machine.instance.providerIdentifier]];
+        }
     } else if([action isEqualToString:@"reload"]) {
         [commandParts addObject:@"vagrant reload"];
     } else if([action isEqualToString:@"suspend"]) {
@@ -397,6 +402,11 @@
     
     if([action isEqualToString:@"up"]) {
         [commandParts addObject:@"vagrant up"];
+        if(instance.providerIdentifier) {
+            [commandParts addObject:[NSString stringWithFormat:@"--provider=%@", instance.providerIdentifier]];
+        }
+    } else if([action isEqualToString:@"up-provision"]) {
+        [commandParts addObject:@"vagrant up --provision"];
         if(instance.providerIdentifier) {
             [commandParts addObject:[NSString stringWithFormat:@"--provider=%@", instance.providerIdentifier]];
         }

@@ -11,6 +11,7 @@
 
 @implementation NativeMenuItem {
     NSMenuItem *_instanceUpMenuItem;
+    NSMenuItem *_instanceUpProvisionMenuItem;
     NSMenuItem *_sshMenuItem;
     NSMenuItem *_rdpMenuItem;
     NSMenuItem *_instanceReloadMenuItem;
@@ -63,6 +64,14 @@
             _instanceUpMenuItem.image = [NSImage imageNamed:@"up"];
             [_instanceUpMenuItem.image setTemplate:YES];
             [self.menuItem.submenu addItem:_instanceUpMenuItem];
+        }
+        
+        if(!_instanceUpProvisionMenuItem) {
+            _instanceUpProvisionMenuItem = [[NSMenuItem alloc] initWithTitle:self.instance.machines.count > 1 ? @"Up All (with provision)" : @"Up (with provision)" action:@selector(upProvisionAllMachines:) keyEquivalent:@""];
+            _instanceUpProvisionMenuItem.target = self;
+            _instanceUpProvisionMenuItem.image = [NSImage imageNamed:@"up"];
+            [_instanceUpProvisionMenuItem.image setTemplate:YES];
+            [self.menuItem.submenu addItem:_instanceUpProvisionMenuItem];
         }
         
         if(!_sshMenuItem) {
@@ -207,6 +216,7 @@
             
             if([self.instance getRunningMachineCount] < self.instance.machines.count) {
                 [_instanceUpMenuItem setHidden:NO];
+                [_instanceUpProvisionMenuItem setHidden:NO];
                 [_sshMenuItem setHidden:YES];
                 [_rdpMenuItem setHidden:YES];
                 [_instanceReloadMenuItem setHidden:YES];
@@ -218,6 +228,7 @@
             
             if([self.instance getRunningMachineCount] > 0) {
                 [_instanceUpMenuItem setHidden:YES];
+                [_instanceUpProvisionMenuItem setHidden:YES];
                 [_sshMenuItem setHidden:NO];
                 [_rdpMenuItem setHidden:NO];
                 [_instanceReloadMenuItem setHidden:NO];
@@ -296,6 +307,13 @@
                 [machineUpMenuItem.image setTemplate:YES];
                 [machineSubmenu addItem:machineUpMenuItem];
                 
+                NSMenuItem *machineUpProvisionMenuItem = [[NSMenuItem alloc] initWithTitle:@"Up (with provision)" action:@selector(upProvisionMachine:) keyEquivalent:@""];
+                machineUpProvisionMenuItem.target = self;
+                machineUpProvisionMenuItem.representedObject = machine;
+                machineUpProvisionMenuItem.image = [NSImage imageNamed:@"up"];
+                [machineUpProvisionMenuItem.image setTemplate:YES];
+                [machineSubmenu addItem:machineUpProvisionMenuItem];
+
                 NSMenuItem *machineSSHMenuItem = [[NSMenuItem alloc] initWithTitle:@"SSH" action:@selector(sshMachine:) keyEquivalent:@""];
                 machineSSHMenuItem.target = self;
                 machineSSHMenuItem.representedObject = machine;
@@ -376,6 +394,7 @@
                 
                 if(machine.state == RunningState) {
                     [machineUpMenuItem setHidden:YES];
+                    [machineUpProvisionMenuItem setHidden:YES];
                     [machineSSHMenuItem setHidden:NO];
                     [machineRDPMenuItem setHidden:NO];
                     [machineReloadMenuItem setHidden:NO];
@@ -385,6 +404,7 @@
                     [machineCustomCommandMenuItem setHidden:NO];
                 } else {
                     [machineUpMenuItem setHidden:NO];
+                    [machineUpProvisionMenuItem setHidden:NO];
                     [machineSSHMenuItem setHidden:YES];
                     [machineRDPMenuItem setHidden:YES];
                     [machineReloadMenuItem setHidden:YES];
@@ -404,7 +424,11 @@
 }
 
 - (void)upAllMachines:(NSMenuItem*)sender {
-    [self.delegate nativeMenuItemUpAllMachines:self];
+    [self.delegate nativeMenuItemUpAllMachines:self withProvision:NO];
+}
+
+- (void)upProvisionAllMachines:(NSMenuItem*)sender {
+    [self.delegate nativeMenuItemUpAllMachines:self withProvision:YES];
 }
 
 - (void)sshInstance:(NSMenuItem*)sender {
@@ -460,7 +484,11 @@
 }
 
 - (void)upMachine:(NSMenuItem*)sender {
-    [self.delegate nativeMenuItemUpMachine:sender.representedObject];
+    [self.delegate nativeMenuItemUpMachine:sender.representedObject withProvision:NO];
+}
+
+- (void)upProvisionMachine:(NSMenuItem*)sender {
+    [self.delegate nativeMenuItemUpMachine:sender.representedObject withProvision:YES];
 }
 
 - (void)sshMachine:(NSMenuItem*)sender {
