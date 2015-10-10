@@ -113,6 +113,17 @@
     
     [_menu addItem:[NSMenuItem separatorItem]];
 
+    NSMenuItem *extrasMenuItem = [[NSMenuItem alloc] initWithTitle:@"Extras" action:nil keyEquivalent:@""];
+    [_menu addItem:extrasMenuItem];
+    
+    NSMenu *extrasMenu = [[NSMenu alloc] init];
+    
+    NSMenuItem *editHostsMenuItem = [[NSMenuItem alloc] initWithTitle:@"Edit hosts file" action:@selector(editHostsMenuItemClicked:) keyEquivalent:@""];
+    editHostsMenuItem.target = self;
+    [extrasMenu addItem:editHostsMenuItem];
+    
+    [extrasMenuItem setSubmenu:extrasMenu];
+
     NSMenuItem *preferencesMenuItem = [[NSMenuItem alloc] initWithTitle:@"Preferences" action:@selector(preferencesMenuItemClicked:) keyEquivalent:@""];
     preferencesMenuItem.target = self;
     [_menu addItem:preferencesMenuItem];
@@ -280,8 +291,12 @@
 
 #pragma mark - Native menu item delegate
 
-- (void)nativeMenuItemUpAllMachines:(NativeMenuItem *)menuItem {
-    [self performAction:@"up" withInstance:menuItem.instance];
+- (void)nativeMenuItemUpAllMachines:(NativeMenuItem *)menuItem withProvision:(BOOL)provision {
+    if(provision) {
+        [self performAction:@"up-provision" withInstance:menuItem.instance];
+    } else {
+        [self performAction:@"up" withInstance:menuItem.instance];
+    }
 }
 
 - (void)nativeMenuItemHaltAllMachines:(NativeMenuItem *)menuItem {
@@ -290,6 +305,10 @@
 
 - (void)nativeMenuItemSSHInstance:(NativeMenuItem*)menuItem {
     [self performAction:@"ssh" withInstance:menuItem.instance];
+}
+
+- (void)nativeMenuItemRDPInstance:(NativeMenuItem*)menuItem {
+    [self performAction:@"rdp" withInstance:menuItem.instance];
 }
 
 - (void)nativeMenuItemReloadAllMachines:(NativeMenuItem*)menuItem {
@@ -325,6 +344,10 @@
     [self.delegate openInstanceInTerminal:menuItem.instance];
 }
 
+- (void)nativeMenuItemEditVagrantfile:(NativeMenuItem *)menuItem {
+    [self.delegate editVagrantfile:menuItem.instance];
+}
+
 - (void)nativeMenuItemUpdateProviderIdentifier:(NativeMenuItem*)menuItem withProviderIdentifier:(NSString*)providerIdentifier {
     VagrantInstance *instance = menuItem.instance;
     
@@ -347,8 +370,12 @@
     [self.delegate addBookmarkWithInstance:menuItem.instance];
 }
 
-- (void)nativeMenuItemUpMachine:(VagrantMachine *)machine {
-    [self performAction:@"up" withMachine:machine];
+- (void)nativeMenuItemUpMachine:(VagrantMachine *)machine withProvision:(BOOL)provision {
+    if(provision) {
+        [self performAction:@"up-provision" withMachine:machine];
+    } else {
+        [self performAction:@"up" withMachine:machine];
+    }
 }
 
 - (void)nativeMenuItemHaltMachine:(VagrantMachine *)machine {
@@ -357,6 +384,10 @@
 
 - (void)nativeMenuItemSSHMachine:(VagrantMachine*)machine {
     [self performAction:@"ssh" withMachine:machine];
+}
+
+- (void)nativeMenuItemRDPMachine:(VagrantMachine*)machine {
+    [self performAction:@"rdp" withMachine:machine];
 }
 
 - (void)nativeMenuItemReloadMachine:(VagrantMachine *)machine {
@@ -412,6 +443,10 @@
         [manageCustomCommandsWindow showWindow:self];
         [[Util getApp] addOpenWindow:manageCustomCommandsWindow];
     }
+}
+
+- (void)editHostsMenuItemClicked:(id)sender {
+    [self.delegate editHostsFile];
 }
 
 - (void)preferencesMenuItemClicked:(id)sender {

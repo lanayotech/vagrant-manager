@@ -14,10 +14,12 @@
 
 @property (weak) IBOutlet NSButton *autoCloseCheckBox;
 @property (weak) IBOutlet NSButton *dontShowUpdateCheckBox;
+@property (weak) IBOutlet NSButton *optionKeyDestroyCheckBox;
 @property (weak) IBOutlet NSButton *usePathAsInstanceDisplayNameCheckBox;
 @property (weak) IBOutlet NSButton *includeMachineNamesCheckBox;
 @property (weak) IBOutlet NSButton *dontShowRunningVmCountCheckBox;
 @property (weak) IBOutlet NSPopUpButton *terminalPreferencePopUpButton;
+@property (weak) IBOutlet NSPopUpButton *terminalEditorPreferencePopUpButton;
 @property (weak) IBOutlet NSPopUpButton *statusBarIconThemePopUpButton;
 @property (weak) IBOutlet NSPopUpButton *updateStabilityPopUpButton;
 @property (weak) IBOutlet NSButton *sendProfileDataCheckBox;
@@ -30,6 +32,7 @@
 
 - (IBAction)autoCloseCheckBoxClicked:(id)sender;
 - (IBAction)dontShowUpdateCheckBoxClicked:(id)sender;
+- (IBAction)optionKeyDestroyCheckBoxClicked:(id)sender;
 - (IBAction)usePathAsInstanceDisplayNameCheckBoxClicked:(id)sender;
 - (IBAction)includeMachineNamesCheckBoxClicked:(id)sender;
 - (IBAction)dontShowRunningVmCountCheckBoxClicked:(id)sender;

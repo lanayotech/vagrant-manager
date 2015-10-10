@@ -13,8 +13,9 @@
 
 @protocol NativeMenuItemDelegate
 
-- (void)nativeMenuItemUpAllMachines:(NativeMenuItem*)menuItem;
+- (void)nativeMenuItemUpAllMachines:(NativeMenuItem*)menuItem withProvision:(BOOL)provision;
 - (void)nativeMenuItemSSHInstance:(NativeMenuItem*)menuItem;
+- (void)nativeMenuItemRDPInstance:(NativeMenuItem*)menuItem;
 - (void)nativeMenuItemSuspendAllMachines:(NativeMenuItem*)menuItem;
 - (void)nativeMenuItemReloadAllMachines:(NativeMenuItem*)menuItem;
 - (void)nativeMenuItemHaltAllMachines:(NativeMenuItem*)menuItem;
@@ -23,12 +24,14 @@
 - (void)nativeMenuItemCustomCommandAllMachines:(NativeMenuItem*)menuItem withCommand:(CustomCommand*)customCommand;
 - (void)nativeMenuItemOpenFinder:(NativeMenuItem*)menuItem;
 - (void)nativeMenuItemOpenTerminal:(NativeMenuItem*)menuItem;
+- (void)nativeMenuItemEditVagrantfile:(NativeMenuItem*)menuItem;
 - (void)nativeMenuItemUpdateProviderIdentifier:(NativeMenuItem*)menuItem withProviderIdentifier:(NSString*)providerIdentifier;
 - (void)nativeMenuItemRemoveBookmark:(NativeMenuItem*)menuItem;
 - (void)nativeMenuItemAddBookmark:(NativeMenuItem*)menuItem;
 
-- (void)nativeMenuItemUpMachine:(VagrantMachine*)machine;
+- (void)nativeMenuItemUpMachine:(VagrantMachine*)machine withProvision:(BOOL)provision;
 - (void)nativeMenuItemSSHMachine:(VagrantMachine*)machine;
+- (void)nativeMenuItemRDPMachine:(VagrantMachine*)machine;
 - (void)nativeMenuItemSuspendMachine:(VagrantMachine*)machine;
 - (void)nativeMenuItemReloadMachine:(VagrantMachine*)machine;
 - (void)nativeMenuItemHaltMachine:(VagrantMachine*)machine;

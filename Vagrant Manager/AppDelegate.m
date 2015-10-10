@@ -232,6 +232,14 @@
     }
 }
 
+- (void)editVagrantfile:(VagrantInstance *)instance {
+    //open Vagrantfile in default text editor
+    NSTask *task = [[NSTask alloc] init];
+    [task setLaunchPath:@"/bin/bash"];
+    [task setArguments:@[@"-l", @"-c", [NSString stringWithFormat:@"open -t %@", [Util escapeShellArg:[instance getVagrantfilePath]]]]];
+    [task launch];
+}
+
 - (void)addBookmarkWithInstance:(VagrantInstance *)instance {
     [[BookmarkManager sharedManager] addBookmarkWithPath:instance.path displayName:instance.displayName providerIdentifier:instance.providerIdentifier];
     [[BookmarkManager sharedManager] saveBookmarks];
@@ -307,7 +315,20 @@
             }
         });
     });
+}
+
+- (void)editHostsFile {
+    NSString *terminalEditorName = [[NSUserDefaults standardUserDefaults] valueForKey:@"terminalEditorPreference"];
     
+    NSString *terminalEditor;
+    if([terminalEditorName isEqualToString:@"vim"]) {
+        terminalEditor = @"vim";
+    } else {
+        terminalEditor = @"nano";
+    }
+    
+    NSString *taskCommand = [NSString stringWithFormat:@"sudo %@ /etc/hosts", [Util escapeShellArg:terminalEditor]];
+    [self runTerminalCommand:taskCommand];
 }
 
 #pragma mark - Vagrant Machine control
@@ -340,6 +361,11 @@
         if(machine.instance.providerIdentifier) {
             [commandParts addObject:[NSString stringWithFormat:@"--provider=%@", machine.instance.providerIdentifier]];
         }
+    } else if([action isEqualToString:@"up-provision"]) {
+        [commandParts addObject:@"vagrant up --provision"];
+        if(machine.instance.providerIdentifier) {
+            [commandParts addObject:[NSString stringWithFormat:@"--provider=%@", machine.instance.providerIdentifier]];
+        }
     } else if([action isEqualToString:@"reload"]) {
         [commandParts addObject:@"vagrant reload"];
     } else if([action isEqualToString:@"suspend"]) {
@@ -350,6 +376,8 @@
         [commandParts addObject:@"vagrant provision"];
     } else if([action isEqualToString:@"destroy"]) {
         [commandParts addObject:@"vagrant destroy -f"];
+    } else if([action isEqualToString:@"rdp"]) {
+        [commandParts addObject:@"vagrant rdp"];
     } else {
         return;
     }
@@ -385,6 +413,11 @@
         if(instance.providerIdentifier) {
             [commandParts addObject:[NSString stringWithFormat:@"--provider=%@", instance.providerIdentifier]];
         }
+    } else if([action isEqualToString:@"up-provision"]) {
+        [commandParts addObject:@"vagrant up --provision"];
+        if(instance.providerIdentifier) {
+            [commandParts addObject:[NSString stringWithFormat:@"--provider=%@", instance.providerIdentifier]];
+        }
     } else if([action isEqualToString:@"reload"]) {
         [commandParts addObject:@"vagrant reload"];
     } else if([action isEqualToString:@"suspend"]) {
@@ -395,6 +428,8 @@
         [commandParts addObject:@"vagrant provision"];
     } else if([action isEqualToString:@"destroy"]) {
         [commandParts addObject:@"vagrant destroy -f"];
+    } else if([action isEqualToString:@"rdp"]) {
+        [commandParts addObject:@"vagrant rdp"];
     } else {
         return;
     }

@@ -17,8 +17,10 @@
 - (void)performCustomCommand:(CustomCommand*)customCommand withMachine:(VagrantMachine*)machine;
 - (void)openInstanceInFinder:(VagrantInstance*)instance;
 - (void)openInstanceInTerminal:(VagrantInstance*)instance;
+- (void)editVagrantfile:(VagrantInstance*)instance;
 - (void)addBookmarkWithInstance:(VagrantInstance*)instance;
 - (void)removeBookmarkWithInstance:(VagrantInstance*)instance;
 - (void)checkForVagrantUpdates:(BOOL)showAlert;
+- (void)editHostsFile;
 
 @end

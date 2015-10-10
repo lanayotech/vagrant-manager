@@ -11,14 +11,18 @@
 
 @implementation NativeMenuItem {
     NSMenuItem *_instanceUpMenuItem;
+    NSMenuItem *_instanceUpProvisionMenuItem;
     NSMenuItem *_sshMenuItem;
+    NSMenuItem *_rdpMenuItem;
     NSMenuItem *_instanceReloadMenuItem;
     NSMenuItem *_instanceSuspendMenuItem;
     NSMenuItem *_instanceHaltMenuItem;
+    NSMenuItem *_instanceDestroyMenuItemPlaceholder;
     NSMenuItem *_instanceDestroyMenuItem;
     NSMenuItem *_instanceProvisionMenuItem;
     NSMenuItem *_instanceCustomCommandMenuItem;
     
+    NSMenuItem *_editVagrantfileMenuItem;
     NSMenuItem *_openInFinderMenuItem;
     NSMenuItem *_openInTerminalMenuItem;
     NSMenuItem *_addBookmarkMenuItem;
@@ -64,6 +68,14 @@
             [self.menuItem.submenu addItem:_instanceUpMenuItem];
         }
         
+        if(!_instanceUpProvisionMenuItem) {
+            _instanceUpProvisionMenuItem = [[NSMenuItem alloc] initWithTitle:self.instance.machines.count > 1 ? @"Up All (with provision)" : @"Up (with provision)" action:@selector(upProvisionAllMachines:) keyEquivalent:@""];
+            _instanceUpProvisionMenuItem.target = self;
+            _instanceUpProvisionMenuItem.image = [NSImage imageNamed:@"up"];
+            [_instanceUpProvisionMenuItem.image setTemplate:YES];
+            [self.menuItem.submenu addItem:_instanceUpProvisionMenuItem];
+        }
+        
         if(!_sshMenuItem) {
             _sshMenuItem = [[NSMenuItem alloc] initWithTitle:@"SSH" action:@selector(sshInstance:) keyEquivalent:@""];
             _sshMenuItem.target = self;
@@ -71,7 +83,15 @@
             [_sshMenuItem.image setTemplate:YES];
             [self.menuItem.submenu addItem:_sshMenuItem];
         }
-        
+
+        if(!_rdpMenuItem) {
+            _rdpMenuItem = [[NSMenuItem alloc] initWithTitle:@"RDP" action:@selector(rdpInstance:) keyEquivalent:@""];
+            _rdpMenuItem.target = self;
+            _rdpMenuItem.image = [NSImage imageNamed:@"rdp"];
+            [_rdpMenuItem.image setTemplate:YES];
+            [self.menuItem.submenu addItem:_rdpMenuItem];
+        }
+
         if(!_instanceReloadMenuItem) {
             _instanceReloadMenuItem = [[NSMenuItem alloc] initWithTitle:self.instance.machines.count > 1 ? @"Reload All" : @"Reload" action:@selector(reloadAllMachines:) keyEquivalent:@""];
             _instanceReloadMenuItem.target = self;
@@ -96,12 +116,33 @@
             [self.menuItem.submenu addItem:_instanceHaltMenuItem];
         }
         
+        BOOL optionKeyDestroy = [[NSUserDefaults standardUserDefaults] boolForKey:@"optionKeyDestroy"];
+        
+        if(!_instanceDestroyMenuItemPlaceholder) {
+            _instanceDestroyMenuItemPlaceholder = [[NSMenuItem alloc] initWithTitle:self.instance.machines.count > 1 ? @"Destroy All" : @"Destroy" action:nil keyEquivalent:@""];
+            _instanceDestroyMenuItemPlaceholder.image = [NSImage imageNamed:@"destroy"];
+            [_instanceDestroyMenuItemPlaceholder.image setTemplate:YES];
+            _instanceDestroyMenuItemPlaceholder.enabled = NO;
+            [self.menuItem.submenu addItem:_instanceDestroyMenuItemPlaceholder];
+        }
+
+        if(!optionKeyDestroy) {
+            _instanceDestroyMenuItemPlaceholder.hidden = YES;
+        }
+        
         if(!_instanceDestroyMenuItem) {
             _instanceDestroyMenuItem = [[NSMenuItem alloc] initWithTitle:self.instance.machines.count > 1 ? @"Destroy All" : @"Destroy" action:@selector(destroyAllMachines:) keyEquivalent:@""];
             _instanceDestroyMenuItem.target = self;
             _instanceDestroyMenuItem.image = [NSImage imageNamed:@"destroy"];
             [_instanceDestroyMenuItem.image setTemplate:YES];
             [self.menuItem.submenu addItem:_instanceDestroyMenuItem];
+        }
+        
+        if(optionKeyDestroy) {
+            _instanceDestroyMenuItem.alternate = YES;
+            _instanceDestroyMenuItem.keyEquivalentModifierMask = NSAlternateKeyMask;
+        } else {
+            _instanceDestroyMenuItem.alternate = NO;
         }
         
         if(!_instanceProvisionMenuItem) {
@@ -142,6 +183,12 @@
            [self.menuItem.submenu addItem:[NSMenuItem separatorItem]];
         }
         
+        if (!_editVagrantfileMenuItem) {
+            _editVagrantfileMenuItem = [[NSMenuItem alloc] initWithTitle:@"Edit Vagrantfile" action:@selector(editVagrantfileMenuItemClicked:) keyEquivalent:@""];
+            _editVagrantfileMenuItem.target = self;
+            [self.menuItem.submenu addItem:_editVagrantfileMenuItem];
+        }
+
         if (!_openInFinderMenuItem) {
             _openInFinderMenuItem = [[NSMenuItem alloc] initWithTitle:@"Open in Finder" action:@selector(finderMenuItemClicked:) keyEquivalent:@""];
             _openInFinderMenuItem.target = self;
@@ -198,7 +245,9 @@
             
             if([self.instance getRunningMachineCount] < self.instance.machines.count) {
                 [_instanceUpMenuItem setHidden:NO];
+                [_instanceUpProvisionMenuItem setHidden:NO];
                 [_sshMenuItem setHidden:YES];
+                [_rdpMenuItem setHidden:YES];
                 [_instanceReloadMenuItem setHidden:YES];
                 [_instanceSuspendMenuItem setHidden:YES];
                 [_instanceHaltMenuItem setHidden:YES];
@@ -208,7 +257,9 @@
             
             if([self.instance getRunningMachineCount] > 0) {
                 [_instanceUpMenuItem setHidden:YES];
+                [_instanceUpProvisionMenuItem setHidden:YES];
                 [_sshMenuItem setHidden:NO];
+                [_rdpMenuItem setHidden:NO];
                 [_instanceReloadMenuItem setHidden:NO];
                 [_instanceSuspendMenuItem setHidden:NO];
                 [_instanceHaltMenuItem setHidden:NO];
@@ -223,6 +274,7 @@
             
             if (self.instance.machines.count > 1) {
                 [_sshMenuItem setHidden:YES];
+                [_rdpMenuItem setHidden:YES];
             }
             
             if([[BookmarkManager sharedManager] getBookmarkWithPath:self.instance.path]) {
@@ -284,12 +336,26 @@
                 [machineUpMenuItem.image setTemplate:YES];
                 [machineSubmenu addItem:machineUpMenuItem];
                 
+                NSMenuItem *machineUpProvisionMenuItem = [[NSMenuItem alloc] initWithTitle:@"Up (with provision)" action:@selector(upProvisionMachine:) keyEquivalent:@""];
+                machineUpProvisionMenuItem.target = self;
+                machineUpProvisionMenuItem.representedObject = machine;
+                machineUpProvisionMenuItem.image = [NSImage imageNamed:@"up"];
+                [machineUpProvisionMenuItem.image setTemplate:YES];
+                [machineSubmenu addItem:machineUpProvisionMenuItem];
+
                 NSMenuItem *machineSSHMenuItem = [[NSMenuItem alloc] initWithTitle:@"SSH" action:@selector(sshMachine:) keyEquivalent:@""];
                 machineSSHMenuItem.target = self;
                 machineSSHMenuItem.representedObject = machine;
                 machineSSHMenuItem.image = [NSImage imageNamed:@"ssh"];
                 [machineSSHMenuItem.image setTemplate:YES];
                 [machineSubmenu addItem:machineSSHMenuItem];
+
+                NSMenuItem *machineRDPMenuItem = [[NSMenuItem alloc] initWithTitle:@"RDP" action:@selector(rdpMachine:) keyEquivalent:@""];
+                machineRDPMenuItem.target = self;
+                machineRDPMenuItem.representedObject = machine;
+                machineRDPMenuItem.image = [NSImage imageNamed:@"rdp"];
+                [machineRDPMenuItem.image setTemplate:YES];
+                [machineSubmenu addItem:machineRDPMenuItem];
 
                 NSMenuItem *machineReloadMenuItem = [[NSMenuItem alloc] initWithTitle:@"Reload" action:@selector(reloadMachine:) keyEquivalent:@""];
                 machineReloadMenuItem.target = self;
@@ -357,7 +423,9 @@
                 
                 if(machine.state == RunningState) {
                     [machineUpMenuItem setHidden:YES];
+                    [machineUpProvisionMenuItem setHidden:YES];
                     [machineSSHMenuItem setHidden:NO];
+                    [machineRDPMenuItem setHidden:NO];
                     [machineReloadMenuItem setHidden:NO];
                     [machineSuspendMenuItem setHidden:NO];
                     [machineHaltMenuItem setHidden:NO];
@@ -365,7 +433,9 @@
                     [machineCustomCommandMenuItem setHidden:NO];
                 } else {
                     [machineUpMenuItem setHidden:NO];
+                    [machineUpProvisionMenuItem setHidden:NO];
                     [machineSSHMenuItem setHidden:YES];
+                    [machineRDPMenuItem setHidden:YES];
                     [machineReloadMenuItem setHidden:YES];
                     [machineSuspendMenuItem setHidden:YES];
                     [machineHaltMenuItem setHidden:YES];
@@ -383,11 +453,19 @@
 }
 
 - (void)upAllMachines:(NSMenuItem*)sender {
-    [self.delegate nativeMenuItemUpAllMachines:self];
+    [self.delegate nativeMenuItemUpAllMachines:self withProvision:NO];
+}
+
+- (void)upProvisionAllMachines:(NSMenuItem*)sender {
+    [self.delegate nativeMenuItemUpAllMachines:self withProvision:YES];
 }
 
 - (void)sshInstance:(NSMenuItem*)sender {
     [self.delegate nativeMenuItemSSHInstance:self];
+}
+
+- (void)rdpInstance:(NSMenuItem*)sender {
+    [self.delegate nativeMenuItemRDPInstance:self];
 }
 
 - (void)reloadAllMachines:(NSMenuItem*)sender {
@@ -418,6 +496,10 @@
     [self.delegate nativeMenuItemOpenFinder:self];
 }
 
+- (void)editVagrantfileMenuItemClicked:(NSMenuItem*)sender {
+    [self.delegate nativeMenuItemEditVagrantfile:self];
+}
+
 - (void)terminalMenuItemClicked:(NSMenuItem*)sender {
     [self.delegate nativeMenuItemOpenTerminal:self];
 }
@@ -435,11 +517,19 @@
 }
 
 - (void)upMachine:(NSMenuItem*)sender {
-    [self.delegate nativeMenuItemUpMachine:sender.representedObject];
+    [self.delegate nativeMenuItemUpMachine:sender.representedObject withProvision:NO];
+}
+
+- (void)upProvisionMachine:(NSMenuItem*)sender {
+    [self.delegate nativeMenuItemUpMachine:sender.representedObject withProvision:YES];
 }
 
 - (void)sshMachine:(NSMenuItem*)sender {
     [self.delegate nativeMenuItemSSHMachine:sender.representedObject];
+}
+
+- (void)rdpMachine:(NSMenuItem*)sender {
+    [self.delegate nativeMenuItemRDPMachine:sender.representedObject];
 }
 
 - (void)reloadMachine:(NSMenuItem*)sender {
@@ -464,6 +554,19 @@
 
 - (void)customCommandMachine:(NSMenuItem*)sender {
     [self.delegate nativeMenuItemCustomCommandMachine:[sender.representedObject objectForKey:@"machine"] withCommand:[sender.representedObject objectForKey:@"command"]];
+}
+
+- (void)menuWillOpen:(NSMenu *)menu {
+    BOOL optionKeyDestroy = [[NSUserDefaults standardUserDefaults] boolForKey:@"optionKeyDestroy"];
+
+    if(optionKeyDestroy) {
+        _instanceDestroyMenuItemPlaceholder.hidden = NO;
+        _instanceDestroyMenuItem.alternate = YES;
+        _instanceDestroyMenuItem.keyEquivalentModifierMask = NSAlternateKeyMask;
+    } else {
+        _instanceDestroyMenuItem.alternate = NO;
+        _instanceDestroyMenuItemPlaceholder.hidden = YES;
+    }
 }
 
 @end

@@ -6,6 +6,7 @@
 //
 
 #import "VagrantManager.h"
+#import "NFSScanner.h"
 #import "VagrantGlobalStatusScanner.h"
 #import "BookmarkManager.h"
 
@@ -95,33 +96,63 @@
 
 //refresh list of instances by querying bookmarks, service providers, and NFS
 - (void)refreshInstances {
+    NSMutableArray *instances = [[NSMutableArray alloc] init];
+    
+    BookmarkManager *bookmarkManager = [BookmarkManager sharedManager];
+
+    //create instance for each bookmark
+    NSMutableArray *bookmarks = [[BookmarkManager sharedManager] getBookmarks];
+    for(Bookmark *bookmark in bookmarks) {
+        [instances addObject:[[VagrantInstance alloc] initWithPath:bookmark.path displayName:bookmark.displayName providerIdentifier:bookmark.providerIdentifier]];
+    }
+    
+    NSMutableArray *allPaths = [[NSMutableArray alloc] init];
+    
+    //scan for NFS exports
+    NFSScanner *nfsScanner = [[NFSScanner alloc] init];
+    for(NSString *path in [nfsScanner getNFSInstancePaths]) {
+        //make sure it is not a bookmark and has not already been detected
+        if(![bookmarkManager getBookmarkWithPath:path] && ![allPaths containsObject:path]) {
+            [allPaths addObject:path];
+            [instances addObject:[[VagrantInstance alloc] initWithPath:path providerIdentifier:nil]];
+        }
+    }
     
     //scan vagrant global-status output
     VagrantGlobalStatusScanner *globalStatusScanner = [[VagrantGlobalStatusScanner alloc] init];
-    NSMutableDictionary *instancesPathDict = [globalStatusScanner getInstances];
+    for(NSString *path in [globalStatusScanner getInstancePaths]) {
+        //make sure it is not a bookmark and has not already been detected
+        if(![bookmarkManager getBookmarkWithPath:path] && ![allPaths containsObject:path]) {
+            [allPaths addObject:path];
+            [instances addObject:[[VagrantInstance alloc] initWithPath:path providerIdentifier:nil]];
+        }
+    }
     
-    BookmarkManager *bookmarkManager = [BookmarkManager sharedManager];
-    NSArray *bookmarks = [bookmarkManager getBookmarks];
-    
-    //add bookmark instances and go through all bookmarks to override display name and provider identifier
-    for (Bookmark *bookmark in bookmarks) {
-        if ([instancesPathDict objectForKey:bookmark.path]) {
-            VagrantInstance *instance = [instancesPathDict objectForKey:bookmark.path];
-            instance.displayName = bookmark.displayName;
-            instance.providerIdentifier = bookmark.providerIdentifier;
-        } else {
-            instancesPathDict[bookmark.path] = [[VagrantInstance alloc] initWithPath:bookmark.path displayName:bookmark.displayName providerIdentifier:bookmark.providerIdentifier];
+    //create instance for each detected path
+    NSDictionary *detectedPaths = [self detectInstancePaths];
+    for(NSString *providerIdentifier in [detectedPaths allKeys]) {
+        NSArray *paths = [detectedPaths objectForKey:providerIdentifier];
+        for(NSString *path in paths) {
+            //make sure it is not a bookmark and has not already been detected
+            if(![bookmarkManager getBookmarkWithPath:path] && ![allPaths containsObject:path]) {
+                [allPaths addObject:path];
+                [instances addObject:[[VagrantInstance alloc] initWithPath:path providerIdentifier:providerIdentifier]];
+            }
         }
     }
 
     //TODO: implement "last seen" functionality. Store paths of previously seen Vagrantfiles and check if they still exist
+    
     NSMutableArray *validPaths = [[NSMutableArray alloc] init];
     
     //query all known instances for machines, process in parallel
     dispatch_group_t queryMachinesGroup = dispatch_group_create();
     dispatch_queue_t queryMachinesQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-    for(VagrantInstance *instance in [instancesPathDict allValues]) {
+    for(VagrantInstance *instance in instances) {
         dispatch_group_async(queryMachinesGroup, queryMachinesQueue, ^{
+            //query instance machines
+            [instance queryMachines];
+            
             @synchronized(_instances) {
                 VagrantInstance *existingInstance = [self getInstanceForPath:instance.path];
                 if(existingInstance) {
