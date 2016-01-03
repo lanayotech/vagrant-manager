@@ -274,24 +274,26 @@
         
         BOOL newVersionAvailable = NO;
         BOOL invalidOutput = YES;
-        NSString *currentVersion;
-        NSString *latestVersion;
+        NSString *currentVersion = nil;
+        NSString *latestVersion = nil;
         
-        
-        if([lines count] >= 2) {
-            NSArray *installedVersionParts = [[lines objectAtIndex:0] componentsSeparatedByString:@","];
-            NSArray *latestVersionParts = [[lines objectAtIndex:1] componentsSeparatedByString:@","];
+        for(NSString *line in lines) {
+            NSArray *cols = [line componentsSeparatedByString:@","];
             
-            if([installedVersionParts count] >= 4 && [latestVersionParts count] >= 4) {
-                currentVersion = [installedVersionParts objectAtIndex:3];
-                latestVersion = [latestVersionParts objectAtIndex:3];
-                
-                if([Util compareVersion:currentVersion toVersion:latestVersion] == NSOrderedAscending) {
-                    newVersionAvailable = YES;
+            if([cols count] >=4 ) {
+                if([[cols objectAtIndex:2] isEqualToString:@"version-installed"]) {
+                    currentVersion = [cols objectAtIndex:3];
+                } else if([[cols objectAtIndex:2] isEqualToString:@"version-latest"]) {
+                    latestVersion = [cols objectAtIndex:3];
                 }
-                
-                invalidOutput = NO;
             }
+        }
+        
+        if(currentVersion && latestVersion) {
+            newVersionAvailable = [Util compareVersion:currentVersion toVersion:latestVersion] == NSOrderedAscending;
+            invalidOutput = NO;
+        } else {
+            invalidOutput = YES;
         }
         
         dispatch_async(dispatch_get_main_queue(), ^{
