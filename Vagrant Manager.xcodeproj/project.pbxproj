@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2609ECF51BC89CEA00E4B44E /* NFSScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 2609ECF41BC89CEA00E4B44E /* NFSScanner.m */; settings = {ASSET_TAGS = (); }; };
-		2609ECF71BC8A04600E4B44E /* rdp@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2609ECF61BC8A04600E4B44E /* rdp@2x.png */; settings = {ASSET_TAGS = (); }; };
-		2609ECF91BC8A05100E4B44E /* rdp.png in Resources */ = {isa = PBXBuildFile; fileRef = 2609ECF81BC8A05100E4B44E /* rdp.png */; settings = {ASSET_TAGS = (); }; };
+		2609ECF51BC89CEA00E4B44E /* NFSScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 2609ECF41BC89CEA00E4B44E /* NFSScanner.m */; };
+		2609ECF71BC8A04600E4B44E /* rdp@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2609ECF61BC8A04600E4B44E /* rdp@2x.png */; };
+		2609ECF91BC8A05100E4B44E /* rdp.png in Resources */ = {isa = PBXBuildFile; fileRef = 2609ECF81BC8A05100E4B44E /* rdp.png */; };
 		26130E9A1B1D565200872C4F /* bm_status_icon_off.png in Resources */ = {isa = PBXBuildFile; fileRef = 26130E981B1D565200872C4F /* bm_status_icon_off.png */; };
 		26130E9B1B1D565200872C4F /* bm_status_icon_off@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 26130E991B1D565200872C4F /* bm_status_icon_off@2x.png */; };
 		26130E9E1B1D596400872C4F /* bm_status_icon_suspended@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 26130E9C1B1D596400872C4F /* bm_status_icon_suspended@2x.png */; };
