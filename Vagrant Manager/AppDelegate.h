@@ -20,7 +20,7 @@
 #define MENU_ITEM_BOOKMARKED_VM 1
 #define MENU_ITEM_DETECTED_VM   2
 
-@interface AppDelegate : NSObject <NSApplicationDelegate, VagrantManagerDelegate, MenuDelegate, NSMenuDelegate, NSUserNotificationCenterDelegate> {
+@interface AppDelegate : NSObject <NSApplicationDelegate, VagrantManagerDelegate, MenuDelegate, NSMenuDelegate, NSUserNotificationCenterDelegate, SUUpdaterDelegate> {
     NSMutableArray *bookmarks;
 }
 
