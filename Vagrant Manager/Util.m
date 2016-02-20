@@ -30,10 +30,20 @@
 }
 
 + (NSComparisonResult)compareVersion:(NSString*)version1 toVersion:(NSString*)version2 {
+    if(!version1 || !version2) {
+        //if either version is nil, don't upgrade
+        return NSOrderedDescending;
+    }
+    
     return [self compareVersion:version1 toVersion:version2 skipExpansion:NO];
 }
 
 + (NSComparisonResult)compareVersion:(NSString*)version1 toVersion:(NSString*)version2 skipExpansion:(BOOL)skipExpansion {
+    if(!version1 || !version2) {
+        //if either version is nil, don't upgrade
+        return NSOrderedDescending;
+    }
+
     NSMutableArray *version1parts = [[version1 componentsSeparatedByString:@"."] mutableCopy];
     NSMutableArray *version2parts = [[version2 componentsSeparatedByString:@"."] mutableCopy];
     
