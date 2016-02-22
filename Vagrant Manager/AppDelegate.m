@@ -504,7 +504,6 @@
     
     NSAppleScript *as = [[NSAppleScript alloc] initWithSource: s];
     [as executeAndReturnError:nil];
-    NSLog(as);
 }
 
 #pragma mark - Window management
