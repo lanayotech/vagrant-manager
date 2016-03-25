@@ -464,19 +464,37 @@
     
     command = [command stringByReplacingOccurrencesOfString:@"\\" withString:@"\\\\"];
     command = [command stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
-    
+            
     NSString *s;
     if ([terminalName isEqualToString:@"iTerm"]) {
-        s = [NSString stringWithFormat:@"tell application \"iTerm\"\n"
+        s = [NSString stringWithFormat:
+             @"set v2_script to \"\n"
+             "tell application \\\"iTerm\\\"\n"
              "tell current terminal\n"
-             "launch session \"Default Session\"\n"
-             "delay .15\n"
+             "launch session \\\"Default Session\\\"\n"
+             "delay 0.15\n"
              "activate\n"
              "tell the last session\n"
-             "write text \"%@\"\n"
+             "write text \\\"%@\\\"\n"
              "end tell\n"
              "end tell\n"
-             "end tell\n", command];
+             "end tell\"\n"
+             "set v3_script to \"\n"
+             "tell application \\\"iTerm\\\"\n"
+             "activate\n"
+             "tell current window\n"
+             "create tab with default profile\n"
+             "tell current session\n"
+             "write text \\\"%@\\\"\n"
+             "end tell\n"
+             "end tell\n"
+             "end tell\"\n"
+             
+             "if application \"iTerm\"'s version >= \"2.9\" then\n"
+             "run script v3_script\n"
+             "else\n"
+             "run script v2_script\n"
+             "end\n", command, command];
     } else {
         s = [NSString stringWithFormat:@"tell application \"Terminal\"\n"
              "activate\n"

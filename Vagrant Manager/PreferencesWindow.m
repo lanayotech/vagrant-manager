@@ -51,6 +51,8 @@
     
     if ([terminalEditorPreference isEqualToString:@"vim"]) {
         [self.terminalEditorPreferencePopUpButton selectItemWithTag:101];
+    } else if ([terminalEditorPreference isEqualToString:@"emacs"]) {
+        [self.terminalEditorPreferencePopUpButton selectItemWithTag:102];
     } else {
         [self.terminalEditorPreferencePopUpButton selectItemWithTag:100];
     }
@@ -136,8 +138,10 @@
 - (IBAction)terminalEditorPreferencePopUpButtonClicked:(id)sender {
     NSString *terminalEditorPreference;
     
-    if (self.terminalPreferencePopUpButton.selectedItem.tag == 101) {
+    if (self.terminalEditorPreferencePopUpButton.selectedItem.tag == 101) {
         terminalEditorPreference = @"vim";
+    } else if (self.terminalEditorPreferencePopUpButton.selectedItem.tag == 102){
+        terminalEditorPreference = @"emacs";
     } else {
         terminalEditorPreference = @"nano";
     }
