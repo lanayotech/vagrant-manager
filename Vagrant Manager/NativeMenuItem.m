@@ -10,6 +10,8 @@
 #import "CustomCommandManager.h"
 
 @implementation NativeMenuItem {
+    NSMenu *_submenu;
+    
     NSMenuItem *_instanceUpMenuItem;
     NSMenuItem *_instanceUpProvisionMenuItem;
     NSMenuItem *_sshMenuItem;
@@ -54,10 +56,14 @@
         
         NSArray *customCommands = [[CustomCommandManager sharedManager] getCustomCommands];
         
+        if(!_submenu) {
+            _submenu = [[NSMenu alloc] init];
+            [_submenu setAutoenablesItems:NO];
+            _submenu.delegate = self;
+        }
+        
         if(!self.menuItem.hasSubmenu) {
-            [self.menuItem setSubmenu:[[NSMenu alloc] init]];
-            [self.menuItem.submenu setAutoenablesItems:NO];
-            self.menuItem.submenu.delegate = self;
+            self.menuItem.submenu = _submenu;
         }
         
         if(!_instanceUpMenuItem) {
@@ -65,7 +71,9 @@
             _instanceUpMenuItem.target = self;
             _instanceUpMenuItem.image = [NSImage imageNamed:@"up"];
             [_instanceUpMenuItem.image setTemplate:YES];
-            [self.menuItem.submenu addItem:_instanceUpMenuItem];
+            [_submenu addItem:_instanceUpMenuItem];
+        } else {
+            _instanceUpMenuItem.title = self.instance.machines.count > 1 ? @"Up All" : @"Up";
         }
         
         if(!_instanceUpProvisionMenuItem) {
@@ -73,7 +81,9 @@
             _instanceUpProvisionMenuItem.target = self;
             _instanceUpProvisionMenuItem.image = [NSImage imageNamed:@"up"];
             [_instanceUpProvisionMenuItem.image setTemplate:YES];
-            [self.menuItem.submenu addItem:_instanceUpProvisionMenuItem];
+            [_submenu addItem:_instanceUpProvisionMenuItem];
+        } else {
+            _instanceUpProvisionMenuItem.title = self.instance.machines.count > 1 ? @"Up All (with provision)" : @"Up (with provision)";
         }
         
         if(!_sshMenuItem) {
@@ -81,7 +91,7 @@
             _sshMenuItem.target = self;
             _sshMenuItem.image = [NSImage imageNamed:@"ssh"];
             [_sshMenuItem.image setTemplate:YES];
-            [self.menuItem.submenu addItem:_sshMenuItem];
+            [_submenu addItem:_sshMenuItem];
         }
 
         if(!_rdpMenuItem) {
@@ -89,7 +99,7 @@
             _rdpMenuItem.target = self;
             _rdpMenuItem.image = [NSImage imageNamed:@"rdp"];
             [_rdpMenuItem.image setTemplate:YES];
-            [self.menuItem.submenu addItem:_rdpMenuItem];
+            [_submenu addItem:_rdpMenuItem];
         }
 
         if(!_instanceReloadMenuItem) {
@@ -97,7 +107,9 @@
             _instanceReloadMenuItem.target = self;
             _instanceReloadMenuItem.image = [NSImage imageNamed:@"reload"];
             [_instanceReloadMenuItem.image setTemplate:YES];
-            [self.menuItem.submenu addItem:_instanceReloadMenuItem];
+            [_submenu addItem:_instanceReloadMenuItem];
+        } else {
+            _instanceReloadMenuItem.title = self.instance.machines.count > 1 ? @"Reload All" : @"Reload";
         }
         
         if(!_instanceSuspendMenuItem) {
@@ -105,7 +117,9 @@
             _instanceSuspendMenuItem.target = self;
             _instanceSuspendMenuItem.image = [NSImage imageNamed:@"suspend"];
             [_instanceSuspendMenuItem.image setTemplate:YES];
-            [self.menuItem.submenu addItem:_instanceSuspendMenuItem];
+            [_submenu addItem:_instanceSuspendMenuItem];
+        } else {
+            _instanceSuspendMenuItem.title = self.instance.machines.count > 1 ? @"Suspend All" : @"Suspend";
         }
         
         if(!_instanceHaltMenuItem) {
@@ -113,7 +127,9 @@
             _instanceHaltMenuItem.target = self;
             _instanceHaltMenuItem.image = [NSImage imageNamed:@"halt"];
             [_instanceHaltMenuItem.image setTemplate:YES];
-            [self.menuItem.submenu addItem:_instanceHaltMenuItem];
+            [_submenu addItem:_instanceHaltMenuItem];
+        } else {
+            _instanceHaltMenuItem.title = self.instance.machines.count > 1 ? @"Halt All" : @"Halt";
         }
         
         BOOL optionKeyDestroy = [[NSUserDefaults standardUserDefaults] boolForKey:@"optionKeyDestroy"];
@@ -123,7 +139,9 @@
             _instanceDestroyMenuItemPlaceholder.image = [NSImage imageNamed:@"destroy"];
             [_instanceDestroyMenuItemPlaceholder.image setTemplate:YES];
             _instanceDestroyMenuItemPlaceholder.enabled = NO;
-            [self.menuItem.submenu addItem:_instanceDestroyMenuItemPlaceholder];
+            [_submenu addItem:_instanceDestroyMenuItemPlaceholder];
+        } else {
+            _instanceDestroyMenuItemPlaceholder.title = self.instance.machines.count > 1 ? @"Destroy All" : @"Destroy";
         }
 
         if(!optionKeyDestroy) {
@@ -135,7 +153,9 @@
             _instanceDestroyMenuItem.target = self;
             _instanceDestroyMenuItem.image = [NSImage imageNamed:@"destroy"];
             [_instanceDestroyMenuItem.image setTemplate:YES];
-            [self.menuItem.submenu addItem:_instanceDestroyMenuItem];
+            [_submenu addItem:_instanceDestroyMenuItem];
+        } else {
+            _instanceDestroyMenuItem.title = self.instance.machines.count > 1 ? @"Destroy All" : @"Destroy";
         }
         
         if(optionKeyDestroy) {
@@ -150,16 +170,20 @@
             _instanceProvisionMenuItem.target = self;
             _instanceProvisionMenuItem.image = [NSImage imageNamed:@"provision"];
             [_instanceProvisionMenuItem.image setTemplate:YES];
-            [self.menuItem.submenu addItem:_instanceProvisionMenuItem];
+            [_submenu addItem:_instanceProvisionMenuItem];
+        } else {
+            _instanceProvisionMenuItem.title = self.instance.machines.count > 1 ? @"Provision All" : @"Provision";
         }
         
         if(!_instanceCustomCommandMenuItem) {
             _instanceCustomCommandMenuItem = [[NSMenuItem alloc] initWithTitle:self.instance.machines.count > 1 ? @"Custom Command All" : @"Custom Command" action:nil keyEquivalent:@""];
             _instanceCustomCommandMenuItem.target = self;
             
-            [self.menuItem.submenu addItem:_instanceCustomCommandMenuItem];
+            [_submenu addItem:_instanceCustomCommandMenuItem];
             _instanceCustomCommandMenuItem.submenu = [[NSMenu alloc] init];
             [_instanceCustomCommandMenuItem.submenu setAutoenablesItems:NO];
+        } else {
+            _instanceCustomCommandMenuItem.title = self.instance.machines.count > 1 ? @"Custom Command All" : @"Custom Command";
         }
 
         [_instanceCustomCommandMenuItem.submenu removeAllItems];
@@ -180,25 +204,25 @@
         
         if (!_actionSeparator) {
             _actionSeparator = [NSMenuItem separatorItem];
-           [self.menuItem.submenu addItem:[NSMenuItem separatorItem]];
+           [_submenu addItem:[NSMenuItem separatorItem]];
         }
         
         if (!_editVagrantfileMenuItem) {
             _editVagrantfileMenuItem = [[NSMenuItem alloc] initWithTitle:@"Edit Vagrantfile" action:@selector(editVagrantfileMenuItemClicked:) keyEquivalent:@""];
             _editVagrantfileMenuItem.target = self;
-            [self.menuItem.submenu addItem:_editVagrantfileMenuItem];
+            [_submenu addItem:_editVagrantfileMenuItem];
         }
 
         if (!_openInFinderMenuItem) {
             _openInFinderMenuItem = [[NSMenuItem alloc] initWithTitle:@"Open in Finder" action:@selector(finderMenuItemClicked:) keyEquivalent:@""];
             _openInFinderMenuItem.target = self;
-            [self.menuItem.submenu addItem:_openInFinderMenuItem];
+            [_submenu addItem:_openInFinderMenuItem];
         }
         
         if (!_openInTerminalMenuItem) {
             _openInTerminalMenuItem = [[NSMenuItem alloc] initWithTitle:@"Open in Terminal" action:@selector(terminalMenuItemClicked:) keyEquivalent:@""];
             _openInTerminalMenuItem.target = self;
-            [self.menuItem.submenu addItem:_openInTerminalMenuItem];
+            [_submenu addItem:_openInTerminalMenuItem];
         }
         
         if (!_chooseProviderMenuItem) {
@@ -213,7 +237,7 @@
                 [submenu addItem:submenuItem];
             }
             [_chooseProviderMenuItem setSubmenu:submenu];
-            [self.menuItem.submenu addItem:_chooseProviderMenuItem];
+            [_submenu addItem:_chooseProviderMenuItem];
         } else {
             _chooseProviderMenuItem.title = [NSString stringWithFormat:@"Provider: %@", self.instance.providerIdentifier ?: @"Unknown"];
         }
@@ -221,13 +245,13 @@
         if (!_removeBookmarkMenuItem) {
             _removeBookmarkMenuItem = [[NSMenuItem alloc] initWithTitle:@"Remove from bookmarks" action:@selector(removeBookmarkMenuItemClicked:) keyEquivalent:@""];
             _removeBookmarkMenuItem.target = self;
-            [self.menuItem.submenu addItem:_removeBookmarkMenuItem];
+            [_submenu addItem:_removeBookmarkMenuItem];
         }
         
         if (!_addBookmarkMenuItem) {
             _addBookmarkMenuItem = [[NSMenuItem alloc] initWithTitle:@"Add to bookmarks" action:@selector(addBookmarkMenuItemClicked:) keyEquivalent:@""];
             _addBookmarkMenuItem.target = self;
-            [self.menuItem.submenu addItem:_addBookmarkMenuItem];
+            [_submenu addItem:_addBookmarkMenuItem];
         }
         
         Bookmark *bookmark = [[BookmarkManager sharedManager] getBookmarkWithPath:self.instance.path];
@@ -309,12 +333,12 @@
         
         if(!_machineSeparator) {
             _machineSeparator = [NSMenuItem separatorItem];
-            [self.menuItem.submenu addItem:_machineSeparator];
+            [_submenu addItem:_machineSeparator];
         }
         
         //destroy machine menu items
         for(NSMenuItem *machineItem in _machineMenuItems) {
-            [self.menuItem.submenu removeItem:machineItem];
+            [_submenu removeItem:machineItem];
         }
         
         [_machineMenuItems removeAllObjects];
@@ -417,7 +441,7 @@
                 machineItem.submenu = machineSubmenu;
                 
                 [_machineMenuItems addObject:machineItem];
-                [self.menuItem.submenu insertItem:machineItem atIndex:[self.menuItem.submenu indexOfItem:_machineSeparator] + _machineMenuItems.count];
+                [_submenu insertItem:machineItem atIndex:[self.menuItem.submenu indexOfItem:_machineSeparator] + _machineMenuItems.count];
                 
                 machineItem.image = machine.state == RunningState ? [NSImage imageNamed:@"status_icon_on"] : machine.state == SavedState ? [NSImage imageNamed:@"status_icon_suspended"] : [NSImage imageNamed:@"status_icon_off"];
                 
