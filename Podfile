@@ -1,1 +1,4 @@
-pod 'Sparkle'
+target "Vagrant Manager" do
+  pod 'Sparkle'
+end
+
