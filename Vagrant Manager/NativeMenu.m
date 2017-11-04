@@ -320,7 +320,9 @@
 }
 
 - (void)nativeMenuItemDestroyAllMachines:(NativeMenuItem *)menuItem {
+    [NSApp activateIgnoringOtherApps:YES];
     NSAlert *confirmAlert = [NSAlert alertWithMessageText:[NSString stringWithFormat:@"Are you sure you want to destroy %@?", menuItem.instance.machines.count > 1 ? @" all machines in the group" : @"this machine"] defaultButton:@"Confirm" alternateButton:@"Cancel" otherButton:nil informativeTextWithFormat:@""];
+    [confirmAlert.window makeKeyWindow];
     NSInteger button = [confirmAlert runModal];
     
     if(button == NSAlertDefaultReturn) {
@@ -399,7 +401,9 @@
 }
 
 - (void)nativeMenuItemDestroyMachine:(VagrantMachine *)machine {
+    [NSApp activateIgnoringOtherApps:YES];
     NSAlert *confirmAlert = [NSAlert alertWithMessageText:@"Are you sure you want to destroy this machine?" defaultButton:@"Confirm" alternateButton:@"Cancel" otherButton:nil informativeTextWithFormat:@""];
+    [confirmAlert.window makeKeyWindow];
     NSInteger button = [confirmAlert runModal];
     
     if(button == NSAlertDefaultReturn) {
@@ -546,7 +550,9 @@
 }
 
 - (IBAction)allDestroyMenuItemClicked:(NSMenuItem*)sender {
+    [NSApp activateIgnoringOtherApps:YES];
     NSAlert *confirmAlert = [NSAlert alertWithMessageText:@"Are you sure you want to destroy all machines?" defaultButton:@"Confirm" alternateButton:@"Cancel" otherButton:nil informativeTextWithFormat:@""];
+    [confirmAlert.window makeKeyWindow];
     NSInteger button = [confirmAlert runModal];
     
     if(button == NSAlertDefaultReturn) {

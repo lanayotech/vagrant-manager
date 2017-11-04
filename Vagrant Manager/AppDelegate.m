@@ -247,7 +247,10 @@
         NSURL *fileURL = [NSURL fileURLWithPath:path];
         [[NSWorkspace sharedWorkspace] openURL:fileURL];
     } else {
-        [[NSAlert alertWithMessageText:[NSString stringWithFormat:@"Path not found: %@", path] defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@""] runModal];
+        [NSApp activateIgnoringOtherApps:YES];
+        NSAlert *confirmAlert = [NSAlert alertWithMessageText:[NSString stringWithFormat:@"Path not found: %@", path] defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@""];
+        [confirmAlert.window makeKeyWindow];
+        [confirmAlert runModal];
     }
 }
 
@@ -258,7 +261,10 @@
     if([[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isDir] && isDir) {
         [self runTerminalCommand:[NSString stringWithFormat:@"cd %@", [Util escapeShellArg:path]]];
     } else {
-        [[NSAlert alertWithMessageText:[NSString stringWithFormat:@"Path not found: %@", path] defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@""] runModal];
+        [NSApp activateIgnoringOtherApps:YES];
+        NSAlert *alert = [NSAlert alertWithMessageText:[NSString stringWithFormat:@"Path not found: %@", path] defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@""];
+        [alert.window makeKeyWindow];
+        [alert runModal];
     }
 }
 
@@ -331,9 +337,14 @@
 
             if(showAlert) {
                 if(invalidOutput) {
-                    [[NSAlert alertWithMessageText:@"There was a problem checking your Vagrant version" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@""] runModal];
+                    [NSApp activateIgnoringOtherApps:YES];
+                    NSAlert *alert = [NSAlert alertWithMessageText:@"There was a problem checking your Vagrant version" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@""];
+                    [alert.window makeKeyWindow];
+                    [alert runModal];
                 } else if(newVersionAvailable) {
+                    [NSApp activateIgnoringOtherApps:YES];
                     NSAlert *alert = [NSAlert alertWithMessageText:[NSString stringWithFormat:@"There is a newer version of Vagrant available.\n\nCurrent version: %@\nLatest version: %@", currentVersion, latestVersion] defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@""];
+                    [alert.window makeKeyWindow];
                     [alert addButtonWithTitle:@"Visit Vagrant Website"];
                     
                     long response = [alert runModal];
@@ -342,7 +353,10 @@
                         [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"https://www.vagrantup.com/"]];
                     }
                 } else {
-                    [[NSAlert alertWithMessageText:@"You are running the latest version of Vagrant" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@""] runModal];
+                    [NSApp activateIgnoringOtherApps:YES];
+                    NSAlert *alert = [NSAlert alertWithMessageText:@"You are running the latest version of Vagrant" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@""];
+                    [alert.window makeKeyWindow];
+                    [alert runModal];
                 }
             }
         });
@@ -686,12 +700,14 @@
 }
 
 - (void)updater:(SUUpdater *)updater didFindValidUpdate:(SUAppcastItem *)update {
+    [NSApp activateIgnoringOtherApps:YES];
     if (![[NSUserDefaults standardUserDefaults] boolForKey:@"dontShowUpdateNotification"]) {
          [[NSNotificationCenter defaultCenter] postNotificationName:@"vagrant-manager.update-available" object:nil userInfo:@{@"is_update_available": [NSNumber numberWithBool:YES]}];
     }
 }
 
 - (void)updaterDidNotFindUpdate:(SUUpdater *)update {
+    [NSApp activateIgnoringOtherApps:YES];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"vagrant-manager.update-available" object:nil userInfo:@{@"is_update_available": [NSNumber numberWithBool:NO]}];
 }
 
