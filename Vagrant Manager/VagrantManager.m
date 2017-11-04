@@ -132,18 +132,18 @@
         }
     }
     
-    //create instance for each detected path
-    NSDictionary *detectedPaths = [self detectInstancePaths];
-    for(NSString *providerIdentifier in [detectedPaths allKeys]) {
-        NSArray *paths = [detectedPaths objectForKey:providerIdentifier];
-        for(NSString *path in paths) {
-            //make sure it is not a bookmark and has not already been detected
-            if(![bookmarkManager getBookmarkWithPath:path] && ![allPaths containsObject:path]) {
-                [allPaths addObject:path];
-                [instances addObject:[[VagrantInstance alloc] initWithPath:path providerIdentifier:providerIdentifier]];
-            }
-        }
-    }
+//    //create instance for each detected path
+//    NSDictionary *detectedPaths = [self detectInstancePaths];
+//    for(NSString *providerIdentifier in [detectedPaths allKeys]) {
+//        NSArray *paths = [detectedPaths objectForKey:providerIdentifier];
+//        for(NSString *path in paths) {
+//            //make sure it is not a bookmark and has not already been detected
+//            if(![bookmarkManager getBookmarkWithPath:path] && ![allPaths containsObject:path]) {
+//                [allPaths addObject:path];
+//                [instances addObject:[[VagrantInstance alloc] initWithPath:path providerIdentifier:providerIdentifier]];
+//            }
+//        }
+//    }
 
     //TODO: implement "last seen" functionality. Store paths of previously seen Vagrantfiles and check if they still exist
     
