@@ -41,6 +41,10 @@
         name = [infoLine substringToIndex:equalRange.location];
         value = [infoLine substringFromIndex:equalRange.location + 1];
         
+        if(name.length == 0 || value.length == 0) {
+            continue;
+        }
+
         if([[name substringToIndex:1] isEqualToString:@"\""]) {
             name = [name substringWithRange:NSMakeRange(1, name.length - 2)];
         }
