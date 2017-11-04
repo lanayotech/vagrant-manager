@@ -90,6 +90,8 @@
         return customCommand.command;
     } else if([tableColumn.identifier isEqualToString:@"runInTerminal"]) {
         return [NSNumber numberWithBool:customCommand.runInTerminal];
+    } else if([tableColumn.identifier isEqualToString:@"runOnHost"]) {
+        return [NSNumber numberWithBool:customCommand.runOnHost];
     } else {
         return @"";
     }
@@ -104,6 +106,8 @@
         customCommand.command = object;
     } else if([tableColumn.identifier isEqualToString:@"runInTerminal"]) {
         customCommand.runInTerminal = [object boolValue];
+    } else if([tableColumn.identifier isEqualToString:@"runOnHost"]) {
+        customCommand.runOnHost = [object boolValue];
     }
 
     [self saveCustomCommands];

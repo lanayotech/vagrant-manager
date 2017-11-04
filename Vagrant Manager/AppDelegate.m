@@ -188,13 +188,30 @@
 }
 
 - (void)performCustomCommand:(CustomCommand *)customCommand withInstance:(VagrantInstance *)instance {
-    for(VagrantMachine *machine in instance.machines) {
-        if(machine.state == RunningState) {
-            if(customCommand.runInTerminal) {
-                NSString *action = [NSString stringWithFormat:@"cd %@; vagrant ssh %@ -c %@", [Util escapeShellArg:instance.path], [Util escapeShellArg:machine.name], [Util escapeShellArg:customCommand.command]];
-                [self runTerminalCommand:action];
-            } else {
-                [self runVagrantCustomCommand:customCommand.command withMachine:machine];
+    if (customCommand.runOnHost) {
+        if(customCommand.runInTerminal) {
+            NSMutableArray<NSString*>* actionParts = [NSMutableArray new];
+            
+            [actionParts addObject:[NSString stringWithFormat:@"cd %@", [Util escapeShellArg:instance.path]]];
+            
+            [actionParts addObject:customCommand.command];
+            
+            [self runTerminalCommand:[actionParts componentsJoinedByString:@"; "]];
+        } else {
+            [self runHostCustomCommand:customCommand.command withInstance:instance];
+        }
+    } else {
+        for(VagrantMachine *machine in instance.machines) {
+            if(machine.state == RunningState) {
+                if(customCommand.runInTerminal) {
+                    NSMutableArray<NSString*>* actionParts = [NSMutableArray new];
+                    [actionParts addObject:[NSString stringWithFormat:@"cd %@", [Util escapeShellArg:instance.path]]];
+                    [actionParts addObject:[NSString stringWithFormat:@"vagrant ssh %@ -c %@", [Util escapeShellArg:machine.name], [Util escapeShellArg:customCommand.command]]];
+                    
+                    [self runTerminalCommand:[actionParts componentsJoinedByString:@"; "]];
+                } else {
+                    [self runVagrantCustomCommand:customCommand.command withMachine:machine];
+                }
             }
         }
     }
@@ -202,10 +219,23 @@
 
 - (void)performCustomCommand:(CustomCommand *)customCommand withMachine:(VagrantMachine *)machine {
     if(customCommand.runInTerminal) {
-        NSString *action = [NSString stringWithFormat:@"cd %@; vagrant ssh %@ -c %@", [Util escapeShellArg:machine.instance.path], [Util escapeShellArg:machine.name], [Util escapeShellArg:customCommand.command]];
-        [self runTerminalCommand:action];
+        NSMutableArray<NSString*>* actionParts = [NSMutableArray new];
+        
+        [actionParts addObject:[NSString stringWithFormat:@"cd %@", [Util escapeShellArg:machine.instance.path]]];
+        
+        if (customCommand.runOnHost) {
+            [actionParts addObject:customCommand.command];
+        } else {
+            [actionParts addObject:[NSString stringWithFormat:@"vagrant ssh %@ -c %@", [Util escapeShellArg:machine.name], [Util escapeShellArg:customCommand.command]]];
+        }
+        
+        [self runTerminalCommand:[actionParts componentsJoinedByString:@"; "]];
     } else {
-        [self runVagrantCustomCommand:customCommand.command withMachine:machine];
+        if (customCommand.runOnHost) {
+            [self runHostCustomCommand:customCommand.command withInstance:machine.instance];
+        } else {
+            [self runVagrantCustomCommand:customCommand.command withMachine:machine];
+        }
     }
 }
 
@@ -331,6 +361,36 @@
     
     NSString *taskCommand = [NSString stringWithFormat:@"sudo %@ /etc/hosts", [Util escapeShellArg:terminalEditor]];
     [self runTerminalCommand:taskCommand];
+}
+
+- (void)runHostCustomCommand:(NSString*)command withInstance:(VagrantInstance*)instance {
+    NSTask *task = [[NSTask alloc] init];
+    [task setLaunchPath:@"/bin/bash"];
+    
+    NSMutableArray<NSString*>* taskCommandParts = [NSMutableArray new];
+    
+    [taskCommandParts addObject:[NSString stringWithFormat:@"cd %@", [Util escapeShellArg:instance.path]]];
+    
+    [taskCommandParts addObject:command];
+    
+    NSString *taskCommand = [taskCommandParts componentsJoinedByString:@"; "];
+    
+    [task setArguments:@[@"-l", @"-c", taskCommand]];
+    
+    TaskOutputWindow *outputWindow = [[TaskOutputWindow alloc] initWithWindowNibName:@"TaskOutputWindow"];
+    outputWindow.task = task;
+    outputWindow.taskCommand = taskCommand;
+    outputWindow.target = instance;
+    outputWindow.taskAction = command;
+    
+    [NSApp activateIgnoringOtherApps:YES];
+    [outputWindow showWindow:self];
+    
+    if([[NSUserDefaults standardUserDefaults] boolForKey:@"hideTaskWindows"]) {
+        [outputWindow.window orderOut:self];
+    }
+    
+    [self addOpenWindow:outputWindow];
 }
 
 #pragma mark - Vagrant Machine control
