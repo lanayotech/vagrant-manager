@@ -56,6 +56,8 @@
     [self.progressBar startAnimation:self];
 
     [self.task launch];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"vagrant-manager.task-started" object:nil userInfo:@{@"target": self.target, @"uuid": self.windowUUID}];
 }
 
 - (void)taskCompletion:(NSNotification*)notif {
@@ -76,7 +78,7 @@
     if(task.terminationStatus != 0) {
         self.taskStatusLabel.stringValue = @"Completed with errors";
         notificationText = @"Task completed with errors";
-        
+        [self showWindow:[Util getApp]];
     } else {
         self.taskStatusLabel.stringValue = @"Completed successfully";
         notificationText = @"Task completed successfully";
@@ -87,9 +89,9 @@
     [[Util getApp] showUserNotificationWithTitle:notificationText informativeText:[NSString stringWithFormat:@"%@ %@", name, self.taskAction] taskWindowUUID:self.windowUUID];
     
     //notify app task is complete
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"vagrant-manager.task-completed" object:nil userInfo:@{@"target": self.target}];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"vagrant-manager.task-completed" object:nil userInfo:@{@"target": self.target, @"uuid": self.windowUUID}];
     
-    if([[NSUserDefaults standardUserDefaults] boolForKey:@"autoCloseTaskWindows"] && task.terminationStatus == 0) {
+    if(([[NSUserDefaults standardUserDefaults] boolForKey:@"autoCloseTaskWindows"] || [[NSUserDefaults standardUserDefaults] boolForKey:@"hideTaskWindows"]) && task.terminationStatus == 0) {
         dispatch_async(dispatch_get_global_queue(0,0), ^{
             [self close];
         });

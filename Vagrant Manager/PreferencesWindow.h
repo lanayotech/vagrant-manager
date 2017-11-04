@@ -13,6 +13,7 @@
 }
 
 @property (weak) IBOutlet NSButton *autoCloseCheckBox;
+@property (weak) IBOutlet NSButton *hideTaskWindowsCheckBox;
 @property (weak) IBOutlet NSButton *dontShowUpdateCheckBox;
 @property (weak) IBOutlet NSButton *optionKeyDestroyCheckBox;
 @property (weak) IBOutlet NSButton *usePathAsInstanceDisplayNameCheckBox;
@@ -32,6 +33,7 @@
 
 
 - (IBAction)autoCloseCheckBoxClicked:(id)sender;
+- (IBAction)hideTaskWindowsCheckBoxClicked:(id)sender;
 - (IBAction)dontShowUpdateCheckBoxClicked:(id)sender;
 - (IBAction)optionKeyDestroyCheckBoxClicked:(id)sender;
 - (IBAction)usePathAsInstanceDisplayNameCheckBoxClicked:(id)sender;

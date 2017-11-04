@@ -25,6 +25,7 @@
     NSString *terminalPreference = [[NSUserDefaults standardUserDefaults] stringForKey:@"terminalPreference"];
     NSString *terminalEditorPreference = [[NSUserDefaults standardUserDefaults] stringForKey:@"terminalEditorPreference"];
     BOOL autoCloseTaskWindows = [[NSUserDefaults standardUserDefaults] boolForKey:@"autoCloseTaskWindows"];
+    BOOL hideTaskWindows = [[NSUserDefaults standardUserDefaults] boolForKey:@"hideTaskWindows"];
     BOOL dontShowUpdateNotification = [[NSUserDefaults standardUserDefaults] boolForKey:@"dontShowUpdateNotification"];
     BOOL optionKeyDestroy = [[NSUserDefaults standardUserDefaults] boolForKey:@"optionKeyDestroy"];
     BOOL usePathAsInstanceDisplayName = [[NSUserDefaults standardUserDefaults] boolForKey:@"usePathAsInstanceDisplayName"];
@@ -71,6 +72,7 @@
     }
 
     [self.autoCloseCheckBox setState:autoCloseTaskWindows ? NSOnState : NSOffState];
+    [self.hideTaskWindowsCheckBox setState:hideTaskWindows ? NSOnState : NSOffState];
     [self.dontShowUpdateCheckBox setState:dontShowUpdateNotification ? NSOnState : NSOffState];
     [self.optionKeyDestroyCheckBox setState:optionKeyDestroy ? NSOnState : NSOffState];
     [self.usePathAsInstanceDisplayNameCheckBox setState:usePathAsInstanceDisplayName ? NSOnState : NSOffState];
@@ -88,6 +90,11 @@
 
 - (IBAction)autoCloseCheckBoxClicked:(id)sender {
     [[NSUserDefaults standardUserDefaults] setBool:(self.autoCloseCheckBox.state == NSOnState) forKey:@"autoCloseTaskWindows"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+- (IBAction)hideTaskWindowsCheckBoxClicked:(id)sender {
+    [[NSUserDefaults standardUserDefaults] setBool:(self.hideTaskWindowsCheckBox.state == NSOnState) forKey:@"hideTaskWindows"];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
