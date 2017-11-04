@@ -206,7 +206,7 @@
                 if(customCommand.runInTerminal) {
                     NSMutableArray<NSString*>* actionParts = [NSMutableArray new];
                     [actionParts addObject:[NSString stringWithFormat:@"cd %@", [Util escapeShellArg:instance.path]]];
-                    [actionParts addObject:[NSString stringWithFormat:@"vagrant ssh %@ -c %@", [Util escapeShellArg:machine.name], [Util escapeShellArg:customCommand.command]]];
+                    [actionParts addObject:[NSString stringWithFormat:@"vagrant ssh %@ -- -t %@", [Util escapeShellArg:machine.name], [Util escapeShellArg:customCommand.command]]];
                     
                     [self runTerminalCommand:[actionParts componentsJoinedByString:@"; "]];
                 } else {
@@ -226,7 +226,7 @@
         if (customCommand.runOnHost) {
             [actionParts addObject:customCommand.command];
         } else {
-            [actionParts addObject:[NSString stringWithFormat:@"vagrant ssh %@ -c %@", [Util escapeShellArg:machine.name], [Util escapeShellArg:customCommand.command]]];
+            [actionParts addObject:[NSString stringWithFormat:@"vagrant ssh %@ -- -t %@", [Util escapeShellArg:machine.name], [Util escapeShellArg:customCommand.command]]];
         }
         
         [self runTerminalCommand:[actionParts componentsJoinedByString:@"; "]];
@@ -413,7 +413,7 @@
     NSTask *task = [[NSTask alloc] init];
     [task setLaunchPath:@"/bin/bash"];
     
-    NSString *taskCommand = [NSString stringWithFormat:@"cd %@; vagrant ssh %@ -c %@", [Util escapeShellArg:machine.instance.path], [Util escapeShellArg:machine.name], [Util escapeShellArg:command]];
+    NSString *taskCommand = [NSString stringWithFormat:@"cd %@; vagrant ssh %@ -- -t %@", [Util escapeShellArg:machine.instance.path], [Util escapeShellArg:machine.name], [Util escapeShellArg:command]];
     
     [task setArguments:@[@"-l", @"-c", taskCommand]];
     
