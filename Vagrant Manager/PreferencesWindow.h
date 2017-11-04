@@ -16,6 +16,7 @@
 @property (weak) IBOutlet NSButton *dontShowUpdateCheckBox;
 @property (weak) IBOutlet NSButton *optionKeyDestroyCheckBox;
 @property (weak) IBOutlet NSButton *usePathAsInstanceDisplayNameCheckBox;
+@property (weak) IBOutlet NSButton *useProviderMachineDetectionCheckBox;
 @property (weak) IBOutlet NSButton *includeMachineNamesCheckBox;
 @property (weak) IBOutlet NSButton *dontShowRunningVmCountCheckBox;
 @property (weak) IBOutlet NSPopUpButton *terminalPreferencePopUpButton;
@@ -34,6 +35,7 @@
 - (IBAction)dontShowUpdateCheckBoxClicked:(id)sender;
 - (IBAction)optionKeyDestroyCheckBoxClicked:(id)sender;
 - (IBAction)usePathAsInstanceDisplayNameCheckBoxClicked:(id)sender;
+- (IBAction)useProviderMachineDetectionCheckBoxClicked:(id)sender;
 - (IBAction)includeMachineNamesCheckBoxClicked:(id)sender;
 - (IBAction)dontShowRunningVmCountCheckBoxClicked:(id)sender;
 - (IBAction)terminalPreferencePopUpButtonClicked:(id)sender;
