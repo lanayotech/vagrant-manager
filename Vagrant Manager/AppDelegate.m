@@ -323,8 +323,8 @@
     NSString *terminalEditorName = [[NSUserDefaults standardUserDefaults] valueForKey:@"terminalEditorPreference"];
     
     NSString *terminalEditor;
-    if([terminalEditorName isEqualToString:@"vim"]) {
-        terminalEditor = @"vim";
+    if([@[@"vim", @"emacs", @"nano"] containsObject:terminalEditorName]) {
+        terminalEditor = terminalEditorName;
     } else {
         terminalEditor = @"nano";
     }
