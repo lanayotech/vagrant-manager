@@ -16,6 +16,9 @@
     
     //map provider identifiers to providers
     NSMutableDictionary *_providers;
+    
+    //this is the first time the machines are being refreshed
+    BOOL _isFirstRefresh;
 }
 
 + (VagrantManager*)sharedManager {
@@ -35,6 +38,7 @@
     if(self) {
         _instances = [[NSMutableArray alloc] init];
         _providers = [[NSMutableDictionary alloc] init];
+        _isFirstRefresh = YES;
     }
     
     return self;
@@ -195,8 +199,20 @@
             [self.delegate vagrantManager:self instanceRemoved:instance];
             
             //TODO: "last seen" functionality may have to be implemented here as well so that this instance doesn't disappear from the list during this pass
+        } else {
+            if(_isFirstRefresh) {
+                Bookmark *bookmark = [[BookmarkManager sharedManager] getBookmarkWithPath:instance.path];
+                
+                if(bookmark && bookmark.launchOnStartup) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [[Util getApp] performVagrantAction:@"up" withInstance:instance];
+                    });
+                }
+            }
         }
     }
+    
+    _isFirstRefresh = NO;
 }
 
 //query all service providers for instances

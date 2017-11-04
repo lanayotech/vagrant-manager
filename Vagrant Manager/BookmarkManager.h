@@ -18,7 +18,7 @@
 - (void)clearBookmarks;
 - (NSMutableArray*)getBookmarks;
 - (Bookmark*)addBookmark:(Bookmark*)bookmark;
-- (Bookmark*)addBookmarkWithPath:(NSString*)path displayName:(NSString*)displayName providerIdentifier:(NSString*)providerIdentifier;
+- (Bookmark*)addBookmarkWithPath:(NSString*)path displayName:(NSString*)displayName providerIdentifier:(NSString*)providerIdentifier launchOnStartup:(BOOL)launchOnStartup;
 - (void)removeBookmarkWithPath:(NSString*)path;
 - (Bookmark*)getBookmarkWithPath:(NSString*)path;
 - (int)getIndexOfBookmarkWithPath:(NSString*)path;

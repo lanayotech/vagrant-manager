@@ -271,7 +271,7 @@
 }
 
 - (void)addBookmarkWithInstance:(VagrantInstance *)instance {
-    [[BookmarkManager sharedManager] addBookmarkWithPath:instance.path displayName:instance.displayName providerIdentifier:instance.providerIdentifier];
+    [[BookmarkManager sharedManager] addBookmarkWithPath:instance.path displayName:instance.displayName providerIdentifier:instance.providerIdentifier launchOnStartup:NO];
     [[BookmarkManager sharedManager] saveBookmarks];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"vagrant-manager.bookmarks-updated" object:nil];
 }
@@ -418,7 +418,7 @@
 - (void)runVagrantAction:(NSString*)action withMachine:(VagrantMachine*)machine {
     NSMutableArray *commandParts = [[NSMutableArray alloc] init];
     
-    if([action isEqualToString:@"up"]) {
+    if([action isEqualToString:@"up"] && machine.state != RunningState) {
         [commandParts addObject:@"vagrant up"];
         if(machine.instance.providerIdentifier) {
             [commandParts addObject:[NSString stringWithFormat:@"--provider=%@", machine.instance.providerIdentifier]];
@@ -470,7 +470,7 @@
 - (void)runVagrantAction:(NSString*)action withInstance:(VagrantInstance*)instance {
     NSMutableArray *commandParts = [[NSMutableArray alloc] init];
     
-    if([action isEqualToString:@"up"]) {
+    if([action isEqualToString:@"up"] && [instance getRunningMachineCount] < instance.machines.count) {
         [commandParts addObject:@"vagrant up"];
         if(instance.providerIdentifier) {
             [commandParts addObject:[NSString stringWithFormat:@"--provider=%@", instance.providerIdentifier]];

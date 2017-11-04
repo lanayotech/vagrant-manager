@@ -94,12 +94,12 @@
                             });
                             
                             if ([[url.path lastPathComponent] isEqualToString:@"Vagrantfile"] && ![bookmarkPaths containsObject:path]) {
-                                [self addBookmarkWithPath:path displayName:[path lastPathComponent]];
+                                [self addBookmarkWithPath:path displayName:[path lastPathComponent] launchOnStartup:NO];
                             }
                         }
                     } else {
                         if ([fileManager fileExistsAtPath:[NSString stringWithFormat:@"%@/Vagrantfile", directoryURL.path]] && ![bookmarkPaths containsObject:directoryURL.path]) {
-                            [self addBookmarkWithPath:directoryURL.path displayName:[directoryURL.path lastPathComponent]];
+                            [self addBookmarkWithPath:directoryURL.path displayName:[directoryURL.path lastPathComponent] launchOnStartup:NO];
                         }
                     }
                 }
@@ -156,11 +156,12 @@
     return YES;
 }
 
-- (void)addBookmarkWithPath:(NSString*)path displayName:(NSString*)displayName {
+- (void)addBookmarkWithPath:(NSString*)path displayName:(NSString*)displayName launchOnStartup:(BOOL)launchOnStartup {
     Bookmark *bookmark = [[Bookmark alloc] init];
     bookmark.displayName = displayName;
     bookmark.path = [Util trimTrailingSlash:path];
     bookmark.providerIdentifier = [[VagrantManager sharedManager] detectVagrantProvider:path];
+    bookmark.launchOnStartup = launchOnStartup;
     
     [bookmarks addObject:bookmark];
 }
@@ -232,6 +233,25 @@
         return view;
     }
     
+    if([tableColumn.identifier isEqualToString:@"launchOnStartup"]) {
+        NSButton *view = [tableView makeViewWithIdentifier:@"LaunchOnStartupCellView" owner:self];
+        
+        if(!view) {
+            view = [[NSButton alloc] initWithFrame:CGRectMake(0, 0, tableColumn.width, 24)];
+            [view setButtonType:NSSwitchButton];
+            view.identifier = @"LaunchOnStartupCellView";
+            view.alignment = NSTextAlignmentCenter;
+            view.imagePosition = NSImageOnly;
+            [view setTitle:@""];
+        }
+        view.tag = row;
+        [view setTarget:self];
+        [view setAction:@selector(launchOnStartupButtonClicked:)];
+        [view setState:bookmark.launchOnStartup ? NSOnState : NSOffState];
+        
+        return view;
+    }
+
     NSTextField *view = [tableView makeViewWithIdentifier:@"TableCellView" owner:self];
     if(!view) {
         view = [[NSTextField alloc] initWithFrame:CGRectMake(0, 0, tableColumn.width, 24)];
@@ -254,6 +274,11 @@
     }
     
     return view;
+}
+
+- (void)launchOnStartupButtonClicked:(NSButton*)sender {
+    Bookmark *bookmark = [bookmarks objectAtIndex:sender.tag];
+    bookmark.launchOnStartup = sender.state == NSOnState;
 }
 
 - (void)comboBoxSelectionDidChange:(NSNotification *)notification {
