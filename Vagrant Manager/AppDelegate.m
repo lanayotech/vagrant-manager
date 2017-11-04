@@ -351,6 +351,10 @@
     
     [NSApp activateIgnoringOtherApps:YES];
     [outputWindow showWindow:self];
+    
+    if([[NSUserDefaults standardUserDefaults] boolForKey:@"hideTaskWindows"]) {
+        [outputWindow.window orderOut:self];
+    }
 
     [self addOpenWindow:outputWindow];
 }
@@ -404,6 +408,10 @@
     [NSApp activateIgnoringOtherApps:YES];
     [outputWindow showWindow:self];
     
+    if([[NSUserDefaults standardUserDefaults] boolForKey:@"hideTaskWindows"]) {
+        [outputWindow.window orderOut:self];
+    }
+
     [self addOpenWindow:outputWindow];
 }
 
@@ -456,6 +464,10 @@
     [NSApp activateIgnoringOtherApps:YES];
     [outputWindow showWindow:self];
     
+    if([[NSUserDefaults standardUserDefaults] boolForKey:@"hideTaskWindows"]) {
+        [outputWindow.window orderOut:self];
+    }
+
     [self addOpenWindow:outputWindow];
 }
 
