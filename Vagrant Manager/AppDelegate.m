@@ -14,6 +14,7 @@
 
 @implementation AppDelegate {
     BOOL isRefreshingVagrantMachines;
+    BOOL shouldTerminateAfterMachinesHalted;
     
     VagrantManager *_manager;
     NativeMenu *_nativeMenu;
@@ -67,6 +68,49 @@
     
     //check for vagrant updates
     [self checkForVagrantUpdates:NO];
+}
+
+- (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender {
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"haltOnExit"] && [[VagrantManager sharedManager] getRunningVmCount] > 0) {
+        // ask if the user would like to halt all running machines
+
+        [NSApp activateIgnoringOtherApps:YES];
+        NSAlert *confirmAlert = [NSAlert alertWithMessageText:@"Would you like to stop all running machines?" defaultButton:@"Halt & Quit" alternateButton:@"Quit" otherButton:@"Suspend & Quit" informativeTextWithFormat:@""];
+        [confirmAlert.window makeKeyWindow];
+        NSInteger button = [confirmAlert runModal];
+        
+        if (button == NSAlertDefaultReturn) {
+            shouldTerminateAfterMachinesHalted = YES;
+            
+            NSArray *instances = [[VagrantManager sharedManager] instances];
+            
+            for (VagrantInstance *instance in instances) {
+                for (VagrantMachine *machine in instance.machines) {
+                    if (machine.state == RunningState) {
+                        [self performVagrantAction:@"halt" withMachine:machine];
+                    }
+                }
+            }
+            
+            return NSTerminateLater;
+        } else if (button == NSAlertOtherReturn) {
+            shouldTerminateAfterMachinesHalted = YES;
+            
+            NSArray *instances = [[VagrantManager sharedManager] instances];
+            
+            for (VagrantInstance *instance in instances) {
+                for (VagrantMachine *machine in instance.machines) {
+                    if (machine.state == RunningState) {
+                        [self performVagrantAction:@"suspend" withMachine:machine];
+                    }
+                }
+            }
+            
+            return NSTerminateLater;
+        }
+    }
+    
+    return NSTerminateNow;
 }
 
 #pragma mark - Notification handlers
@@ -618,6 +662,10 @@
 
 - (void)updateRunningVmCount {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"vagrant-manager.update-running-vm-count" object:nil userInfo:@{@"count": [NSNumber numberWithInt:[_manager getRunningVmCount]]}];
+    
+    if (shouldTerminateAfterMachinesHalted && [_manager getRunningVmCount] == 0) {
+        [[NSApplication sharedApplication] replyToApplicationShouldTerminate:YES];
+    }
 }
 
 #pragma mark - Notification center

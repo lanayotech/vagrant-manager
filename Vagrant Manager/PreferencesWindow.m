@@ -25,6 +25,7 @@
     NSString *terminalPreference = [[NSUserDefaults standardUserDefaults] stringForKey:@"terminalPreference"];
     NSString *terminalEditorPreference = [[NSUserDefaults standardUserDefaults] stringForKey:@"terminalEditorPreference"];
     BOOL autoCloseTaskWindows = [[NSUserDefaults standardUserDefaults] boolForKey:@"autoCloseTaskWindows"];
+    BOOL haltOnExit = [[NSUserDefaults standardUserDefaults] boolForKey:@"haltOnExit"];
     BOOL dontShowUpdateNotification = [[NSUserDefaults standardUserDefaults] boolForKey:@"dontShowUpdateNotification"];
     BOOL optionKeyDestroy = [[NSUserDefaults standardUserDefaults] boolForKey:@"optionKeyDestroy"];
     BOOL usePathAsInstanceDisplayName = [[NSUserDefaults standardUserDefaults] boolForKey:@"usePathAsInstanceDisplayName"];
@@ -70,6 +71,7 @@
     }
 
     [self.autoCloseCheckBox setState:autoCloseTaskWindows ? NSOnState : NSOffState];
+    [self.haltOnExitCheckBox setState:haltOnExit ? NSOnState : NSOffState];
     [self.dontShowUpdateCheckBox setState:dontShowUpdateNotification ? NSOnState : NSOffState];
     [self.optionKeyDestroyCheckBox setState:optionKeyDestroy ? NSOnState : NSOffState];
     [self.usePathAsInstanceDisplayNameCheckBox setState:usePathAsInstanceDisplayName ? NSOnState : NSOffState];
@@ -82,6 +84,11 @@
     
     [self.sendProfileDataCheckBox setState:[Util shouldSendProfileData] ? NSOnState : NSOffState];
     [self.launchAtLoginCheckBox setState:[self willStartAtLogin] ? NSOnState : NSOffState];
+}
+
+- (IBAction)haltOnExitCheckBoxClicked:(id)sender {
+    [[NSUserDefaults standardUserDefaults] setBool:(self.haltOnExitCheckBox.state == NSOnState) forKey:@"haltOnExit"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 - (IBAction)autoCloseCheckBoxClicked:(id)sender {
