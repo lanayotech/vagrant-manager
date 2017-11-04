@@ -228,6 +228,18 @@
     NSError *error = nil;
     NSArray *machinePaths = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:[NSString stringWithFormat:@"%@/.vagrant/machines", path] error:&error];
     
+    // check for virtual machine id
+    if(!error && machinePaths) {
+        for(NSString *machinePath in machinePaths) {
+            for(NSString *providerIdentifier in [self getProviderIdentifiers]) {
+                if([fileManager fileExistsAtPath:[NSString stringWithFormat:@"%@/.vagrant/machines/%@/%@/id", path, machinePath, providerIdentifier]]) {
+                    return providerIdentifier;
+                }
+            }
+        }
+    }
+    
+    // no virtual machine id, check for just an existing provider folder as a fallback
     if(!error && machinePaths) {
         for(NSString *machinePath in machinePaths) {
             for(NSString *providerIdentifier in [self getProviderIdentifiers]) {
@@ -237,7 +249,7 @@
             }
         }
     }
-    
+
     return @"virtualbox";
 }
 
