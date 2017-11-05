@@ -14,6 +14,7 @@
 
 @implementation AppDelegate {
     BOOL isRefreshingVagrantMachines;
+    BOOL shouldTerminateAfterMachinesHalted;
     
     VagrantManager *_manager;
     NativeMenu *_nativeMenu;
@@ -28,9 +29,13 @@
     //initialize data
     openWindows = [[NSMutableArray alloc] init];
     
+    //make sure process is running in the right state
+    [self updateProcessType];
+
     //register notification listeners
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(taskCompleted:) name:@"vagrant-manager.task-completed" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(themeChanged:) name:@"vagrant-manager.theme-changed" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(haltOnExitPreferenceChanged:) name:@"vagrant-manager.halt-on-exit-preference-changed" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showRunningVmCountPreferenceChanged:) name:@"vagrant-manager.show-running-vm-count-preference-changed" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(usePathAsInstanceDisplayNamePreferenceChanged:) name:@"vagrant-manager.use-path-as-instance-display-name-preference-changed" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(includeMachineNamesInMenuPreferenceChanged:) name:@"vagrant-manager.include-machine-names-in-menu-preference-changed" object:nil];
@@ -69,6 +74,55 @@
     [self checkForVagrantUpdates:NO];
 }
 
+- (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender {
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"haltOnExit"] && [[VagrantManager sharedManager] getRunningVmCount] > 0) {
+        // ask if the user would like to halt all running machines
+
+        [NSApp activateIgnoringOtherApps:YES];
+        NSAlert *confirmAlert = [NSAlert alertWithMessageText:@"Would you like to stop all running machines?" defaultButton:@"Halt & Quit" alternateButton:@"Quit" otherButton:@"Suspend & Quit" informativeTextWithFormat:@""];
+        [confirmAlert addButtonWithTitle:@"Cancel"];
+        
+        NSInteger button = [confirmAlert runModal];
+
+        if (button == NSAlertThirdButtonReturn + 1) {
+            return NSTerminateCancel;
+        } else if (button == NSAlertDefaultReturn) {
+            shouldTerminateAfterMachinesHalted = YES;
+            
+            NSArray *instances = [[VagrantManager sharedManager] instances];
+            
+            for (VagrantInstance *instance in instances) {
+                for (VagrantMachine *machine in instance.machines) {
+                    if (machine.state == RunningState) {
+                        [self performVagrantAction:@"halt" withMachine:machine];
+                    }
+                }
+            }
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"vagrant-manager.started-shutdown" object:nil];
+            return NSTerminateLater;
+        } else if (button == NSAlertOtherReturn) {
+            shouldTerminateAfterMachinesHalted = YES;
+            
+            NSArray *instances = [[VagrantManager sharedManager] instances];
+            
+            for (VagrantInstance *instance in instances) {
+                for (VagrantMachine *machine in instance.machines) {
+                    if (machine.state == RunningState) {
+                        [self performVagrantAction:@"suspend" withMachine:machine];
+                    }
+                }
+            }
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"vagrant-manager.started-shutdown" object:nil];
+            return NSTerminateLater;
+        }
+    }
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"vagrant-manager.started-shutdown" object:nil];
+    return NSTerminateNow;
+}
+
 #pragma mark - Notification handlers
 
 - (void)receivedWakeNotification:(NSNotification*)notification {
@@ -105,6 +159,10 @@
 
 - (void)showUpdateNotificationPreferenceChanged:(NSNotification*)notification {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"vagrant-manager.notification-preference-changed" object:nil];
+}
+
+- (void)haltOnExitPreferenceChanged:(NSNotification*)notification {
+    [self updateProcessType];
 }
 
 #pragma mark - Vagrant manager control
@@ -609,13 +667,13 @@
 }
 
 - (void)updateProcessType {
-    if([openWindows count] == 0) {
-        ProcessSerialNumber psn = { 0, kCurrentProcess };
-        TransformProcessType(&psn, kProcessTransformToBackgroundApplication);
-    } else {
+    if([[NSUserDefaults standardUserDefaults] boolForKey:@"haltOnExit"] || [openWindows count] > 0) {
         ProcessSerialNumber psn = { 0, kCurrentProcess };
         TransformProcessType(&psn, kProcessTransformToForegroundApplication);
         SetFrontProcess(&psn);
+    } else {
+        ProcessSerialNumber psn = { 0, kCurrentProcess };
+        TransformProcessType(&psn, kProcessTransformToBackgroundApplication);
     }
 }
 
@@ -644,6 +702,10 @@
 
 - (void)updateRunningVmCount {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"vagrant-manager.update-running-vm-count" object:nil userInfo:@{@"count": [NSNumber numberWithInt:[_manager getRunningVmCount]]}];
+    
+    if (shouldTerminateAfterMachinesHalted && [_manager getRunningVmCount] == 0) {
+        [[NSApplication sharedApplication] replyToApplicationShouldTerminate:YES];
+    }
 }
 
 #pragma mark - Notification center
