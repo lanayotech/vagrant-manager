@@ -89,6 +89,8 @@
 - (IBAction)haltOnExitCheckBoxClicked:(id)sender {
     [[NSUserDefaults standardUserDefaults] setBool:(self.haltOnExitCheckBox.state == NSOnState) forKey:@"haltOnExit"];
     [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"vagrant-manager.halt-on-exit-preference-changed" object:nil];
 }
 
 - (IBAction)autoCloseCheckBoxClicked:(id)sender {

@@ -37,6 +37,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshingStarted:) name:@"vagrant-manager.refreshing-started" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshingEnded:) name:@"vagrant-manager.refreshing-ended" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateRunningVmCount:) name:@"vagrant-manager.update-running-vm-count" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startedShutdown:) name:@"vagrant-manager.started-shutdown" object:nil];
     
     _statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength];
     _menu = [[NSMenu alloc] init];
@@ -148,6 +149,10 @@
 }
 
 #pragma mark - Notification Handlers
+
+- (void)startedShutdown:(NSNotification*)notification {
+    _statusItem.enabled = NO;
+}
 
 - (void)bookmarksUpdated:(NSNotification*)notification {
     [self rebuildMenu];
