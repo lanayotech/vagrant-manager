@@ -1,0 +1,14 @@
+{
+  "title": "Vagrant Manager",
+  "background": "background.png",
+  "icon": "appicon-512x512@2x.png",
+  "contents": [
+    { "x": 236, "y": 160, "type": "file", "path": "Vagrant Manager.app" },
+    { "x": 600, "y": 160, "type": "link", "path": "/Applications" },
+
+    { "x": 250, "y": 500, "type": "position", "path": ".VolumeIcon.icns" },
+    { "x": 250, "y": 500, "type": "position", "path": ".background" },
+    { "x": 250, "y": 500, "type": "position", "path": ".Trashes" },
+    { "x": 250, "y": 500, "type": "position", "path": ".DS_Store" }
+  ]
+}
