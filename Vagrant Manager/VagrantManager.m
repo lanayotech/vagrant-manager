@@ -16,6 +16,9 @@
     
     //map provider identifiers to providers
     NSMutableDictionary *_providers;
+    
+    //this is the first time the machines are being refreshed
+    BOOL _isFirstRefresh;
 }
 
 + (VagrantManager*)sharedManager {
@@ -35,6 +38,7 @@
     if(self) {
         _instances = [[NSMutableArray alloc] init];
         _providers = [[NSMutableDictionary alloc] init];
+        _isFirstRefresh = YES;
     }
     
     return self;
@@ -128,15 +132,17 @@
         }
     }
     
-    //create instance for each detected path
-    NSDictionary *detectedPaths = [self detectInstancePaths];
-    for(NSString *providerIdentifier in [detectedPaths allKeys]) {
-        NSArray *paths = [detectedPaths objectForKey:providerIdentifier];
-        for(NSString *path in paths) {
-            //make sure it is not a bookmark and has not already been detected
-            if(![bookmarkManager getBookmarkWithPath:path] && ![allPaths containsObject:path]) {
-                [allPaths addObject:path];
-                [instances addObject:[[VagrantInstance alloc] initWithPath:path providerIdentifier:providerIdentifier]];
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"useProviderMachineDetection"]) {
+        //create instance for each detected path
+        NSDictionary *detectedPaths = [self detectInstancePaths];
+        for(NSString *providerIdentifier in [detectedPaths allKeys]) {
+            NSArray *paths = [detectedPaths objectForKey:providerIdentifier];
+            for(NSString *path in paths) {
+                //make sure it is not a bookmark and has not already been detected
+                if(![bookmarkManager getBookmarkWithPath:path] && ![allPaths containsObject:path]) {
+                    [allPaths addObject:path];
+                    [instances addObject:[[VagrantInstance alloc] initWithPath:path providerIdentifier:providerIdentifier]];
+                }
             }
         }
     }
@@ -195,8 +201,20 @@
             [self.delegate vagrantManager:self instanceRemoved:instance];
             
             //TODO: "last seen" functionality may have to be implemented here as well so that this instance doesn't disappear from the list during this pass
+        } else {
+            if(_isFirstRefresh) {
+                Bookmark *bookmark = [[BookmarkManager sharedManager] getBookmarkWithPath:instance.path];
+                
+                if(bookmark && bookmark.launchOnStartup) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [[Util getApp] performVagrantAction:@"up" withInstance:instance];
+                    });
+                }
+            }
         }
     }
+    
+    _isFirstRefresh = NO;
 }
 
 //query all service providers for instances
@@ -228,6 +246,18 @@
     NSError *error = nil;
     NSArray *machinePaths = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:[NSString stringWithFormat:@"%@/.vagrant/machines", path] error:&error];
     
+    // check for virtual machine id
+    if(!error && machinePaths) {
+        for(NSString *machinePath in machinePaths) {
+            for(NSString *providerIdentifier in [self getProviderIdentifiers]) {
+                if([fileManager fileExistsAtPath:[NSString stringWithFormat:@"%@/.vagrant/machines/%@/%@/id", path, machinePath, providerIdentifier]]) {
+                    return providerIdentifier;
+                }
+            }
+        }
+    }
+    
+    // no virtual machine id, check for just an existing provider folder as a fallback
     if(!error && machinePaths) {
         for(NSString *machinePath in machinePaths) {
             for(NSString *providerIdentifier in [self getProviderIdentifiers]) {
@@ -237,7 +267,7 @@
             }
         }
     }
-    
+
     return @"virtualbox";
 }
 

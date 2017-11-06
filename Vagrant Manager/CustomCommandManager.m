@@ -38,7 +38,7 @@
         NSArray *savedCommands = [[NSUserDefaults standardUserDefaults] arrayForKey:@"customCommands"];
         if(savedCommands) {
             for(NSDictionary *savedCommand in savedCommands) {
-                [self addCustomCommandWithDisplayName:[savedCommand objectForKey:@"displayName"] command:[savedCommand objectForKey:@"command"] runInTerminal:[[savedCommand objectForKey:@"runInTerminal"] boolValue]];
+                [self addCustomCommandWithDisplayName:[savedCommand objectForKey:@"displayName"] command:[savedCommand objectForKey:@"command"] runInTerminal:[[savedCommand objectForKey:@"runInTerminal"] boolValue] runOnHost:[[savedCommand objectForKey:@"runOnHost"] boolValue]];
             }
         }
     }
@@ -51,7 +51,7 @@
         if(customCommands) {
             NSMutableArray *arr = [[NSMutableArray alloc] init];
             for(CustomCommand *c in customCommands) {
-                [arr addObject:@{@"displayName":c.displayName, @"command":c.command, @"runInTerminal":[NSNumber numberWithBool:c.runInTerminal]}];
+                [arr addObject:@{@"displayName":c.displayName, @"command":c.command, @"runInTerminal":[NSNumber numberWithBool:c.runInTerminal], @"runOnHost":[NSNumber numberWithBool:c.runOnHost]}];
             }
             
             [[NSUserDefaults standardUserDefaults] setObject:arr forKey:@"customCommands"];
@@ -93,11 +93,12 @@
     return commands;
 }
 
-- (CustomCommand*)addCustomCommandWithDisplayName:(NSString*)displayName command:(NSString*)command runInTerminal:(BOOL)runInTerminal {
+- (CustomCommand*)addCustomCommandWithDisplayName:(NSString*)displayName command:(NSString*)command runInTerminal:(BOOL)runInTerminal runOnHost:(BOOL)runOnHost {
     CustomCommand *customCommand = [[CustomCommand alloc] init];
     customCommand.displayName = displayName;
     customCommand.command = command;
     customCommand.runInTerminal = runInTerminal;
+    customCommand.runOnHost = runOnHost;
     
     @synchronized(_commands) {
         [_commands addObject:customCommand];

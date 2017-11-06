@@ -13,5 +13,6 @@
 @property (strong, nonatomic) NSString *displayName;
 @property (strong, nonatomic) NSString *path;
 @property (strong, nonatomic) NSString *providerIdentifier;
+@property BOOL launchOnStartup;
 
 @end

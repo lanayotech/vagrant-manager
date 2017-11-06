@@ -25,9 +25,12 @@
     NSString *terminalPreference = [[NSUserDefaults standardUserDefaults] stringForKey:@"terminalPreference"];
     NSString *terminalEditorPreference = [[NSUserDefaults standardUserDefaults] stringForKey:@"terminalEditorPreference"];
     BOOL autoCloseTaskWindows = [[NSUserDefaults standardUserDefaults] boolForKey:@"autoCloseTaskWindows"];
+    BOOL hideTaskWindows = [[NSUserDefaults standardUserDefaults] boolForKey:@"hideTaskWindows"];
+    BOOL haltOnExit = [[NSUserDefaults standardUserDefaults] boolForKey:@"haltOnExit"];
     BOOL dontShowUpdateNotification = [[NSUserDefaults standardUserDefaults] boolForKey:@"dontShowUpdateNotification"];
     BOOL optionKeyDestroy = [[NSUserDefaults standardUserDefaults] boolForKey:@"optionKeyDestroy"];
     BOOL usePathAsInstanceDisplayName = [[NSUserDefaults standardUserDefaults] boolForKey:@"usePathAsInstanceDisplayName"];
+    BOOL useProviderMachineDetection = [[NSUserDefaults standardUserDefaults] boolForKey:@"useProviderMachineDetection"];
     BOOL includeMachineNames = [[NSUserDefaults standardUserDefaults] boolForKey:@"includeMachineNamesInMenu"];
     BOOL dontShowRunningVmCount = [[NSUserDefaults standardUserDefaults] boolForKey:@"dontShowRunningVmCount"];
     BOOL refreshEvery = [[NSUserDefaults standardUserDefaults] boolForKey:@"refreshEvery"];
@@ -70,9 +73,12 @@
     }
 
     [self.autoCloseCheckBox setState:autoCloseTaskWindows ? NSOnState : NSOffState];
+    [self.hideTaskWindowsCheckBox setState:hideTaskWindows ? NSOnState : NSOffState];
+    [self.haltOnExitCheckBox setState:haltOnExit ? NSOnState : NSOffState];
     [self.dontShowUpdateCheckBox setState:dontShowUpdateNotification ? NSOnState : NSOffState];
     [self.optionKeyDestroyCheckBox setState:optionKeyDestroy ? NSOnState : NSOffState];
     [self.usePathAsInstanceDisplayNameCheckBox setState:usePathAsInstanceDisplayName ? NSOnState : NSOffState];
+    [self.useProviderMachineDetectionCheckBox setState:useProviderMachineDetection ? NSOnState: NSOffState];
     [self.includeMachineNamesCheckBox setState:includeMachineNames ? NSOnState : NSOffState];
     [self.dontShowRunningVmCountCheckBox setState:dontShowRunningVmCount ? NSOnState : NSOffState];
     [self.dontAnimateStatusIconCheckBox setState:dontAnimateStatusIcon ? NSOnState : NSOffState];
@@ -84,8 +90,20 @@
     [self.launchAtLoginCheckBox setState:[self willStartAtLogin] ? NSOnState : NSOffState];
 }
 
+- (IBAction)haltOnExitCheckBoxClicked:(id)sender {
+    [[NSUserDefaults standardUserDefaults] setBool:(self.haltOnExitCheckBox.state == NSOnState) forKey:@"haltOnExit"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"vagrant-manager.halt-on-exit-preference-changed" object:nil];
+}
+
 - (IBAction)autoCloseCheckBoxClicked:(id)sender {
     [[NSUserDefaults standardUserDefaults] setBool:(self.autoCloseCheckBox.state == NSOnState) forKey:@"autoCloseTaskWindows"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+- (IBAction)hideTaskWindowsCheckBoxClicked:(id)sender {
+    [[NSUserDefaults standardUserDefaults] setBool:(self.hideTaskWindowsCheckBox.state == NSOnState) forKey:@"hideTaskWindows"];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
@@ -106,6 +124,11 @@
     [[NSUserDefaults standardUserDefaults] synchronize];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:@"vagrant-manager.use-path-as-instance-display-name-preference-changed" object:nil];
+}
+
+- (IBAction)useProviderMachineDetectionCheckBoxClicked:(id)sender {
+    [[NSUserDefaults standardUserDefaults] setBool:(self.useProviderMachineDetectionCheckBox.state == NSOnState) forKey:@"useProviderMachineDetection"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 - (IBAction)includeMachineNamesCheckBoxClicked:(id)sender {

@@ -38,7 +38,7 @@
         NSArray *savedBookmarks = [[NSUserDefaults standardUserDefaults] arrayForKey:@"bookmarks"];
         if(savedBookmarks) {
             for(NSDictionary *savedBookmark in savedBookmarks) {
-                [self addBookmarkWithPath:[savedBookmark objectForKey:@"path"] displayName:[savedBookmark objectForKey:@"displayName"] providerIdentifier:[savedBookmark objectForKey:@"providerIdentifier"]];
+                [self addBookmarkWithPath:[savedBookmark objectForKey:@"path"] displayName:[savedBookmark objectForKey:@"displayName"] providerIdentifier:[savedBookmark objectForKey:@"providerIdentifier"] launchOnStartup:[[savedBookmark objectForKey:@"launchOnStartup"] boolValue]];
             }
         }
     }
@@ -51,7 +51,7 @@
         if(bookmarks) {
             NSMutableArray *arr = [[NSMutableArray alloc] init];
             for(Bookmark *b in bookmarks) {
-                [arr addObject:@{@"displayName":b.displayName, @"path":b.path, @"providerIdentifier":b.providerIdentifier?:@""}];
+                [arr addObject:@{@"displayName":b.displayName, @"path":b.path, @"providerIdentifier":b.providerIdentifier?:@"", @"launchOnStartup":[NSNumber numberWithBool:b.launchOnStartup]}];
             }
             
             [[NSUserDefaults standardUserDefaults] setObject:arr forKey:@"bookmarks"];
@@ -88,7 +88,7 @@
     return bookmarks;
 }
 
-- (Bookmark*)addBookmarkWithPath:(NSString*)path displayName:(NSString*)displayName providerIdentifier:(NSString*)providerIdentifier {
+- (Bookmark*)addBookmarkWithPath:(NSString*)path displayName:(NSString*)displayName providerIdentifier:(NSString*)providerIdentifier launchOnStartup:(BOOL)launchOnStartup {
     Bookmark *bookmark = [self getBookmarkWithPath:path];
     if(bookmark) {
         return bookmark;
@@ -97,6 +97,7 @@
     bookmark = [[Bookmark alloc] init];
     bookmark.displayName = displayName;
     bookmark.path = path;
+    bookmark.launchOnStartup = launchOnStartup;
     if(!providerIdentifier || [providerIdentifier length] == 0) {
         bookmark.providerIdentifier = [[VagrantManager sharedManager] detectVagrantProvider:path];
     } else {

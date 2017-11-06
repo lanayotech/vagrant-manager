@@ -16,7 +16,6 @@
 		26130E9F1B1D596400872C4F /* bm_status_icon_on@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 26130E9D1B1D596400872C4F /* bm_status_icon_on@2x.png */; };
 		26130EA51B1D68CA00872C4F /* bm_status_icon_on.png in Resources */ = {isa = PBXBuildFile; fileRef = 26130EA31B1D68CA00872C4F /* bm_status_icon_on.png */; };
 		26130EA61B1D68CA00872C4F /* bm_status_icon_suspended.png in Resources */ = {isa = PBXBuildFile; fileRef = 26130EA41B1D68CA00872C4F /* bm_status_icon_suspended.png */; };
-		5A7A90CF6C6D6417AF62DCB0 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A002F74D4E423EAF9576A5F /* libPods.a */; };
 		8308E132188662BD001E0B45 /* AboutWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 8308E130188662BD001E0B45 /* AboutWindow.m */; };
 		8308E133188662BD001E0B45 /* AboutWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8308E131188662BD001E0B45 /* AboutWindow.xib */; };
 		8308E135188668A1001E0B45 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8308E134188668A1001E0B45 /* WebKit.framework */; };
@@ -114,6 +113,7 @@
 		B17AA1991887DB8C00B4C274 /* status_icon_off.png in Resources */ = {isa = PBXBuildFile; fileRef = B17AA1971887DB8C00B4C274 /* status_icon_off.png */; };
 		B17AA19A1887DB8C00B4C274 /* status_icon_on.png in Resources */ = {isa = PBXBuildFile; fileRef = B17AA1981887DB8C00B4C274 /* status_icon_on.png */; };
 		B1FAFC791920B62D009F0F86 /* status_icon_suspended.png in Resources */ = {isa = PBXBuildFile; fileRef = B1FAFC781920B62D009F0F86 /* status_icon_suspended.png */; };
+		EF9CC0C06EBF48E30B22392F /* libPods-Vagrant Manager.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A3AEF745A02767367BAF2F13 /* libPods-Vagrant Manager.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -148,8 +148,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		20A1BF629F303E4536AAAC3A /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
-		238F136A64232976B56C749B /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		2609ECF31BC89CEA00E4B44E /* NFSScanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NFSScanner.h; sourceTree = "<group>"; };
 		2609ECF41BC89CEA00E4B44E /* NFSScanner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NFSScanner.m; sourceTree = "<group>"; };
 		2609ECF61BC8A04600E4B44E /* rdp@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rdp@2x.png"; sourceTree = "<group>"; };
@@ -254,7 +252,7 @@
 		83FD353C19826945002EEA2D /* ManageBookmarksWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ManageBookmarksWindow.xib; sourceTree = "<group>"; };
 		83FD354619827545002EEA2D /* BookmarkManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BookmarkManager.h; sourceTree = "<group>"; };
 		83FD354719827545002EEA2D /* BookmarkManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BookmarkManager.m; sourceTree = "<group>"; };
-		9A002F74D4E423EAF9576A5F /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		A3AEF745A02767367BAF2F13 /* libPods-Vagrant Manager.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Vagrant Manager.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B12661161A00A650009B1635 /* NativeMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NativeMenu.h; sourceTree = "<group>"; };
 		B12661171A00A650009B1635 /* NativeMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NativeMenu.m; sourceTree = "<group>"; };
 		B12661191A00AF29009B1635 /* MenuDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuDelegate.h; sourceTree = "<group>"; };
@@ -291,6 +289,8 @@
 		B17AA1981887DB8C00B4C274 /* status_icon_on.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = status_icon_on.png; sourceTree = "<group>"; };
 		B1A5DE7D192354E900AF0CA5 /* VirtualMachineServiceProvider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VirtualMachineServiceProvider.h; sourceTree = "<group>"; };
 		B1FAFC781920B62D009F0F86 /* status_icon_suspended.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = status_icon_suspended.png; sourceTree = "<group>"; };
+		B6AC85BFC2445FC5F426BB3C /* Pods-Vagrant Manager.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Vagrant Manager.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Vagrant Manager/Pods-Vagrant Manager.debug.xcconfig"; sourceTree = "<group>"; };
+		C7624BDAB06533321968B8CB /* Pods-Vagrant Manager.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Vagrant Manager.release.xcconfig"; path = "Pods/Target Support Files/Pods-Vagrant Manager/Pods-Vagrant Manager.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -310,18 +310,18 @@
 				838A36FB191F56E4006244FA /* Security.framework in Frameworks */,
 				8308E135188668A1001E0B45 /* WebKit.framework in Frameworks */,
 				B1357A71187CEB3B00811CBC /* Cocoa.framework in Frameworks */,
-				5A7A90CF6C6D6417AF62DCB0 /* libPods.a in Frameworks */,
+				EF9CC0C06EBF48E30B22392F /* libPods-Vagrant Manager.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		3C0C6BD270D0F475F3A5109C /* Pods */ = {
+		6417B9EF4284A6DC5F56586F /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				20A1BF629F303E4536AAAC3A /* Pods.debug.xcconfig */,
-				238F136A64232976B56C749B /* Pods.release.xcconfig */,
+				B6AC85BFC2445FC5F426BB3C /* Pods-Vagrant Manager.debug.xcconfig */,
+				C7624BDAB06533321968B8CB /* Pods-Vagrant Manager.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -555,7 +555,7 @@
 				838A3727191F59FE006244FA /* Askpass */,
 				B1357A6F187CEB3B00811CBC /* Frameworks */,
 				B1357A6E187CEB3B00811CBC /* Products */,
-				3C0C6BD270D0F475F3A5109C /* Pods */,
+				6417B9EF4284A6DC5F56586F /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -576,7 +576,7 @@
 				B1357A70187CEB3B00811CBC /* Cocoa.framework */,
 				838A3701191F5798006244FA /* Foundation.framework */,
 				B1357A72187CEB3B00811CBC /* Other Frameworks */,
-				9A002F74D4E423EAF9576A5F /* libPods.a */,
+				A3AEF745A02767367BAF2F13 /* libPods-Vagrant Manager.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -658,13 +658,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B1357A9E187CEB3B00811CBC /* Build configuration list for PBXNativeTarget "Vagrant Manager" */;
 			buildPhases = (
-				67C5DB24167BAC833322A56E /* Check Pods Manifest.lock */,
+				D168E0F13DA1DD5BD7139B64 /* [CP] Check Pods Manifest.lock */,
 				B1357A69187CEB3B00811CBC /* Sources */,
 				B1357A6A187CEB3B00811CBC /* Frameworks */,
 				B1357A6B187CEB3B00811CBC /* Resources */,
 				83BCB0451921B1AA00206967 /* CopyFiles */,
-				2E4EB66B53DF74792C32725A /* Embed Pods Frameworks */,
-				A52B6F4CFE15AACC30B6EE60 /* Copy Pods Resources */,
+				1A2A14C45607EB080326A596 /* [CP] Embed Pods Frameworks */,
+				95E23E880A25E17C3F0E72DD /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -682,7 +682,7 @@
 		B1357A65187CEB3B00811CBC /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0700;
+				LastUpgradeCheck = 0900;
 				ORGANIZATIONNAME = Lanayo;
 			};
 			buildConfigurationList = B1357A68187CEB3B00811CBC /* Build configuration list for PBXProject "Vagrant Manager" */;
@@ -787,49 +787,57 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		2E4EB66B53DF74792C32725A /* Embed Pods Frameworks */ = {
+		1A2A14C45607EB080326A596 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-Vagrant Manager/Pods-Vagrant Manager-frameworks.sh",
+				"${PODS_ROOT}/Sparkle/Sparkle.framework",
+				"${PODS_ROOT}/Sparkle/Sparkle.framework.dSYM",
 			);
-			name = "Embed Pods Frameworks";
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Sparkle.framework",
+				"${DWARF_DSYM_FOLDER_PATH}/Sparkle.framework.dSYM",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-frameworks.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Vagrant Manager/Pods-Vagrant Manager-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		67C5DB24167BAC833322A56E /* Check Pods Manifest.lock */ = {
+		95E23E880A25E17C3F0E72DD /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Check Pods Manifest.lock";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Vagrant Manager/Pods-Vagrant Manager-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		A52B6F4CFE15AACC30B6EE60 /* Copy Pods Resources */ = {
+		D168E0F13DA1DD5BD7139B64 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
-			name = "Copy Pods Resources";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Vagrant Manager-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -943,19 +951,30 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -981,19 +1000,30 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -1007,7 +1037,7 @@
 		};
 		B1357A9F187CEB3B00811CBC /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 20A1BF629F303E4536AAAC3A /* Pods.debug.xcconfig */;
+			baseConfigurationReference = B6AC85BFC2445FC5F426BB3C /* Pods-Vagrant Manager.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -1018,6 +1048,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Vagrant Manager/Vagrant Manager-Prefix.pch";
 				INFOPLIST_FILE = "Vagrant Manager/Vagrant Manager-Info.plist";
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				PRODUCT_BUNDLE_IDENTIFIER = "lanayo.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
@@ -1026,7 +1057,7 @@
 		};
 		B1357AA0187CEB3B00811CBC /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 238F136A64232976B56C749B /* Pods.release.xcconfig */;
+			baseConfigurationReference = C7624BDAB06533321968B8CB /* Pods-Vagrant Manager.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -1037,6 +1068,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Vagrant Manager/Vagrant Manager-Prefix.pch";
 				INFOPLIST_FILE = "Vagrant Manager/Vagrant Manager-Info.plist";
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				PRODUCT_BUNDLE_IDENTIFIER = "lanayo.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;

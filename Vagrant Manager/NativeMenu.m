@@ -22,10 +22,15 @@
 
     NSMenuItem *_checkForUpdatesMenuItem;
     NSMenuItem *_checkForVagrantUpdatesMenuItem;
+    
+    NSMutableArray *_runningTasks;
+    int _runningVmCount;
 }
 
 - (id)init {
     self = [super init];
+    
+    _runningTasks = [NSMutableArray new];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(bookmarksUpdated:) name:@"vagrant-manager.bookmarks-updated" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notificationPreferenceChanged:) name:@"vagrant-manager.notification-preference-changed" object:nil];
@@ -37,6 +42,9 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshingStarted:) name:@"vagrant-manager.refreshing-started" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshingEnded:) name:@"vagrant-manager.refreshing-ended" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateRunningVmCount:) name:@"vagrant-manager.update-running-vm-count" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(taskStarted:) name:@"vagrant-manager.task-started" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(taskCompleted:) name:@"vagrant-manager.task-completed" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startedShutdown:) name:@"vagrant-manager.started-shutdown" object:nil];
     
     _statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength];
     _menu = [[NSMenu alloc] init];
@@ -149,6 +157,10 @@
 
 #pragma mark - Notification Handlers
 
+- (void)startedShutdown:(NSNotification*)notification {
+    _statusItem.enabled = NO;
+}
+
 - (void)bookmarksUpdated:(NSNotification*)notification {
     [self rebuildMenu];
 }
@@ -195,6 +207,26 @@
 
 - (void)refreshingEnded: (NSNotification*)notification {
     [self setIsRefreshing:NO];
+}
+
+- (void)taskStarted:(NSNotification*)notification {
+    NSString *uuid = [notification.userInfo objectForKey:@"uuid"];
+    @synchronized(_runningTasks) {
+        if (![_runningTasks containsObject:uuid]) {
+            [_runningTasks addObject:uuid];
+        }
+    }
+    
+    [self updateStatusItem];
+}
+
+- (void)taskCompleted:(NSNotification*)notification {
+    NSString *uuid = [notification.userInfo objectForKey:@"uuid"];
+    @synchronized(_runningTasks) {
+        [_runningTasks removeObject:uuid];
+    }
+    
+    [self updateStatusItem];
 }
 
 #pragma mark - Control
@@ -320,7 +352,9 @@
 }
 
 - (void)nativeMenuItemDestroyAllMachines:(NativeMenuItem *)menuItem {
+    [NSApp activateIgnoringOtherApps:YES];
     NSAlert *confirmAlert = [NSAlert alertWithMessageText:[NSString stringWithFormat:@"Are you sure you want to destroy %@?", menuItem.instance.machines.count > 1 ? @" all machines in the group" : @"this machine"] defaultButton:@"Confirm" alternateButton:@"Cancel" otherButton:nil informativeTextWithFormat:@""];
+    [confirmAlert.window makeKeyWindow];
     NSInteger button = [confirmAlert runModal];
     
     if(button == NSAlertDefaultReturn) {
@@ -399,7 +433,9 @@
 }
 
 - (void)nativeMenuItemDestroyMachine:(VagrantMachine *)machine {
+    [NSApp activateIgnoringOtherApps:YES];
     NSAlert *confirmAlert = [NSAlert alertWithMessageText:@"Are you sure you want to destroy this machine?" defaultButton:@"Confirm" alternateButton:@"Cancel" otherButton:nil informativeTextWithFormat:@""];
+    [confirmAlert.window makeKeyWindow];
     NSInteger button = [confirmAlert runModal];
     
     if(button == NSAlertDefaultReturn) {
@@ -546,7 +582,9 @@
 }
 
 - (IBAction)allDestroyMenuItemClicked:(NSMenuItem*)sender {
+    [NSApp activateIgnoringOtherApps:YES];
     NSAlert *confirmAlert = [NSAlert alertWithMessageText:@"Are you sure you want to destroy all machines?" defaultButton:@"Confirm" alternateButton:@"Cancel" otherButton:nil informativeTextWithFormat:@""];
+    [confirmAlert.window makeKeyWindow];
     NSInteger button = [confirmAlert runModal];
     
     if(button == NSAlertDefaultReturn) {
@@ -578,19 +616,31 @@
 }
 
 - (void)updateRunningVmCount:(NSNotification*)notification {
-    int count = [[notification.userInfo objectForKey:@"count"] intValue];
+    _runningVmCount = [[notification.userInfo objectForKey:@"count"] intValue];
     
-    if (count) {
-        if(![[NSUserDefaults standardUserDefaults] boolForKey:@"dontShowRunningVmCount"]) {
-            [_statusItem setTitle:[@(count) stringValue]];
-        } else {
-            [_statusItem setTitle:@""];
+    [self updateStatusItem];
+}
+
+- (void)updateStatusItem {
+    NSMutableArray<NSString*> *parts = [NSMutableArray new];
+    
+    if (_runningVmCount) {
+        if (![[NSUserDefaults standardUserDefaults] boolForKey:@"dontShowRunningVmCount"]) {
+            [parts addObject:[NSString stringWithFormat:@"%d", _runningVmCount]];
         }
+    }
+    
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"hideTaskWindows"] && [_runningTasks count]) {
+        [parts addObject:[NSString stringWithFormat:@"(%lu running task%@)", _runningTasks.count, _runningTasks.count == 1 ? @"" : @"s"]];
+    }
+    
+    if (_runningVmCount) {
         _statusItem.image = [[Util getApp] getThemedImage:@"vagrant_logo_on"];
     } else {
-        [_statusItem setTitle:@""];
         _statusItem.image = [[Util getApp] getThemedImage:@"vagrant_logo_off"];
     }
+    
+    [_statusItem setTitle:[parts componentsJoinedByString:@" "]];
 }
 
 - (NativeMenuItem*)menuItemForInstance:(VagrantInstance*)instance {

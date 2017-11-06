@@ -19,7 +19,7 @@
 - (void)clearCustomCommands;
 - (NSMutableArray*)getCustomCommands;
 - (CustomCommand*)addCustomCommand:(CustomCommand*)command;
-- (CustomCommand*)addCustomCommandWithDisplayName:(NSString*)displayName command:(NSString*)command runInTerminal:(BOOL)runInTerminal;
+- (CustomCommand*)addCustomCommandWithDisplayName:(NSString*)displayName command:(NSString*)command runInTerminal:(BOOL)runInTerminal runOnHost:(BOOL)runOnHost;
 - (void)removeCustomCommand:(CustomCommand*)command;
 - (void)setCustomCommands:(NSArray*)customCommands;
 

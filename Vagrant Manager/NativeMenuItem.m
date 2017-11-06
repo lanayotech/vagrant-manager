@@ -56,6 +56,18 @@
         
         NSArray *customCommands = [[CustomCommandManager sharedManager] getCustomCommands];
         
+        if ([self.instance getRunningMachineCount] == 0) {
+            // only show custom commands that run on the host since no machines are up
+            NSMutableArray *hostCustomCommands = [NSMutableArray new];
+            for (CustomCommand *customCommand in customCommands) {
+                if (customCommand.runOnHost) {
+                    [hostCustomCommands addObject:customCommand];
+                }
+            }
+            
+            customCommands = hostCustomCommands;
+        }
+        
         if(!_submenu) {
             _submenu = [[NSMenu alloc] init];
             [_submenu setAutoenablesItems:NO];
@@ -276,7 +288,6 @@
                 [_instanceSuspendMenuItem setHidden:YES];
                 [_instanceHaltMenuItem setHidden:YES];
                 [_instanceProvisionMenuItem setHidden:YES];
-                [_instanceCustomCommandMenuItem setHidden:YES];
             }
             
             if([self.instance getRunningMachineCount] > 0) {
@@ -288,12 +299,6 @@
                 [_instanceSuspendMenuItem setHidden:NO];
                 [_instanceHaltMenuItem setHidden:NO];
                 [_instanceProvisionMenuItem setHidden:NO];
-                
-                if(customCommands.count == 0) {
-                    [_instanceCustomCommandMenuItem setHidden:YES];
-                } else {
-                    [_instanceCustomCommandMenuItem setHidden:NO];
-                }
             }
             
             if (self.instance.machines.count > 1) {
@@ -454,7 +459,6 @@
                     [machineSuspendMenuItem setHidden:NO];
                     [machineHaltMenuItem setHidden:NO];
                     [machineProvisionMenuItem setHidden:NO];
-                    [machineCustomCommandMenuItem setHidden:NO];
                 } else {
                     [machineUpMenuItem setHidden:NO];
                     [machineUpProvisionMenuItem setHidden:NO];
@@ -464,7 +468,6 @@
                     [machineSuspendMenuItem setHidden:YES];
                     [machineHaltMenuItem setHidden:YES];
                     [machineProvisionMenuItem setHidden:YES];
-                    [machineCustomCommandMenuItem setHidden:YES];
                 }
             }
         } else {

@@ -12,5 +12,6 @@
 @property (strong, nonatomic) NSString *displayName;
 @property (strong, nonatomic) NSString *command;
 @property BOOL runInTerminal;
+@property BOOL runOnHost;
 
 @end

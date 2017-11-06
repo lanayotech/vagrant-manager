@@ -16,6 +16,7 @@
         bookmark.displayName = self.displayName;
         bookmark.path = self.path;
         bookmark.providerIdentifier = self.providerIdentifier;
+        bookmark.launchOnStartup = self.launchOnStartup;
     }
     
     return bookmark;

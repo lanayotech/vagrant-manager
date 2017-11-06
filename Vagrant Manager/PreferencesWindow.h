@@ -13,9 +13,11 @@
 }
 
 @property (weak) IBOutlet NSButton *autoCloseCheckBox;
+@property (weak) IBOutlet NSButton *hideTaskWindowsCheckBox;
 @property (weak) IBOutlet NSButton *dontShowUpdateCheckBox;
 @property (weak) IBOutlet NSButton *optionKeyDestroyCheckBox;
 @property (weak) IBOutlet NSButton *usePathAsInstanceDisplayNameCheckBox;
+@property (weak) IBOutlet NSButton *useProviderMachineDetectionCheckBox;
 @property (weak) IBOutlet NSButton *includeMachineNamesCheckBox;
 @property (weak) IBOutlet NSButton *dontShowRunningVmCountCheckBox;
 @property (weak) IBOutlet NSPopUpButton *terminalPreferencePopUpButton;
@@ -24,6 +26,7 @@
 @property (weak) IBOutlet NSPopUpButton *updateStabilityPopUpButton;
 @property (weak) IBOutlet NSButton *sendProfileDataCheckBox;
 @property (weak) IBOutlet NSButton *launchAtLoginCheckBox;
+@property (weak) IBOutlet NSButton *haltOnExitCheckBox;
 @property (weak) IBOutlet NSButton *refreshEveryCheckBox;
 @property (weak) IBOutlet NSPopUpButton *intervalMenu;
 @property (weak) IBOutlet NSButton *dontAnimateStatusIconCheckBox;
@@ -31,9 +34,11 @@
 
 
 - (IBAction)autoCloseCheckBoxClicked:(id)sender;
+- (IBAction)hideTaskWindowsCheckBoxClicked:(id)sender;
 - (IBAction)dontShowUpdateCheckBoxClicked:(id)sender;
 - (IBAction)optionKeyDestroyCheckBoxClicked:(id)sender;
 - (IBAction)usePathAsInstanceDisplayNameCheckBoxClicked:(id)sender;
+- (IBAction)useProviderMachineDetectionCheckBoxClicked:(id)sender;
 - (IBAction)includeMachineNamesCheckBoxClicked:(id)sender;
 - (IBAction)dontShowRunningVmCountCheckBoxClicked:(id)sender;
 - (IBAction)terminalPreferencePopUpButtonClicked:(id)sender;
@@ -41,6 +46,7 @@
 - (IBAction)updateStabilityPopUpButtonClicked:(id)sender;
 - (IBAction)sendProfileDataCheckBoxClicked:(id)sender;
 - (IBAction)launchAtLoginCheckBoxClicked:(id)sender;
+- (IBAction)haltOnExitCheckBoxClicked:(id)sender;
 - (IBAction)refreshEveryCheckBoxClicked:(id)sender;
 - (IBAction)intervalMenuChanged:(id)sender;
 - (IBAction)dontAnimateStatusIconCheckBoxClicked:(id)sender;

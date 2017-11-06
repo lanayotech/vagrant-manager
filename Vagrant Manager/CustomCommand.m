@@ -27,6 +27,7 @@
         command.displayName = self.displayName;
         command.command = self.command;
         command.runInTerminal = self.runInTerminal;
+        command.runOnHost = self.runOnHost;
     }
     
     return command;
