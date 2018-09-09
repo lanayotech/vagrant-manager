@@ -639,11 +639,23 @@
              "else\n"
              "run script v2_script\n"
              "end\n", command, command];
+    }
+    else if ([terminalName isEqualToString:@"Hyper"]) {
+        s = [NSString stringWithFormat:
+             @"tell application \"Hyper\"\n"
+             "activate\n"
+             "delay 2\n"
+             "tell application \"System Events\"\n"
+             "keystroke \"%@\"\n"
+             "key code 36\n"
+             "end tell\n"
+             "end tell\n", command];
     } else {
         s = [NSString stringWithFormat:@"tell application \"Terminal\"\n"
              "activate\n"
              "do script \"%@\"\n"
              "end tell\n", command];
+        NSLog(@"Value of string is %@", s);
     }
     
     NSAppleScript *as = [[NSAppleScript alloc] initWithSource: s];

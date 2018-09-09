@@ -48,6 +48,9 @@
     
     if ([terminalPreference isEqualToString:@"iTerm"]) {
         [self.terminalPreferencePopUpButton selectItemWithTag:101];
+    }
+    else if ([terminalPreference isEqualToString:@"Hyper"]) {
+        [self.terminalPreferencePopUpButton selectItemWithTag:102];
     } else {
         [self.terminalPreferencePopUpButton selectItemWithTag:100];
     }
@@ -150,6 +153,10 @@
     
     if (self.terminalPreferencePopUpButton.selectedItem.tag == 101) {
         terminalPreference = @"iTerm";
+    }
+    else if (self.terminalPreferencePopUpButton.selectedItem.tag == 102)
+    {
+        terminalPreference = @"Hyper";
     } else {
         terminalPreference = @"Terminal";
     }
