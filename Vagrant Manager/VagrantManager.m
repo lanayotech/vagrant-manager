@@ -9,6 +9,8 @@
 #import "NFSScanner.h"
 #import "VagrantGlobalStatusScanner.h"
 #import "BookmarkManager.h"
+#import "CustomProviderManager.h"
+#import "VagrantInstanceCache.h"
 
 @implementation VagrantManager {
     //all known vagrant instances
@@ -156,6 +158,8 @@
     dispatch_queue_t queryMachinesQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     for(VagrantInstance *instance in instances) {
         dispatch_group_async(queryMachinesGroup, queryMachinesQueue, ^{
+            [VagrantInstanceCache restoreCachedInstance:instance];
+            
             //query instance machines
             [instance queryMachines];
             
@@ -274,8 +278,12 @@
 - (NSArray*)getProviderIdentifiers {
     NSMutableArray *providerIdentifiers = [NSMutableArray arrayWithArray:[_providers allKeys]];
     [providerIdentifiers addObject:@"vmware_workstation"];
+    [providerIdentifiers addObject:@"vmware_desktop"];
     [providerIdentifiers addObject:@"vmware_fusion"];
     [providerIdentifiers addObject:@"docker"];
+    for (CustomProvider* cp in [[CustomProviderManager sharedManager] getCustomProviders]) {
+        [providerIdentifiers addObject:cp.name];
+    }
     return providerIdentifiers;
 }
 

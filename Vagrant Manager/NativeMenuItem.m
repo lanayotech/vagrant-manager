@@ -239,20 +239,21 @@
         
         if (!_chooseProviderMenuItem) {
             _chooseProviderMenuItem = [[NSMenuItem alloc] initWithTitle:[NSString stringWithFormat:@"Provider: %@", self.instance.providerIdentifier ?: @"Unknown"] action:nil keyEquivalent:@""];
-            NSMenu *submenu = [[NSMenu alloc] init];
-            [submenu setAutoenablesItems:NO];
-            NSArray *providerIdentifiers = [[VagrantManager sharedManager] getProviderIdentifiers];
-            for(NSString *providerIdentifier in providerIdentifiers) {
-                NSMenuItem *submenuItem = [[NSMenuItem alloc] initWithTitle:providerIdentifier action:@selector(updateProviderIdentifier:) keyEquivalent:@""];
-                submenuItem.representedObject = providerIdentifier;
-                submenuItem.target = self;
-                [submenu addItem:submenuItem];
-            }
-            [_chooseProviderMenuItem setSubmenu:submenu];
             [_submenu addItem:_chooseProviderMenuItem];
-        } else {
-            _chooseProviderMenuItem.title = [NSString stringWithFormat:@"Provider: %@", self.instance.providerIdentifier ?: @"Unknown"];
         }
+        
+        NSMenu *submenu = [[NSMenu alloc] init];
+        [submenu setAutoenablesItems:NO];
+        NSArray *providerIdentifiers = [[VagrantManager sharedManager] getProviderIdentifiers];
+        for(NSString *providerIdentifier in providerIdentifiers) {
+            NSMenuItem *submenuItem = [[NSMenuItem alloc] initWithTitle:providerIdentifier action:@selector(updateProviderIdentifier:) keyEquivalent:@""];
+            submenuItem.representedObject = providerIdentifier;
+            submenuItem.target = self;
+            [submenu addItem:submenuItem];
+        }
+        
+        [_chooseProviderMenuItem setSubmenu:submenu];
+        _chooseProviderMenuItem.title = [NSString stringWithFormat:@"Provider: %@", self.instance.providerIdentifier ?: @"Unknown"];
         
         if (!_removeBookmarkMenuItem) {
             _removeBookmarkMenuItem = [[NSMenuItem alloc] initWithTitle:@"Remove from bookmarks" action:@selector(removeBookmarkMenuItemClicked:) keyEquivalent:@""];

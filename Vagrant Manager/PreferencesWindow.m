@@ -40,7 +40,7 @@
     NSString *statusBarIconTheme = [[NSUserDefaults standardUserDefaults] stringForKey:@"statusBarIconTheme"];
     NSString *updateStability = [Util getUpdateStability];
     
-    if([statusBarIconTheme isEqualToString:@"flat"]) {
+    if ([statusBarIconTheme isEqualToString:@"flat"]) {
         [self.statusBarIconThemePopUpButton selectItemWithTag:102];
     } else {
         [self.statusBarIconThemePopUpButton selectItemWithTag:103];
@@ -48,6 +48,8 @@
     
     if ([terminalPreference isEqualToString:@"iTerm"]) {
         [self.terminalPreferencePopUpButton selectItemWithTag:101];
+    } else if ([terminalPreference isEqualToString:@"Hyper"]) {
+        [self.terminalPreferencePopUpButton selectItemWithTag:102];
     } else {
         [self.terminalPreferencePopUpButton selectItemWithTag:100];
     }
@@ -56,11 +58,13 @@
         [self.terminalEditorPreferencePopUpButton selectItemWithTag:101];
     } else if ([terminalEditorPreference isEqualToString:@"emacs"]) {
         [self.terminalEditorPreferencePopUpButton selectItemWithTag:102];
+    } else if ([terminalEditorPreference isEqualToString:@"micro"]) {
+        [self.terminalEditorPreferencePopUpButton selectItemWithTag:103];
     } else {
         [self.terminalEditorPreferencePopUpButton selectItemWithTag:100];
     }
 
-    if([updateStability isEqualToString:@"rc"]) {
+    if ([updateStability isEqualToString:@"rc"]) {
         [self.updateStabilityPopUpButton selectItemWithTag:101];
     } else if([updateStability isEqualToString:@"beta"]) {
         [self.updateStabilityPopUpButton selectItemWithTag:102];
@@ -150,6 +154,8 @@
     
     if (self.terminalPreferencePopUpButton.selectedItem.tag == 101) {
         terminalPreference = @"iTerm";
+    } else if (self.terminalPreferencePopUpButton.selectedItem.tag == 102) {
+        terminalPreference = @"Hyper";
     } else {
         terminalPreference = @"Terminal";
     }
@@ -163,8 +169,10 @@
     
     if (self.terminalEditorPreferencePopUpButton.selectedItem.tag == 101) {
         terminalEditorPreference = @"vim";
-    } else if (self.terminalEditorPreferencePopUpButton.selectedItem.tag == 102){
+    } else if (self.terminalEditorPreferencePopUpButton.selectedItem.tag == 102) {
         terminalEditorPreference = @"emacs";
+    } else if (self.terminalEditorPreferencePopUpButton.selectedItem.tag == 103) {
+        terminalEditorPreference = @"micro";
     } else {
         terminalEditorPreference = @"nano";
     }

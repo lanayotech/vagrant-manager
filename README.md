@@ -16,6 +16,11 @@ Download Vagrant Manager from the [GitHub Releases Page](https://github.com/lana
 * Currently, vagrant machines must already be initialized in order for Vagrant Manager to detect them. Make sure you have run vagrant init on any machine you want to appear in Vagrant Manager. Once Vagrant Manager has detected a machine, you can bookmark it so that it will not disappear when you destroy the machine. You can also manually add a bookmark and specify the path to your Vagrantfile.
 * Vagrant Manager requires OS X 10.8 Mountain Lion or higher
 
+## Building DMG
+* Use [appdmg](https://github.com/LinusU/node-appdmg) to build the distribution DMG.
+* Put the `Vagrant Manager.app` file in the `dmg` foler
+* Run `appdmg dmg/appdmg.json <outputfile>`
+
 ## Contributing to Vagrant Manager
 
 We love code contributions! If you would like to contribute, here are some notes and guidlines:

@@ -105,6 +105,11 @@
 		B150013319249FFD000A76E7 /* status_icon_off@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B150013119249FFD000A76E7 /* status_icon_off@2x.png */; };
 		B150013419249FFD000A76E7 /* status_icon_on@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B150013219249FFD000A76E7 /* status_icon_on@2x.png */; };
 		B15001361924A02C000A76E7 /* status_icon_suspended@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B15001351924A02C000A76E7 /* status_icon_suspended@2x.png */; };
+		B15C0D3D22077EA900755337 /* ManageCustomProvidersWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = B15C0D3A22077EA800755337 /* ManageCustomProvidersWindow.m */; };
+		B15C0D3E22077EA900755337 /* ManageCustomProvidersWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = B15C0D3C22077EA900755337 /* ManageCustomProvidersWindow.xib */; };
+		B15C0D4422077FA600755337 /* CustomProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = B15C0D4022077FA600755337 /* CustomProvider.m */; };
+		B15C0D4522077FA600755337 /* CustomProviderManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B15C0D4322077FA600755337 /* CustomProviderManager.m */; };
+		B15C0D512207B1C600755337 /* VagrantInstanceCache.m in Sources */ = {isa = PBXBuildFile; fileRef = B15C0D502207B1C600755337 /* VagrantInstanceCache.m */; };
 		B1761B3D1A00C0140056582F /* NativeMenuItem.m in Sources */ = {isa = PBXBuildFile; fileRef = B1761B3C1A00C0140056582F /* NativeMenuItem.m */; };
 		B17AA18B1887A75300B4C274 /* Util.m in Sources */ = {isa = PBXBuildFile; fileRef = B17AA18A1887A75300B4C274 /* Util.m */; };
 		B17AA18F1887CA4600B4C274 /* PreferencesWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = B17AA18D1887CA4600B4C274 /* PreferencesWindow.m */; };
@@ -277,6 +282,15 @@
 		B150013119249FFD000A76E7 /* status_icon_off@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "status_icon_off@2x.png"; sourceTree = "<group>"; };
 		B150013219249FFD000A76E7 /* status_icon_on@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "status_icon_on@2x.png"; sourceTree = "<group>"; };
 		B15001351924A02C000A76E7 /* status_icon_suspended@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "status_icon_suspended@2x.png"; sourceTree = "<group>"; };
+		B15C0D3A22077EA800755337 /* ManageCustomProvidersWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ManageCustomProvidersWindow.m; sourceTree = "<group>"; };
+		B15C0D3B22077EA800755337 /* ManageCustomProvidersWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ManageCustomProvidersWindow.h; sourceTree = "<group>"; };
+		B15C0D3C22077EA900755337 /* ManageCustomProvidersWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ManageCustomProvidersWindow.xib; sourceTree = "<group>"; };
+		B15C0D4022077FA600755337 /* CustomProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomProvider.m; sourceTree = "<group>"; };
+		B15C0D4122077FA600755337 /* CustomProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomProvider.h; sourceTree = "<group>"; };
+		B15C0D4222077FA600755337 /* CustomProviderManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomProviderManager.h; sourceTree = "<group>"; };
+		B15C0D4322077FA600755337 /* CustomProviderManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomProviderManager.m; sourceTree = "<group>"; };
+		B15C0D4F2207B1C600755337 /* VagrantInstanceCache.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VagrantInstanceCache.h; sourceTree = "<group>"; };
+		B15C0D502207B1C600755337 /* VagrantInstanceCache.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VagrantInstanceCache.m; sourceTree = "<group>"; };
 		B1761B3B1A00C0140056582F /* NativeMenuItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NativeMenuItem.h; sourceTree = "<group>"; };
 		B1761B3C1A00C0140056582F /* NativeMenuItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NativeMenuItem.m; sourceTree = "<group>"; };
 		B17AA1891887A75300B4C274 /* Util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Util.h; sourceTree = "<group>"; };
@@ -376,6 +390,9 @@
 				837A30861A5D0D5500E12A40 /* ManageCustomCommandsWindow.h */,
 				837A30871A5D0D5500E12A40 /* ManageCustomCommandsWindow.m */,
 				837A30881A5D0D5500E12A40 /* ManageCustomCommandsWindow.xib */,
+				B15C0D3B22077EA800755337 /* ManageCustomProvidersWindow.h */,
+				B15C0D3A22077EA800755337 /* ManageCustomProvidersWindow.m */,
+				B15C0D3C22077EA900755337 /* ManageCustomProvidersWindow.xib */,
 				832B4C3A1A5FA24B0027A3BA /* BaseWindowController.h */,
 				832B4C3B1A5FA24B0027A3BA /* BaseWindowController.m */,
 			);
@@ -442,6 +459,7 @@
 			children = (
 				2609ECF31BC89CEA00E4B44E /* NFSScanner.h */,
 				2609ECF41BC89CEA00E4B44E /* NFSScanner.m */,
+				B15C0D3F22077EF700755337 /* Custom Providers */,
 				837A308B1A5D170D00E12A40 /* Custom Commands */,
 				83F5BBB41983B8FB00ACE853 /* Vagrant Manager */,
 				83F5BBB51983B90800ACE853 /* Providers */,
@@ -464,6 +482,8 @@
 				83E7CAB31928C2E9001C86F6 /* VirtualMachineInfo.m */,
 				830BAC331A0F278D00AE5F9C /* VagrantGlobalStatusScanner.h */,
 				830BAC341A0F278D00AE5F9C /* VagrantGlobalStatusScanner.m */,
+				B15C0D4F2207B1C600755337 /* VagrantInstanceCache.h */,
+				B15C0D502207B1C600755337 /* VagrantInstanceCache.m */,
 			);
 			name = "Vagrant Manager";
 			sourceTree = "<group>";
@@ -623,6 +643,17 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		B15C0D3F22077EF700755337 /* Custom Providers */ = {
+			isa = PBXGroup;
+			children = (
+				B15C0D4122077FA600755337 /* CustomProvider.h */,
+				B15C0D4022077FA600755337 /* CustomProvider.m */,
+				B15C0D4222077FA600755337 /* CustomProviderManager.h */,
+				B15C0D4322077FA600755337 /* CustomProviderManager.m */,
+			);
+			name = "Custom Providers";
+			sourceTree = "<group>";
+		};
 		B1761B3A1A00BE580056582F /* Native */ = {
 			isa = PBXGroup;
 			children = (
@@ -733,6 +764,7 @@
 				B150013419249FFD000A76E7 /* status_icon_on@2x.png in Resources */,
 				8339DCA2187E756B0036E162 /* TaskOutputWindow.xib in Resources */,
 				83C4CDE41A060B3600611DCC /* reload.png in Resources */,
+				B15C0D3E22077EA900755337 /* ManageCustomProvidersWindow.xib in Resources */,
 				2609ECF91BC8A05100E4B44E /* rdp.png in Resources */,
 				B17AA1901887CA4600B4C274 /* PreferencesWindow.xib in Resources */,
 				B150012E19249CA2000A76E7 /* vagrant_logo_on-flat@2x.png in Resources */,
@@ -857,15 +889,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				83DB673719288DD90008CB57 /* VagrantInstance.m in Sources */,
+				B15C0D4522077FA600755337 /* CustomProviderManager.m in Sources */,
 				83103A571982180C00B340BB /* ParallelsServiceProvider.m in Sources */,
+				B15C0D4422077FA600755337 /* CustomProvider.m in Sources */,
 				83E7CAB41928C2E9001C86F6 /* VirtualMachineInfo.m in Sources */,
 				83FD354819827545002EEA2D /* BookmarkManager.m in Sources */,
 				83DB673A1928AC0C0008CB57 /* VagrantMachine.m in Sources */,
+				B15C0D3D22077EA900755337 /* ManageCustomProvidersWindow.m in Sources */,
 				837A30911A5D177A00E12A40 /* CustomCommandManager.m in Sources */,
 				B1357A84187CEB3B00811CBC /* AppDelegate.m in Sources */,
 				83103A5A19821A9E00B340BB /* ParallelsMachineInfo.m in Sources */,
 				8360A05A18C2B39B002EA89B /* Environment.m in Sources */,
 				8308E14018869FAC001E0B45 /* Bookmark.m in Sources */,
+				B15C0D512207B1C600755337 /* VagrantInstanceCache.m in Sources */,
 				83DB673D1928B3510008CB57 /* VagrantManager.m in Sources */,
 				8308E132188662BD001E0B45 /* AboutWindow.m in Sources */,
 				B1761B3D1A00C0140056582F /* NativeMenuItem.m in Sources */,

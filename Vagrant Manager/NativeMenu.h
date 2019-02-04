@@ -11,6 +11,7 @@
 #import "AboutWindow.h"
 #import "ManageBookmarksWindow.h"
 #import "ManageCustomCommandsWindow.h"
+#import "ManageCustomProvidersWindow.h"
 #import "NativeMenuItem.h"
 #import "CustomCommand.h"
 
@@ -19,6 +20,7 @@
     AboutWindow *aboutWindow;
     ManageBookmarksWindow *manageBookmarksWindow;
     ManageCustomCommandsWindow *manageCustomCommandsWindow;
+    ManageCustomProvidersWindow *manageCustomProvidersWindow;
 }
 
 @property (weak) id<MenuDelegate> delegate;

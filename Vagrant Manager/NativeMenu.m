@@ -7,6 +7,7 @@
 
 #import "NativeMenu.h"
 #import "BookmarkManager.h"
+#import "VagrantInstanceCache.h"
 
 @implementation NativeMenu {
     NSStatusItem *_statusItem;
@@ -45,6 +46,8 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(taskStarted:) name:@"vagrant-manager.task-started" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(taskCompleted:) name:@"vagrant-manager.task-completed" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startedShutdown:) name:@"vagrant-manager.started-shutdown" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(customProvidersUpdated:) name:@"vagrant-manager.custom-providers-updated" object:nil];
+    
     
     _statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength];
     _menu = [[NSMenu alloc] init];
@@ -119,6 +122,10 @@
     manageCustomCommandsMenuItem.target = self;
     [_menu addItem:manageCustomCommandsMenuItem];
     
+    NSMenuItem *manageCustomProvidersMenuItem = [[NSMenuItem alloc] initWithTitle:@"Manage Custom Providers" action:@selector(manageCustomProvidersMenuItemClicked:) keyEquivalent:@""];
+    manageCustomProvidersMenuItem.target = self;
+    [_menu addItem:manageCustomProvidersMenuItem];
+    
     [_menu addItem:[NSMenuItem separatorItem]];
 
     NSMenuItem *extrasMenuItem = [[NSMenuItem alloc] initWithTitle:@"Extras" action:nil keyEquivalent:@""];
@@ -162,6 +169,10 @@
 }
 
 - (void)bookmarksUpdated:(NSNotification*)notification {
+    [self rebuildMenu];
+}
+
+- (void)customProvidersUpdated:(NSNotification*)notification {
     [self rebuildMenu];
 }
 
@@ -393,6 +404,7 @@
     }
     
     instance.providerIdentifier = providerIdentifier;
+    [VagrantInstanceCache cacheInstance:instance];
     [menuItem refresh];
 }
 
@@ -478,6 +490,18 @@
         [NSApp activateIgnoringOtherApps:YES];
         [manageCustomCommandsWindow showWindow:self];
         [[Util getApp] addOpenWindow:manageCustomCommandsWindow];
+    }
+}
+
+- (void)manageCustomProvidersMenuItemClicked:(id)sender {
+    if(manageCustomProvidersWindow && !manageCustomProvidersWindow.isClosed) {
+        [NSApp activateIgnoringOtherApps:YES];
+        [manageCustomProvidersWindow showWindow:self];
+    } else {
+        manageCustomProvidersWindow = [[ManageCustomProvidersWindow alloc] initWithWindowNibName:@"ManageCustomProvidersWindow"];
+        [NSApp activateIgnoringOtherApps:YES];
+        [manageCustomProvidersWindow showWindow:self];
+        [[Util getApp] addOpenWindow:manageCustomProvidersWindow];
     }
 }
 

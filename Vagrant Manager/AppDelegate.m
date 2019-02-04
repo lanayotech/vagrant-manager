@@ -11,6 +11,7 @@
 #import "VagrantInstance.h"
 #import "BookmarkManager.h"
 #import "CustomCommandManager.h"
+#import "CustomProviderManager.h"
 
 @implementation AppDelegate {
     BOOL isRefreshingVagrantMachines;
@@ -58,6 +59,7 @@
     
     [[BookmarkManager sharedManager] loadBookmarks];
     [[CustomCommandManager sharedManager] loadCustomCommands];
+    [[CustomProviderManager sharedManager] loadCustomProviders];
     
     //initialize updates
     [[SUUpdater sharedUpdater] setDelegate:self];
@@ -423,9 +425,9 @@
 
 - (void)editHostsFile {
     NSString *terminalEditorName = [[NSUserDefaults standardUserDefaults] valueForKey:@"terminalEditorPreference"];
-    
     NSString *terminalEditor;
-    if([@[@"vim", @"emacs", @"nano"] containsObject:terminalEditorName]) {
+    
+    if([@[@"vim", @"emacs", @"nano", @"micro"] containsObject:terminalEditorName]) {
         terminalEditor = terminalEditorName;
     } else {
         terminalEditor = @"nano";
@@ -612,42 +614,44 @@
     NSString *s;
     if ([terminalName isEqualToString:@"iTerm"]) {
         s = [NSString stringWithFormat:
-             @"set v2_script to \"\n"
-             "tell application \\\"iTerm\\\"\n"
-             "tell current terminal\n"
-             "launch session \\\"Default Session\\\"\n"
-             "delay 0.15\n"
-             "activate\n"
-             "tell the last session\n"
-             "write text \\\"%@\\\"\n"
-             "end tell\n"
-             "end tell\n"
-             "end tell\"\n"
-             "set v3_script to \"\n"
-             "tell application \\\"iTerm\\\"\n"
-             "activate\n"
-             "tell current window\n"
-             "create tab with default profile\n"
-             "tell current session\n"
-             "write text \\\"%@\\\"\n"
-             "end tell\n"
-             "end tell\n"
-             "end tell\"\n"
-             
-             "if application \"iTerm\"'s version >= \"2.9\" then\n"
-             "run script v3_script\n"
-             "else\n"
-             "run script v2_script\n"
-             "end\n", command, command];
+             @"if application \"iTerm\" is running then\n"
+                 "tell application \"iTerm\"\n"
+                     "tell current window\n"
+                         "create tab with default profile\n"
+                     "end tell\n"
+                 "end tell\n"
+             "end if\n"
+             "tell application \"iTerm\"\n"
+                 "activate\n"
+                 "tell current session of current window\n"
+                     "write text \"%@\"\n"
+                 "end tell\n"
+             "end tell", command];
+    } else if ([terminalName isEqualToString:@"Hyper"]) {
+        s = [NSString stringWithFormat:
+             @"tell application \"Hyper\"\n"
+                "activate\n"
+                "delay 2\n"
+                "tell application \"System Events\"\n"
+                    "keystroke \"%@\"\n"
+                    "key code 36\n"
+                "end tell\n"
+             "end tell\n", command];
     } else {
-        s = [NSString stringWithFormat:@"tell application \"Terminal\"\n"
-             "activate\n"
-             "do script \"%@\"\n"
+        s = [NSString stringWithFormat:
+             @"tell application \"Terminal\"\n"
+                "activate\n"
+                "do script \"%@\"\n"
              "end tell\n", command];
     }
     
     NSAppleScript *as = [[NSAppleScript alloc] initWithSource: s];
-    [as executeAndReturnError:nil];
+    NSDictionary *errors = nil;
+    [as executeAndReturnError:&errors];
+    
+    if (errors) {
+        [[NSAlert alertWithMessageText:@"There was an error performing the command" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@"%@", errors[NSAppleScriptErrorMessage]] runModal];
+    }
 }
 
 #pragma mark - Window management
@@ -662,18 +666,27 @@
 - (void)removeOpenWindow:(id)window {
     @synchronized(openWindows) {
         [openWindows removeObject:window];
-        [self updateProcessType];
+        [self updateProcessType:NO];
     }
 }
 
 - (void)updateProcessType {
-    if([[NSUserDefaults standardUserDefaults] boolForKey:@"haltOnExit"] || [openWindows count] > 0) {
+    [self updateProcessType:YES];
+}
+
+- (void)updateProcessType:(BOOL)bringToFront {
+    if([[NSUserDefaults standardUserDefaults] boolForKey:@"haltOnExit"] || [openWindows count]) {
         ProcessSerialNumber psn = { 0, kCurrentProcess };
         TransformProcessType(&psn, kProcessTransformToForegroundApplication);
-        SetFrontProcess(&psn);
+        [[NSApplication sharedApplication] setActivationPolicy:NSApplicationActivationPolicyRegular];
+
+        if (bringToFront) {
+            SetFrontProcess(&psn);
+        }
     } else {
         ProcessSerialNumber psn = { 0, kCurrentProcess };
         TransformProcessType(&psn, kProcessTransformToBackgroundApplication);
+        [[NSApplication sharedApplication] setActivationPolicy:NSApplicationActivationPolicyAccessory];
     }
 }
 
@@ -783,6 +796,10 @@
 - (void)updaterDidNotFindUpdate:(SUUpdater *)update {
     [NSApp activateIgnoringOtherApps:YES];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"vagrant-manager.update-available" object:nil userInfo:@{@"is_update_available": [NSNumber numberWithBool:NO]}];
+}
+
+- (void)updaterWillShowModalAlert:(SUUpdater *)updater {
+    [NSApp activateIgnoringOtherApps:YES];
 }
 
 - (id<SUVersionComparison>)versionComparatorForUpdater:(SUUpdater *)updater {
