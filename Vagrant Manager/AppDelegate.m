@@ -11,6 +11,7 @@
 #import "VagrantInstance.h"
 #import "BookmarkManager.h"
 #import "CustomCommandManager.h"
+#import "CustomProviderManager.h"
 
 @implementation AppDelegate {
     BOOL isRefreshingVagrantMachines;
@@ -58,6 +59,7 @@
     
     [[BookmarkManager sharedManager] loadBookmarks];
     [[CustomCommandManager sharedManager] loadCustomCommands];
+    [[CustomProviderManager sharedManager] loadCustomProviders];
     
     //initialize updates
     [[SUUpdater sharedUpdater] setDelegate:self];
