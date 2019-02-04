@@ -425,9 +425,9 @@
 
 - (void)editHostsFile {
     NSString *terminalEditorName = [[NSUserDefaults standardUserDefaults] valueForKey:@"terminalEditorPreference"];
-    
     NSString *terminalEditor;
-    if([@[@"vim", @"emacs", @"nano"] containsObject:terminalEditorName]) {
+    
+    if([@[@"vim", @"emacs", @"nano", @"micro"] containsObject:terminalEditorName]) {
         terminalEditor = terminalEditorName;
     } else {
         terminalEditor = @"nano";

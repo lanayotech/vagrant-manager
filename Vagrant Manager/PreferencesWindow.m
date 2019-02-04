@@ -56,6 +56,8 @@
         [self.terminalEditorPreferencePopUpButton selectItemWithTag:101];
     } else if ([terminalEditorPreference isEqualToString:@"emacs"]) {
         [self.terminalEditorPreferencePopUpButton selectItemWithTag:102];
+    } else if ([terminalEditorPreference isEqualToString:@"micro"]) {
+        [self.terminalEditorPreferencePopUpButton selectItemWithTag:103];
     } else {
         [self.terminalEditorPreferencePopUpButton selectItemWithTag:100];
     }
@@ -163,8 +165,10 @@
     
     if (self.terminalEditorPreferencePopUpButton.selectedItem.tag == 101) {
         terminalEditorPreference = @"vim";
-    } else if (self.terminalEditorPreferencePopUpButton.selectedItem.tag == 102){
+    } else if (self.terminalEditorPreferencePopUpButton.selectedItem.tag == 102) {
         terminalEditorPreference = @"emacs";
+    } else if (self.terminalEditorPreferencePopUpButton.selectedItem.tag == 103) {
+        terminalEditorPreference = @"micro";
     } else {
         terminalEditorPreference = @"nano";
     }
