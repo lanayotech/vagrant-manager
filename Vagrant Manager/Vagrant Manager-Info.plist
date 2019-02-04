@@ -47,5 +47,7 @@
 	<string>https://api.lanayo.com/appcast/vagrant_manager.xml</string>
 	<key>SUPublicDSAKeyFile</key>
 	<string>dsa_pub.pem</string>
+	<key>NSAppleEventsUsageDescription</key>
+	<string>This app uses apple events to communicate with terminal applications</string>
 </dict>
 </plist>
