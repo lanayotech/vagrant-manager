@@ -664,18 +664,27 @@
 - (void)removeOpenWindow:(id)window {
     @synchronized(openWindows) {
         [openWindows removeObject:window];
-        [self updateProcessType];
+        [self updateProcessType:NO];
     }
 }
 
 - (void)updateProcessType {
-    if([[NSUserDefaults standardUserDefaults] boolForKey:@"haltOnExit"] || [openWindows count] > 0) {
+    [self updateProcessType:YES];
+}
+
+- (void)updateProcessType:(BOOL)bringToFront {
+    if([[NSUserDefaults standardUserDefaults] boolForKey:@"haltOnExit"] || [openWindows count]) {
         ProcessSerialNumber psn = { 0, kCurrentProcess };
         TransformProcessType(&psn, kProcessTransformToForegroundApplication);
-        SetFrontProcess(&psn);
+        [[NSApplication sharedApplication] setActivationPolicy:NSApplicationActivationPolicyRegular];
+
+        if (bringToFront) {
+            SetFrontProcess(&psn);
+        }
     } else {
         ProcessSerialNumber psn = { 0, kCurrentProcess };
         TransformProcessType(&psn, kProcessTransformToBackgroundApplication);
+        [[NSApplication sharedApplication] setActivationPolicy:NSApplicationActivationPolicyAccessory];
     }
 }
 
@@ -785,6 +794,10 @@
 - (void)updaterDidNotFindUpdate:(SUUpdater *)update {
     [NSApp activateIgnoringOtherApps:YES];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"vagrant-manager.update-available" object:nil userInfo:@{@"is_update_available": [NSNumber numberWithBool:NO]}];
+}
+
+- (void)updaterWillShowModalAlert:(SUUpdater *)updater {
+    [NSApp activateIgnoringOtherApps:YES];
 }
 
 - (id<SUVersionComparison>)versionComparatorForUpdater:(SUUpdater *)updater {
