@@ -17,11 +17,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.6.0</string>
+	<string>2.7.0</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>2.6.0</string>
+	<string>2.7.0</string>
 	<key>Configuration</key>
 	<string>${CONFIGURATION}</string>
 	<key>LSApplicationCategoryType</key>
@@ -35,6 +35,8 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<key>NSAppleEventsUsageDescription</key>
+	<string>This app uses apple events to communicate with terminal applications</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2014 Lanayo Technology</string>
 	<key>NSMainNibFile</key>
@@ -47,7 +49,5 @@
 	<string>https://api.lanayo.com/appcast/vagrant_manager.xml</string>
 	<key>SUPublicDSAKeyFile</key>
 	<string>dsa_pub.pem</string>
-	<key>NSAppleEventsUsageDescription</key>
-	<string>This app uses apple events to communicate with terminal applications</string>
 </dict>
 </plist>
