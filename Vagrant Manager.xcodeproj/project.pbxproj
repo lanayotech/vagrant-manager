@@ -695,7 +695,6 @@
 				B1357A6B187CEB3B00811CBC /* Resources */,
 				83BCB0451921B1AA00206967 /* CopyFiles */,
 				1A2A14C45607EB080326A596 /* [CP] Embed Pods Frameworks */,
-				95E23E880A25E17C3F0E72DD /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -825,7 +824,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-Vagrant Manager/Pods-Vagrant Manager-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-Vagrant Manager/Pods-Vagrant Manager-frameworks.sh",
 				"${PODS_ROOT}/Sparkle/Sparkle.framework",
 				"${PODS_ROOT}/Sparkle/Sparkle.framework.dSYM",
 			);
@@ -836,22 +835,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Vagrant Manager/Pods-Vagrant Manager-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		95E23E880A25E17C3F0E72DD /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Vagrant Manager/Pods-Vagrant Manager-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Vagrant Manager/Pods-Vagrant Manager-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		D168E0F13DA1DD5BD7139B64 /* [CP] Check Pods Manifest.lock */ = {
