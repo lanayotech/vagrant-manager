@@ -22,9 +22,17 @@
 
 - (void)windowDidLoad {
     [super windowDidLoad];
+    
+    BOOL isDarkMode = [[[NSUserDefaults standardUserDefaults] stringForKey:@"AppleInterfaceStyle"] isEqualToString:@"Dark"];
+    
+    NSString *styles = @"";
+    
+    if (isDarkMode) {
+        styles = @"<style>body { color:#fff; } a { color: #66f; }</style>";
+    }
 
-    NSString *str = @"<div style=\"text-align:center;font-family:Arial;font-size:13px\">Copyright &copy;{YEAR} Lanayo Tech<br><br>Vagrant Manager {VERSION}<br><br>For more information visit:<br><a href=\"{URL}\">{URL}</a><br><br>or check us out on GitHub:<br><a href=\"{GITHUB_URL}\">{GITHUB_URL}</a></div>";
-
+    NSString *str = [NSString stringWithFormat:@"%@<div style=\"text-align:center;font-family:Arial;font-size:13px\">Copyright &copy;{YEAR} Lanayo Tech<br><br>Vagrant Manager {VERSION}<br><br>For more information visit:<br><a href=\"{URL}\">{URL}</a><br><br>or check us out on GitHub:<br><a href=\"{GITHUB_URL}\">{GITHUB_URL}</a></div>", styles];
+    
     NSString *dateString = [NSString stringWithCString:__DATE__ encoding:NSASCIIStringEncoding];
     NSString *yearString = [dateString substringWithRange:NSMakeRange([dateString length] - 4, 4)];
     

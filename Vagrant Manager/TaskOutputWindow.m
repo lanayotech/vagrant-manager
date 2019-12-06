@@ -117,7 +117,7 @@
         if (!_isClosed) {
             //smart scrolling logic for command output
             BOOL scroll = (NSMaxY(self.outputTextView.visibleRect) == NSMaxY(self.outputTextView.bounds));
-            [self.outputTextView.textStorage appendAttributedString:[[NSAttributedString alloc] initWithString:str]];
+            [self.outputTextView.textStorage appendAttributedString:[[NSAttributedString alloc] initWithString:str attributes:@{NSForegroundColorAttributeName: NSColor.controlTextColor}]];
             if([NSFont fontWithName:@"Menlo" size:11]) {
                 [self.outputTextView.textStorage setFont:[NSFont fontWithName:@"Menlo" size:11]];
             }
